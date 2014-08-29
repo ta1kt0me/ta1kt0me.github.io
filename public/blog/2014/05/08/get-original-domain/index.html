@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>独自ドメイン設定 - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="独自ドメイン設定の道程 せっかくなので独自ドメインでも設定してみよう。
+そうすれば否が応でも書かずにはいられないはず。
+有料だもの。現金な人間です。 手順としてはこんな感じでした。 独自ドメイン取得(お名前.com)
+cloudflareで独自ドメインとherokuを紐付け &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://yoursite.com/blog/2014/05/08/get-original-domain">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:yoursite.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">独自ドメイン設定</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-05-08T00:00:00+09:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>独自ドメイン設定の道程</h1>
+
+<p>せっかくなので独自ドメインでも設定してみよう。<br/>
+そうすれば否が応でも書かずにはいられないはず。<br/>
+有料だもの。現金な人間です。</p>
+
+<p>手順としてはこんな感じでした。</p>
+
+<ol>
+<li>独自ドメイン取得(お名前.com)</li>
+<li>cloudflareで独自ドメインとherokuを紐付け</li>
+<li>herokuに独自ドメイン設定</li>
+<li>おまけ:google analyticsの設定</li>
+</ol>
+
+
+<hr />
+
+<h1>独自ドメイン取得</h1>
+
+<p>お名前.comで独自ドメイン購入。<br/>
+最近は.tokyoやら.redやらあるんですね。<br/>
+.comにしました。<br/>
+あらかじめ候補探しておきましょう。<br/>
+大体は使われています。
+悩んでいると日が暮れます。</p>
+
+<hr />
+
+<h1>cloudflare独自ドメインとheroku連携</h1>
+
+<p>wwwつけると入力手間だな〜っていう理由でルートドメインはしたくない。<br/>
+たまたま<a href="http://blog.jnito.com/entry/2014/05/04/090537">こちらの記事</a>を見かけまして。<br/>
+cloudflareを利用することにしました。<br/>
+用途はブログを公開するだけだし、SSL利用するまでもなかったので無料プランで試してみました。<br/>
+使い切れてないですが、設定だけでもできたの良し。目的達成。<br/>
+設定完了後、whoisコマンドのName Serverの値がcloudflare用に変わります。<br/>
+反映されるのに待ちます。</p>
+
+<hr />
+
+<h1>herokuに独自ドメイン設定</h1>
+
+<p>herokuアプリのSettingsのDomainsに独自ドメインを追加。<br/>
+これしないと、herokuの404画面が出てくる。</p>
+
+<hr />
+
+<h1>google analyticsの設定</h1>
+
+<p>トラッキング情報のトラッキングコードを<em>google-analytics.htmlにコピペ。<br/>
+</em>config.ymlを以下の通り変更
+<code>yaml
+  analytics:
++    google: false
++    google: true</code></p>
+
+<p>夜明けに寝て夕暮れ時に目覚めても反映されてませんでした。<br/>
+気長に待ちましょう。</p>
+
+<p>どれも長い。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">{&#8220;name&#8221;=>&#8221;talkto_me&#8221;, &#8220;twitter&#8221;=>&#8221;talkto_me&#8221;, &#8220;gplus&#8221;=>112523552085244928159}</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-05-08T00:00:00+09:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://yoursite.com/blog/2014/05/08/get-original-domain/" data-via="" data-counturl="http://yoursite.com/blog/2014/05/08/get-original-domain/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/04/20/setup-jekyll-blog/" title="Previous Post: jekyllでブログを作ってみた">&laquo; jekyllでブログを作ってみた</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/05/10/baseball-game-watching/" title="Next Post: 初野球観戦">初野球観戦 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/08/21/github-login-bottun/">Railsでソーシャルログインボタン(Github)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/18/use-octokit/">Github APIを使いやすくするoctokitを触ってみる</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/16/rails-omniauth-github/">RailsアプリケーションでGithub連携</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/08/yield-for-erb/">Erbのyieldの挙動</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/05/peco-peco/">Peco入れてみました</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

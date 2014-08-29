@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  
+  <url>
+    <loc>http://yoursite.com/blog/2014/08/21/github-login-bottun/</loc>
+    <lastmod>2014-08-21T00:00:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/blog/2014/08/18/use-octokit/</loc>
+    <lastmod>2014-08-18T00:00:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/blog/2014/08/16/rails-omniauth-github/</loc>
+    <lastmod>2014-08-16T00:00:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/blog/2014/07/08/yield-for-erb/</loc>
+    <lastmod>2014-07-08T00:00:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/blog/2014/07/05/peco-peco/</loc>
+    <lastmod>2014-07-05T00:00:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/blog/2014/07/03/release-dict-en2ja/</loc>
+    <lastmod>2014-07-03T00:00:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/blog/2014/06/25/warning-add-button-on-navigationbar/</loc>
+    <lastmod>2014-06-25T00:00:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/blog/2014/05/10/baseball-game-watching/</loc>
+    <lastmod>2014-05-10T00:00:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/blog/2014/05/08/get-original-domain/</loc>
+    <lastmod>2014-05-08T00:00:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/blog/2014/04/20/setup-jekyll-blog/</loc>
+    <lastmod>2014-04-20T00:00:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/blog/2013/10/08/sample/</loc>
+    <lastmod>2013-10-08T00:00:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  
+  <url>
+    <loc>http://yoursite.com/blog/archives/</loc>
+    <lastmod>2014-08-30T04:54:41+09:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/</loc>
+    <lastmod>2014-08-30T04:54:41+09:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  
+</urlset>

@@ -1,0 +1,1370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[My Octopress Blog]]></title>
+  <link href="http://yoursite.com/atom.xml" rel="self"/>
+  <link href="http://yoursite.com/"/>
+  <updated>2014-08-30T04:54:41+09:00</updated>
+  <id>http://yoursite.com/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Railsでソーシャルログインボタン(Github)]]></title>
+    <link href="http://yoursite.com/blog/2014/08/21/github-login-bottun/"/>
+    <updated>2014-08-21T00:00:00+09:00</updated>
+    <id>http://yoursite.com/blog/2014/08/21/github-login-bottun</id>
+    <content type="html"><![CDATA[<p>RailsでGithub、twitter、facebookといったソーシャルのoauthログインボタンを出したい人向けです。</p>
+
+<p>Githubのomniauth連携をした時に、専用のログインボタンを簡単に用意できないか探してみたところ、いい感じのGemがありました。<br/>
+さて、今回使用するのは<a href="https://github.com/jeffleeismyhero/Zocial-Rails">こちら</a></p>
+
+<h1>使い方</h1>
+
+<h2>インストール</h2>
+
+<p>Gemfileに書いて、bundle installします。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;zocial-rails&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>導入</h2>
+
+<p>application.cssに以下を記述します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="o">*=</span> <span class="nt">require</span> <span class="nt">zocial</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>ボタン</h2>
+
+<p>elementのclassに、&#8217;zocial&#8217;と利用したいサービス(例では&#8217;github&#8217;)を記述します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;zocial github&quot;</span> <span class="na">href=</span><span class="s">&quot;/auth/github&quot;</span><span class="nt">&gt;</span>Sign in with Github<span class="nt">&lt;/a&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ちなみに、hamlの場合はこちら。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="p">=</span> <span class="n">link_to</span><span class="p">(</span><span class="s1">&#39;Sign in with Github&#39;</span><span class="p">,</span> <span class="s1">&#39;/auth/github&#39;</span><span class="p">,</span>  <span class="ss">:class</span><span class="o">=&gt;</span> <span class="o">[</span><span class="s1">&#39;zocial&#39;</span><span class="p">,</span> <span class="s1">&#39;github&#39;</span><span class="o">]</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Github APIを使いやすくするoctokitを触ってみる]]></title>
+    <link href="http://yoursite.com/blog/2014/08/18/use-octokit/"/>
+    <updated>2014-08-18T00:00:00+09:00</updated>
+    <id>http://yoursite.com/blog/2014/08/18/use-octokit</id>
+    <content type="html"><![CDATA[<p>GithubのAPIを使いやすくしてくれるoctokitに触ってみました。試すのはcontributorsの一覧の取得です。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;octokit&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;octokit&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">client</span> <span class="o">=</span> <span class="no">Octokit</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">new</span> <span class="ss">access_token</span><span class="p">:</span> <span class="s1">&#39;xxx&#39;</span>
+</span><span class='line'><span class="n">client</span><span class="o">.</span><span class="n">contributors_stats</span><span class="p">(</span><span class="s1">&#39;rails/rails&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort</span><span class="p">{</span><span class="o">|</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="o">|</span> <span class="n">b</span><span class="o">[</span><span class="ss">:total</span><span class="o">]</span> <span class="o">&lt;=&gt;</span> <span class="n">a</span><span class="o">[</span><span class="ss">:total</span><span class="o">]</span><span class="p">}</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span><span class="o">|</span><span class="n">member</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">p</span> <span class="n">member</span><span class="o">[</span><span class="ss">:author</span><span class="o">][</span><span class="ss">:login</span><span class="o">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>access_tokenを利用した方式で試していますが、LOGIN IDとパスワードにも対応しています。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[RailsアプリケーションでGithub連携]]></title>
+    <link href="http://yoursite.com/blog/2014/08/16/rails-omniauth-github/"/>
+    <updated>2014-08-16T00:00:00+09:00</updated>
+    <id>http://yoursite.com/blog/2014/08/16/rails-omniauth-github</id>
+    <content type="html"><![CDATA[<p>Railsアプリケーションにomuniauth-githubを利用したGithubログイン連携機能を追加する方法を調査しました。
+作業の概要は↓の通りです。</p>
+
+<ol>
+<li>Githubで連携キーの発行</li>
+<li>連携キーの環境変数設定</li>
+<li>Railsアプリケーションの作成</li>
+<li>ログインに使用するModel、Controllerの生成</li>
+<li>ホーム画面にGithubログインのリンクを作る</li>
+</ol>
+
+
+<p>それでは始めます。</p>
+
+<h1>Github連携準備(&ldquo;Client ID&rdquo; &amp; &ldquo;Client Secret&#8221;作成)</h1>
+
+<p>まず、連携に必要な情報を取得します。</p>
+
+<h2>Githubのアプリケーション登録</h2>
+
+<p>Githubの設定画面 -> Application -> Developer applications の Register new applicationボタンをクリック。<br/>
+次の情報を環境に合わせて設定してください。設定したらRegister Applicationボタンを押すのを忘れずに。</p>
+
+<ul>
+<li>Application name
+
+<ul>
+<li>sample</li>
+</ul>
+</li>
+<li>Authorization callback URL
+
+<ul>
+<li><a href="http://localhost:3000/">http://localhost:3000/</a></li>
+</ul>
+</li>
+<li>Application description
+
+<ul>
+<li>アプリの説明</li>
+</ul>
+</li>
+<li>Authorization callback URL
+
+<ul>
+<li><a href="http://localhost:3000/auth/github/callback">http://localhost:3000/auth/github/callback</a></li>
+<li>ここ大事。config/routes.rbに設定するcallbackメソッドのURLを記載</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>連携キーを環境変数に設定</h2>
+
+<p>今回は、連携情報を環境変数から取得してGithubログインを実現します。<br/>
+上の手順で取得したClient IDとClient Secretを、以下コマンドで環境変数に設定してください。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">export </span><span class="nv">GITHUB_KEY</span><span class="o">=</span><span class="c">#{GithubのClient ID}</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">GITHUB_SECRET</span><span class="o">=</span><span class="c">#{GithubのClient Secret}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>サンプルアプリケーション作成</h1>
+
+<h2>Railsアプリケーション作成</h2>
+
+<p>タイトル通りです。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle <span class="nb">exec </span>rails new SampleApp<span class="p">;</span><span class="nb">cd </span>SampleApp
+</span><span class='line'>bundle install --path vendor/bundle
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>add Gem for omniauth-github</h2>
+
+<p>次に、Githubログイン連携に必要なGemをインストールします。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;omniauth&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;omniauth-github&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle install --path vendor/bundle
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>initializer for omniauth</h2>
+
+<p>環境変数から連携情報を取得する処理を記載します。
+アプリ起動時に読み込むようにするため、config/initializersディレクトリ配下に作成します。</p>
+
+<ul>
+<li>新規
+
+<ul>
+<li>config/initializers/omniauth.rb</li>
+</ul>
+</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="no">OmniAuth</span><span class="o">::</span><span class="no">Builder</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">provider</span> <span class="ss">:github</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GITHUB_KEY&#39;</span><span class="o">]</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GITHUB_SECRET&#39;</span><span class="o">]</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>create user model</h2>
+
+<p>Githubログインで登録するユーザー情報のModelです。providerとuidは多分必須です。
+まずはrailsコマンドからModelを生成します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle <span class="nb">exec </span>rails g model user provider:string uid:string name:string
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>次に、連携時に取得したデータから必要な項目をModelに設定します。</p>
+
+<ul>
+<li>編集
+
+<ul>
+<li>app/models/user.rb</li>
+</ul>
+</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">create_with_omniauth</span><span class="p">(</span><span class="n">auth</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">create!</span> <span class="k">do</span> <span class="o">|</span><span class="n">user</span><span class="o">|</span>
+</span><span class='line'>          <span class="n">user</span><span class="o">.</span><span class="n">provider</span> <span class="o">=</span> <span class="n">auth</span><span class="o">[</span><span class="s2">&quot;provider&quot;</span><span class="o">]</span>
+</span><span class='line'>          <span class="n">user</span><span class="o">.</span><span class="n">uid</span>      <span class="o">=</span> <span class="n">auth</span><span class="o">[</span><span class="s2">&quot;uid&quot;</span><span class="o">]</span>
+</span><span class='line'>          <span class="n">user</span><span class="o">.</span><span class="n">name</span>     <span class="o">=</span> <span class="n">auth</span><span class="o">[</span><span class="s2">&quot;info&quot;</span><span class="o">][</span><span class="s2">&quot;nickname&quot;</span><span class="o">]</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'> <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>create session controller</h2>
+
+<p>Modelができたので、次は連携処理に使うControllerの作成です。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle <span class="nb">exec </span>rails g controller sessions
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>追加するのは、Github連携後のcallback処理と、ログアウト時にSessionを破棄する処理です。</p>
+
+<ul>
+<li>編集
+
+<ul>
+<li>app/controllers/sessions_controller.rb</li>
+</ul>
+</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="k">class</span> <span class="nc">SessionsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">callback</span>
+</span><span class='line'>      <span class="n">auth</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">env</span><span class="o">[</span><span class="s1">&#39;omniauth.auth&#39;</span><span class="o">]</span>
+</span><span class='line'>      <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find_by_provider_and_uid</span><span class="p">(</span><span class="n">auth</span><span class="o">[</span><span class="s2">&quot;provider&quot;</span><span class="o">]</span><span class="p">,</span> <span class="n">auth</span><span class="o">[</span><span class="s2">&quot;uid&quot;</span><span class="o">]</span><span class="p">)</span> <span class="o">||</span> <span class="no">User</span><span class="o">.</span><span class="n">create_with_omniauth</span><span class="p">(</span><span class="n">auth</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">session</span><span class="o">[</span><span class="ss">:user_id</span><span class="o">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span>
+</span><span class='line'>      <span class="n">redirect_to</span> <span class="n">root_path</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">destroy</span>
+</span><span class='line'>      <span class="n">reset_session</span>
+</span><span class='line'>      <span class="n">redirect_to</span> <span class="n">root_path</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'> <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>それからルーティング設定を追加します。</p>
+
+<ul>
+<li>編集
+
+<ul>
+<li>config/routes.rb</li>
+</ul>
+</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">get</span> <span class="s2">&quot;/auth/:provider/callback&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;sessions#callback&quot;</span>
+</span><span class='line'>  <span class="n">get</span> <span class="s2">&quot;/signout&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;sessions#destroy&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>login helper method</h2>
+
+<p>ログイン状態の判定に利用するヘルパーメソッドを追加します。</p>
+
+<ul>
+<li>編集
+
+<ul>
+<li>app/controllers/application_controller.rb</li>
+</ul>
+</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">helper_method</span> <span class="ss">:current_user</span>
+</span><span class='line'>
+</span><span class='line'><span class="kp">private</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">current_user</span>
+</span><span class='line'>      <span class="vi">@current_user</span> <span class="o">||=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">session</span><span class="o">[</span><span class="ss">:user_id</span><span class="o">]</span><span class="p">)</span> <span class="k">if</span> <span class="n">session</span><span class="o">[</span><span class="ss">:user_id</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>create home view</h2>
+
+<p>最後に連携用のリンクをテストする画面を用意します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle <span class="nb">exec </span>rails g controller home index
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>編集
+
+<ul>
+<li>config/routes.rb</li>
+</ul>
+</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">get</span> <span class="s1">&#39;home/index&#39;</span>
+</span><span class='line'>  <span class="n">root</span> <span class="ss">to</span><span class="p">:</span> <span class="s1">&#39;home#index&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ヘルパーメソッドを利用して、ログインリンクと、ログアウトリンクの出し分けを行います。</p>
+
+<ul>
+<li>編集
+
+<ul>
+<li>app/views/home/index.html.erb</li>
+</ul>
+</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="cp">&lt;%</span> <span class="k">if</span> <span class="n">current_user</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Sign out&quot;</span><span class="p">,</span> <span class="s2">&quot;/signout&quot;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="cp">&lt;%</span> <span class="k">else</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Sign in with GitHub&quot;</span><span class="p">,</span> <span class="s2">&quot;/auth/github&quot;</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span><span class='line'><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Erbのyieldの挙動]]></title>
+    <link href="http://yoursite.com/blog/2014/07/08/yield-for-erb/"/>
+    <updated>2014-07-08T00:00:00+09:00</updated>
+    <id>http://yoursite.com/blog/2014/07/08/yield-for-erb</id>
+    <content type="html"><![CDATA[<p>railsでerbファイルでyieldを呼び出すと読み込むコンテンツを表示しているけど、実際何がおこっているのかわからない。<br/>
+yield自体はrubyのそれだと思うんだけど。</p>
+
+<h1>block_given?の結果</h1>
+
+<p>yieldが実行されているということは、呼び出し時にブロック関数が渡されているんだよね、多分。<br/>
+とりあえず、pryで確認してみる。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[1] pry(#&lt;#&lt;Class:0x007ff76226d908&gt;&gt;)&gt; block_given?
+</span><span class='line'>=&gt; true</span></code></pre></td></tr></table></div></figure>
+
+
+<p>はい。ブロック関数はありますね。</p>
+
+<h1>関数のスタック</h1>
+
+<p>先にこっちを見た方がいいのかな。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="o">=&gt;</span> <span class="c1">#0  _app_views_layouts_application_html_erb__4523233871588515359_70350238470280 &lt;ActionView::CompiledTemplates#_app_views_layouts_application_html_erb__4523233871588515359_70350238470280(local_assigns, output_buffer)&gt;</span>
+</span><span class='line'>   <span class="c1">#1 [block]   block in render &lt;ActionView::Template#render(view, locals, buffer=?, &amp;block)&gt;</span>
+</span><span class='line'>   <span class="c1">#2 [method]  instrument &lt;ActiveSupport::Notifications.instrument(name, payload=?)&gt;</span>
+</span><span class='line'>   <span class="c1">#3 [method]  render &lt;ActionView::Template#render(view, locals, buffer=?, &amp;block)&gt;</span>
+</span><span class='line'>   <span class="c1">#4 [method]  render_with_layout &lt;ActionView::TemplateRenderer#render_with_layout(path, locals)&gt;</span>
+</span><span class='line'>   <span class="c1">#5 [method]  render_template &lt;ActionView::TemplateRenderer#render_template(template, layout_name=?, locals=?)&gt;</span>
+</span><span class='line'>   <span class="c1">#6 [method]  render &lt;ActionView::TemplateRenderer#render(context, options)&gt;</span>
+</span><span class='line'>   <span class="c1">#7 [method]  render_template &lt;ActionView::Renderer#render_template(context, options)&gt;</span>
+</span><span class='line'>   <span class="c1">#8 [method]  render &lt;ActionView::Renderer#render(context, options)&gt;</span>
+</span><span class='line'>   <span class="c1">#9 [method]  _render_template &lt;AbstractController::Rendering#_render_template(options)&gt;</span>
+</span><span class='line'>   <span class="c1">#10 [method]  _render_template &lt;ActionController::Streaming#_render_template(options)&gt;</span>
+</span><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>まずは<code>ActionView::Template#render</code>から。<br/>
+<code>action_view/template.rb</code>の中にいました。
+順当にいけばreturnされるのは、<code>&amp;block</code>を引数に含んでいる<code>view.send</code>メソッドっぽい。<br/>
+<code>&amp;block</code>は<code>ActionView::Template#render</code>の引数で渡ってきてる。<br/>
+<code>ActionView::TemplateRenderer#render_with_layout</code>が元になるのかな。<br/>
+<code>action_view/renderer/template_renderer.rb</code>の中に</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">layout</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">locals</span><span class="p">){</span> <span class="o">|*</span><span class="nb">name</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">view</span><span class="o">.</span><span class="n">_layout_for</span><span class="p">(</span><span class="o">*</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>それっぽいのがあった。</p>
+
+<h1>ブロック内の処理</h1>
+
+<p><code>view._layout_for</code>がどこで呼ばれているのか。
+とりあえず、<code>view.class.ancestors</code>してみる！</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="o">[</span><span class="mi">21</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="c1">#&lt;ActionView::TemplateRenderer&gt;)&gt; view.class.ancestors</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="c1">#&lt;Class:0x007f9798335bf8&gt;,</span>
+</span><span class='line'> <span class="c1">#&lt;Module:0x007f9798274958&gt;,</span>
+</span><span class='line'> <span class="c1">#&lt;Module:0x007f9793d33150&gt;,</span>
+</span><span class='line'> <span class="no">StaticPagesHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ApplicationHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="c1">#&lt;Module:0x007f9799261078&gt;,</span>
+</span><span class='line'> <span class="no">ActionDispatch</span><span class="o">::</span><span class="no">Routing</span><span class="o">::</span><span class="no">RouteSet</span><span class="o">::</span><span class="no">MountedHelpers</span><span class="p">,</span>
+</span><span class='line'> <span class="c1">#&lt;Module:0x007f9793ca6278&gt;,</span>
+</span><span class='line'> <span class="c1">#&lt;Module:0x007f97991b97b0&gt;,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">RoutingUrlFor</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionDispatch</span><span class="o">::</span><span class="no">Routing</span><span class="o">::</span><span class="no">UrlFor</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionDispatch</span><span class="o">::</span><span class="no">Routing</span><span class="o">::</span><span class="no">PolymorphicRoutes</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionController</span><span class="o">::</span><span class="no">ModelNaming</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Base</span><span class="p">,</span>
+</span><span class='line'> <span class="no">Sprockets</span><span class="o">::</span><span class="no">Rails</span><span class="o">::</span><span class="no">Helper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">TranslationHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">RenderingHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">RecordTagHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">RecordIdentifier</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">FormHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">ModelNaming</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">OutputSafetyHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">NumberHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">JavaScriptHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">FormOptionsHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">FormTagHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">TextHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">DebugHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">SanitizeHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">CacheHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">AtomFeedHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">UrlHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">AssetTagHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">AssetUrlHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">ActiveModelHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Benchmarkable</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">TagHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">DateHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">CsrfHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">ControllerHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">CaptureHelper</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ERB</span><span class="o">::</span><span class="no">Util</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Context</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">CompiledTemplates</span><span class="p">,</span>
+</span><span class='line'> <span class="no">Object</span><span class="p">,</span>
+</span><span class='line'> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Dependencies</span><span class="o">::</span><span class="no">Loadable</span><span class="p">,</span>
+</span><span class='line'> <span class="no">PP</span><span class="o">::</span><span class="no">ObjectMixin</span><span class="p">,</span>
+</span><span class='line'> <span class="no">JSON</span><span class="o">::</span><span class="no">Ext</span><span class="o">::</span><span class="no">Generator</span><span class="o">::</span><span class="no">GeneratorMethods</span><span class="o">::</span><span class="no">Object</span><span class="p">,</span>
+</span><span class='line'> <span class="no">Kernel</span><span class="p">,</span>
+</span><span class='line'> <span class="no">BasicObject</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>なんかいっぱい出てきた&hellip;一個一個見てくのはつらいなぁ&hellip;<br/>
+renderメソッドの直前で、<code>view.view_flow.set(:layout, content)</code>という処理をしている。<br/>
+view_flowの中を覗いてみるとこんな感じ。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="o">[</span><span class="mi">22</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="c1">#&lt;ActionView::TemplateRenderer&gt;)&gt; view.view_flow</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;ActionView::OutputFlow:0x007f9798335c70</span>
+</span><span class='line'> <span class="vi">@content</span><span class="o">=</span><span class="p">{</span><span class="ss">:title</span><span class="o">=&gt;</span><span class="s2">&quot;Home&quot;</span><span class="p">,</span> <span class="ss">:layout</span><span class="o">=&gt;</span><span class="s2">&quot;&lt;h1&gt;Sample App&lt;/h1&gt;</span><span class="se">\n</span><span class="s2">&lt;p&gt;</span><span class="se">\n</span><span class="s2">    This is the home page for the</span><span class="se">\n</span><span class="s2">  &lt;a href=</span><span class="se">\&quot;</span><span class="s2">http://railstutorial.jp/</span><span class="se">\&quot;</span><span class="s2">&gt;Ruby on Rails Tutorial&lt;/a&gt;</span><span class="se">\n</span><span class="s2">    sample application.</span><span class="se">\n</span><span class="s2">&lt;/p&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">}</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>実際に埋め込まれている内容のHashじゃないか。<br/>
+この辺にあたりをつけたら<code>action_view/context.rb</code>にいた。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">def</span> <span class="nf">_layout_for</span><span class="p">(</span><span class="nb">name</span><span class="o">=</span><span class="kp">nil</span><span class="p">)</span>
+</span><span class='line'>  <span class="nb">name</span> <span class="o">||=</span> <span class="ss">:layout</span>
+</span><span class='line'>  <span class="n">view_flow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span><span class="o">.</span><span class="n">html_safe</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>view_flowからnameのシンボルをとってきて、html_safeってメソッドを呼び出してる。これはActiveSupportのString拡張クラスで新しい文字列オブジェクト作っているだけみたい。
+なので、この結果がyieldの結果になっているんですね。<br/>
+すっきりした。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Peco入れてみました]]></title>
+    <link href="http://yoursite.com/blog/2014/07/05/peco-peco/"/>
+    <updated>2014-07-05T00:00:00+09:00</updated>
+    <id>http://yoursite.com/blog/2014/07/05/peco-peco</id>
+    <content type="html"><![CDATA[<p>なぜか4時に起きてしまったのでブラジル-コロンビア戦を見る傍ら、昨日はてなで見かけた<a href="http://blog.horimisli.me/entry/terminal-env-2014">面白コンテンツ探求日記のこちら</a>の記事を眺めてたら<a href="https://github.com/peco/peco">peco</a>面白そうと思い立って試してみました。<br/>
+インタラクティブgrep。</p>
+
+<h2>導入</h2>
+
+<p>python製のpercolをGoで作ってみたものだとか。homebrewでインストール。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew tap peco/peco
+</span><span class='line'>$ brew install peco</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>psお試し</h2>
+
+<p><code>ps aux | peco</code>と打つとモードが切り替わって、psコマンドの結果を、入力した値でフィルタリングして表示してくれる〜。
+ctrl+n,pで上下に移動できます。</p>
+
+<h2>続けてhistoryコマンドに応用</h2>
+
+<p><a href="http://qiita.com/uchiko/items/f6b1528d7362c9310da0">oh-my-zsh の環境で、peco-select-history が動かない</a>を参考に<code>ctrl+r</code>でコマンド履歴検索をインタラクティブに！これいい。</p>
+
+<h2>z.shを入れる</h2>
+
+<p>面白コンテンツ探求日記の記事を参考にこれも入れてみました。ググらずに素直にgithubで検索したらすぐでた。過去に行ったことのあるディレクトリの履歴を表示するツール。使いやすそう。pecoと連携しやすそう。というわけで、homebrewでインストール。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$brew install z</span></code></pre></td></tr></table></div></figure>
+
+
+<p>それで<code>.zshrc</code>を修正。<a href="http://blog.en30.net/2014/06/25/peco.html">こちらのブログ</a>を参考にさせてもらいました。<br/>
+これも便利。すごく便利。ちょっとしたパス入力のストレスが激減しそう。</p>
+
+<h2>ghq</h2>
+
+<p>peco関連で漁っていたらghqなるものを利用している人が多かった。cloneしてきたリポジトリを一元管理するツールだそうでGo言語の発想とのこと。確かにgithubやら、bitbucketやら散らかってて収集つかなくなってたので入れてみました。
+まずは入れてみる。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install go
+</span><span class='line'>$ echo "export GOPATH=~/Dev/src" &gt;&gt; ~/.zshrc
+</span><span class='line'>$ echo "export PATH=${PATH}:~/Dev/src/bin" &gt;&gt; ~/.zshrc
+</span><span class='line'>$ . ~/.zshrc
+</span><span class='line'>$ go get github.com/motemen/ghq
+</span><span class='line'>$ git config --global ghq.root ~/.ghq
+</span><span class='line'>$ ghq get git@github.com:ta1kt0me/dict-en2ja.git</span></code></pre></td></tr></table></div></figure>
+
+
+<p>それからpecoる。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ ghq list | peco</span></code></pre></td></tr></table></div></figure>
+
+
+<p>peco便利。
+気がついたら試合終わって、PK見逃してた。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Dict-en2jaというatomのpackageを公開しました]]></title>
+    <link href="http://yoursite.com/blog/2014/07/03/release-dict-en2ja/"/>
+    <updated>2014-07-03T00:00:00+09:00</updated>
+    <id>http://yoursite.com/blog/2014/07/03/release-dict-en2ja</id>
+    <content type="html"><![CDATA[<h1>dict-en2jaというatomのpackageを公開しました</h1>
+
+<p><code>publish</code>するときにバージョンの指定がまずったせいで、公開初版が2.0.0となりました。<br/>
+いまだに<code>publish</code>コマンドの正解がわからない。そんな打たないし。</p>
+
+<p>初めてatomのパッケージ作りました。<br/>
+初めてcoffeescriptでもの作りました。<br/>
+初めてgithubで作ったものがforkされました。(forkされてしまった！)</p>
+
+<p>辞書のAPiを呼び出して英単語の意味を表するatomのpackageです。<br/>
+エディタ内で完結したかったので作ってみました。
+(本当はAPIも自分で作った方がいいのかなぁ)</p>
+
+<h2>atom packageの感想</h2>
+
+<p>atom!痒いところに手が届かなくてsublimeに戻りがちですが、ちょくちょく使っています。<br/>
+viewとpaneのところ、coffeescriptが初めてっていうのもありますが、情報もそんなに多くなかった（しググラビリティ悪い）ので使い方わかるまでに時間かかりました。<br/>
+viewの種類はいくつかあったので色々試してみたいな。結局htmlなので、ムリクリ表示する領域を生成していたりするのもありましたね。<br/>
+タグ構造もですが、やり方が諸々で。基本的な仕組みであればatom自体のソースコードが一番参考になるかもしれません。<br/>
+viewを独自拡張したものを使用しなかったので次はその辺りをうまく使えるようになりたい。<br/>
+後、修正を適用するときにいちいちreloadしなきゃいけないのは手間でした。何かいい方法ないのかな。</p>
+
+<h2>coffeescriptの感想</h2>
+
+<p>coffeescriptの練習も着手理由１つでした。
+コンパイルしたjsみなくても挙動が判断できるようにならないとだめですね。<br/>
+スペース１つでコンパイル結果がかわるのでちょっとしたtypoでおかしなことになるのはしんどい。でも書きやすかった。<br/>
+それと、実はhtml(xml)へのアクセスには向かない感じ？この辺りはjsのplugin入れて対応しました。<br/>
+こっちはhubot-scriptを参考にしました。githubは宝の山ですね。<br/>
+まだ使いどころが悩ましいですが、少しずつ仲良くしていきたいです。</p>
+
+<h2>そんなところで</h2>
+
+<p>まとなものは初めて作ったので、よかったらお試しください。
+使用感などフィードバックをいただけると嬉しいです。
+一人でざーっと作ったのでソースの指摘も嬉しいです。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Warning on Navigation Barnavigation Bar]]></title>
+    <link href="http://yoursite.com/blog/2014/06/25/warning-add-button-on-navigationbar/"/>
+    <updated>2014-06-25T00:00:00+09:00</updated>
+    <id>http://yoursite.com/blog/2014/06/25/warning-add-button-on-navigationbar</id>
+    <content type="html"><![CDATA[<p>storyboardでnavigation barの右側にbackとは異なるボタンを配置したら下の警告が出た。</p>
+
+<blockquote><p>unsupported configuration plain style unsupported in a navigation item</p></blockquote>
+
+<p>Buttonではなく、Bar Button Itemを使うのが正しいんですね。</p>
+
+<ul>
+<li>参考
+
+<ul>
+<li><a href="http://stackoverflow.com/questions/8531972/unsupported-configuration-plain-style-unsupported-in-a-navigation-item">stackoverflowの回答欄</a></li>
+</ul>
+</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[初野球観戦]]></title>
+    <link href="http://yoursite.com/blog/2014/05/10/baseball-game-watching/"/>
+    <updated>2014-05-10T00:00:00+09:00</updated>
+    <id>http://yoursite.com/blog/2014/05/10/baseball-game-watching</id>
+    <content type="html"><![CDATA[<h1>野球観戦</h1>
+
+<p>野球観戦なんて高校以来です。<br/>
+知り合いに誘われて人生初のプロ野球観戦をしました。<br/>
+カードは、横浜DeNAベイスターズ VS 東京ヤクルトスワローズ。<br/>
+観戦席はベイスターズサイド。<br/>
+野球はそれほど興味もなく、ホッシーがいなくなっていたのも、この日初めて知ったぐらい
+(ファンの方々すんません)</p>
+
+<p>序盤からもの凄く静かな試合。出塁のほとんど4球で、時たまスワローズヒットを打つ程度。<br/>
+ベイスターズはヒットが一本もなく、ナーブソンとモスコーソの投球数にも徐々に差が広がる。<br/>
+疲れもあるせいか、時たま危ういシーンもあったが、大切なところはきっちり守りきるモスコーソ。<br/>
+ターニングポイントは7回裏。バルディリス、痺れを切らした１発２ラン。<br/>
+ベイスターズ、この試合唯一のヒットで試合を決めてしまった。<br/>
+一番会場が沸いた瞬間。歓声と大声援とハイタッチの嵐。  <br/>
+それまで堪えていたものが爆発してました。<br/>
+8回の表で、１失点、１アウト満塁という状況も、ソーサが２者連続三振できっちり抑え込む。<br/>
+たったの１点差。少しでも弛みが生じたらいつ逆転されてもおかしくない状況だが、9回表も難無く無失点に抑え込む。<br/>
+(僕が言うのもなんですが)多くのベイスターズファンの期待に応えていたと思います。
+試合後も優勝したかのような盛り上がりでした。</p>
+
+<p>この試合がちょうど横浜スタジアム通算1000勝目という記念になったようで、このゲームを観戦できたことは幸運だったかな。<br/>
+面白かったのでまた行きたいですね。</p>
+
+<p><img src="http://photos-e.ak.instagram.com/hphotos-ak-prn/926456_466559483474076_986180211_n.jpg" title="baseball game" alt="alt text" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[独自ドメイン設定]]></title>
+    <link href="http://yoursite.com/blog/2014/05/08/get-original-domain/"/>
+    <updated>2014-05-08T00:00:00+09:00</updated>
+    <id>http://yoursite.com/blog/2014/05/08/get-original-domain</id>
+    <content type="html"><![CDATA[<h1>独自ドメイン設定の道程</h1>
+
+<p>せっかくなので独自ドメインでも設定してみよう。<br/>
+そうすれば否が応でも書かずにはいられないはず。<br/>
+有料だもの。現金な人間です。</p>
+
+<p>手順としてはこんな感じでした。</p>
+
+<ol>
+<li>独自ドメイン取得(お名前.com)</li>
+<li>cloudflareで独自ドメインとherokuを紐付け</li>
+<li>herokuに独自ドメイン設定</li>
+<li>おまけ:google analyticsの設定</li>
+</ol>
+
+
+<hr />
+
+<h1>独自ドメイン取得</h1>
+
+<p>お名前.comで独自ドメイン購入。<br/>
+最近は.tokyoやら.redやらあるんですね。<br/>
+.comにしました。<br/>
+あらかじめ候補探しておきましょう。<br/>
+大体は使われています。
+悩んでいると日が暮れます。</p>
+
+<hr />
+
+<h1>cloudflare独自ドメインとheroku連携</h1>
+
+<p>wwwつけると入力手間だな〜っていう理由でルートドメインはしたくない。<br/>
+たまたま<a href="http://blog.jnito.com/entry/2014/05/04/090537">こちらの記事</a>を見かけまして。<br/>
+cloudflareを利用することにしました。<br/>
+用途はブログを公開するだけだし、SSL利用するまでもなかったので無料プランで試してみました。<br/>
+使い切れてないですが、設定だけでもできたの良し。目的達成。<br/>
+設定完了後、whoisコマンドのName Serverの値がcloudflare用に変わります。<br/>
+反映されるのに待ちます。</p>
+
+<hr />
+
+<h1>herokuに独自ドメイン設定</h1>
+
+<p>herokuアプリのSettingsのDomainsに独自ドメインを追加。<br/>
+これしないと、herokuの404画面が出てくる。</p>
+
+<hr />
+
+<h1>google analyticsの設定</h1>
+
+<p>トラッキング情報のトラッキングコードを<em>google-analytics.htmlにコピペ。<br/>
+</em>config.ymlを以下の通り変更
+<code>yaml
+  analytics:
++    google: false
++    google: true</code></p>
+
+<p>夜明けに寝て夕暮れ時に目覚めても反映されてませんでした。<br/>
+気長に待ちましょう。</p>
+
+<p>どれも長い。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Jekyllでブログを作ってみた]]></title>
+    <link href="http://yoursite.com/blog/2014/04/20/setup-jekyll-blog/"/>
+    <updated>2014-04-20T00:00:00+09:00</updated>
+    <id>http://yoursite.com/blog/2014/04/20/setup-jekyll-blog</id>
+    <content type="html"><![CDATA[<p>JekyllとHerokuを使ってBlogを作成しました。<br/>
+サーバーにはUnicornを利用します。<br/>
+githubはprivate repositoryが有料なので、bitbucketを使用。<br/>
+せっかくなのでCIツールとして、werckerをお試しで。<br/>
+よくよく考えるとHeroku使うんならどっちも要らないがさておき。</p>
+
+<hr />
+
+<h1>事前準備</h1>
+
+<h2>アカウント作成</h2>
+
+<ol>
+<li>heroku</li>
+<li>bitbucket(ついでにrepositoryも作成)</li>
+<li>wercker</li>
+</ol>
+
+
+<h1>jekyllインストール</h1>
+
+<p>jekyllのgemをインストールします。<br/>
+テンプレートとして、<a href="https://github.com/kippt/jekyll-incorporated.git">jekyll-incorporated</a>を使ってみます。<br/>
+なかなかいい感じにデザインしてくれる。</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; gem install jekyll
+&gt; git clone https://github.com/kippt/jekyll-incorporated.git blog
+&gt; <span class="nb">cd </span>blog
+&gt; git branch myblog
+&gt; git checkout myblog</code></pre></div>
+
+
+<hr />
+
+<h1>環境設定</h1>
+
+<p>環境用のファイルを作成。<br/>
+heroku、wercker用の設定ファイルと、jekyllのmarkdownの設定をします。</p>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text">blog
+├── Gemfile      # 必要なGemを追加
+├── Gemfile.lock
+├── Procfile     # heroku用
+├── _config.yml
+├── config.ru    # heroku用
+├── unicorn.rb   # heroku用
+...
+└── wercker.yml  # wercker用</code></pre></div>
+
+
+<h2>Gemfile</h2>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">+</span> <span class="n">gem</span> <span class="s1">&#39;rack-jekyll&#39;</span>
+<span class="o">+</span> <span class="n">gem</span> <span class="s1">&#39;unicorn&#39;</span></code></pre></div>
+
+
+<h2>Procfile</h2>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">+</span> <span class="ss">web</span><span class="p">:</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">unicorn</span> <span class="o">-</span><span class="nb">p</span> <span class="vg">$PORT</span> <span class="o">-</span><span class="n">c</span> <span class="o">.</span><span class="n">/unicorn</span><span class="o">.</span><span class="n">rb</span></code></pre></div>
+
+
+<h2>_config.yml</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">exclude</span><span class="p-Indicator">:</span>     <span class="p-Indicator">[]</span>
+</span><span class='line'><span class="l-Scalar-Plain">+ exclude</span><span class="p-Indicator">:</span>     <span class="p-Indicator">[</span><span class="s">&quot;vendor&quot;</span><span class="p-Indicator">]</span>
+</span><span class='line'><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">markdown</span><span class="p-Indicator">:</span>      <span class="l-Scalar-Plain">maruku</span>
+</span><span class='line'><span class="l-Scalar-Plain">+ markdown</span><span class="p-Indicator">:</span>      <span class="l-Scalar-Plain">redcarpet</span>
+</span><span class='line'><span class="l-Scalar-Plain">+ redcarpet</span><span class="p-Indicator">:</span>
+</span><span class='line'><span class="l-Scalar-Plain">+     extensions</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span><span class="s">&quot;no_intra_emphasis&quot;</span>
+</span><span class='line'><span class="nv">+</span>                  <span class="p-Indicator">,</span><span class="s">&quot;fenced_code_blocks&quot;</span>
+</span><span class='line'><span class="nv">+</span>                  <span class="p-Indicator">,</span><span class="s">&quot;autolink&quot;</span>
+</span><span class='line'><span class="nv">+</span>                  <span class="p-Indicator">,</span><span class="s">&quot;tables&quot;</span>
+</span><span class='line'><span class="nv">+</span>                  <span class="p-Indicator">,</span><span class="s">&quot;with_toc_data&quot;</span><span class="p-Indicator">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>config.ru</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">+</span> <span class="nb">require</span> <span class="s2">&quot;bundler/setup&quot;</span>
+</span><span class='line'><span class="o">+</span> <span class="no">Bundler</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:default</span><span class="p">)</span>
+</span><span class='line'><span class="o">+</span> <span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Jekyll</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:destination</span> <span class="o">=&gt;</span> <span class="s1">&#39;_site&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>unicorn.rb</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">+</span> <span class="n">worker_processes</span> <span class="mi">1</span>
+</span><span class='line'><span class="o">+</span> <span class="n">timeout</span> <span class="mi">30</span>
+</span><span class='line'><span class="o">+</span> <span class="n">preload_app</span> <span class="kp">true</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>wercker.yml</h2>
+
+<p>indentは半角スペース2つじゃないと怒られる。<br/>
+<a href="http://devcenter.wercker.com/articles/werckeryml/validate.html">ここ</a>でフォーマットのチェックができて便利ですね。</p>
+
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">+ box</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">wercker/ruby</span>
+<span class="l-Scalar-Plain">+ build</span><span class="p-Indicator">:</span>
+<span class="l-Scalar-Plain">+   steps</span><span class="p-Indicator">:</span>
+<span class="l-Scalar-Plain">+     - bundle-install</span>
+<span class="l-Scalar-Plain">+     - script</span><span class="p-Indicator">:</span>
+<span class="l-Scalar-Plain">+         name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">echo ruby information</span>
+<span class="l-Scalar-Plain">+         code</span><span class="p-Indicator">:</span> <span class="p-Indicator">|</span>
+<span class="l-Scalar-Plain">+             echo &quot;ruby version $(ruby --version) running!&quot;</span>
+<span class="l-Scalar-Plain">+             echo &quot;from location $(which ruby)&quot;</span>
+<span class="l-Scalar-Plain">+             echo -p &quot;gem list</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">$(gem list)&quot;</span>
+<span class="l-Scalar-Plain">+ deploy</span><span class="p-Indicator">:</span>
+<span class="l-Scalar-Plain">+   steps</span><span class="p-Indicator">:</span>
+<span class="l-Scalar-Plain">+   - heroku-deploy</span></code></pre></div>
+
+
+<hr />
+
+<h1>Remote Repositoryにpush</h1>
+
+<p>ここまでの設定を保存します。
+実際はちまちまコミットしちゃいました。<br/>
+ついでにherokuでアプリ作成。</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; bundle install
+&gt; git remote add bitbucket git@bitbucket.org:xxxx/jekyllblog.git
+&gt; git add .
+&gt; git commit -m <span class="s1">&#39;initial commit for myblog&#39;</span>
+&gt; <span class="c"># bitbucketにpush</span>
+&gt; git push bitbucket myblog
+&gt; <span class="c"># herokuに専用アプリ作成</span>
+&gt; heroku create myblog</code></pre></div>
+
+
+<p>ちなみに、ここでherokuにpushして、<code>heroku open</code>すれば確認できる。<br/>
+やっぱりこっちの方が楽なんじゃ&hellip;</p>
+
+<hr />
+
+<h1>wercker</h1>
+
+<p>いよいよwercker試してみます。</p>
+
+<h2>Add App</h2>
+
+<p>ここでは作業対象となるリポジトリを設定します。<br/>
+(<a href="https://app.wercker.com/#applications/create">ADD APPLICATION</a>)</p>
+
+<h3>Choose a Git provider</h3>
+
+<p><em>bitbucket</em>を選択</p>
+
+<h3>Select a repository</h3>
+
+<p>pushしたbranchを選択</p>
+
+<h3>Add werckerbot</h3>
+
+<p><em>read</em>権限だけつけて許可する</p>
+
+<h3>Setup your wercker.yml</h3>
+
+<p>準備済み！</p>
+
+<h2>My Apps</h2>
+
+<p>Add Appで登録したAppsを選択します。</p>
+
+<h3>Settings</h3>
+
+<p><em>Deploy targets</em>でHeroku APIキーの登録します。<br/>
+<em>Deploy target name</em>にheroku createしたアプリ名を設定します。</p>
+
+<h3>Builds</h3>
+
+<p>Build Passが通ったら、<em>Deploy to</em>から<strong>Settings</strong>に設定したアプリ名を選択します。</p>
+
+<hr />
+
+<h1>動作確認</h1>
+
+<p>成功していればDeploysのデプロイ結果のURLからアクセス可能です。
+(あるいは<code>heroku open</code>)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Sample Post]]></title>
+    <link href="http://yoursite.com/blog/2013/10/08/sample/"/>
+    <updated>2013-10-08T00:00:00+09:00</updated>
+    <id>http://yoursite.com/blog/2013/10/08/sample</id>
+    <content type="html"><![CDATA[<p>Incorporated provides a great typography, responsive design, author details, semantic markup and more.</p>
+
+<p>You can set customize post covers, and other things directly in the post front matter:</p>
+
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">layout</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">post</span>
+
+<span class="l-Scalar-Plain">title</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Jekyll Incorporated Features</span>
+<span class="l-Scalar-Plain">subtitle</span><span class="p-Indicator">:</span> <span class="s">&quot;What&#39;s</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">box&quot;</span>
+
+<span class="c1"># Setup post cover image in /images/</span>
+<span class="l-Scalar-Plain">cover_image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">blog-cover.jpg</span>
+
+<span class="l-Scalar-Plain">excerpt</span><span class="p-Indicator">:</span> <span class="s">&quot;Incorporated</span><span class="nv"> </span><span class="s">provides</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">great</span><span class="nv"> </span><span class="s">typography,</span><span class="nv"> </span><span class="s">responsive</span><span class="nv"> </span><span class="s">design,</span><span class="nv"> </span><span class="s">author</span><span class="nv"> </span><span class="s">details,</span><span class="nv"> </span><span class="s">semantic</span><span class="nv"> </span><span class="s">markup</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">more.&quot;</span>
+
+<span class="c1"># Author details, including Google Plus authorship</span>
+<span class="l-Scalar-Plain">author</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Karri Saarinen</span>
+  <span class="l-Scalar-Plain">twitter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">karrisaarinen</span>
+  <span class="l-Scalar-Plain">gplus</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">100687498195339762535</span> 
+  <span class="l-Scalar-Plain">bio</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Co-founder, Design</span>
+  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ks.jpg</span>
+  
+<span class="c1"># Keep it as draft, not published in index.html or feed.xml</span>
+<span class="l-Scalar-Plain">draft</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">false</span></code></pre></div>
+
+
+<h4>Configurable &amp; Code Snipped Highlighting</h4>
+
+<p>/assets/stylesheets/main.scss:</p>
+
+<div class="highlight"><pre><code class="language-scss" data-lang="scss"><span class="cm">/* Bodytext font */</span>
+<span class="nv">$font</span><span class="o">:</span> <span class="s2">&quot;Droid Sans&quot;</span><span class="o">,</span> <span class="s2">&quot;Helvetica Neue&quot;</span><span class="o">,</span> <span class="n">Helvetica</span><span class="o">,</span> <span class="n">Arial</span><span class="o">,</span> <span class="no">sans-serif</span><span class="p">;</span>
+
+<span class="cm">/* Font for headings */</span>
+<span class="nv">$fontheadings</span><span class="o">:</span> <span class="s2">&quot;Droid Sans&quot;</span><span class="o">,</span> <span class="s2">&quot;Helvetica Neue&quot;</span><span class="o">,</span> <span class="n">Helvetica</span><span class="o">,</span> <span class="n">Arial</span><span class="o">,</span> <span class="no">sans-serif</span><span class="p">;</span>
+
+<span class="cm">/* Text colors */</span>
+<span class="nv">$text</span><span class="o">:</span> <span class="mh">#21272d</span><span class="p">;</span>
+<span class="nv">$textmuted</span><span class="o">:</span> <span class="mh">#848484</span><span class="p">;</span>
+<span class="nv">$accent</span><span class="o">:</span> <span class="mh">#2077b2</span><span class="p">;</span></code></pre></div>
+
+
+<p>config.yml:</p>
+
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">inc</span><span class="p-Indicator">:</span>
+  <span class="c1"># Blog Information</span>
+  <span class="l-Scalar-Plain">title</span><span class="p-Indicator">:</span>        <span class="s">&quot;Jekyll</span><span class="nv"> </span><span class="s">Incorporated&quot;</span>
+  <span class="l-Scalar-Plain">subtitle</span><span class="p-Indicator">:</span>     <span class="s">&quot;Modern</span><span class="nv"> </span><span class="s">Jekyll</span><span class="nv"> </span><span class="s">based</span><span class="nv"> </span><span class="s">blog</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">companies&quot;</span>
+  <span class="l-Scalar-Plain">cover_image</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">blog-cover.jpg</span>
+  
+  <span class="c1"># Company information</span>
+  <span class="l-Scalar-Plain">company</span><span class="p-Indicator">:</span>      <span class="l-Scalar-Plain">Incorporated</span>
+  <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span>          <span class="l-Scalar-Plain">http://incorporated.sendtoinc.com/</span>
+  <span class="l-Scalar-Plain">facebook</span><span class="p-Indicator">:</span>     <span class="l-Scalar-Plain">sendtoinc</span>
+  <span class="l-Scalar-Plain">twitter</span><span class="p-Indicator">:</span>      <span class="l-Scalar-Plain">sendtoinc</span>
+  <span class="l-Scalar-Plain">about_link</span><span class="p-Indicator">:</span>   <span class="l-Scalar-Plain">https://sendtoinc.com/about/</span>
+  
+  <span class="c1"># Product Information</span>
+  <span class="l-Scalar-Plain">product_link</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://incorporated.sendtoinc.com/</span>
+  <span class="l-Scalar-Plain">tagline</span><span class="p-Indicator">:</span>      <span class="s">&quot;Get</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">modern</span><span class="nv"> </span><span class="s">blog</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">your</span><span class="nv"> </span><span class="s">company&quot;</span>
+  
+  <span class="c1"># Comments</span>
+  <span class="l-Scalar-Plain">disqus</span><span class="p-Indicator">:</span>
+    <span class="c1"># Eg. &quot;exampleblog&quot; Set to false to disable comments</span>
+    <span class="l-Scalar-Plain">shortname</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">false</span>
+  
+  
+  <span class="c1"># Sharing settings</span>
+  <span class="l-Scalar-Plain">sharing</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">twitter</span><span class="p-Indicator">:</span>    <span class="l-Scalar-Plain">false</span>
+    <span class="l-Scalar-Plain">facebook</span><span class="p-Indicator">:</span>   <span class="l-Scalar-Plain">false</span>
+    <span class="l-Scalar-Plain">gplus</span><span class="p-Indicator">:</span>      <span class="l-Scalar-Plain">false</span>
+    <span class="l-Scalar-Plain">hn</span><span class="p-Indicator">:</span>         <span class="l-Scalar-Plain">false</span>
+    
+  
+ <span class="c1"># Analytics     </span>
+  <span class="l-Scalar-Plain">analytics</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">google</span><span class="p-Indicator">:</span> 
+      <span class="c1"># eg. &#39;UA-123-12&#39;</span>
+      <span class="l-Scalar-Plain">id</span><span class="p-Indicator">:</span>       <span class="l-Scalar-Plain">false</span></code></pre></div>
+
+
+<p><strong>Zoomable images</strong></p>
+
+<div class="full zoomable"><img src="http://yoursite.com/images/incorporated.jpg"></div>
+
+
+<p><strong>Awesome quotes</strong></p>
+
+<blockquote><p>“Effective companies tend to communicate more, their people are curious and they have opinions”</p></blockquote>
+
+<p>Stay tuned for updates.</p>
+
+<h1>H1</h1>
+
+<h2>H2</h2>
+
+<h3>H3</h3>
+
+<h4>H4</h4>
+
+<h5>H5</h5>
+
+<h6>H6</h6>
+
+<p>Alternatively, for H1 and H2, an underline-ish style:</p>
+
+<h1>Alt-H1</h1>
+
+<h2>Alt-H2</h2>
+
+<p>Emphasis, aka italics, with <em>asterisks</em> or <em>underscores</em>.</p>
+
+<p>Strong emphasis, aka bold, with <strong>asterisks</strong> or <strong>underscores</strong>.</p>
+
+<p>Combined emphasis with <strong>asterisks and <em>underscores</em></strong>.</p>
+
+<p>[NG]Strikethrough uses two tildes. <del>Scratch this.</del></p>
+
+<ol>
+<li>First ordered list item</li>
+<li>Another item
+⋅⋅* Unordered sub-list.</li>
+<li>Actual numbers don&rsquo;t matter, just that it&rsquo;s a number
+⋅⋅1. Ordered sub-list</li>
+<li>And another item.</li>
+</ol>
+
+
+<p>⋅⋅⋅You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we&rsquo;ll use three here to also align the raw Markdown).</p>
+
+<p>⋅⋅⋅To have a line break without a paragraph, you will need to use two trailing spaces.⋅⋅
+⋅⋅⋅Note that this line is separate, but within the same paragraph.⋅⋅
+⋅⋅⋅(This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)</p>
+
+<ul>
+<li>Unordered list can use asterisks</li>
+<li>Or minuses</li>
+<li>Or pluses</li>
+</ul>
+
+
+<p><a href="https://www.google.com">I&rsquo;m an inline-style link</a></p>
+
+<p><a href="https://www.google.com" title="Google's Homepage">I&rsquo;m an inline-style link with title</a></p>
+
+<p>[NG][I&rsquo;m a reference-style link][Arbitrary case-insensitive reference text]</p>
+
+<p><a href="../blob/master/LICENSE">I&rsquo;m a relative reference to a repository file</a></p>
+
+<p>[NG][You can use numbers for reference-style link definitions][1]</p>
+
+<p>Or leave it empty and use the [link text itself]</p>
+
+<p>Some text to show that the reference links can follow later.</p>
+
+<p>Here&rsquo;s our logo (hover to see the title text):</p>
+
+<p>Inline-style:
+<img src="https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png" title="Logo Title Text 1" alt="alt text" /></p>
+
+<p>[NG]Reference-style:
+![alt text][logo]</p>
+
+<p>Inline <code>code</code> has <code>back-ticks around</code> it.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="s2">&quot;JavaScript syntax highlighting&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">s</span> <span class="o">=</span> <span class="s">&quot;Python syntax highlighting&quot;</span>
+</span><span class='line'><span class="k">print</span> <span class="n">s</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">No</span> <span class="n">language</span> <span class="n">indicated</span><span class="p">,</span> <span class="n">so</span> <span class="n">no</span> <span class="n">syntax</span> <span class="n">highlighting</span><span class="o">.</span>
+</span><span class='line'><span class="n">But</span> <span class="n">let</span><span class="s">&#39;s throw in a &lt;b&gt;tag&lt;/b&gt;.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>[NG]Colons can be used to align columns.</p>
+
+<table>
+<thead>
+<tr>
+<th> Tables        </th>
+<th style="text-align:center;"> Are           </th>
+<th style="text-align:right;"> Cool  </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> col 3 is      </td>
+<td style="text-align:center;"> right-aligned </td>
+<td style="text-align:right;"> $1600 </td>
+</tr>
+<tr>
+<td> col 2 is      </td>
+<td style="text-align:center;"> centered      </td>
+<td style="text-align:right;">   $12 </td>
+</tr>
+<tr>
+<td> zebra stripes </td>
+<td style="text-align:center;"> are neat      </td>
+<td style="text-align:right;">    $1 </td>
+</tr>
+</tbody>
+</table>
+
+
+<p>[NG]The outer pipes (|) are optional, and you don&rsquo;t need to make the raw Markdown line up prettily. You can also use inline Markdown.</p>
+
+<table>
+<thead>
+<tr>
+<th>Markdown </th>
+<th> Less </th>
+<th> Pretty</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Still</em> </td>
+<td> <code>renders</code> </td>
+<td> <strong>nicely</strong></td>
+</tr>
+<tr>
+<td>1 </td>
+<td> 2 </td>
+<td> 3</td>
+</tr>
+</tbody>
+</table>
+
+
+<blockquote><p>Blockquotes are very handy in email to emulate reply text.
+This line is part of the same quote.</p></blockquote>
+
+<p>Quote break.</p>
+
+<blockquote><p>This is a very long line that will still be quoted properly when it wraps. Oh boy let&rsquo;s keep writing to make sure this is long enough to actually wrap for everyone. Oh, you can <em>put</em> <strong>Markdown</strong> into a blockquote.</p></blockquote>
+
+<dl>
+  <dt>Definition list</dt>
+  <dd>Is something people use sometimes.</dd>
+
+  <dt>Markdown in HTML</dt>
+  <dd>Does *not* work **very** well. Use HTML <em>tags</em>.</dd>
+</dl>
+
+
+<p>Three or more&hellip;</p>
+
+<hr />
+
+<p>Hyphens</p>
+
+<hr />
+
+<p>Asterisks</p>
+
+<hr />
+
+<p>Underscores</p>
+
+<p>Here&rsquo;s a line for us to start with.</p>
+
+<p>This line is separated from the one above by two newlines, so it will be a <em>separate paragraph</em>.</p>
+
+<p>This line is also a separate paragraph, but&hellip;
+This line is only separated by a single newline, so it&rsquo;s a separate line in the <em>same paragraph</em>.</p>
+
+<p><a href="http://www.youtube.com/watch?feature=player_embedded&v=YOUTUBE_VIDEO_ID_HERE
+" target="_blank"><img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg"
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a></p>
+
+<p><a href="http://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE"><img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" alt="IMAGE ALT TEXT HERE" /></a></p>
+]]></content>
+  </entry>
+  
+</feed>
