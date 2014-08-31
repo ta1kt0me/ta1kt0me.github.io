@@ -155,6 +155,7 @@ body > nav {
   a[rel=subscribe-github]{ @include whitespace-subscription-button('github_22_gray.png'); }
   a[rel=subscribe-delicious]{ @include whitespace-subscription-button('delicious_22_gray.png'); }
   a[rel=subscribe-pinboard]{ @include whitespace-subscription-button('pinboard_22_gray.png'); }
+  a[rel=subscribe-qiita]{ @include whitespace-subscription-button('qiita.png'); }
   a[rel=publisher]{ @include whitespace-subscription-button('gprofile_22_gray.png'); }
   a[rel=subscribe-rss]{ @include mask-subscription-nav('rss.png'); }
   a[rel=subscribe-email]{ @include mask-subscription-nav('email.png'); }
