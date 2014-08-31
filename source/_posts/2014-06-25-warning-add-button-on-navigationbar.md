@@ -2,15 +2,9 @@
 layout: post
 
 title: Warning on navigation barnavigation bar
-subtitle: "Xcode5.1の警告Navigation Barでの警告"
-cover_image: blog-post-cover.jpg
-
-excerpt: "警告：unsupported configuration plain style unsupported in a navigation item"
-
-author:
-  name: talkto_me
-  twitter: talkto_me
-  gplus: 112523552085244928159
+date: 2014-06-25
+comments: true
+categories: [iOS]
 ---
 
 storyboardでnavigation barの右側にbackとは異なるボタンを配置したら下の警告が出た。

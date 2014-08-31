@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[My Octopress Blog]]></title>
-  <link href="http://yoursite.com/atom.xml" rel="self"/>
-  <link href="http://yoursite.com/"/>
-  <updated>2014-08-30T04:54:41+09:00</updated>
-  <id>http://yoursite.com/</id>
+  <title><![CDATA[Jangajan.com]]></title>
+  <link href="http://jangajan.com/atom.xml" rel="self"/>
+  <link href="http://jangajan.com/"/>
+  <updated>2014-08-31T15:30:58+09:00</updated>
+  <id>http://jangajan.com/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[talkto_me]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Railsでソーシャルログインボタン(Github)]]></title>
-    <link href="http://yoursite.com/blog/2014/08/21/github-login-bottun/"/>
+    <link href="http://jangajan.com/blog/2014/08/21/github-login-bottun/"/>
     <updated>2014-08-21T00:00:00+09:00</updated>
-    <id>http://yoursite.com/blog/2014/08/21/github-login-bottun</id>
+    <id>http://jangajan.com/blog/2014/08/21/github-login-bottun</id>
     <content type="html"><![CDATA[<p>RailsでGithub、twitter、facebookといったソーシャルのoauthログインボタンを出したい人向けです。</p>
 
 <p>Githubのomniauth連携をした時に、専用のログインボタンを簡単に用意できないか探してみたところ、いい感じのGemがありました。<br/>
@@ -63,9 +63,9 @@
   
   <entry>
     <title type="html"><![CDATA[Github APIを使いやすくするoctokitを触ってみる]]></title>
-    <link href="http://yoursite.com/blog/2014/08/18/use-octokit/"/>
+    <link href="http://jangajan.com/blog/2014/08/18/use-octokit/"/>
     <updated>2014-08-18T00:00:00+09:00</updated>
-    <id>http://yoursite.com/blog/2014/08/18/use-octokit</id>
+    <id>http://jangajan.com/blog/2014/08/18/use-octokit</id>
     <content type="html"><![CDATA[<p>GithubのAPIを使いやすくしてくれるoctokitに触ってみました。試すのはcontributorsの一覧の取得です。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -96,9 +96,9 @@
   
   <entry>
     <title type="html"><![CDATA[RailsアプリケーションでGithub連携]]></title>
-    <link href="http://yoursite.com/blog/2014/08/16/rails-omniauth-github/"/>
+    <link href="http://jangajan.com/blog/2014/08/16/rails-omniauth-github/"/>
     <updated>2014-08-16T00:00:00+09:00</updated>
-    <id>http://yoursite.com/blog/2014/08/16/rails-omniauth-github</id>
+    <id>http://jangajan.com/blog/2014/08/16/rails-omniauth-github</id>
     <content type="html"><![CDATA[<p>Railsアプリケーションにomuniauth-githubを利用したGithubログイン連携機能を追加する方法を調査しました。
 作業の概要は↓の通りです。</p>
 
@@ -416,9 +416,9 @@
   
   <entry>
     <title type="html"><![CDATA[Erbのyieldの挙動]]></title>
-    <link href="http://yoursite.com/blog/2014/07/08/yield-for-erb/"/>
+    <link href="http://jangajan.com/blog/2014/07/08/yield-for-erb/"/>
     <updated>2014-07-08T00:00:00+09:00</updated>
-    <id>http://yoursite.com/blog/2014/07/08/yield-for-erb</id>
+    <id>http://jangajan.com/blog/2014/07/08/yield-for-erb</id>
     <content type="html"><![CDATA[<p>railsでerbファイルでyieldを呼び出すと読み込むコンテンツを表示しているけど、実際何がおこっているのかわからない。<br/>
 yield自体はrubyのそれだと思うんだけど。</p>
 
@@ -631,9 +631,9 @@ view_flowの中を覗いてみるとこんな感じ。</p>
   
   <entry>
     <title type="html"><![CDATA[Peco入れてみました]]></title>
-    <link href="http://yoursite.com/blog/2014/07/05/peco-peco/"/>
+    <link href="http://jangajan.com/blog/2014/07/05/peco-peco/"/>
     <updated>2014-07-05T00:00:00+09:00</updated>
-    <id>http://yoursite.com/blog/2014/07/05/peco-peco</id>
+    <id>http://jangajan.com/blog/2014/07/05/peco-peco</id>
     <content type="html"><![CDATA[<p>なぜか4時に起きてしまったのでブラジル-コロンビア戦を見る傍ら、昨日はてなで見かけた<a href="http://blog.horimisli.me/entry/terminal-env-2014">面白コンテンツ探求日記のこちら</a>の記事を眺めてたら<a href="https://github.com/peco/peco">peco</a>面白そうと思い立って試してみました。<br/>
 インタラクティブgrep。</p>
 
@@ -701,9 +701,9 @@ ctrl+n,pで上下に移動できます。</p>
   
   <entry>
     <title type="html"><![CDATA[Dict-en2jaというatomのpackageを公開しました]]></title>
-    <link href="http://yoursite.com/blog/2014/07/03/release-dict-en2ja/"/>
+    <link href="http://jangajan.com/blog/2014/07/03/release-dict-en2ja/"/>
     <updated>2014-07-03T00:00:00+09:00</updated>
-    <id>http://yoursite.com/blog/2014/07/03/release-dict-en2ja</id>
+    <id>http://jangajan.com/blog/2014/07/03/release-dict-en2ja</id>
     <content type="html"><![CDATA[<h1>dict-en2jaというatomのpackageを公開しました</h1>
 
 <p><code>publish</code>するときにバージョンの指定がまずったせいで、公開初版が2.0.0となりました。<br/>
@@ -745,9 +745,9 @@ viewを独自拡張したものを使用しなかったので次はその辺り�
   
   <entry>
     <title type="html"><![CDATA[Warning on Navigation Barnavigation Bar]]></title>
-    <link href="http://yoursite.com/blog/2014/06/25/warning-add-button-on-navigationbar/"/>
+    <link href="http://jangajan.com/blog/2014/06/25/warning-add-button-on-navigationbar/"/>
     <updated>2014-06-25T00:00:00+09:00</updated>
-    <id>http://yoursite.com/blog/2014/06/25/warning-add-button-on-navigationbar</id>
+    <id>http://jangajan.com/blog/2014/06/25/warning-add-button-on-navigationbar</id>
     <content type="html"><![CDATA[<p>storyboardでnavigation barの右側にbackとは異なるボタンを配置したら下の警告が出た。</p>
 
 <blockquote><p>unsupported configuration plain style unsupported in a navigation item</p></blockquote>
@@ -768,9 +768,9 @@ viewを独自拡張したものを使用しなかったので次はその辺り�
   
   <entry>
     <title type="html"><![CDATA[初野球観戦]]></title>
-    <link href="http://yoursite.com/blog/2014/05/10/baseball-game-watching/"/>
+    <link href="http://jangajan.com/blog/2014/05/10/baseball-game-watching/"/>
     <updated>2014-05-10T00:00:00+09:00</updated>
-    <id>http://yoursite.com/blog/2014/05/10/baseball-game-watching</id>
+    <id>http://jangajan.com/blog/2014/05/10/baseball-game-watching</id>
     <content type="html"><![CDATA[<h1>野球観戦</h1>
 
 <p>野球観戦なんて高校以来です。<br/>
@@ -801,9 +801,9 @@ viewを独自拡張したものを使用しなかったので次はその辺り�
   
   <entry>
     <title type="html"><![CDATA[独自ドメイン設定]]></title>
-    <link href="http://yoursite.com/blog/2014/05/08/get-original-domain/"/>
+    <link href="http://jangajan.com/blog/2014/05/08/get-original-domain/"/>
     <updated>2014-05-08T00:00:00+09:00</updated>
-    <id>http://yoursite.com/blog/2014/05/08/get-original-domain</id>
+    <id>http://jangajan.com/blog/2014/05/08/get-original-domain</id>
     <content type="html"><![CDATA[<h1>独自ドメイン設定の道程</h1>
 
 <p>せっかくなので独自ドメインでも設定してみよう。<br/>
@@ -870,9 +870,9 @@ cloudflareを利用することにしました。<br/>
   
   <entry>
     <title type="html"><![CDATA[Jekyllでブログを作ってみた]]></title>
-    <link href="http://yoursite.com/blog/2014/04/20/setup-jekyll-blog/"/>
+    <link href="http://jangajan.com/blog/2014/04/20/setup-jekyll-blog/"/>
     <updated>2014-04-20T00:00:00+09:00</updated>
-    <id>http://yoursite.com/blog/2014/04/20/setup-jekyll-blog</id>
+    <id>http://jangajan.com/blog/2014/04/20/setup-jekyll-blog</id>
     <content type="html"><![CDATA[<p>JekyllとHerokuを使ってBlogを作成しました。<br/>
 サーバーにはUnicornを利用します。<br/>
 githubはprivate repositoryが有料なので、bitbucketを使用。<br/>
@@ -1073,9 +1073,9 @@ heroku、wercker用の設定ファイルと、jekyllのmarkdownの設定をし�
   
   <entry>
     <title type="html"><![CDATA[Sample Post]]></title>
-    <link href="http://yoursite.com/blog/2013/10/08/sample/"/>
+    <link href="http://jangajan.com/blog/2013/10/08/sample/"/>
     <updated>2013-10-08T00:00:00+09:00</updated>
-    <id>http://yoursite.com/blog/2013/10/08/sample</id>
+    <id>http://jangajan.com/blog/2013/10/08/sample</id>
     <content type="html"><![CDATA[<p>Incorporated provides a great typography, responsive design, author details, semantic markup and more.</p>
 
 <p>You can set customize post covers, and other things directly in the post front matter:</p>
@@ -1160,7 +1160,7 @@ heroku、wercker用の設定ファイルと、jekyllのmarkdownの設定をし�
 
 <p><strong>Zoomable images</strong></p>
 
-<div class="full zoomable"><img src="http://yoursite.com/images/incorporated.jpg"></div>
+<div class="full zoomable"><img src="http://jangajan.com/images/incorporated.jpg"></div>
 
 
 <p><strong>Awesome quotes</strong></p>

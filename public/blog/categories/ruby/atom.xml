@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ruby | Jangajan.com]]></title>
+  <link href="http://jangajan.com/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://jangajan.com/"/>
+  <updated>2014-08-31T15:30:58+09:00</updated>
+  <id>http://jangajan.com/</id>
+  <author>
+    <name><![CDATA[talkto_me]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Github APIを使いやすくするoctokitを触ってみる]]></title>
+    <link href="http://jangajan.com/blog/2014/08/18/use-octokit/"/>
+    <updated>2014-08-18T00:00:00+09:00</updated>
+    <id>http://jangajan.com/blog/2014/08/18/use-octokit</id>
+    <content type="html"><![CDATA[<p>GithubのAPIを使いやすくしてくれるoctokitに触ってみました。試すのはcontributorsの一覧の取得です。</p>
+
+<pre><code class="ruby">gem 'octokit'
+</code></pre>
+
+<pre><code class="ruby">require 'octokit'
+
+client = Octokit::Client.new access_token: 'xxx'
+client.contributors_stats('rails/rails').sort{|a,b| b[:total] &lt;=&gt; a[:total]}.map {|member|
+    p member[:author][:login]
+}
+</code></pre>
+
+<p>access_tokenを利用した方式で試していますが、LOGIN IDとパスワードにも対応しています。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Erbのyieldの挙動]]></title>
+    <link href="http://jangajan.com/blog/2014/07/08/yield-for-erb/"/>
+    <updated>2014-07-08T00:00:00+09:00</updated>
+    <id>http://jangajan.com/blog/2014/07/08/yield-for-erb</id>
+    <content type="html"><![CDATA[<p>railsでerbファイルでyieldを呼び出すと読み込むコンテンツを表示しているけど、実際何がおこっているのかわからない。<br/>
+yield自体はrubyのそれだと思うんだけど。</p>
+
+<h1>block_given?の結果</h1>
+
+<p>yieldが実行されているということは、呼び出し時にブロック関数が渡されているんだよね、多分。<br/>
+とりあえず、pryで確認してみる。</p>
+
+<pre><code>[1] pry(#&lt;#&lt;Class:0x007ff76226d908&gt;&gt;)&gt; block_given?
+=&gt; true
+</code></pre>
+
+<p>はい。ブロック関数はありますね。</p>
+
+<h1>関数のスタック</h1>
+
+<p>先にこっちを見た方がいいのかな。</p>
+
+<pre><code class="rb">=&gt; #0  _app_views_layouts_application_html_erb__4523233871588515359_70350238470280 &lt;ActionView::CompiledTemplates#_app_views_layouts_application_html_erb__4523233871588515359_70350238470280(local_assigns, output_buffer)&gt;
+   #1 [block]   block in render &lt;ActionView::Template#render(view, locals, buffer=?, &amp;block)&gt;
+   #2 [method]  instrument &lt;ActiveSupport::Notifications.instrument(name, payload=?)&gt;
+   #3 [method]  render &lt;ActionView::Template#render(view, locals, buffer=?, &amp;block)&gt;
+   #4 [method]  render_with_layout &lt;ActionView::TemplateRenderer#render_with_layout(path, locals)&gt;
+   #5 [method]  render_template &lt;ActionView::TemplateRenderer#render_template(template, layout_name=?, locals=?)&gt;
+   #6 [method]  render &lt;ActionView::TemplateRenderer#render(context, options)&gt;
+   #7 [method]  render_template &lt;ActionView::Renderer#render_template(context, options)&gt;
+   #8 [method]  render &lt;ActionView::Renderer#render(context, options)&gt;
+   #9 [method]  _render_template &lt;AbstractController::Rendering#_render_template(options)&gt;
+   #10 [method]  _render_template &lt;ActionController::Streaming#_render_template(options)&gt;
+...
+</code></pre>
+
+<p>まずは<code>ActionView::Template#render</code>から。<br/>
+<code>action_view/template.rb</code>の中にいました。
+順当にいけばreturnされるのは、<code>&amp;block</code>を引数に含んでいる<code>view.send</code>メソッドっぽい。<br/>
+<code>&amp;block</code>は<code>ActionView::Template#render</code>の引数で渡ってきてる。<br/>
+<code>ActionView::TemplateRenderer#render_with_layout</code>が元になるのかな。<br/>
+<code>action_view/renderer/template_renderer.rb</code>の中に</p>
+
+<pre><code class="rb">layout.render(view, locals){ |*name|
+  view._layout_for(*name)
+}
+</code></pre>
+
+<p>それっぽいのがあった。</p>
+
+<h1>ブロック内の処理</h1>
+
+<p><code>view._layout_for</code>がどこで呼ばれているのか。
+とりあえず、<code>view.class.ancestors</code>してみる！</p>
+
+<pre><code class="rb">[21] pry(#&lt;ActionView::TemplateRenderer&gt;)&gt; view.class.ancestors
+=&gt; [#&lt;Class:0x007f9798335bf8&gt;,
+ #&lt;Module:0x007f9798274958&gt;,
+ #&lt;Module:0x007f9793d33150&gt;,
+ StaticPagesHelper,
+ ApplicationHelper,
+ #&lt;Module:0x007f9799261078&gt;,
+ ActionDispatch::Routing::RouteSet::MountedHelpers,
+ #&lt;Module:0x007f9793ca6278&gt;,
+ #&lt;Module:0x007f97991b97b0&gt;,
+ ActionView::RoutingUrlFor,
+ ActionDispatch::Routing::UrlFor,
+ ActionDispatch::Routing::PolymorphicRoutes,
+ ActionController::ModelNaming,
+ ActionView::Base,
+ Sprockets::Rails::Helper,
+ ActionView::Helpers,
+ ActionView::Helpers::TranslationHelper,
+ ActionView::Helpers::RenderingHelper,
+ ActionView::Helpers::RecordTagHelper,
+ ActionView::RecordIdentifier,
+ ActionView::Helpers::FormHelper,
+ ActionView::ModelNaming,
+ ActionView::Helpers::OutputSafetyHelper,
+ ActionView::Helpers::NumberHelper,
+ ActionView::Helpers::JavaScriptHelper,
+ ActionView::Helpers::FormOptionsHelper,
+ ActionView::Helpers::FormTagHelper,
+ ActionView::Helpers::TextHelper,
+ ActionView::Helpers::DebugHelper,
+ ActionView::Helpers::SanitizeHelper,
+ ActionView::Helpers::CacheHelper,
+ ActionView::Helpers::AtomFeedHelper,
+ ActionView::Helpers::UrlHelper,
+ ActionView::Helpers::AssetTagHelper,
+ ActionView::Helpers::AssetUrlHelper,
+ ActionView::Helpers::ActiveModelHelper,
+ ActiveSupport::Benchmarkable,
+ ActionView::Helpers::TagHelper,
+ ActionView::Helpers::DateHelper,
+ ActionView::Helpers::CsrfHelper,
+ ActionView::Helpers::ControllerHelper,
+ ActionView::Helpers::CaptureHelper,
+ ERB::Util,
+ ActionView::Context,
+ ActionView::CompiledTemplates,
+ Object,
+ ActiveSupport::Dependencies::Loadable,
+ PP::ObjectMixin,
+ JSON::Ext::Generator::GeneratorMethods::Object,
+ Kernel,
+ BasicObject]
+</code></pre>
+
+<p>なんかいっぱい出てきた&hellip;一個一個見てくのはつらいなぁ&hellip;<br/>
+renderメソッドの直前で、<code>view.view_flow.set(:layout, content)</code>という処理をしている。<br/>
+view_flowの中を覗いてみるとこんな感じ。</p>
+
+<pre><code class="rb">[22] pry(#&lt;ActionView::TemplateRenderer&gt;)&gt; view.view_flow
+=&gt; #&lt;ActionView::OutputFlow:0x007f9798335c70
+ @content={:title=&gt;"Home", :layout=&gt;"&lt;h1&gt;Sample App&lt;/h1&gt;\n&lt;p&gt;\n    This is the home page for the\n  &lt;a href=\"http://railstutorial.jp/\"&gt;Ruby on Rails Tutorial&lt;/a&gt;\n    sample application.\n&lt;/p&gt;\n"}&gt;
+</code></pre>
+
+<p>実際に埋め込まれている内容のHashじゃないか。<br/>
+この辺にあたりをつけたら<code>action_view/context.rb</code>にいた。</p>
+
+<pre><code class="rb">def _layout_for(name=nil)
+  name ||= :layout
+  view_flow.get(name).html_safe
+end
+</code></pre>
+
+<p>view_flowからnameのシンボルをとってきて、html_safeってメソッドを呼び出してる。これはActiveSupportのString拡張クラスで新しい文字列オブジェクト作っているだけみたい。
+なので、この結果がyieldの結果になっているんですね。<br/>
+すっきりした。</p>
+]]></content>
+  </entry>
+  
+</feed>

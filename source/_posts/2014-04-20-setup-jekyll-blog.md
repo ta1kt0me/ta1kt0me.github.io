@@ -2,15 +2,9 @@
 layout: post
 
 title: jekyllでブログを作ってみた
-subtitle: "use jekyll & heroku & bitbucket & wercker"
-cover_image: blog-post-cover.jpg
-
-excerpt: "JekyllとHerokuを使ってBlogを作成しました。 サーバーにはUnicornを利用し..."
-
-author:
-  name: talkto_me
-  twitter: talkto_me
-  gplus: 112523552085244928159
+date: 2014-04-20
+comments: true
+categories: [Blog]
 ---
 
 JekyllとHerokuを使ってBlogを作成しました。  

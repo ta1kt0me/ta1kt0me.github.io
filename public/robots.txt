@@ -1,4 +1,4 @@
 User-agent: *
-Disallow: 
+Disallow:
 
-Sitemap: http://yoursite.com/sitemap.xml 
+Sitemap: http://jangajan.com/sitemap.xml

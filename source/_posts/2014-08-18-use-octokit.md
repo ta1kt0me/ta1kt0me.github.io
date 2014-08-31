@@ -2,15 +2,9 @@
 layout: post
 
 title: Github APIを使いやすくするoctokitを触ってみる
-subtitle: "use octokit to get repos contributors"
-cover_image: blog-post-cover.jpg
-
-excerpt: "GithubのAPIを使いやすくしてくれるoctkitに..."
-
-author:
-  name: talkto_me
-  twitter: talkto_me
-  gplus: 112523552085244928159
+date: 2014-08-18
+comments: true
+categories: [Ruby]
 ---
 
 GithubのAPIを使いやすくしてくれるoctokitに触ってみました。試すのはcontributorsの一覧の取得です。

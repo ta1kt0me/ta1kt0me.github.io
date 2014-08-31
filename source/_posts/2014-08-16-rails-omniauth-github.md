@@ -2,15 +2,9 @@
 layout: post
 
 title: RailsアプリケーションでGithub連携
-subtitle: "rails with omniauth-github."
-cover_image: blog-post-cover.jpg
-
-excerpt: "Railsアプリケーションにomuniauth-githubを利用したGithubログイン..."
-
-author:
-  name: talkto_me
-  twitter: talkto_me
-  gplus: 112523552085244928159
+date: 2014-08-16
+comments: true
+categories: [Ruby on Rails]
 ---
 
 Railsアプリケーションにomuniauth-githubを利用したGithubログイン連携機能を追加する方法を調査しました。

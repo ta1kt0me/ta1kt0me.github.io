@@ -2,15 +2,9 @@
 layout: post
 
 title: erbのyieldの挙動
-subtitle: "erbのyieldが何してくれてるのかわからない"
-cover_image: blog-post-cover.jpg
-
-excerpt: "railsでerbファイルでyieldを呼び出すと読み込むコンテンツを表示しているけど"
-
-author:
-  name: talkto_me
-  twitter: talkto_me
-  gplus: 112523552085244928159
+date: 2014-07-08
+comments: true
+categories: [Ruby]
 ---
 
 railsでerbファイルでyieldを呼び出すと読み込むコンテンツを表示しているけど、実際何がおこっているのかわからない。  

@@ -2,15 +2,9 @@
 layout: post
 
 title: 独自ドメイン設定
-subtitle: "set original domain for blog"
-cover_image: blog-post-cover.jpg
-
-excerpt: "せっかくなので独自ドメインでも設定してみよう。そうすれば"
-
-author:
-  name: talkto_me
-  twitter: talkto_me
-  gplus: 112523552085244928159
+date: 2014-05-08
+comments: true
+categories: [Blog]
 ---
 
 # 独自ドメイン設定の道程

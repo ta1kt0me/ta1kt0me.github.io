@@ -2,15 +2,9 @@
 layout: post
 
 title: 初野球観戦
-subtitle: "ベイスターズ VS スワローズ"
-cover_image: blog-post-cover.jpg
-
-excerpt: "知り合いに誘われて人生初のプロ野球観戦を"
-
-author:
-  name: talkto_me
-  twitter: talkto_me
-  gplus: 112523552085244928159
+date: 2014-05-10
+comments: true
+categories: [life]
 ---
 
 # 野球観戦

@@ -2,15 +2,9 @@
 layout: post
 
 title: Railsでソーシャルログインボタン(Github)
-subtitle: "use zocial-rails gem on RoR"
-cover_image: blog-post-cover.jpg
-
-excerpt: "RailsでGithub、twitter、facebookといったソーシャルのoauthログイン..."
-
-author:
-  name: talkto_me
-  twitter: talkto_me
-  gplus: 112523552085244928159
+date: 2014-08-21
+comments: true
+categories: [Ruby on Rails]
 ---
 
 RailsでGithub、twitter、facebookといったソーシャルのoauthログインボタンを出したい人向けです。  

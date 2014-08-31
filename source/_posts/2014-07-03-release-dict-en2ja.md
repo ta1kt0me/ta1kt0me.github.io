@@ -2,15 +2,9 @@
 layout: post
 
 title: dict-en2jaというatomのpackageを公開しました
-subtitle: "release atom's package"
-cover_image: blog-post-cover.jpg
-
-excerpt: "辞書のAPiを呼び出して英単語の意味を表するatomのpackageです"
-
-author:
-  name: talkto_me
-  twitter: talkto_me
-  gplus: 112523552085244928159
+date: 2014-07-03
+comments: true
+categories: [Atom]
 ---
 
 # dict-en2jaというatomのpackageを公開しました
