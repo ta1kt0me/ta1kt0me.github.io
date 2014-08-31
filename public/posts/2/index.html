@@ -9,7 +9,10 @@
   <meta name="author" content="talkto_me">
 
   
-  <meta name="description" content="Incorporated provides a great typography, responsive design, author details, semantic markup and more. You can set customize post covers, and other &hellip;">
+  <meta name="description" content="JekyllとHerokuを使ってBlogを作成しました。
+サーバーにはUnicornを利用します。
+githubはprivate repositoryが有料なので、bitbucketを使用。
+せっかくなのでCIツールとして、werckerをお試しで。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -97,6 +100,229 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/20/setup-jekyll-blog/">Jekyllでブログを作ってみた</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-04-20'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>JekyllとHerokuを使ってBlogを作成しました。<br/>
+サーバーにはUnicornを利用します。<br/>
+githubはprivate repositoryが有料なので、bitbucketを使用。<br/>
+せっかくなのでCIツールとして、werckerをお試しで。<br/>
+よくよく考えるとHeroku使うんならどっちも要らないがさておき。</p>
+
+<hr />
+
+<h1>事前準備</h1>
+
+<h2>アカウント作成</h2>
+
+<ol>
+<li>heroku</li>
+<li>bitbucket(ついでにrepositoryも作成)</li>
+<li>wercker</li>
+</ol>
+
+
+<h1>jekyllインストール</h1>
+
+<p>jekyllのgemをインストールします。<br/>
+テンプレートとして、<a href="https://github.com/kippt/jekyll-incorporated.git">jekyll-incorporated</a>を使ってみます。<br/>
+なかなかいい感じにデザインしてくれる。</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; gem install jekyll
+&gt; git clone https://github.com/kippt/jekyll-incorporated.git blog
+&gt; <span class="nb">cd </span>blog
+&gt; git branch myblog
+&gt; git checkout myblog</code></pre></div>
+
+
+<hr />
+
+<h1>環境設定</h1>
+
+<p>環境用のファイルを作成。<br/>
+heroku、wercker用の設定ファイルと、jekyllのmarkdownの設定をします。</p>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text">blog
+├── Gemfile      # 必要なGemを追加
+├── Gemfile.lock
+├── Procfile     # heroku用
+├── _config.yml
+├── config.ru    # heroku用
+├── unicorn.rb   # heroku用
+...
+└── wercker.yml  # wercker用</code></pre></div>
+
+
+<h2>Gemfile</h2>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">+</span> <span class="n">gem</span> <span class="s1">&#39;rack-jekyll&#39;</span>
+<span class="o">+</span> <span class="n">gem</span> <span class="s1">&#39;unicorn&#39;</span></code></pre></div>
+
+
+<h2>Procfile</h2>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">+</span> <span class="ss">web</span><span class="p">:</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">unicorn</span> <span class="o">-</span><span class="nb">p</span> <span class="vg">$PORT</span> <span class="o">-</span><span class="n">c</span> <span class="o">.</span><span class="n">/unicorn</span><span class="o">.</span><span class="n">rb</span></code></pre></div>
+
+
+<h2>_config.yml</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">exclude</span><span class="p-Indicator">:</span>     <span class="p-Indicator">[]</span>
+</span><span class='line'><span class="l-Scalar-Plain">+ exclude</span><span class="p-Indicator">:</span>     <span class="p-Indicator">[</span><span class="s">&quot;vendor&quot;</span><span class="p-Indicator">]</span>
+</span><span class='line'><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">markdown</span><span class="p-Indicator">:</span>      <span class="l-Scalar-Plain">maruku</span>
+</span><span class='line'><span class="l-Scalar-Plain">+ markdown</span><span class="p-Indicator">:</span>      <span class="l-Scalar-Plain">redcarpet</span>
+</span><span class='line'><span class="l-Scalar-Plain">+ redcarpet</span><span class="p-Indicator">:</span>
+</span><span class='line'><span class="l-Scalar-Plain">+     extensions</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span><span class="s">&quot;no_intra_emphasis&quot;</span>
+</span><span class='line'><span class="nv">+</span>                  <span class="p-Indicator">,</span><span class="s">&quot;fenced_code_blocks&quot;</span>
+</span><span class='line'><span class="nv">+</span>                  <span class="p-Indicator">,</span><span class="s">&quot;autolink&quot;</span>
+</span><span class='line'><span class="nv">+</span>                  <span class="p-Indicator">,</span><span class="s">&quot;tables&quot;</span>
+</span><span class='line'><span class="nv">+</span>                  <span class="p-Indicator">,</span><span class="s">&quot;with_toc_data&quot;</span><span class="p-Indicator">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>config.ru</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">+</span> <span class="nb">require</span> <span class="s2">&quot;bundler/setup&quot;</span>
+</span><span class='line'><span class="o">+</span> <span class="no">Bundler</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:default</span><span class="p">)</span>
+</span><span class='line'><span class="o">+</span> <span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Jekyll</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:destination</span> <span class="o">=&gt;</span> <span class="s1">&#39;_site&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>unicorn.rb</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">+</span> <span class="n">worker_processes</span> <span class="mi">1</span>
+</span><span class='line'><span class="o">+</span> <span class="n">timeout</span> <span class="mi">30</span>
+</span><span class='line'><span class="o">+</span> <span class="n">preload_app</span> <span class="kp">true</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>wercker.yml</h2>
+
+<p>indentは半角スペース2つじゃないと怒られる。<br/>
+<a href="http://devcenter.wercker.com/articles/werckeryml/validate.html">ここ</a>でフォーマットのチェックができて便利ですね。</p>
+
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">+ box</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">wercker/ruby</span>
+<span class="l-Scalar-Plain">+ build</span><span class="p-Indicator">:</span>
+<span class="l-Scalar-Plain">+   steps</span><span class="p-Indicator">:</span>
+<span class="l-Scalar-Plain">+     - bundle-install</span>
+<span class="l-Scalar-Plain">+     - script</span><span class="p-Indicator">:</span>
+<span class="l-Scalar-Plain">+         name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">echo ruby information</span>
+<span class="l-Scalar-Plain">+         code</span><span class="p-Indicator">:</span> <span class="p-Indicator">|</span>
+<span class="l-Scalar-Plain">+             echo &quot;ruby version $(ruby --version) running!&quot;</span>
+<span class="l-Scalar-Plain">+             echo &quot;from location $(which ruby)&quot;</span>
+<span class="l-Scalar-Plain">+             echo -p &quot;gem list</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">$(gem list)&quot;</span>
+<span class="l-Scalar-Plain">+ deploy</span><span class="p-Indicator">:</span>
+<span class="l-Scalar-Plain">+   steps</span><span class="p-Indicator">:</span>
+<span class="l-Scalar-Plain">+   - heroku-deploy</span></code></pre></div>
+
+
+<hr />
+
+<h1>Remote Repositoryにpush</h1>
+
+<p>ここまでの設定を保存します。
+実際はちまちまコミットしちゃいました。<br/>
+ついでにherokuでアプリ作成。</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; bundle install
+&gt; git remote add bitbucket git@bitbucket.org:xxxx/jekyllblog.git
+&gt; git add .
+&gt; git commit -m <span class="s1">&#39;initial commit for myblog&#39;</span>
+&gt; <span class="c"># bitbucketにpush</span>
+&gt; git push bitbucket myblog
+&gt; <span class="c"># herokuに専用アプリ作成</span>
+&gt; heroku create myblog</code></pre></div>
+
+
+<p>ちなみに、ここでherokuにpushして、<code>heroku open</code>すれば確認できる。<br/>
+やっぱりこっちの方が楽なんじゃ&hellip;</p>
+
+<hr />
+
+<h1>wercker</h1>
+
+<p>いよいよwercker試してみます。</p>
+
+<h2>Add App</h2>
+
+<p>ここでは作業対象となるリポジトリを設定します。<br/>
+(<a href="https://app.wercker.com/#applications/create">ADD APPLICATION</a>)</p>
+
+<h3>Choose a Git provider</h3>
+
+<p><em>bitbucket</em>を選択</p>
+
+<h3>Select a repository</h3>
+
+<p>pushしたbranchを選択</p>
+
+<h3>Add werckerbot</h3>
+
+<p><em>read</em>権限だけつけて許可する</p>
+
+<h3>Setup your wercker.yml</h3>
+
+<p>準備済み！</p>
+
+<h2>My Apps</h2>
+
+<p>Add Appで登録したAppsを選択します。</p>
+
+<h3>Settings</h3>
+
+<p><em>Deploy targets</em>でHeroku APIキーの登録します。<br/>
+<em>Deploy target name</em>にheroku createしたアプリ名を設定します。</p>
+
+<h3>Builds</h3>
+
+<p>Build Passが通ったら、<em>Deploy to</em>から<strong>Settings</strong>に設定したアプリ名を選択します。</p>
+
+<hr />
+
+<h1>動作確認</h1>
+
+<p>成功していればDeploysのデプロイ結果のURLからアクセス可能です。
+(あるいは<code>heroku open</code>)</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
