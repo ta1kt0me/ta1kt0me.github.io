@@ -9,9 +9,23 @@
   <meta name="author" content="talkto_me">
 
   
-  <meta name="description" content="感想 前置きですが、初参加です。Perl書けません。
-ただ前から興味があったので最終出社日を一日前倒して、8/29、30の2日間YAPC::Asia 2014に行ってきました。 一人で行ったので始終気ままにプラプラしてました。意外と一人で来ている人は多かった様子です。
-面白かったのは、 &hellip;">
+  <meta name="description" content="hubotでデータを永続的に保存するためにはredisとの連携が必要です。 使い方 redisとセットで使うので、redisを起動しておくことを忘れずに。
+herokuで使いたい場合は、addonが必要になります。 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -99,6 +113,78 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/09/02/hubot-brain-sample/">Hubotでデータを保存する</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-09-02T20:38:53+09:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>8:38 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>hubotでデータを永続的に保存するためにはredisとの連携が必要です。</p>
+
+<h1>使い方</h1>
+
+<p>redisとセットで使うので、redisを起動しておくことを忘れずに。<br/>
+herokuで使いたい場合は、addonが必要になります。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="nv">module.exports = </span><span class="nf">(robot) -&gt;</span>
+</span><span class='line'>  <span class="nx">robot</span><span class="p">.</span><span class="nx">hear</span> <span class="sr">/janga/i</span><span class="p">,</span> <span class="nf">(msg) -&gt;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># データ取得</span>
+</span><span class='line'>  <span class="nv">jangajan = </span><span class="nx">robot</span><span class="p">.</span><span class="nx">brain</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s">&#39;janga&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># データ更新</span>
+</span><span class='line'>  <span class="nx">robot</span><span class="p">.</span><span class="nx">brain</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s">&#39;janga&#39;</span><span class="p">,</span> <span class="nx">jangajan</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># データ保存 - redis起動してないと保存できない</span>
+</span><span class='line'>  <span class="nx">robot</span><span class="p">.</span><span class="nx">brain</span><span class="p">.</span><span class="nx">save</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># データの保存場所</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">robot</span><span class="p">.</span><span class="nx">brain</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">]</span>
+</span><span class='line'>  <span class="c1"># =&gt; { users: { &#39;1&#39;: { id: &#39;1&#39;, name: &#39;Shell&#39;, room: &#39;Shell&#39; } },</span>
+</span><span class='line'>  <span class="c1">#     _private: { janga: [ [Object] ] } }</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>実際には<code>_private</code>というキーの値として保存されています。<br/>
+あまりよくはないけれど、<code>robot.brain['data']['_pravate']['janga']</code>で取得することもできます。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1266,95 +1352,6 @@ viewを独自拡張したものを使用しなかったので次はその辺り�
 面白かったのでまた行きたいですね。</p>
 
 <p><img src="http://photos-e.ak.instagram.com/hphotos-ak-prn/926456_466559483474076_986180211_n.jpg" title="baseball game" alt="alt text" /></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/08/get-original-domain/">独自ドメイン設定</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-05-08'><span class='date'><span class='date-month'>May</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1>独自ドメイン設定の道程</h1>
-
-<p>せっかくなので独自ドメインでも設定してみよう。<br/>
-そうすれば否が応でも書かずにはいられないはず。<br/>
-有料だもの。現金な人間です。</p>
-
-<p>手順としてはこんな感じでした。</p>
-
-<ol>
-<li>独自ドメイン取得(お名前.com)</li>
-<li>cloudflareで独自ドメインとherokuを紐付け</li>
-<li>herokuに独自ドメイン設定</li>
-<li>おまけ:google analyticsの設定</li>
-</ol>
-
-
-<hr />
-
-<h1>独自ドメイン取得</h1>
-
-<p>お名前.comで独自ドメイン購入。<br/>
-最近は.tokyoやら.redやらあるんですね。<br/>
-.comにしました。<br/>
-あらかじめ候補探しておきましょう。<br/>
-大体は使われています。
-悩んでいると日が暮れます。</p>
-
-<hr />
-
-<h1>cloudflare独自ドメインとheroku連携</h1>
-
-<p>wwwつけると入力手間だな〜っていう理由でルートドメインはしたくない。<br/>
-たまたま<a href="http://blog.jnito.com/entry/2014/05/04/090537">こちらの記事</a>を見かけまして。<br/>
-cloudflareを利用することにしました。<br/>
-用途はブログを公開するだけだし、SSL利用するまでもなかったので無料プランで試してみました。<br/>
-使い切れてないですが、設定だけでもできたの良し。目的達成。<br/>
-設定完了後、whoisコマンドのName Serverの値がcloudflare用に変わります。<br/>
-反映されるのに待ちます。</p>
-
-<hr />
-
-<h1>herokuに独自ドメイン設定</h1>
-
-<p>herokuアプリのSettingsのDomainsに独自ドメインを追加。<br/>
-これしないと、herokuの404画面が出てくる。</p>
-
-<hr />
-
-<h1>google analyticsの設定</h1>
-
-<p>トラッキング情報のトラッキングコードを<em>google-analytics.htmlにコピペ。<br/>
-</em>config.ymlを以下の通り変更
-<code>yaml
-  analytics:
-+    google: false
-+    google: true</code></p>
-
-<p>夜明けに寝て夕暮れ時に目覚めても反映されてませんでした。<br/>
-気長に待ちましょう。</p>
-
-<p>どれも長い。</p>
 </div>
   
   

@@ -9,10 +9,10 @@
   <meta name="author" content="talkto_me">
 
   
-  <meta name="description" content="JekyllとHerokuを使ってBlogを作成しました。
-サーバーにはUnicornを利用します。
-githubはprivate repositoryが有料なので、bitbucketを使用。
-せっかくなのでCIツールとして、werckerをお試しで。 &hellip;">
+  <meta name="description" content="独自ドメイン設定の道程 せっかくなので独自ドメインでも設定してみよう。
+そうすれば否が応でも書かずにはいられないはず。
+有料だもの。現金な人間です。 手順としてはこんな感じでした。 独自ドメイン取得(お名前.com)
+cloudflareで独自ドメインとherokuを紐付け &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -100,6 +100,95 @@ githubはprivate repositoryが有料なので、bitbucketを使用。
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/05/08/get-original-domain/">独自ドメイン設定</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-05-08'><span class='date'><span class='date-month'>May</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>独自ドメイン設定の道程</h1>
+
+<p>せっかくなので独自ドメインでも設定してみよう。<br/>
+そうすれば否が応でも書かずにはいられないはず。<br/>
+有料だもの。現金な人間です。</p>
+
+<p>手順としてはこんな感じでした。</p>
+
+<ol>
+<li>独自ドメイン取得(お名前.com)</li>
+<li>cloudflareで独自ドメインとherokuを紐付け</li>
+<li>herokuに独自ドメイン設定</li>
+<li>おまけ:google analyticsの設定</li>
+</ol>
+
+
+<hr />
+
+<h1>独自ドメイン取得</h1>
+
+<p>お名前.comで独自ドメイン購入。<br/>
+最近は.tokyoやら.redやらあるんですね。<br/>
+.comにしました。<br/>
+あらかじめ候補探しておきましょう。<br/>
+大体は使われています。
+悩んでいると日が暮れます。</p>
+
+<hr />
+
+<h1>cloudflare独自ドメインとheroku連携</h1>
+
+<p>wwwつけると入力手間だな〜っていう理由でルートドメインはしたくない。<br/>
+たまたま<a href="http://blog.jnito.com/entry/2014/05/04/090537">こちらの記事</a>を見かけまして。<br/>
+cloudflareを利用することにしました。<br/>
+用途はブログを公開するだけだし、SSL利用するまでもなかったので無料プランで試してみました。<br/>
+使い切れてないですが、設定だけでもできたの良し。目的達成。<br/>
+設定完了後、whoisコマンドのName Serverの値がcloudflare用に変わります。<br/>
+反映されるのに待ちます。</p>
+
+<hr />
+
+<h1>herokuに独自ドメイン設定</h1>
+
+<p>herokuアプリのSettingsのDomainsに独自ドメインを追加。<br/>
+これしないと、herokuの404画面が出てくる。</p>
+
+<hr />
+
+<h1>google analyticsの設定</h1>
+
+<p>トラッキング情報のトラッキングコードを<em>google-analytics.htmlにコピペ。<br/>
+</em>config.ymlを以下の通り変更
+<code>yaml
+  analytics:
++    google: false
++    google: true</code></p>
+
+<p>夜明けに寝て夕暮れ時に目覚めても反映されてませんでした。<br/>
+気長に待ちましょう。</p>
+
+<p>どれも長い。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
