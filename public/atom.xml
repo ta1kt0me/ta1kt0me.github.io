@@ -4,7 +4,7 @@
   <title><![CDATA[Jangajan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-03T19:48:37+09:00</updated>
+  <updated>2014-09-05T03:51:55+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,89 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[UnixのSocketをRubyで扱う]]></title>
+    <link href="http://jangajan.com/blog/2014/09/04/unix-process-socket-in-ruby/"/>
+    <updated>2014-09-04T03:20:37+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/04/unix-process-socket-in-ruby</id>
+    <content type="html"><![CDATA[<p>積読消化シリーズです。<br/>
+<a href="http://tatsu-zine.com/books/naruhounix">なるほどUnixプロセス ― Rubyで学ぶUnixの基礎</a><br/>
+プロセス間通信を、昨日はpipe、今日はUnixソケットのところです。</p>
+
+<h1>Rubyのプロセス間通信でメッセージ（データグラム）を使う</h1>
+
+<p>データの通信にストリームではなく、メッセージ（データグラム）を利用したい場合、UNIXソケットを使います。</p>
+
+<h2>メッセージ</h2>
+
+<p>昨日の最後にも載せた記事に説明があります。<br/>
+メッセージを利用する場合は、１通信が１メッセージとなるため、データのデリミタが不要です。<br/>
+(close処理が不要になる)</p>
+
+<p><a href="http://slashdot.jp/journal/160355/TCP%E3%81%A8UDP%E3%81%AE%E9%81%95%E3%81%84">gatekeeperの日記： TCPとUDPの違い</a></p>
+
+<blockquote><p>ところがデータグラム型ではメッセージ単位なのでメッセージの境界が保存されていて、
+読み込みと書き込みは常にペアでなければいけない。</p></blockquote>
+
+<p>なお、パイプでは、メッセージは使えません。</p>
+
+<h2>Unixソケット</h2>
+
+<p>Unixソケットは、ソケットを利用したプロセス間通信の方法の一つです。<br/>
+メッセージを利用するためにはパイプではなく、Unixソケットでないといけません。<br/>
+pipeではできなかったデータの双方向の通信ができます。</p>
+
+<h2>サンプル</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;socket&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># :DGRAMはメッセージ（データグラム）の利用を宣言</span>
+</span><span class='line'><span class="n">child_socket</span><span class="p">,</span> <span class="n">parent_socket</span> <span class="o">=</span> <span class="no">Socket</span><span class="o">.</span><span class="n">pair</span><span class="p">(</span><span class="ss">:UNIX</span><span class="p">,</span> <span class="ss">:DGRAM</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'><span class="n">maxlen</span> <span class="o">=</span> <span class="mi">1000</span> <span class="c1"># メッセージのMaxサイズ</span>
+</span><span class='line'><span class="nb">fork</span> <span class="k">do</span>
+</span><span class='line'>  <span class="c1"># 子プロセスで使用しないsocketを閉じる</span>
+</span><span class='line'>  <span class="n">parent_socket</span><span class="o">.</span><span class="n">close</span>
+</span><span class='line'>  <span class="c1"># 対となるSocketからのメッセージの通知を待つ</span>
+</span><span class='line'>  <span class="n">instruction</span> <span class="o">=</span> <span class="n">child_socket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">maxlen</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1"># 対となるSocketへメッセージ送信</span>
+</span><span class='line'>  <span class="n">child_socket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">instruction</span><span class="si">}</span><span class="s2"> accomplished!&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># 親プロセスで使用しないsocketを閉じる</span>
+</span><span class='line'><span class="n">child_socket</span><span class="o">.</span><span class="n">close</span>
+</span><span class='line'><span class="c1"># 対となるSocketへメッセージ送信</span>
+</span><span class='line'><span class="n">parent_socket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;Heavy lifting&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># 対となるSocketからのメッセージの通知を待って表示する</span>
+</span><span class='line'><span class="vg">$stdout</span><span class="o">.</span><span class="n">puts</span> <span class="n">parent_socket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">maxlen</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># =&gt;Parent_Socket accomplished!</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>child_socket</code>と<code>parent_socket</code>でそれぞれ、メッセージをやり取りしています。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[UnixのパイプをRubyで扱う]]></title>

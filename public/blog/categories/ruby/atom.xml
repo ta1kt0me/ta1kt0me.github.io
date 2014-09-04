@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Jangajan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-03T19:49:43+09:00</updated>
+  <updated>2014-09-05T03:51:55+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,67 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[UnixのSocketをRubyで扱う]]></title>
+    <link href="http://jangajan.com/blog/2014/09/04/unix-process-socket-in-ruby/"/>
+    <updated>2014-09-04T03:20:37+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/04/unix-process-socket-in-ruby</id>
+    <content type="html"><![CDATA[<p>積読消化シリーズです。<br/>
+<a href="http://tatsu-zine.com/books/naruhounix">なるほどUnixプロセス ― Rubyで学ぶUnixの基礎</a><br/>
+プロセス間通信を、昨日はpipe、今日はUnixソケットのところです。</p>
+
+<h1>Rubyのプロセス間通信でメッセージ（データグラム）を使う</h1>
+
+<p>データの通信にストリームではなく、メッセージ（データグラム）を利用したい場合、UNIXソケットを使います。</p>
+
+<h2>メッセージ</h2>
+
+<p>昨日の最後にも載せた記事に説明があります。<br/>
+メッセージを利用する場合は、１通信が１メッセージとなるため、データのデリミタが不要です。<br/>
+(close処理が不要になる)</p>
+
+<p><a href="http://slashdot.jp/journal/160355/TCP%E3%81%A8UDP%E3%81%AE%E9%81%95%E3%81%84">gatekeeperの日記： TCPとUDPの違い</a></p>
+
+<blockquote><p>ところがデータグラム型ではメッセージ単位なのでメッセージの境界が保存されていて、
+読み込みと書き込みは常にペアでなければいけない。</p></blockquote>
+
+<p>なお、パイプでは、メッセージは使えません。</p>
+
+<h2>Unixソケット</h2>
+
+<p>Unixソケットは、ソケットを利用したプロセス間通信の方法の一つです。<br/>
+メッセージを利用するためにはパイプではなく、Unixソケットでないといけません。<br/>
+pipeではできなかったデータの双方向の通信ができます。</p>
+
+<h2>サンプル</h2>
+
+<pre><code class="rb">require 'socket'
+
+# :DGRAMはメッセージ（データグラム）の利用を宣言
+child_socket, parent_socket = Socket.pair(:UNIX, :DGRAM, 0)
+maxlen = 1000 # メッセージのMaxサイズ
+fork do
+  # 子プロセスで使用しないsocketを閉じる
+  parent_socket.close
+  # 対となるSocketからのメッセージの通知を待つ
+  instruction = child_socket.recv(maxlen)
+  # 対となるSocketへメッセージ送信
+  child_socket.send("#{instruction} accomplished!", 0)  
+end
+
+# 親プロセスで使用しないsocketを閉じる
+child_socket.close
+# 対となるSocketへメッセージ送信
+parent_socket.send("Heavy lifting", 0)
+# 対となるSocketからのメッセージの通知を待って表示する
+$stdout.puts parent_socket.recv(maxlen)
+# =&gt;Parent_Socket accomplished!
+</code></pre>
+
+<p><code>child_socket</code>と<code>parent_socket</code>でそれぞれ、メッセージをやり取りしています。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[UnixのパイプをRubyで扱う]]></title>
