@@ -4,7 +4,7 @@
   <title><![CDATA[Jangajan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-05T03:51:55+09:00</updated>
+  <updated>2014-09-05T19:27:04+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,171 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[RubyでUnixのSocketを利用したWebサーバーを作る]]></title>
+    <link href="http://jangajan.com/blog/2014/09/05/unix-process-socket-server-in-ruby/"/>
+    <updated>2014-09-05T19:08:20+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/05/unix-process-socket-server-in-ruby</id>
+    <content type="html"><![CDATA[<p>積読消化シリーズです。<br/>
+<a href="http://tatsu-zine.com/books/naruhounix">なるほどUnixプロセス ― Rubyで学ぶUnixの基礎</a><br/>
+簡単なWebサーバーを作ります。</p>
+
+<ul>
+<li>telnetでアクセスするWebサーバー</li>
+<li>ブラウザでアクセスするWebサーバー</li>
+<li>forkしたProcessでリクエストを処理するWebサーバー</li>
+</ul>
+
+
+<h1>telnetでアクセスするWebサーバー</h1>
+
+<p>まずはtelnetでアクセスするためのシンプルなWebサーバーを用意します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1">#!/usr/bin/env ruby</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;socket&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># 127.0.0.1(localhost)で8080ポートで立ち上げる</span>
+</span><span class='line'><span class="n">socket</span> <span class="o">=</span> <span class="no">TCPServer</span><span class="o">.</span><span class="n">open</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">8080</span>
+</span><span class='line'>
+</span><span class='line'><span class="kp">loop</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">connection</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">accept</span>
+</span><span class='line'>  <span class="n">connection</span><span class="o">.</span><span class="n">puts</span> <span class="s1">&#39;Hello Readers!&#39;</span>
+</span><span class='line'>  <span class="n">connection</span><span class="o">.</span><span class="n">close</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>サーバーを起動し、ターミナルを立ち上げて、telnetでアクセスしてみます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>telnet 127.0.0.1 <span class="nv">8080</span>
+</span><span class='line'><span class="o">=</span>&gt; Hello Readers!
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ただし、このままだとブラウザで<code>http://127.0.0.1:8080</code>にアクセスできません。<br/>
+次はブラウザでアクセスできるように修正します。</p>
+
+<h1>ブラウザでアクセスするWebサーバー</h1>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1">#!/usr/bin/env ruby</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;socket&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;time&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">socket</span> <span class="o">=</span> <span class="no">TCPServer</span><span class="o">.</span><span class="n">open</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">8080</span>
+</span><span class='line'>
+</span><span class='line'><span class="kp">loop</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">connection</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">accept</span>
+</span><span class='line'>  <span class="c1"># response headerを設定</span>
+</span><span class='line'>  <span class="n">connection</span><span class="o">.</span><span class="n">puts</span> <span class="o">[</span><span class="s1">&#39;HTTP/1.1 200 OK&#39;</span><span class="p">,</span>
+</span><span class='line'>                   <span class="s2">&quot;Date: </span><span class="si">#{</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">httpdate</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+</span><span class='line'>                   <span class="s1">&#39;Server: Ruby&#39;</span><span class="p">,</span>
+</span><span class='line'>                   <span class="s1">&#39;Content-Type: text/html; charset=utf-8&#39;</span><span class="p">,</span>
+</span><span class='line'>                   <span class="s2">&quot;Content-Length: </span><span class="si">#{</span><span class="n">response_body</span><span class="o">.</span><span class="n">length</span><span class="si">}</span><span class="se">\r\n\r\n</span><span class="s2">&quot;</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1"># response bodyを設定</span>
+</span><span class='line'>  <span class="n">connection</span><span class="o">.</span><span class="n">puts</span> <span class="s1">&#39;Hello Readers!&#39;</span>
+</span><span class='line'>  <span class="n">connection</span><span class="o">.</span><span class="n">close</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>レスポンスのヘッダー情報を追加しました。<br/>
+ヘッダーとボディは改行<code>\r\n</code>で区切ります。</p>
+
+<p>これでブラウザでアクセスできるようになりました。</p>
+
+<h1>forkしたProcessでリクエストを処理するWebサーバー</h1>
+
+<p>続いては、アクセスを子プロセスで処理するように変更します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1">#!/usr/bin/env ruby                           </span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;socket&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;time&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">socket</span> <span class="o">=</span> <span class="no">TCPServer</span><span class="o">.</span><span class="n">open</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">8080</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">fork</span> <span class="k">do</span>
+</span><span class='line'>  <span class="c1"># 子プロセスで処理</span>
+</span><span class='line'>  <span class="kp">loop</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">response_body</span> <span class="o">=</span> <span class="s1">&#39;Hello Browser!&#39;</span>
+</span><span class='line'>    <span class="n">connection</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">accept</span>
+</span><span class='line'>    <span class="n">connection</span><span class="o">.</span><span class="n">puts</span> <span class="o">[</span><span class="s1">&#39;HTTP/1.1 200 OK&#39;</span><span class="p">,</span>
+</span><span class='line'>                   <span class="s2">&quot;Date: </span><span class="si">#{</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">httpdate</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+</span><span class='line'>                   <span class="s1">&#39;Server: Ruby&#39;</span><span class="p">,</span>
+</span><span class='line'>                   <span class="s1">&#39;Content-Type: text/html; charset=utf-8&#39;</span><span class="p">,</span>
+</span><span class='line'>                   <span class="s2">&quot;Content-Length: </span><span class="si">#{</span><span class="n">response_body</span><span class="o">.</span><span class="n">length</span><span class="si">}</span><span class="se">\r\n\r\n</span><span class="s2">&quot;</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">connection</span><span class="o">.</span><span class="n">puts</span> <span class="n">response_body</span>
+</span><span class='line'>    <span class="n">connection</span><span class="o">.</span><span class="n">close</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># 親プロセスの処理を待ちにする</span>
+</span><span class='line'><span class="no">Process</span><span class="o">.</span><span class="n">waitall</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>forkで子プロセスを生成し、リクエストを子プロセスで処理しています。<br/>
+親プロセスは待ち状態になっているので子プロセスからのなにかしらのシグナルを受け取るべきですが、そこはまた今度。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[UnixのSocketをRubyで扱う]]></title>

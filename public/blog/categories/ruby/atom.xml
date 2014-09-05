@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Jangajan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-05T03:51:55+09:00</updated>
+  <updated>2014-09-05T19:27:04+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,111 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[RubyでUnixのSocketを利用したWebサーバーを作る]]></title>
+    <link href="http://jangajan.com/blog/2014/09/05/unix-process-socket-server-in-ruby/"/>
+    <updated>2014-09-05T19:08:20+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/05/unix-process-socket-server-in-ruby</id>
+    <content type="html"><![CDATA[<p>積読消化シリーズです。<br/>
+<a href="http://tatsu-zine.com/books/naruhounix">なるほどUnixプロセス ― Rubyで学ぶUnixの基礎</a><br/>
+簡単なWebサーバーを作ります。</p>
+
+<ul>
+<li>telnetでアクセスするWebサーバー</li>
+<li>ブラウザでアクセスするWebサーバー</li>
+<li>forkしたProcessでリクエストを処理するWebサーバー</li>
+</ul>
+
+
+<h1>telnetでアクセスするWebサーバー</h1>
+
+<p>まずはtelnetでアクセスするためのシンプルなWebサーバーを用意します。</p>
+
+<pre><code class="rb">#!/usr/bin/env ruby
+
+require 'socket'
+
+# 127.0.0.1(localhost)で8080ポートで立ち上げる
+socket = TCPServer.open '127.0.0.1', 8080
+
+loop {
+  connection = socket.accept
+  connection.puts 'Hello Readers!'
+  connection.close
+}
+</code></pre>
+
+<p>サーバーを起動し、ターミナルを立ち上げて、telnetでアクセスしてみます。</p>
+
+<pre><code class="sh">telnet 127.0.0.1 8080
+=&gt; Hello Readers!
+</code></pre>
+
+<p>ただし、このままだとブラウザで<code>http://127.0.0.1:8080</code>にアクセスできません。<br/>
+次はブラウザでアクセスできるように修正します。</p>
+
+<h1>ブラウザでアクセスするWebサーバー</h1>
+
+<pre><code class="rb">#!/usr/bin/env ruby
+
+require 'socket'
+require 'time'
+
+socket = TCPServer.open '127.0.0.1', 8080
+
+loop {
+  connection = socket.accept
+  # response headerを設定
+  connection.puts ['HTTP/1.1 200 OK',
+                   "Date: #{Time.now.httpdate}",
+                   'Server: Ruby',
+                   'Content-Type: text/html; charset=utf-8',
+                   "Content-Length: #{response_body.length}\r\n\r\n"].join("\r\n")
+  # response bodyを設定
+  connection.puts 'Hello Readers!'
+  connection.close
+}
+</code></pre>
+
+<p>レスポンスのヘッダー情報を追加しました。<br/>
+ヘッダーとボディは改行<code>\r\n</code>で区切ります。</p>
+
+<p>これでブラウザでアクセスできるようになりました。</p>
+
+<h1>forkしたProcessでリクエストを処理するWebサーバー</h1>
+
+<p>続いては、アクセスを子プロセスで処理するように変更します。</p>
+
+<pre><code class="rb">#!/usr/bin/env ruby                           
+require 'socket'
+require 'time'
+
+socket = TCPServer.open '127.0.0.1', 8080
+
+fork do
+  # 子プロセスで処理
+  loop {
+    response_body = 'Hello Browser!'
+    connection = socket.accept
+    connection.puts ['HTTP/1.1 200 OK',
+                   "Date: #{Time.now.httpdate}",
+                   'Server: Ruby',
+                   'Content-Type: text/html; charset=utf-8',
+                   "Content-Length: #{response_body.length}\r\n\r\n"].join("\r\n")
+    connection.puts response_body
+    connection.close
+  }
+end
+
+# 親プロセスの処理を待ちにする
+Process.waitall
+</code></pre>
+
+<p>forkで子プロセスを生成し、リクエストを子プロセスで処理しています。<br/>
+親プロセスは待ち状態になっているので子プロセスからのなにかしらのシグナルを受け取るべきですが、そこはまた今度。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[UnixのSocketをRubyで扱う]]></title>
