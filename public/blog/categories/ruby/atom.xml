@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Jangajan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-05T19:27:04+09:00</updated>
+  <updated>2014-09-07T16:53:49+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -94,7 +94,7 @@ require 'time'
 
 socket = TCPServer.open '127.0.0.1', 8080
 
-fork do
+worker_pid = fork do
   # 子プロセスで処理
   loop {
     response_body = 'Hello Browser!'
@@ -109,12 +109,20 @@ fork do
   }
 end
 
+# Signalを受け取ったらprocessをkillする
+[:INT, :QUIT].each do |signal|
+  Signal.trap(signal) {
+    Process.kill(signal, worker_pid)
+  }
+end
+
 # 親プロセスの処理を待ちにする
-Process.waitall
+Process.waitpid worker_pid
 </code></pre>
 
 <p>forkで子プロセスを生成し、リクエストを子プロセスで処理しています。<br/>
-親プロセスは待ち状態になっているので子プロセスからのなにかしらのシグナルを受け取るべきですが、そこはまた今度。</p>
+親プロセスは子プロセスが処理が完了するまでwaitします。<br/>
+(子プロセスはloop処理を行っているため、シグナルを受け取るまでは生き続けます)</p>
 ]]></content>
   </entry>
   

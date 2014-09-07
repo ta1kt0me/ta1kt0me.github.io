@@ -251,13 +251,20 @@ forkしたProcessでリクエストを処理するWebサーバー &hellip;">
 <span class='line-number'>21</span>
 <span class='line-number'>22</span>
 <span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
 </pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1">#!/usr/bin/env ruby                           </span>
 </span><span class='line'><span class="nb">require</span> <span class="s1">&#39;socket&#39;</span>
 </span><span class='line'><span class="nb">require</span> <span class="s1">&#39;time&#39;</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">socket</span> <span class="o">=</span> <span class="no">TCPServer</span><span class="o">.</span><span class="n">open</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">8080</span>
 </span><span class='line'>
-</span><span class='line'><span class="nb">fork</span> <span class="k">do</span>
+</span><span class='line'><span class="n">worker_pid</span> <span class="o">=</span> <span class="nb">fork</span> <span class="k">do</span>
 </span><span class='line'>  <span class="c1"># 子プロセスで処理</span>
 </span><span class='line'>  <span class="kp">loop</span> <span class="p">{</span>
 </span><span class='line'>    <span class="n">response_body</span> <span class="o">=</span> <span class="s1">&#39;Hello Browser!&#39;</span>
@@ -272,13 +279,21 @@ forkしたProcessでリクエストを処理するWebサーバー &hellip;">
 </span><span class='line'>  <span class="p">}</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
+</span><span class='line'><span class="c1"># Signalを受け取ったらprocessをkillする</span>
+</span><span class='line'><span class="o">[</span><span class="ss">:INT</span><span class="p">,</span> <span class="ss">:QUIT</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">signal</span><span class="o">|</span>
+</span><span class='line'>  <span class="no">Signal</span><span class="o">.</span><span class="n">trap</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="no">Process</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">worker_pid</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
 </span><span class='line'><span class="c1"># 親プロセスの処理を待ちにする</span>
-</span><span class='line'><span class="no">Process</span><span class="o">.</span><span class="n">waitall</span>
+</span><span class='line'><span class="no">Process</span><span class="o">.</span><span class="n">waitpid</span> <span class="n">worker_pid</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>forkで子プロセスを生成し、リクエストを子プロセスで処理しています。<br/>
-親プロセスは待ち状態になっているので子プロセスからのなにかしらのシグナルを受け取るべきですが、そこはまた今度。</p>
+親プロセスは子プロセスが処理が完了するまでwaitします。<br/>
+(子プロセスはloop処理を行っているため、シグナルを受け取るまでは生き続けます)</p>
 </div>
 
 
