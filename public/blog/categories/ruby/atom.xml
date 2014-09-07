@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Jangajan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-08T03:49:05+09:00</updated>
+  <updated>2014-09-08T03:50:35+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -124,7 +124,7 @@ ThreadsWait.all_waits(worker_threads)
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[RubyでProcessを利用したWebサーバーを作る]]></title>
+    <title type="html"><![CDATA[RubyのProcessを利用したWebサーバーを作る]]></title>
     <link href="http://jangajan.com/blog/2014/09/05/unix-process-socket-server-in-ruby/"/>
     <updated>2014-09-05T19:08:20+09:00</updated>
     <id>http://jangajan.com/blog/2014/09/05/unix-process-socket-server-in-ruby</id>
