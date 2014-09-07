@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "RubyでUnixのSocketを利用したWebサーバーを作る"
+title: "RubyでProcessを利用したWebサーバーを作る"
 date: 2014-09-05 19:08:20 +0900
 comments: true
 categories: [ruby]
