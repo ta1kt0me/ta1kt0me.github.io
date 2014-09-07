@@ -81,7 +81,7 @@ require 'time'
 
 socket = TCPServer.open '127.0.0.1', 8080
 
-fork do
+worker_pid = fork do
   # 子プロセスで処理
   loop {
     response_body = 'Hello Browser!'
@@ -96,10 +96,17 @@ fork do
   }
 end
 
+# Signalを受け取ったらprocessをkillする
+[:INT, :QUIT].each do |signal|
+  Signal.trap(signal) {
+    Process.kill(signal, worker_pid)
+  }
+end
+
 # 親プロセスの処理を待ちにする
-Process.waitall
+Process.waitpid worker_pid
 ```
 
 forkで子プロセスを生成し、リクエストを子プロセスで処理しています。  
-親プロセスは待ち状態になっているので子プロセスからのなにかしらのシグナルを受け取るべきですが、そこはまた今度。
-
+親プロセスは子プロセスが処理が完了するまでwaitします。  
+(子プロセスはloop処理を行っているため、シグナルを受け取るまでは生き続けます)
