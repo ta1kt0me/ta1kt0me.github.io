@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Jangajan.com]]></title>
+  <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-08T09:34:46+09:00</updated>
+  <updated>2014-09-08T09:55:20+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -21,6 +21,9 @@
     <content type="html"><![CDATA[<p>積読消化シリーズの派生です。<br/>
 <a href="http://tatsu-zine.com/books/naruhounix">なるほどUnixプロセス ― Rubyで学ぶUnixの基礎</a><br/>
 processをforkして動くWebサーバーをThreadで試してみます。</p>
+
+<!-- more -->
+
 
 <h1>Threadの簡単な使い方</h1>
 

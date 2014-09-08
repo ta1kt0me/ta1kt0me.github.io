@@ -5,14 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Jangajan.com</title>
+  <title>JanGaJan.com</title>
   <meta name="author" content="talkto_me">
 
   
   <meta name="description" content="積読消化シリーズの派生です。
 なるほどUnixプロセス ― Rubyで学ぶUnixの基礎
-processをforkして動くWebサーバーをThreadで試してみます。 Threadの簡単な使い方 まずはThreadの簡単な使い方です。
-一部違いはあるものの、 &hellip;">
+processをforkして動くWebサーバーをThreadで試してみます。 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -24,7 +23,7 @@ processをforkして動くWebサーバーをThreadで試してみます。 Threa
   <link rel="canonical" href="http://jangajan.com">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="Jangajan.com" type="application/atom+xml">
+  <link href="/atom.xml" rel="alternate" title="JanGaJan.com" type="application/atom+xml">
   <script src="/javascripts/modernizr-2.0.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
@@ -53,7 +52,7 @@ processをforkして動くWebサーバーをThreadで試してみます。 Threa
 
 <body   class="collapse-sidebar sidebar-footer" >
   <header role="banner"><hgroup>
-  <h1><a href="/">Jangajan.com</a></h1>
+  <h1><a href="/">JanGaJan.com</a></h1>
   
     <h2>i&#8217;m talkto_me but talkto_you.</h2>
   
@@ -126,167 +125,12 @@ processをforkして動くWebサーバーをThreadで試してみます。 Threa
 <a href="http://tatsu-zine.com/books/naruhounix">なるほどUnixプロセス ― Rubyで学ぶUnixの基礎</a><br/>
 processをforkして動くWebサーバーをThreadで試してみます。</p>
 
-<h1>Threadの簡単な使い方</h1>
-
-<p>まずはThreadの簡単な使い方です。<br/>
-一部違いはあるものの、書き方はProcessのfork処理と大きく差はありませんね。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">t1</span> <span class="o">=</span> <span class="no">Thread</span><span class="o">.</span><span class="n">start</span> <span class="p">{</span>
-</span><span class='line'>   <span class="nb">puts</span> <span class="s2">&quot;スレッド1 id : </span><span class="si">#{</span><span class="no">Thread</span><span class="o">.</span><span class="n">current</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>   <span class="nb">sleep</span> <span class="mi">1</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># t1が終わるまではメインスレッドが待ちになる</span>
-</span><span class='line'><span class="n">t1</span><span class="o">.</span><span class="n">join</span>
-</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;メインスレッド id : </span><span class="si">#{</span><span class="no">Thread</span><span class="o">.</span><span class="n">current</span><span class="si">}</span><span class="s2">&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>Thread.start{&hellip;}とすると、新しいThreadを生成してブロックを実行します。</li>
-<li>メインスレッドが終了すると、Threadも終了します。</li>
-<li>Thread#joinを実行すると、対象のThreadの処理が終了するまで待ちます。</li>
-</ul>
-
-
-<p>ちなみに、Threadはメインスレッドと同じProcessで実行されます。<br/>
-そのため、<code>ps</code>でrubyのプロセスを確認すると一つしかありません。</p>
-
-<h1>Threadローカルな変数</h1>
-
-<p>処理プロセスが同じということは、Thread内の処理で変数は共有されることになりますね。<br/>
-Threadローカルにするためには、Thread.startの引数に渡します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">access_count</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span class='line'><span class="n">t1</span> <span class="o">=</span> <span class="no">Thread</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">access_count</span><span class="p">)</span> <span class="p">{</span><span class="o">|</span><span class="n">ac</span><span class="o">|</span>
-</span><span class='line'>   <span class="nb">puts</span> <span class="s2">&quot;スレッド1 id : </span><span class="si">#{</span><span class="no">Thread</span><span class="o">.</span><span class="n">current</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">ac</span> <span class="o">+=</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=&gt;</span> <span class="mi">1</span>
-</span><span class='line'>   <span class="nb">sleep</span> <span class="mi">1</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="n">t1</span><span class="o">.</span><span class="n">join</span>
-</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;メインスレッド id : </span><span class="si">#{</span><span class="no">Thread</span><span class="o">.</span><span class="n">current</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">access_count</span> <span class="o">+=</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=&gt;</span> <span class="mi">1</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>複数Threadを待ちたい</h1>
-
-<p>Thread#joinは特定のThreadを待ちます。<br/>
-Webサーバーの例では複数のProcessを管理していました。<br/>
-同様のことをThreadで実行するには、<code>ThreadsWait</code>を使います。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;thwait&#39;</span>
-</span><span class='line'><span class="n">worker_threads</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'><span class="mi">5</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">worker_threads</span> <span class="o">&lt;&lt;</span> <span class="no">Thread</span><span class="o">.</span><span class="n">start</span> <span class="p">{</span>
-</span><span class='line'>     <span class="nb">puts</span> <span class="s2">&quot;スレッド1 id : </span><span class="si">#{</span><span class="no">Thread</span><span class="o">.</span><span class="n">current</span><span class="si">}</span><span class="s2"> &quot;</span>
-</span><span class='line'>     <span class="nb">sleep</span> <span class="mi">1</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="c1"># ThreadsWait.all_waitsで全てのThreadの処理終了を待つ</span>
-</span><span class='line'><span class="no">ThreadsWait</span><span class="o">.</span><span class="n">all_waits</span><span class="p">(</span><span class="n">worker_threads</span><span class="p">)</span>
-</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;メインスレッド id : </span><span class="si">#{</span><span class="no">Thread</span><span class="o">.</span><span class="n">current</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">access_count</span> <span class="o">+=</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">=&gt;</span> <span class="mi">1</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>複数Threadでリクエストを処理するWebサーバー</h1>
-
-<p>それでは上記を踏まえて、複数Threadで処理するWebサーバーを書いてみます。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1">#!/usr/bin/env ruby</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;socket&#39;</span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;time&#39;</span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;thwait&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">socket</span> <span class="o">=</span> <span class="no">TCPServer</span><span class="o">.</span><span class="n">open</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">8080</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">access_count</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">worker_threads</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'><span class="mi">5</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span>
-</span><span class='line'>  <span class="c1"># access_countはThreadローカルにする</span>
-</span><span class='line'>  <span class="n">worker_threads</span> <span class="o">&lt;&lt;</span> <span class="no">Thread</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">access_count</span><span class="p">){</span><span class="o">|</span><span class="n">ac</span><span class="o">|</span>
-</span><span class='line'>    <span class="c1"># threadの処理</span>
-</span><span class='line'>    <span class="kp">loop</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">response_body</span> <span class="o">=</span> <span class="s2">&quot;Hello Browser! </span><span class="si">#{</span><span class="n">ac</span> <span class="o">+=</span> <span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>      <span class="n">connection</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">accept</span>
-</span><span class='line'>      <span class="n">connection</span><span class="o">.</span><span class="n">puts</span> <span class="o">[</span><span class="s1">&#39;HTTP/1.1 200 OK&#39;</span><span class="p">,</span>
-</span><span class='line'>                     <span class="s2">&quot;Date: </span><span class="si">#{</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">httpdate</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-</span><span class='line'>                     <span class="s1">&#39;Server: Ruby&#39;</span><span class="p">,</span>
-</span><span class='line'>                     <span class="s1">&#39;Content-Type: text/html; charset=utf-8&#39;</span><span class="p">,</span>
-</span><span class='line'>                     <span class="s2">&quot;Content-Length: </span><span class="si">#{</span><span class="n">response_body</span><span class="o">.</span><span class="n">length</span><span class="si">}</span><span class="se">\r\n\r\n</span><span class="s2">&quot;</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span class='line'>      <span class="n">connection</span><span class="o">.</span><span class="n">puts</span> <span class="n">response_body</span>
-</span><span class='line'>      <span class="n">connection</span><span class="o">.</span><span class="n">close</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># メインスレッドを待ちにする</span>
-</span><span class='line'><span class="no">ThreadsWait</span><span class="o">.</span><span class="n">all_waits</span><span class="p">(</span><span class="n">worker_threads</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>実際のところ、<code>socket</code>を複数Threadで共有した場合どうなるか、とかは調査する必要がありますね。<br/>
-ただ、Threadで置き換えることもできたということで。<br/>
-これでも一応動きます。</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/09/07/unix-thread-socket-server-in-ruby/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -1828,6 +1672,14 @@ view_flowの中を覗いてみるとこんな感じ。</p>
 
 
 
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
 
 
 
