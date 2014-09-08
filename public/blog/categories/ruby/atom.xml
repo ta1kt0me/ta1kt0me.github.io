@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-08T09:55:45+09:00</updated>
+  <updated>2014-09-08T09:59:05+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -21,6 +21,9 @@
     <content type="html"><![CDATA[<p>積読消化シリーズの派生です。<br/>
 <a href="http://tatsu-zine.com/books/naruhounix">なるほどUnixプロセス ― Rubyで学ぶUnixの基礎</a><br/>
 processをforkして動くWebサーバーをThreadで試してみます。</p>
+
+<!-- more -->
+
 
 <h1>Threadの簡単な使い方</h1>
 
@@ -139,6 +142,9 @@ ThreadsWait.all_waits(worker_threads)
 </ul>
 
 
+<!-- more -->
+
+
 <h1>telnetでアクセスするWebサーバー</h1>
 
 <p>まずはtelnetでアクセスするためのシンプルなWebサーバーを用意します。</p>
@@ -245,6 +251,9 @@ Process.waitpid worker_pid
 <a href="http://tatsu-zine.com/books/naruhounix">なるほどUnixプロセス ― Rubyで学ぶUnixの基礎</a><br/>
 プロセス間通信を、昨日はpipe、今日はUnixソケットのところです。</p>
 
+<!-- more -->
+
+
 <h1>Rubyのプロセス間通信でメッセージ（データグラム）を使う</h1>
 
 <p>データの通信にストリームではなく、メッセージ（データグラム）を利用したい場合、UNIXソケットを使います。</p>
@@ -305,6 +314,9 @@ $stdout.puts parent_socket.recv(maxlen)
     <content type="html"><![CDATA[<p>積読消化シリーズです。<br/>
 <a href="http://tatsu-zine.com/books/naruhounix">なるほどUnixプロセス ― Rubyで学ぶUnixの基礎</a><br/>
 UnixでのパイプをRubyで表すとどうなるか。</p>
+
+<!-- more -->
+
 
 <h1>Rubyで扱うパイプ</h1>
 
@@ -430,6 +442,9 @@ print reader.read
     <updated>2014-08-18T00:00:00+09:00</updated>
     <id>http://jangajan.com/blog/2014/08/18/use-octokit</id>
     <content type="html"><![CDATA[<p>GithubのAPIを使いやすくしてくれるoctokitに触ってみました。試すのはcontributorsの一覧の取得です。</p>
+
+<!-- more -->
+
 
 <pre><code class="ruby">gem 'octokit'
 </code></pre>

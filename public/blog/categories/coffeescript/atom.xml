@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Coffeescript | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/coffeescript/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-08T09:55:45+09:00</updated>
+  <updated>2014-09-08T09:59:05+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -19,6 +19,9 @@
     <updated>2014-09-02T20:38:53+09:00</updated>
     <id>http://jangajan.com/blog/2014/09/02/hubot-brain-sample</id>
     <content type="html"><![CDATA[<p>hubotでデータを永続的に保存するためにはredisとの連携が必要です。</p>
+
+<!-- more -->
+
 
 <h1>使い方</h1>
 

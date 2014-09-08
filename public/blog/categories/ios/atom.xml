@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ios | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-08T09:55:45+09:00</updated>
+  <updated>2014-09-08T09:59:05+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -21,6 +21,9 @@
     <content type="html"><![CDATA[<p>storyboardでnavigation barの右側にbackとは異なるボタンを配置したら下の警告が出た。</p>
 
 <blockquote><p>unsupported configuration plain style unsupported in a navigation item</p></blockquote>
+
+<!-- more -->
+
 
 <p>Buttonではなく、Bar Button Itemを使うのが正しいんですね。</p>
 

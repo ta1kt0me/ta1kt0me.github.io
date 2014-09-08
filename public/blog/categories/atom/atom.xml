@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Atom | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/atom/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-08T09:55:45+09:00</updated>
+  <updated>2014-09-08T09:59:05+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -22,6 +22,9 @@
 
 <p><code>publish</code>するときにバージョンの指定がまずったせいで、公開初版が2.0.0となりました。<br/>
 いまだに<code>publish</code>コマンドの正解がわからない。そんな打たないし。</p>
+
+<!-- more -->
+
 
 <p>初めてatomのパッケージ作りました。<br/>
 初めてcoffeescriptでもの作りました。<br/>

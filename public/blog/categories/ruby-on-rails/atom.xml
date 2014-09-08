@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby on Rails | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby-on-rails/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-08T09:55:45+09:00</updated>
+  <updated>2014-09-08T09:59:05+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -20,8 +20,12 @@
     <id>http://jangajan.com/blog/2014/08/21/github-login-bottun</id>
     <content type="html"><![CDATA[<p>RailsでGithub、twitter、facebookといったソーシャルのoauthログインボタンを出したい人向けです。</p>
 
-<p>Githubのomniauth連携をした時に、専用のログインボタンを簡単に用意できないか探してみたところ、いい感じのGemがありました。<br/>
-さて、今回使用するのは<a href="https://github.com/jeffleeismyhero/Zocial-Rails">こちら</a></p>
+<p>Githubのomniauth連携をした時に、専用のログインボタンを簡単に用意できないか探してみたところ、いい感じのGemがありました。</p>
+
+<!-- more -->
+
+
+<p>さて、今回使用するのは<a href="https://github.com/jeffleeismyhero/Zocial-Rails">こちら</a></p>
 
 <h1>使い方</h1>
 
@@ -71,6 +75,9 @@
 
 
 <p>それでは始めます。</p>
+
+<!-- more -->
+
 
 <h1>Github連携準備(&ldquo;Client ID&rdquo; &amp; &ldquo;Client Secret&#8221;作成)</h1>
 

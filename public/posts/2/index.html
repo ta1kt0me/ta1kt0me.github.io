@@ -10,7 +10,7 @@
 
   
   <meta name="description" content="なぜか4時に起きてしまったのでブラジル-コロンビア戦を見る傍ら、昨日はてなで見かけた面白コンテンツ探求日記のこちらの記事を眺めてたらpeco面白そうと思い立って試してみました。
-インタラクティブgrep。 導入 python製のpercolをGoで作ってみたものだとか。 &hellip;">
+インタラクティブgrep。 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -123,67 +123,12 @@
   <div class="entry-content"><p>なぜか4時に起きてしまったのでブラジル-コロンビア戦を見る傍ら、昨日はてなで見かけた<a href="http://blog.horimisli.me/entry/terminal-env-2014">面白コンテンツ探求日記のこちら</a>の記事を眺めてたら<a href="https://github.com/peco/peco">peco</a>面白そうと思い立って試してみました。<br/>
 インタラクティブgrep。</p>
 
-<h2>導入</h2>
-
-<p>python製のpercolをGoで作ってみたものだとか。homebrewでインストール。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew tap peco/peco
-</span><span class='line'>$ brew install peco</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>psお試し</h2>
-
-<p><code>ps aux | peco</code>と打つとモードが切り替わって、psコマンドの結果を、入力した値でフィルタリングして表示してくれる〜。
-ctrl+n,pで上下に移動できます。</p>
-
-<h2>続けてhistoryコマンドに応用</h2>
-
-<p><a href="http://qiita.com/uchiko/items/f6b1528d7362c9310da0">oh-my-zsh の環境で、peco-select-history が動かない</a>を参考に<code>ctrl+r</code>でコマンド履歴検索をインタラクティブに！これいい。</p>
-
-<h2>z.shを入れる</h2>
-
-<p>面白コンテンツ探求日記の記事を参考にこれも入れてみました。ググらずに素直にgithubで検索したらすぐでた。過去に行ったことのあるディレクトリの履歴を表示するツール。使いやすそう。pecoと連携しやすそう。というわけで、homebrewでインストール。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$brew install z</span></code></pre></td></tr></table></div></figure>
-
-
-<p>それで<code>.zshrc</code>を修正。<a href="http://blog.en30.net/2014/06/25/peco.html">こちらのブログ</a>を参考にさせてもらいました。<br/>
-これも便利。すごく便利。ちょっとしたパス入力のストレスが激減しそう。</p>
-
-<h2>ghq</h2>
-
-<p>peco関連で漁っていたらghqなるものを利用している人が多かった。cloneしてきたリポジトリを一元管理するツールだそうでGo言語の発想とのこと。確かにgithubやら、bitbucketやら散らかってて収集つかなくなってたので入れてみました。
-まずは入れてみる。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install go
-</span><span class='line'>$ echo "export GOPATH=~/Dev/src" &gt;&gt; ~/.zshrc
-</span><span class='line'>$ echo "export PATH=${PATH}:~/Dev/src/bin" &gt;&gt; ~/.zshrc
-</span><span class='line'>$ . ~/.zshrc
-</span><span class='line'>$ go get github.com/motemen/ghq
-</span><span class='line'>$ git config --global ghq.root ~/.ghq
-</span><span class='line'>$ ghq get git@github.com:ta1kt0me/dict-en2ja.git</span></code></pre></td></tr></table></div></figure>
-
-
-<p>それからpecoる。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ ghq list | peco</span></code></pre></td></tr></table></div></figure>
-
-
-<p>peco便利。
-気がついたら試合終わって、PK見逃してた。</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/07/05/peco-peco/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -215,39 +160,12 @@ ctrl+n,pで上下に移動できます。</p>
 <p><code>publish</code>するときにバージョンの指定がまずったせいで、公開初版が2.0.0となりました。<br/>
 いまだに<code>publish</code>コマンドの正解がわからない。そんな打たないし。</p>
 
-<p>初めてatomのパッケージ作りました。<br/>
-初めてcoffeescriptでもの作りました。<br/>
-初めてgithubで作ったものがforkされました。(forkされてしまった！)</p>
-
-<p>辞書のAPiを呼び出して英単語の意味を表するatomのpackageです。<br/>
-エディタ内で完結したかったので作ってみました。
-(本当はAPIも自分で作った方がいいのかなぁ)</p>
-
-<h2>atom packageの感想</h2>
-
-<p>atom!痒いところに手が届かなくてsublimeに戻りがちですが、ちょくちょく使っています。<br/>
-viewとpaneのところ、coffeescriptが初めてっていうのもありますが、情報もそんなに多くなかった（しググラビリティ悪い）ので使い方わかるまでに時間かかりました。<br/>
-viewの種類はいくつかあったので色々試してみたいな。結局htmlなので、ムリクリ表示する領域を生成していたりするのもありましたね。<br/>
-タグ構造もですが、やり方が諸々で。基本的な仕組みであればatom自体のソースコードが一番参考になるかもしれません。<br/>
-viewを独自拡張したものを使用しなかったので次はその辺りをうまく使えるようになりたい。<br/>
-後、修正を適用するときにいちいちreloadしなきゃいけないのは手間でした。何かいい方法ないのかな。</p>
-
-<h2>coffeescriptの感想</h2>
-
-<p>coffeescriptの練習も着手理由１つでした。
-コンパイルしたjsみなくても挙動が判断できるようにならないとだめですね。<br/>
-スペース１つでコンパイル結果がかわるのでちょっとしたtypoでおかしなことになるのはしんどい。でも書きやすかった。<br/>
-それと、実はhtml(xml)へのアクセスには向かない感じ？この辺りはjsのplugin入れて対応しました。<br/>
-こっちはhubot-scriptを参考にしました。githubは宝の山ですね。<br/>
-まだ使いどころが悩ましいですが、少しずつ仲良くしていきたいです。</p>
-
-<h2>そんなところで</h2>
-
-<p>まとなものは初めて作ったので、よかったらお試しください。
-使用感などフィードバックをいただけると嬉しいです。
-一人でざーっと作ったのでソースの指摘も嬉しいです。</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/07/03/release-dict-en2ja/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -278,19 +196,12 @@ viewを独自拡張したものを使用しなかったので次はその辺り�
 
 <blockquote><p>unsupported configuration plain style unsupported in a navigation item</p></blockquote>
 
-<p>Buttonではなく、Bar Button Itemを使うのが正しいんですね。</p>
-
-<ul>
-<li>参考
-
-<ul>
-<li><a href="http://stackoverflow.com/questions/8531972/unsupported-configuration-plain-style-unsupported-in-a-navigation-item">stackoverflowの回答欄</a></li>
-</ul>
-</li>
-</ul>
-
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/06/25/warning-add-button-on-navigationbar/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -319,31 +230,14 @@ viewを独自拡張したものを使用しなかったので次はその辺り�
 
   <div class="entry-content"><h1>野球観戦</h1>
 
-<p>野球観戦なんて高校以来です。<br/>
-知り合いに誘われて人生初のプロ野球観戦をしました。<br/>
-カードは、横浜DeNAベイスターズ VS 東京ヤクルトスワローズ。<br/>
-観戦席はベイスターズサイド。<br/>
-野球はそれほど興味もなく、ホッシーがいなくなっていたのも、この日初めて知ったぐらい
-(ファンの方々すんません)</p>
+<p>野球観戦なんて高校以来です。</p>
 
-<p>序盤からもの凄く静かな試合。出塁のほとんど4球で、時たまスワローズヒットを打つ程度。<br/>
-ベイスターズはヒットが一本もなく、ナーブソンとモスコーソの投球数にも徐々に差が広がる。<br/>
-疲れもあるせいか、時たま危ういシーンもあったが、大切なところはきっちり守りきるモスコーソ。<br/>
-ターニングポイントは7回裏。バルディリス、痺れを切らした１発２ラン。<br/>
-ベイスターズ、この試合唯一のヒットで試合を決めてしまった。<br/>
-一番会場が沸いた瞬間。歓声と大声援とハイタッチの嵐。  <br/>
-それまで堪えていたものが爆発してました。<br/>
-8回の表で、１失点、１アウト満塁という状況も、ソーサが２者連続三振できっちり抑え込む。<br/>
-たったの１点差。少しでも弛みが生じたらいつ逆転されてもおかしくない状況だが、9回表も難無く無失点に抑え込む。<br/>
-(僕が言うのもなんですが)多くのベイスターズファンの期待に応えていたと思います。
-試合後も優勝したかのような盛り上がりでした。</p>
-
-<p>この試合がちょうど横浜スタジアム通算1000勝目という記念になったようで、このゲームを観戦できたことは幸運だったかな。<br/>
-面白かったのでまた行きたいですね。</p>
-
-<p><img src="http://photos-e.ak.instagram.com/hphotos-ak-prn/926456_466559483474076_986180211_n.jpg" title="baseball game" alt="alt text" /></p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/05/10/baseball-game-watching/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -378,61 +272,12 @@ viewを独自拡張したものを使用しなかったので次はその辺り�
 
 <p>手順としてはこんな感じでした。</p>
 
-<ol>
-<li>独自ドメイン取得(お名前.com)</li>
-<li>cloudflareで独自ドメインとherokuを紐付け</li>
-<li>herokuに独自ドメイン設定</li>
-<li>おまけ:google analyticsの設定</li>
-</ol>
-
-
-<hr />
-
-<h1>独自ドメイン取得</h1>
-
-<p>お名前.comで独自ドメイン購入。<br/>
-最近は.tokyoやら.redやらあるんですね。<br/>
-.comにしました。<br/>
-あらかじめ候補探しておきましょう。<br/>
-大体は使われています。
-悩んでいると日が暮れます。</p>
-
-<hr />
-
-<h1>cloudflare独自ドメインとheroku連携</h1>
-
-<p>wwwつけると入力手間だな〜っていう理由でルートドメインはしたくない。<br/>
-たまたま<a href="http://blog.jnito.com/entry/2014/05/04/090537">こちらの記事</a>を見かけまして。<br/>
-cloudflareを利用することにしました。<br/>
-用途はブログを公開するだけだし、SSL利用するまでもなかったので無料プランで試してみました。<br/>
-使い切れてないですが、設定だけでもできたの良し。目的達成。<br/>
-設定完了後、whoisコマンドのName Serverの値がcloudflare用に変わります。<br/>
-反映されるのに待ちます。</p>
-
-<hr />
-
-<h1>herokuに独自ドメイン設定</h1>
-
-<p>herokuアプリのSettingsのDomainsに独自ドメインを追加。<br/>
-これしないと、herokuの404画面が出てくる。</p>
-
-<hr />
-
-<h1>google analyticsの設定</h1>
-
-<p>トラッキング情報のトラッキングコードを<em>google-analytics.htmlにコピペ。<br/>
-</em>config.ymlを以下の通り変更
-<code>yaml
-  analytics:
-+    google: false
-+    google: true</code></p>
-
-<p>夜明けに寝て夕暮れ時に目覚めても反映されてませんでした。<br/>
-気長に待ちましょう。</p>
-
-<p>どれも長い。</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/05/08/get-original-domain/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -465,197 +310,12 @@ githubはprivate repositoryが有料なので、bitbucketを使用。<br/>
 せっかくなのでCIツールとして、werckerをお試しで。<br/>
 よくよく考えるとHeroku使うんならどっちも要らないがさておき。</p>
 
-<hr />
-
-<h1>事前準備</h1>
-
-<h2>アカウント作成</h2>
-
-<ol>
-<li>heroku</li>
-<li>bitbucket(ついでにrepositoryも作成)</li>
-<li>wercker</li>
-</ol>
-
-
-<h1>jekyllインストール</h1>
-
-<p>jekyllのgemをインストールします。<br/>
-テンプレートとして、<a href="https://github.com/kippt/jekyll-incorporated.git">jekyll-incorporated</a>を使ってみます。<br/>
-なかなかいい感じにデザインしてくれる。</p>
-
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; gem install jekyll
-&gt; git clone https://github.com/kippt/jekyll-incorporated.git blog
-&gt; <span class="nb">cd </span>blog
-&gt; git branch myblog
-&gt; git checkout myblog</code></pre></div>
-
-
-<hr />
-
-<h1>環境設定</h1>
-
-<p>環境用のファイルを作成。<br/>
-heroku、wercker用の設定ファイルと、jekyllのmarkdownの設定をします。</p>
-
-<div class="highlight"><pre><code class="language-text" data-lang="text">blog
-├── Gemfile      # 必要なGemを追加
-├── Gemfile.lock
-├── Procfile     # heroku用
-├── _config.yml
-├── config.ru    # heroku用
-├── unicorn.rb   # heroku用
-...
-└── wercker.yml  # wercker用</code></pre></div>
-
-
-<h2>Gemfile</h2>
-
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">+</span> <span class="n">gem</span> <span class="s1">&#39;rack-jekyll&#39;</span>
-<span class="o">+</span> <span class="n">gem</span> <span class="s1">&#39;unicorn&#39;</span></code></pre></div>
-
-
-<h2>Procfile</h2>
-
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">+</span> <span class="ss">web</span><span class="p">:</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">unicorn</span> <span class="o">-</span><span class="nb">p</span> <span class="vg">$PORT</span> <span class="o">-</span><span class="n">c</span> <span class="o">.</span><span class="n">/unicorn</span><span class="o">.</span><span class="n">rb</span></code></pre></div>
-
-
-<h2>_config.yml</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">exclude</span><span class="p-Indicator">:</span>     <span class="p-Indicator">[]</span>
-</span><span class='line'><span class="l-Scalar-Plain">+ exclude</span><span class="p-Indicator">:</span>     <span class="p-Indicator">[</span><span class="s">&quot;vendor&quot;</span><span class="p-Indicator">]</span>
-</span><span class='line'><span class="p-Indicator">-</span> <span class="l-Scalar-Plain">markdown</span><span class="p-Indicator">:</span>      <span class="l-Scalar-Plain">maruku</span>
-</span><span class='line'><span class="l-Scalar-Plain">+ markdown</span><span class="p-Indicator">:</span>      <span class="l-Scalar-Plain">redcarpet</span>
-</span><span class='line'><span class="l-Scalar-Plain">+ redcarpet</span><span class="p-Indicator">:</span>
-</span><span class='line'><span class="l-Scalar-Plain">+     extensions</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span><span class="s">&quot;no_intra_emphasis&quot;</span>
-</span><span class='line'><span class="nv">+</span>                  <span class="p-Indicator">,</span><span class="s">&quot;fenced_code_blocks&quot;</span>
-</span><span class='line'><span class="nv">+</span>                  <span class="p-Indicator">,</span><span class="s">&quot;autolink&quot;</span>
-</span><span class='line'><span class="nv">+</span>                  <span class="p-Indicator">,</span><span class="s">&quot;tables&quot;</span>
-</span><span class='line'><span class="nv">+</span>                  <span class="p-Indicator">,</span><span class="s">&quot;with_toc_data&quot;</span><span class="p-Indicator">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>config.ru</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">+</span> <span class="nb">require</span> <span class="s2">&quot;bundler/setup&quot;</span>
-</span><span class='line'><span class="o">+</span> <span class="no">Bundler</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:default</span><span class="p">)</span>
-</span><span class='line'><span class="o">+</span> <span class="n">run</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Jekyll</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:destination</span> <span class="o">=&gt;</span> <span class="s1">&#39;_site&#39;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>unicorn.rb</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">+</span> <span class="n">worker_processes</span> <span class="mi">1</span>
-</span><span class='line'><span class="o">+</span> <span class="n">timeout</span> <span class="mi">30</span>
-</span><span class='line'><span class="o">+</span> <span class="n">preload_app</span> <span class="kp">true</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>wercker.yml</h2>
-
-<p>indentは半角スペース2つじゃないと怒られる。<br/>
-<a href="http://devcenter.wercker.com/articles/werckeryml/validate.html">ここ</a>でフォーマットのチェックができて便利ですね。</p>
-
-<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">+ box</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">wercker/ruby</span>
-<span class="l-Scalar-Plain">+ build</span><span class="p-Indicator">:</span>
-<span class="l-Scalar-Plain">+   steps</span><span class="p-Indicator">:</span>
-<span class="l-Scalar-Plain">+     - bundle-install</span>
-<span class="l-Scalar-Plain">+     - script</span><span class="p-Indicator">:</span>
-<span class="l-Scalar-Plain">+         name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">echo ruby information</span>
-<span class="l-Scalar-Plain">+         code</span><span class="p-Indicator">:</span> <span class="p-Indicator">|</span>
-<span class="l-Scalar-Plain">+             echo &quot;ruby version $(ruby --version) running!&quot;</span>
-<span class="l-Scalar-Plain">+             echo &quot;from location $(which ruby)&quot;</span>
-<span class="l-Scalar-Plain">+             echo -p &quot;gem list</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">$(gem list)&quot;</span>
-<span class="l-Scalar-Plain">+ deploy</span><span class="p-Indicator">:</span>
-<span class="l-Scalar-Plain">+   steps</span><span class="p-Indicator">:</span>
-<span class="l-Scalar-Plain">+   - heroku-deploy</span></code></pre></div>
-
-
-<hr />
-
-<h1>Remote Repositoryにpush</h1>
-
-<p>ここまでの設定を保存します。
-実際はちまちまコミットしちゃいました。<br/>
-ついでにherokuでアプリ作成。</p>
-
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">&gt; bundle install
-&gt; git remote add bitbucket git@bitbucket.org:xxxx/jekyllblog.git
-&gt; git add .
-&gt; git commit -m <span class="s1">&#39;initial commit for myblog&#39;</span>
-&gt; <span class="c"># bitbucketにpush</span>
-&gt; git push bitbucket myblog
-&gt; <span class="c"># herokuに専用アプリ作成</span>
-&gt; heroku create myblog</code></pre></div>
-
-
-<p>ちなみに、ここでherokuにpushして、<code>heroku open</code>すれば確認できる。<br/>
-やっぱりこっちの方が楽なんじゃ&hellip;</p>
-
-<hr />
-
-<h1>wercker</h1>
-
-<p>いよいよwercker試してみます。</p>
-
-<h2>Add App</h2>
-
-<p>ここでは作業対象となるリポジトリを設定します。<br/>
-(<a href="https://app.wercker.com/#applications/create">ADD APPLICATION</a>)</p>
-
-<h3>Choose a Git provider</h3>
-
-<p><em>bitbucket</em>を選択</p>
-
-<h3>Select a repository</h3>
-
-<p>pushしたbranchを選択</p>
-
-<h3>Add werckerbot</h3>
-
-<p><em>read</em>権限だけつけて許可する</p>
-
-<h3>Setup your wercker.yml</h3>
-
-<p>準備済み！</p>
-
-<h2>My Apps</h2>
-
-<p>Add Appで登録したAppsを選択します。</p>
-
-<h3>Settings</h3>
-
-<p><em>Deploy targets</em>でHeroku APIキーの登録します。<br/>
-<em>Deploy target name</em>にheroku createしたアプリ名を設定します。</p>
-
-<h3>Builds</h3>
-
-<p>Build Passが通ったら、<em>Deploy to</em>から<strong>Settings</strong>に設定したアプリ名を選択します。</p>
-
-<hr />
-
-<h1>動作確認</h1>
-
-<p>成功していればDeploysのデプロイ結果のURLからアクセス可能です。
-(あるいは<code>heroku open</code>)</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/04/20/setup-jekyll-blog/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -682,296 +342,12 @@ heroku、wercker用の設定ファイルと、jekyllのmarkdownの設定をし�
   </header>
 
 
-  <div class="entry-content"><p>Incorporated provides a great typography, responsive design, author details, semantic markup and more.</p>
-
-<p>You can set customize post covers, and other things directly in the post front matter:</p>
-
-<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">layout</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">post</span>
-
-<span class="l-Scalar-Plain">title</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Jekyll Incorporated Features</span>
-<span class="l-Scalar-Plain">subtitle</span><span class="p-Indicator">:</span> <span class="s">&quot;What&#39;s</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">box&quot;</span>
-
-<span class="c1"># Setup post cover image in /images/</span>
-<span class="l-Scalar-Plain">cover_image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">blog-cover.jpg</span>
-
-<span class="l-Scalar-Plain">excerpt</span><span class="p-Indicator">:</span> <span class="s">&quot;Incorporated</span><span class="nv"> </span><span class="s">provides</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">great</span><span class="nv"> </span><span class="s">typography,</span><span class="nv"> </span><span class="s">responsive</span><span class="nv"> </span><span class="s">design,</span><span class="nv"> </span><span class="s">author</span><span class="nv"> </span><span class="s">details,</span><span class="nv"> </span><span class="s">semantic</span><span class="nv"> </span><span class="s">markup</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">more.&quot;</span>
-
-<span class="c1"># Author details, including Google Plus authorship</span>
-<span class="l-Scalar-Plain">author</span><span class="p-Indicator">:</span>
-  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Karri Saarinen</span>
-  <span class="l-Scalar-Plain">twitter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">karrisaarinen</span>
-  <span class="l-Scalar-Plain">gplus</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">100687498195339762535</span> 
-  <span class="l-Scalar-Plain">bio</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Co-founder, Design</span>
-  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ks.jpg</span>
-  
-<span class="c1"># Keep it as draft, not published in index.html or feed.xml</span>
-<span class="l-Scalar-Plain">draft</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">false</span></code></pre></div>
-
-
-<h4>Configurable &amp; Code Snipped Highlighting</h4>
-
-<p>/assets/stylesheets/main.scss:</p>
-
-<div class="highlight"><pre><code class="language-scss" data-lang="scss"><span class="cm">/* Bodytext font */</span>
-<span class="nv">$font</span><span class="o">:</span> <span class="s2">&quot;Droid Sans&quot;</span><span class="o">,</span> <span class="s2">&quot;Helvetica Neue&quot;</span><span class="o">,</span> <span class="n">Helvetica</span><span class="o">,</span> <span class="n">Arial</span><span class="o">,</span> <span class="no">sans-serif</span><span class="p">;</span>
-
-<span class="cm">/* Font for headings */</span>
-<span class="nv">$fontheadings</span><span class="o">:</span> <span class="s2">&quot;Droid Sans&quot;</span><span class="o">,</span> <span class="s2">&quot;Helvetica Neue&quot;</span><span class="o">,</span> <span class="n">Helvetica</span><span class="o">,</span> <span class="n">Arial</span><span class="o">,</span> <span class="no">sans-serif</span><span class="p">;</span>
-
-<span class="cm">/* Text colors */</span>
-<span class="nv">$text</span><span class="o">:</span> <span class="mh">#21272d</span><span class="p">;</span>
-<span class="nv">$textmuted</span><span class="o">:</span> <span class="mh">#848484</span><span class="p">;</span>
-<span class="nv">$accent</span><span class="o">:</span> <span class="mh">#2077b2</span><span class="p">;</span></code></pre></div>
-
-
-<p>config.yml:</p>
-
-<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">inc</span><span class="p-Indicator">:</span>
-  <span class="c1"># Blog Information</span>
-  <span class="l-Scalar-Plain">title</span><span class="p-Indicator">:</span>        <span class="s">&quot;Jekyll</span><span class="nv"> </span><span class="s">Incorporated&quot;</span>
-  <span class="l-Scalar-Plain">subtitle</span><span class="p-Indicator">:</span>     <span class="s">&quot;Modern</span><span class="nv"> </span><span class="s">Jekyll</span><span class="nv"> </span><span class="s">based</span><span class="nv"> </span><span class="s">blog</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">companies&quot;</span>
-  <span class="l-Scalar-Plain">cover_image</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">blog-cover.jpg</span>
-  
-  <span class="c1"># Company information</span>
-  <span class="l-Scalar-Plain">company</span><span class="p-Indicator">:</span>      <span class="l-Scalar-Plain">Incorporated</span>
-  <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span>          <span class="l-Scalar-Plain">http://incorporated.sendtoinc.com/</span>
-  <span class="l-Scalar-Plain">facebook</span><span class="p-Indicator">:</span>     <span class="l-Scalar-Plain">sendtoinc</span>
-  <span class="l-Scalar-Plain">twitter</span><span class="p-Indicator">:</span>      <span class="l-Scalar-Plain">sendtoinc</span>
-  <span class="l-Scalar-Plain">about_link</span><span class="p-Indicator">:</span>   <span class="l-Scalar-Plain">https://sendtoinc.com/about/</span>
-  
-  <span class="c1"># Product Information</span>
-  <span class="l-Scalar-Plain">product_link</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://incorporated.sendtoinc.com/</span>
-  <span class="l-Scalar-Plain">tagline</span><span class="p-Indicator">:</span>      <span class="s">&quot;Get</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">modern</span><span class="nv"> </span><span class="s">blog</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">your</span><span class="nv"> </span><span class="s">company&quot;</span>
-  
-  <span class="c1"># Comments</span>
-  <span class="l-Scalar-Plain">disqus</span><span class="p-Indicator">:</span>
-    <span class="c1"># Eg. &quot;exampleblog&quot; Set to false to disable comments</span>
-    <span class="l-Scalar-Plain">shortname</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">false</span>
+  <div class="entry-content"></div>
   
   
-  <span class="c1"># Sharing settings</span>
-  <span class="l-Scalar-Plain">sharing</span><span class="p-Indicator">:</span>
-    <span class="l-Scalar-Plain">twitter</span><span class="p-Indicator">:</span>    <span class="l-Scalar-Plain">false</span>
-    <span class="l-Scalar-Plain">facebook</span><span class="p-Indicator">:</span>   <span class="l-Scalar-Plain">false</span>
-    <span class="l-Scalar-Plain">gplus</span><span class="p-Indicator">:</span>      <span class="l-Scalar-Plain">false</span>
-    <span class="l-Scalar-Plain">hn</span><span class="p-Indicator">:</span>         <span class="l-Scalar-Plain">false</span>
-    
-  
- <span class="c1"># Analytics     </span>
-  <span class="l-Scalar-Plain">analytics</span><span class="p-Indicator">:</span>
-    <span class="l-Scalar-Plain">google</span><span class="p-Indicator">:</span> 
-      <span class="c1"># eg. &#39;UA-123-12&#39;</span>
-      <span class="l-Scalar-Plain">id</span><span class="p-Indicator">:</span>       <span class="l-Scalar-Plain">false</span></code></pre></div>
-
-
-<p><strong>Zoomable images</strong></p>
-
-<div class="full zoomable"><img src="/images/incorporated.jpg"></div>
-
-
-<p><strong>Awesome quotes</strong></p>
-
-<blockquote><p>“Effective companies tend to communicate more, their people are curious and they have opinions”</p></blockquote>
-
-<p>Stay tuned for updates.</p>
-
-<h1>H1</h1>
-
-<h2>H2</h2>
-
-<h3>H3</h3>
-
-<h4>H4</h4>
-
-<h5>H5</h5>
-
-<h6>H6</h6>
-
-<p>Alternatively, for H1 and H2, an underline-ish style:</p>
-
-<h1>Alt-H1</h1>
-
-<h2>Alt-H2</h2>
-
-<p>Emphasis, aka italics, with <em>asterisks</em> or <em>underscores</em>.</p>
-
-<p>Strong emphasis, aka bold, with <strong>asterisks</strong> or <strong>underscores</strong>.</p>
-
-<p>Combined emphasis with <strong>asterisks and <em>underscores</em></strong>.</p>
-
-<p>[NG]Strikethrough uses two tildes. <del>Scratch this.</del></p>
-
-<ol>
-<li>First ordered list item</li>
-<li>Another item
-⋅⋅* Unordered sub-list.</li>
-<li>Actual numbers don&rsquo;t matter, just that it&rsquo;s a number
-⋅⋅1. Ordered sub-list</li>
-<li>And another item.</li>
-</ol>
-
-
-<p>⋅⋅⋅You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we&rsquo;ll use three here to also align the raw Markdown).</p>
-
-<p>⋅⋅⋅To have a line break without a paragraph, you will need to use two trailing spaces.⋅⋅
-⋅⋅⋅Note that this line is separate, but within the same paragraph.⋅⋅
-⋅⋅⋅(This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)</p>
-
-<ul>
-<li>Unordered list can use asterisks</li>
-<li>Or minuses</li>
-<li>Or pluses</li>
-</ul>
-
-
-<p><a href="https://www.google.com">I&rsquo;m an inline-style link</a></p>
-
-<p><a href="https://www.google.com" title="Google's Homepage">I&rsquo;m an inline-style link with title</a></p>
-
-<p>[NG][I&rsquo;m a reference-style link][Arbitrary case-insensitive reference text]</p>
-
-<p><a href="../blob/master/LICENSE">I&rsquo;m a relative reference to a repository file</a></p>
-
-<p>[NG][You can use numbers for reference-style link definitions][1]</p>
-
-<p>Or leave it empty and use the [link text itself]</p>
-
-<p>Some text to show that the reference links can follow later.</p>
-
-<p>Here&rsquo;s our logo (hover to see the title text):</p>
-
-<p>Inline-style:
-<img src="https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png" title="Logo Title Text 1" alt="alt text" /></p>
-
-<p>[NG]Reference-style:
-![alt text][logo]</p>
-
-<p>Inline <code>code</code> has <code>back-ticks around</code> it.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="s2">&quot;JavaScript syntax highlighting&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">s</span> <span class="o">=</span> <span class="s">&quot;Python syntax highlighting&quot;</span>
-</span><span class='line'><span class="k">print</span> <span class="n">s</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">No</span> <span class="n">language</span> <span class="n">indicated</span><span class="p">,</span> <span class="n">so</span> <span class="n">no</span> <span class="n">syntax</span> <span class="n">highlighting</span><span class="o">.</span>
-</span><span class='line'><span class="n">But</span> <span class="n">let</span><span class="s">&#39;s throw in a &lt;b&gt;tag&lt;/b&gt;.</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>[NG]Colons can be used to align columns.</p>
-
-<table>
-<thead>
-<tr>
-<th> Tables        </th>
-<th style="text-align:center;"> Are           </th>
-<th style="text-align:right;"> Cool  </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> col 3 is      </td>
-<td style="text-align:center;"> right-aligned </td>
-<td style="text-align:right;"> $1600 </td>
-</tr>
-<tr>
-<td> col 2 is      </td>
-<td style="text-align:center;"> centered      </td>
-<td style="text-align:right;">   $12 </td>
-</tr>
-<tr>
-<td> zebra stripes </td>
-<td style="text-align:center;"> are neat      </td>
-<td style="text-align:right;">    $1 </td>
-</tr>
-</tbody>
-</table>
-
-
-<p>[NG]The outer pipes (|) are optional, and you don&rsquo;t need to make the raw Markdown line up prettily. You can also use inline Markdown.</p>
-
-<table>
-<thead>
-<tr>
-<th>Markdown </th>
-<th> Less </th>
-<th> Pretty</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><em>Still</em> </td>
-<td> <code>renders</code> </td>
-<td> <strong>nicely</strong></td>
-</tr>
-<tr>
-<td>1 </td>
-<td> 2 </td>
-<td> 3</td>
-</tr>
-</tbody>
-</table>
-
-
-<blockquote><p>Blockquotes are very handy in email to emulate reply text.
-This line is part of the same quote.</p></blockquote>
-
-<p>Quote break.</p>
-
-<blockquote><p>This is a very long line that will still be quoted properly when it wraps. Oh boy let&rsquo;s keep writing to make sure this is long enough to actually wrap for everyone. Oh, you can <em>put</em> <strong>Markdown</strong> into a blockquote.</p></blockquote>
-
-<dl>
-  <dt>Definition list</dt>
-  <dd>Is something people use sometimes.</dd>
-
-  <dt>Markdown in HTML</dt>
-  <dd>Does *not* work **very** well. Use HTML <em>tags</em>.</dd>
-</dl>
-
-
-<p>Three or more&hellip;</p>
-
-<hr />
-
-<p>Hyphens</p>
-
-<hr />
-
-<p>Asterisks</p>
-
-<hr />
-
-<p>Underscores</p>
-
-<p>Here&rsquo;s a line for us to start with.</p>
-
-<p>This line is separated from the one above by two newlines, so it will be a <em>separate paragraph</em>.</p>
-
-<p>This line is also a separate paragraph, but&hellip;
-This line is only separated by a single newline, so it&rsquo;s a separate line in the <em>same paragraph</em>.</p>
-
-<p><a href="http://www.youtube.com/watch?feature=player_embedded&v=YOUTUBE_VIDEO_ID_HERE
-" target="_blank"><img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg"
-alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a></p>
-
-<p><a href="http://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE"><img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" alt="IMAGE ALT TEXT HERE" /></a></p>
-</div>
-  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/08/sample/">Read on &rarr;</a>
+    </footer>
   
 
 
