@@ -3,7 +3,7 @@
 # ----------------------- #
 
 url: http://jangajan.com
-title: Jangajan.com
+title: JanGaJan.com
 subtitle: i'm talkto_me but talkto_you.
 author: talkto_me
 simple_search: https://www.google.com/search
@@ -74,7 +74,7 @@ twitter_user: talkto_me
 twitter_tweet_button: true
 
 # Google +1
-google_plus_one: false
+google_plus_one: true
 google_plus_one_size: medium
 
 # Google Plus Profile
@@ -98,7 +98,7 @@ disqus_show_comment_count: false
 google_analytics_tracking_id: UA-50654761-1
 
 # Facebook Like
-facebook_like: false
+facebook_like: false 
 
 
 # ----------------------- #
