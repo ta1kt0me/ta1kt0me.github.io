@@ -11,6 +11,8 @@ storyboardでnavigation barの右側にbackとは異なるボタンを配置し�
 
 > unsupported configuration plain style unsupported in a navigation item
 
+<!-- more -->
+
 Buttonではなく、Bar Button Itemを使うのが正しいんですね。
 
 * 参考

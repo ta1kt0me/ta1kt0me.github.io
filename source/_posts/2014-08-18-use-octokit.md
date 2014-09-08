@@ -9,6 +9,8 @@ categories: [Ruby]
 
 GithubのAPIを使いやすくしてくれるoctokitに触ってみました。試すのはcontributorsの一覧の取得です。
 
+<!-- more -->
+
 ```ruby
 gem 'octokit'
 ```

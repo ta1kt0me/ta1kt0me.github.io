@@ -13,6 +13,8 @@ githubはprivate repositoryが有料なので、bitbucketを使用。
 せっかくなのでCIツールとして、werckerをお試しで。  
 よくよく考えるとHeroku使うんならどっちも要らないがさておき。
 
+<!-- more -->
+
 ***
 
 # 事前準備

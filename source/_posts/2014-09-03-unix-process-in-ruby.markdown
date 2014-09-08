@@ -10,6 +10,8 @@ categories: [ruby]
 [なるほどUnixプロセス ― Rubyで学ぶUnixの基礎](http://tatsu-zine.com/books/naruhounix)  
 UnixでのパイプをRubyで表すとどうなるか。
 
+<!-- more -->
+
 # Rubyで扱うパイプ
 
 ## パイプとは

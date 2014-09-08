@@ -15,6 +15,8 @@ categories: [Blog]
 
 手順としてはこんな感じでした。
 
+<!-- more -->
+
 1. 独自ドメイン取得(お名前.com)
 1. cloudflareで独自ドメインとherokuを紐付け
 1. herokuに独自ドメイン設定

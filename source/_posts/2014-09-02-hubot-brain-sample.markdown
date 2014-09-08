@@ -8,6 +8,8 @@ categories: [coffeescript]
 
 hubotでデータを永続的に保存するためにはredisとの連携が必要です。
 
+<!-- more -->
+
 # 使い方
 
 redisとセットで使うので、redisを起動しておくことを忘れずに。  

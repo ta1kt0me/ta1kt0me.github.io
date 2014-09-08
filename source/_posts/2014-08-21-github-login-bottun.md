@@ -10,6 +10,9 @@ categories: [Ruby on Rails]
 RailsでGithub、twitter、facebookといったソーシャルのoauthログインボタンを出したい人向けです。  
 
 Githubのomniauth連携をした時に、専用のログインボタンを簡単に用意できないか探してみたところ、いい感じのGemがありました。  
+
+<!-- more -->
+
 さて、今回使用するのは[こちら](https://github.com/jeffleeismyhero/Zocial-Rails)
 
 # 使い方

@@ -10,6 +10,8 @@ categories: [ruby]
 [なるほどUnixプロセス ― Rubyで学ぶUnixの基礎](http://tatsu-zine.com/books/naruhounix)  
 プロセス間通信を、昨日はpipe、今日はUnixソケットのところです。
 
+<!-- more -->
+
 # Rubyのプロセス間通信でメッセージ（データグラム）を使う
 
 データの通信にストリームではなく、メッセージ（データグラム）を利用したい場合、UNIXソケットを使います。

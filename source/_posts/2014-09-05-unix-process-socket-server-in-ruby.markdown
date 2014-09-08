@@ -14,6 +14,8 @@ categories: [ruby]
 * ブラウザでアクセスするWebサーバー
 * forkしたProcessでリクエストを処理するWebサーバー
 
+<!-- more -->
+
 # telnetでアクセスするWebサーバー
 
 まずはtelnetでアクセスするためのシンプルなWebサーバーを用意します。  

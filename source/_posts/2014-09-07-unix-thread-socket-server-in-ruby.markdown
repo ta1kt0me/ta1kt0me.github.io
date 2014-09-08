@@ -10,6 +10,8 @@ categories: [ruby]
 [なるほどUnixプロセス ― Rubyで学ぶUnixの基礎](http://tatsu-zine.com/books/naruhounix)  
 processをforkして動くWebサーバーをThreadで試してみます。  
 
+<!-- more -->
+
 # Threadの簡単な使い方
 
 まずはThreadの簡単な使い方です。  
