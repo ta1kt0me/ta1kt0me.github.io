@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Ruby on Rails | JanGaJan.com]]></title>
+  <title><![CDATA[Category: Ruby-on-rails | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby-on-rails/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-09T22:50:33+09:00</updated>
+  <updated>2014-09-10T01:53:07+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -14,301 +14,28 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Railsでソーシャルログインボタン(Github)]]></title>
-    <link href="http://jangajan.com/blog/2014/08/21/github-login-bottun/"/>
-    <updated>2014-08-21T00:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/08/21/github-login-bottun</id>
-    <content type="html"><![CDATA[<p>RailsでGithub、twitter、facebookといったソーシャルのoauthログインボタンを出したい人向けです。</p>
+    <title type="html"><![CDATA[Rails4 and Bootstrap3]]></title>
+    <link href="http://jangajan.com/blog/2014/09/10/perfect-rails-6-bootstrap/"/>
+    <updated>2014-09-10T01:40:22+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/10/perfect-rails-6-bootstrap</id>
+    <content type="html"><![CDATA[<p><a href="http://www.amazon.co.jp/gp/product/4774165166/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=4774165166&linkCode=as2&tag=pochan0919-22">パーフェクト Ruby on Rails</a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=4774165166" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />を、第6章からやってます。</p>
 
-<p>Githubのomniauth連携をした時に、専用のログインボタンを簡単に用意できないか探してみたところ、いい感じのGemがありました。</p>
-
-<!-- more -->
-
-
-<p>さて、今回使用するのは<a href="https://github.com/jeffleeismyhero/Zocial-Rails">こちら</a></p>
-
-<h1>使い方</h1>
-
-<h2>インストール</h2>
-
-<p>Gemfileに書いて、bundle installします。</p>
-
-<pre><code class="ruby">gem 'zocial-rails'
-</code></pre>
-
-<h2>導入</h2>
-
-<p>application.cssに以下を記述します。</p>
-
-<pre><code class="css">*= require zocial
-</code></pre>
-
-<h2>ボタン</h2>
-
-<p>elementのclassに、&#8217;zocial&#8217;と利用したいサービス(例では&#8217;github&#8217;)を記述します。</p>
-
-<pre><code class="html">&lt;a class="zocial github" href="http://jangajan.com/auth/github"&gt;Sign in with Github&lt;/a&gt;
-</code></pre>
-
-<p>ちなみに、hamlの場合はこちら。</p>
-
-<pre><code class="haml">= link_to('Sign in with Github', '/auth/github',    :class=&gt; ['zocial', 'github'])
-</code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[RailsアプリケーションでGithub連携]]></title>
-    <link href="http://jangajan.com/blog/2014/08/16/rails-omniauth-github/"/>
-    <updated>2014-08-16T00:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/08/16/rails-omniauth-github</id>
-    <content type="html"><![CDATA[<p>Railsアプリケーションにomuniauth-githubを利用したGithubログイン連携機能を追加する方法を調査しました。
-作業の概要は↓の通りです。</p>
-
-<ol>
-<li>Githubで連携キーの発行</li>
-<li>連携キーの環境変数設定</li>
-<li>Railsアプリケーションの作成</li>
-<li>ログインに使用するModel、Controllerの生成</li>
-<li>ホーム画面にGithubログインのリンクを作る</li>
-</ol>
-
-
-<p>それでは始めます。</p>
+<p>Bootstrapの導入をzipから展開したので、Gemで導入する方法を調査しました。</p>
 
 <!-- more -->
 
 
-<h1>Github連携準備(&ldquo;Client ID&rdquo; &amp; &ldquo;Client Secret&#8221;作成)</h1>
+<h1>twitter-bootstrap-rails gemを使う</h1>
 
-<p>まず、連携に必要な情報を取得します。</p>
+<p><a href="https://rubygems.org/gems/twitter-bootstrap-rails">twitter-bootstrap-rails</a>というGemを使うことで、テキスト同様の表示ができます。<br/>
+(後の手順で一部テキスト外の修正を行う必要があるかもしれません)</p>
 
-<h2>Githubのアプリケーション登録</h2>
-
-<p>Githubの設定画面 -> Application -> Developer applications の Register new applicationボタンをクリック。<br/>
-次の情報を環境に合わせて設定してください。設定したらRegister Applicationボタンを押すのを忘れずに。</p>
-
-<ul>
-<li>Application name
-
-<ul>
-<li>sample</li>
-</ul>
-</li>
-<li>Authorization callback URL
-
-<ul>
-<li><a href="http://localhost:3000/">http://localhost:3000/</a></li>
-</ul>
-</li>
-<li>Application description
-
-<ul>
-<li>アプリの説明</li>
-</ul>
-</li>
-<li>Authorization callback URL
-
-<ul>
-<li><a href="http://localhost:3000/auth/github/callback">http://localhost:3000/auth/github/callback</a></li>
-<li>ここ大事。config/routes.rbに設定するcallbackメソッドのURLを記載</li>
-</ul>
-</li>
-</ul>
-
-
-<h2>連携キーを環境変数に設定</h2>
-
-<p>今回は、連携情報を環境変数から取得してGithubログインを実現します。<br/>
-上の手順で取得したClient IDとClient Secretを、以下コマンドで環境変数に設定してください。</p>
-
-<pre><code class="sh">export GITHUB_KEY=#{GithubのClient ID}
-export GITHUB_SECRET=#{GithubのClient Secret}
-</code></pre>
-
-<h1>サンプルアプリケーション作成</h1>
-
-<h2>Railsアプリケーション作成</h2>
-
-<p>タイトル通りです。</p>
-
-<pre><code class="sh">bundle exec rails new SampleApp;cd SampleApp
+<pre><code class="sh">echo "gem 'twitter-bootstrap-rails', '&gt;= 3.1.1'" &gt;&gt; Gemfile
 bundle install --path vendor/bundle
+bundle exec rails generate bootstrap:install static
 </code></pre>
 
-<h2>add Gem for omniauth-github</h2>
-
-<p>次に、Githubログイン連携に必要なGemをインストールします。</p>
-
-<pre><code class="ruby">gem 'omniauth'
-gem 'omniauth-github'
-</code></pre>
-
-<pre><code class="sh">bundle install --path vendor/bundle
-</code></pre>
-
-<h2>initializer for omniauth</h2>
-
-<p>環境変数から連携情報を取得する処理を記載します。
-アプリ起動時に読み込むようにするため、config/initializersディレクトリ配下に作成します。</p>
-
-<ul>
-<li>新規
-
-<ul>
-<li>config/initializers/omniauth.rb</li>
-</ul>
-</li>
-</ul>
-
-
-<pre><code class="ruby">Rails.application.config.middleware.use OmniAuth::Builder do
-    provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
-end
-</code></pre>
-
-<h2>create user model</h2>
-
-<p>Githubログインで登録するユーザー情報のModelです。providerとuidは多分必須です。
-まずはrailsコマンドからModelを生成します。</p>
-
-<pre><code class="sh">bundle exec rails g model user provider:string uid:string name:string
-</code></pre>
-
-<p>次に、連携時に取得したデータから必要な項目をModelに設定します。</p>
-
-<ul>
-<li>編集
-
-<ul>
-<li>app/models/user.rb</li>
-</ul>
-</li>
-</ul>
-
-
-<pre><code class="ruby"> class User &lt; ActiveRecord::Base
-    def self.create_with_omniauth(auth)
-        create! do |user|
-            user.provider = auth["provider"]
-            user.uid      = auth["uid"]
-            user.name     = auth["info"]["nickname"]
-        end
-    end
- end
-</code></pre>
-
-<h2>create session controller</h2>
-
-<p>Modelができたので、次は連携処理に使うControllerの作成です。</p>
-
-<pre><code class="sh">bundle exec rails g controller sessions
-</code></pre>
-
-<p>追加するのは、Github連携後のcallback処理と、ログアウト時にSessionを破棄する処理です。</p>
-
-<ul>
-<li>編集
-
-<ul>
-<li>app/controllers/sessions_controller.rb</li>
-</ul>
-</li>
-</ul>
-
-
-<pre><code class="ruby"> class SessionsController &lt; ApplicationController
-    def callback
-        auth = request.env['omniauth.auth']
-        user = User.find_by_provider_and_uid(auth["provider"], auth["uid"]) || User.create_with_omniauth(auth)
-        session[:user_id] = user.id
-        redirect_to root_path
-    end
-
-    def destroy
-        reset_session
-        redirect_to root_path
-    end
- end
-</code></pre>
-
-<p>それからルーティング設定を追加します。</p>
-
-<ul>
-<li>編集
-
-<ul>
-<li>config/routes.rb</li>
-</ul>
-</li>
-</ul>
-
-
-<pre><code class="ruby">  get "/auth/:provider/callback" =&gt; "sessions#callback"
-  get "/signout" =&gt; "sessions#destroy"
-</code></pre>
-
-<h2>login helper method</h2>
-
-<p>ログイン状態の判定に利用するヘルパーメソッドを追加します。</p>
-
-<ul>
-<li>編集
-
-<ul>
-<li>app/controllers/application_controller.rb</li>
-</ul>
-</li>
-</ul>
-
-
-<pre><code>    helper_method :current_user
-
-    private
-        def current_user
-            @current_user ||= User.find(session[:user_id]) if session[:user_id]
-        end
-</code></pre>
-
-<h2>create home view</h2>
-
-<p>最後に連携用のリンクをテストする画面を用意します。</p>
-
-<pre><code class="sh">bundle exec rails g controller home index
-</code></pre>
-
-<ul>
-<li>編集
-
-<ul>
-<li>config/routes.rb</li>
-</ul>
-</li>
-</ul>
-
-
-<pre><code class="ruby">  get 'home/index'
-  root to: 'home#index'
-</code></pre>
-
-<p>ヘルパーメソッドを利用して、ログインリンクと、ログアウトリンクの出し分けを行います。</p>
-
-<ul>
-<li>編集
-
-<ul>
-<li>app/views/home/index.html.erb</li>
-</ul>
-</li>
-</ul>
-
-
-<pre><code class="erb">&lt;% if current_user %&gt;
-&lt;%= link_to "Sign out", "/signout" %&gt;
-&lt;% else %&gt;
-&lt;%= link_to "Sign in with GitHub", "/auth/github" %&gt;
-&lt;% end %&gt;
-</code></pre>
+<p><code>p.167 リスト6.3</code>の通り<code>app/views/layouts/application.html.erb</code>を修正すれば完了です。</p>
 ]]></content>
   </entry>
   

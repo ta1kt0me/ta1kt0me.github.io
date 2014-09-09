@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-09T22:50:33+09:00</updated>
+  <updated>2014-09-10T01:53:07+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,36 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rails4 and Bootstrap3]]></title>
+    <link href="http://jangajan.com/blog/2014/09/10/perfect-rails-6-bootstrap/"/>
+    <updated>2014-09-10T01:40:22+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/10/perfect-rails-6-bootstrap</id>
+    <content type="html"><![CDATA[<p><a href="http://www.amazon.co.jp/gp/product/4774165166/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=4774165166&linkCode=as2&tag=pochan0919-22">パーフェクト Ruby on Rails</a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=4774165166" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />を、第6章からやってます。</p>
+
+<p>Bootstrapの導入をzipから展開したので、Gemで導入する方法を調査しました。</p>
+
+<!-- more -->
+
+
+<h1>twitter-bootstrap-rails gemを使う</h1>
+
+<p><a href="https://rubygems.org/gems/twitter-bootstrap-rails">twitter-bootstrap-rails</a>というGemを使うことで、テキスト同様の表示ができます。<br/>
+(後の手順で一部テキスト外の修正を行う必要があるかもしれません)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">echo</span> <span class="s2">&quot;gem &#39;twitter-bootstrap-rails&#39;, &#39;&gt;= 3.1.1&#39;&quot;</span> &gt;&gt; Gemfile
+</span><span class='line'>bundle install --path vendor/bundle
+</span><span class='line'>bundle <span class="nb">exec </span>rails generate bootstrap:install static
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>p.167 リスト6.3</code>の通り<code>app/views/layouts/application.html.erb</code>を修正すれば完了です。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Sedで1行追加]]></title>
