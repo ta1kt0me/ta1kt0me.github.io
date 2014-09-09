@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-08T13:12:34+09:00</updated>
+  <updated>2014-09-09T22:50:33+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,41 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Sedで1行追加]]></title>
+    <link href="http://jangajan.com/blog/2014/09/09/sed-insert-text/"/>
+    <updated>2014-09-09T22:41:12+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/09/sed-insert-text</id>
+    <content type="html"><![CDATA[<p>Macでコマンドラインから指定した行にテキストを1行追加する方法です。<br/>
+sedコマンドを使ってやってみたら、エラーが発生しました。</p>
+
+<!-- more -->
+
+
+<p><code>16i</code>は16行目に追加することを意味します。
+<code>-i</code>をつけると、上書きになります。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>sed -i -e <span class="s2">&quot;16i //= require bootstrap.min&quot;</span> app/assets/javascripts/application.js
+</span><span class='line'><span class="o">=</span>&gt; sed: 1: <span class="s2">&quot;16i //= require bootstr ...&quot;</span>: <span class="nb">command </span>i expects <span class="se">\ </span>followed by text
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>あれ、16iがきいてない？
+手持ちのUbuntuだとうまくいったんだけどな、と思って、もしやGnu-？</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>brew install gnu-sed
+</span><span class='line'><span class="nv">$ </span>gsed -i -e <span class="s2">&quot;16i //= require bootstrap.min&quot;</span> app/assets/javascripts/application.js
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>成功！</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[RubyのThreadを利用したWebサーバーを作る]]></title>
