@@ -5,10 +5,14 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Bootstrap3 With Rails4z - JanGaJan.com</title>
+  <title>RailsでLocaleを指定する - JanGaJan.com</title>
   <meta name="author" content="talkto_me">
   
-  <meta name="description" content="パーフェクト Ruby on Railsを、第6章からやってます。 Bootstrapの導入をzipから展開したので、Gemで導入する方法を調査しました。 twitter-bootstrap-rails gemを使う twitter-bootstrap-railsというGemを使うことで、 &hellip;">
+  <meta name="description" content="RailsにおけるTimezoneの設定方法です。
+config/application.rbで設定します。 Timezoneの日時設定 Timezoneを指定した日時は、Time.zone.noweで取得します。
+デフォルトでは、UTCとなります。 rails console1
+2
+irb( &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -17,7 +21,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jangajan.com/blog/2014/09/10/perfect-rails-6-bootstrap/">
+  <link rel="canonical" href="http://jangajan.com/blog/2014/09/11/perfect-rails-locale/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="JanGaJan.com" type="application/atom+xml">
@@ -100,7 +104,7 @@
   <header>
     
       
-        <h1 class="entry-title">Bootstrap3 With Rails4z</h1>
+        <h1 class="entry-title">RailsでLocaleを指定する</h1>
       
     
     
@@ -110,35 +114,79 @@
 
 
 
-<time class='entry-date' datetime='2014-09-10T01:40:22+09:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>1:40 am</span></time>
+<time class='entry-date' datetime='2014-09-11T15:34:56+09:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>3:34 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><a href="http://www.amazon.co.jp/gp/product/4774165166/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=4774165166&linkCode=as2&tag=pochan0919-22">パーフェクト Ruby on Rails</a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=4774165166" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />を、第6章からやってます。</p>
-
-<p>Bootstrapの導入をzipから展開したので、Gemで導入する方法を調査しました。</p>
+<div class="entry-content"><p>RailsにおけるTimezoneの設定方法です。
+<code>config/application.rb</code>で設定します。</p>
 
 <!-- more -->
 
 
-<h1>twitter-bootstrap-rails gemを使う</h1>
+<h1>Timezoneの日時設定</h1>
 
-<p><a href="https://rubygems.org/gems/twitter-bootstrap-rails">twitter-bootstrap-rails</a>というGemを使うことで、テキスト同様の表示ができます。<br/>
-(後の手順で一部テキスト外の修正を行う必要があるかもしれません)</p>
+<p>Timezoneを指定した日時は、<code>Time.zone.nowe</code>で取得します。
+デフォルトでは、<code>UTC</code>となります。</p>
+
+<figure class='code'><figcaption><span>rails console</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">001</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="no">Time</span><span class="o">.</span><span class="n">zone</span><span class="o">.</span><span class="n">now</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="no">Thu</span><span class="p">,</span> <span class="mi">11</span> <span class="no">Sep</span> <span class="mi">2014</span> <span class="mo">06</span><span class="p">:</span><span class="mi">33</span><span class="p">:</span><span class="mi">19</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これを<code>JST</code>に変更するには、以下の修正をします。</p>
+
+<figure class='code'><figcaption><span>config/application.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">module</span> <span class="nn">AwesomeEvents</span>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">Application</span> <span class="o">&lt;</span> <span class="no">Rails</span><span class="o">::</span><span class="no">Application</span>
+</span><span class='line'>    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">time_zone</span> <span class="o">=</span> <span class="s1">&#39;Tokyo&#39;</span>
+</span><span class='line'>    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>rails console</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">003</span><span class="p">:</span><span class="mi">0</span><span class="o">*</span> <span class="no">Time</span><span class="o">.</span><span class="n">zone</span><span class="o">.</span><span class="n">now</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="no">Thu</span><span class="p">,</span> <span class="mi">11</span> <span class="no">Sep</span> <span class="mi">2014</span> <span class="mi">15</span><span class="p">:</span><span class="mi">33</span><span class="p">:</span><span class="mi">47</span> <span class="no">JST</span> <span class="o">+</span><span class="mi">09</span><span class="p">:</span><span class="mo">00</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>time_zoneに設定できる値</h1>
+
+<p><code>config/application.rb</code>の<code>config.time_zone</code>に設定できる情報を確認できます。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">echo</span> <span class="s2">&quot;gem &#39;twitter-bootstrap-rails&#39;, &#39;&gt;= 3.1.1&#39;&quot;</span> &gt;&gt; Gemfile
-</span><span class='line'>bundle install --path vendor/bundle
-</span><span class='line'>bundle <span class="nb">exec </span>rails generate bootstrap:install static
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># time_zoneに設定できる値の一覧を表示</span>
+</span><span class='line'>bundle <span class="nb">exec </span>rake <span class="nb">time</span>:zones:all
+</span><span class='line'>
+</span><span class='line'><span class="c"># 現在有効なtime_zoneの値を表示</span>
+</span><span class='line'><span class="c"># 設定していない場合、システムのタイムゾーンの値を表示</span>
+</span><span class='line'>bundle <span class="nb">exec </span>rake <span class="nb">time</span>:zones:local
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><code>p.167 リスト6.3</code>の通り<code>app/views/layouts/application.html.erb</code>を修正すれば完了です。</p>
+
 </div>
 
 
@@ -163,7 +211,7 @@
 
 
 
-<time class='entry-date' datetime='2014-09-10T01:40:22+09:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>1:40 am</span></time>
+<time class='entry-date' datetime='2014-09-11T15:34:56+09:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>3:34 pm</span></time>
       
 
 <span class="categories">
@@ -176,9 +224,9 @@
     </p>
     
       <div class="sharing">
-  <a href="http://b.hatena.ne.jp/entry/http://jangajan.com/blog/2014/09/10/perfect-rails-6-bootstrap/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  <a href="http://b.hatena.ne.jp/entry/http://jangajan.com/blog/2014/09/11/perfect-rails-locale/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jangajan.com/blog/2014/09/10/perfect-rails-6-bootstrap/" data-via="talkto_me" data-counturl="http://jangajan.com/blog/2014/09/10/perfect-rails-6-bootstrap/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jangajan.com/blog/2014/09/11/perfect-rails-locale/" data-via="talkto_me" data-counturl="http://jangajan.com/blog/2014/09/11/perfect-rails-locale/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -189,10 +237,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/09/09/sed-insert-text/" title="Previous Post: sedで1行追加">&laquo; sedで1行追加</a>
+        <a class="basic-alignment left" href="/blog/2014/09/10/perfect-rails-6-bootstrap/" title="Previous Post: Bootstrap3 with Rails4z">&laquo; Bootstrap3 with Rails4z</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/09/11/perfect-rails-locale/" title="Next Post: RailsでLocaleを指定する">RailsでLocaleを指定する &raquo;</a>
       
     </p>
     <p>
@@ -235,8 +281,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://jangajan.com/blog/2014/09/10/perfect-rails-6-bootstrap/';
-        var disqus_url = 'http://jangajan.com/blog/2014/09/10/perfect-rails-6-bootstrap/';
+        var disqus_identifier = 'http://jangajan.com/blog/2014/09/11/perfect-rails-locale/';
+        var disqus_url = 'http://jangajan.com/blog/2014/09/11/perfect-rails-locale/';
         var disqus_script = 'embed.js';
       
     (function () {

@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-10T01:53:07+09:00</updated>
+  <updated>2014-09-11T15:53:12+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -14,7 +14,81 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Rails4 and Bootstrap3]]></title>
+    <title type="html"><![CDATA[RailsでLocaleを指定する]]></title>
+    <link href="http://jangajan.com/blog/2014/09/11/perfect-rails-locale/"/>
+    <updated>2014-09-11T15:34:56+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/11/perfect-rails-locale</id>
+    <content type="html"><![CDATA[<p>RailsにおけるTimezoneの設定方法です。
+<code>config/application.rb</code>で設定します。</p>
+
+<!-- more -->
+
+
+<h1>Timezoneの日時設定</h1>
+
+<p>Timezoneを指定した日時は、<code>Time.zone.nowe</code>で取得します。
+デフォルトでは、<code>UTC</code>となります。</p>
+
+<figure class='code'><figcaption><span>rails console</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">001</span><span class="p">:</span><span class="mi">0</span><span class="o">&gt;</span> <span class="no">Time</span><span class="o">.</span><span class="n">zone</span><span class="o">.</span><span class="n">now</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="no">Thu</span><span class="p">,</span> <span class="mi">11</span> <span class="no">Sep</span> <span class="mi">2014</span> <span class="mo">06</span><span class="p">:</span><span class="mi">33</span><span class="p">:</span><span class="mi">19</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これを<code>JST</code>に変更するには、以下の修正をします。</p>
+
+<figure class='code'><figcaption><span>config/application.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">module</span> <span class="nn">AwesomeEvents</span>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">Application</span> <span class="o">&lt;</span> <span class="no">Rails</span><span class="o">::</span><span class="no">Application</span>
+</span><span class='line'>    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">time_zone</span> <span class="o">=</span> <span class="s1">&#39;Tokyo&#39;</span>
+</span><span class='line'>    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>rails console</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">irb</span><span class="p">(</span><span class="n">main</span><span class="p">):</span><span class="mo">003</span><span class="p">:</span><span class="mi">0</span><span class="o">*</span> <span class="no">Time</span><span class="o">.</span><span class="n">zone</span><span class="o">.</span><span class="n">now</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="no">Thu</span><span class="p">,</span> <span class="mi">11</span> <span class="no">Sep</span> <span class="mi">2014</span> <span class="mi">15</span><span class="p">:</span><span class="mi">33</span><span class="p">:</span><span class="mi">47</span> <span class="no">JST</span> <span class="o">+</span><span class="mi">09</span><span class="p">:</span><span class="mo">00</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>time_zoneに設定できる値</h1>
+
+<p><code>config/application.rb</code>の<code>config.time_zone</code>に設定できる情報を確認できます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># time_zoneに設定できる値の一覧を表示</span>
+</span><span class='line'>bundle <span class="nb">exec </span>rake <span class="nb">time</span>:zones:all
+</span><span class='line'>
+</span><span class='line'><span class="c"># 現在有効なtime_zoneの値を表示</span>
+</span><span class='line'><span class="c"># 設定していない場合、システムのタイムゾーンの値を表示</span>
+</span><span class='line'>bundle <span class="nb">exec </span>rake <span class="nb">time</span>:zones:local
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Bootstrap3 With Rails4z]]></title>
     <link href="http://jangajan.com/blog/2014/09/10/perfect-rails-6-bootstrap/"/>
     <updated>2014-09-10T01:40:22+09:00</updated>
     <id>http://jangajan.com/blog/2014/09/10/perfect-rails-6-bootstrap</id>

@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://jangajan.com/blog/2014/09/11/perfect-rails-locale/</loc>
+    <lastmod>2014-09-11T15:34:56+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://jangajan.com/blog/2014/09/10/perfect-rails-6-bootstrap/</loc>
     <lastmod>2014-09-10T01:40:22+09:00</lastmod>
     <priority>0.8</priority>
@@ -119,14 +125,14 @@
   
   <url>
     <loc>http://jangajan.com/blog/archives/</loc>
-    <lastmod>2014-09-11T06:59:20+09:00</lastmod>
+    <lastmod>2014-09-11T15:53:12+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://jangajan.com/</loc>
-    <lastmod>2014-09-11T06:59:20+09:00</lastmod>
+    <lastmod>2014-09-11T15:53:12+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby-on-rails | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby-on-rails/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-11T06:59:20+09:00</updated>
+  <updated>2014-09-11T15:53:12+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[RailsでLocaleを指定する]]></title>
+    <link href="http://jangajan.com/blog/2014/09/11/perfect-rails-locale/"/>
+    <updated>2014-09-11T15:34:56+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/11/perfect-rails-locale</id>
+    <content type="html"><![CDATA[<p>RailsにおけるTimezoneの設定方法です。
+<code>config/application.rb</code>で設定します。</p>
+
+<!-- more -->
+
+
+<h1>Timezoneの日時設定</h1>
+
+<p>Timezoneを指定した日時は、<code>Time.zone.nowe</code>で取得します。
+デフォルトでは、<code>UTC</code>となります。</p>
+
+<pre><code class="rb rails console">irb(main):001:0&gt; Time.zone.now
+=&gt; Thu, 11 Sep 2014 06:33:19 UTC +00:00
+</code></pre>
+
+<p>これを<code>JST</code>に変更するには、以下の修正をします。</p>
+
+<pre><code class="rb config/application.rb">module AwesomeEvents
+  class Application &lt; Rails::Application
+    ...
+    config.time_zone = 'Tokyo'
+    ...
+  end
+end
+</code></pre>
+
+<pre><code class="rb rails console">irb(main):003:0* Time.zone.now
+=&gt; Thu, 11 Sep 2014 15:33:47 JST +09:00
+</code></pre>
+
+<h1>time_zoneに設定できる値</h1>
+
+<p><code>config/application.rb</code>の<code>config.time_zone</code>に設定できる情報を確認できます。</p>
+
+<pre><code class="sh"># time_zoneに設定できる値の一覧を表示
+bundle exec rake time:zones:all
+
+# 現在有効なtime_zoneの値を表示
+# 設定していない場合、システムのタイムゾーンの値を表示
+bundle exec rake time:zones:local
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Bootstrap3 With Rails4z]]></title>
