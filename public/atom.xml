@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-11T15:53:12+09:00</updated>
+  <updated>2014-09-12T19:02:15+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -14,11 +14,130 @@
 
   
   <entry>
+    <title type="html"><![CDATA[I18nの設定でdatetime_selectのエラー対応]]></title>
+    <link href="http://jangajan.com/blog/2014/09/12/perfect-rails-i18n/"/>
+    <updated>2014-09-12T18:25:27+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/12/perfect-rails-i18n</id>
+    <content type="html"><![CDATA[<p><a href="http://www.amazon.co.jp/gp/product/4774165166/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=4774165166&linkCode=as2&tag=pochan0919-22">パーフェクト Ruby on Rails</a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=4774165166" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />を、第6章からやってます。</p>
+
+<p>日本語対応のi18nの設定でエラーが発生しました。<br/>
+補足ですが、私のRailsの環境は<code>4.1.5</code>です。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">ActionView</span><span class="o">::</span><span class="no">Template</span><span class="o">::</span><span class="no">Error</span> <span class="p">(</span><span class="n">undefined</span> <span class="nb">method</span> <span class="sb">`map&#39; for &quot;translation missing: ja.date.order&quot;:String):</span>
+</span><span class='line'><span class="sb">    27:   &lt;/div&gt;</span>
+</span><span class='line'><span class="sb">    28:   &lt;div class=&quot;form-group&quot;&gt;</span>
+</span><span class='line'><span class="sb">    29:     &lt;%= f.label :end_time %&gt;</span>
+</span><span class='line'><span class="sb">    30:     &lt;%= f.datetime_select :end_time, start_year: now.year, end_year: now.year + 1 %&gt;</span>
+</span><span class='line'><span class="sb">    31:   &lt;/div&gt;</span>
+</span><span class='line'><span class="sb">    32:   &lt;div class=&quot;form-group&quot;&gt;</span>
+</span><span class='line'><span class="sb">    33:     &lt;%= f.label :content %&gt;</span>
+</span><span class='line'><span class="sb">  app/views/events/new.html.erb:30:in `</span><span class="n">block</span> <span class="k">in</span> <span class="n">_app_views_events_new_html_erb__622987462779560017_70179900721920</span><span class="s1">&#39;</span>
+</span><span class='line'><span class="s1">  app/views/events/new.html.erb:5:in `_app_views_events_new_html_erb__622987462779560017_70179900721920&#39;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">Rendered</span> <span class="n">vendor</span><span class="o">/</span><span class="n">bundle</span><span class="o">/</span><span class="n">ruby</span><span class="o">/</span><span class="mi">2</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">actionpack</span><span class="o">-</span><span class="mi">4</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">action_dispatch</span><span class="o">/</span><span class="n">middleware</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">rescues</span><span class="o">/</span><span class="n">_trace</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="n">ms</span><span class="p">)</span>
+</span><span class='line'>  <span class="no">Rendered</span> <span class="n">vendor</span><span class="o">/</span><span class="n">bundle</span><span class="o">/</span><span class="n">ruby</span><span class="o">/</span><span class="mi">2</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">actionpack</span><span class="o">-</span><span class="mi">4</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">action_dispatch</span><span class="o">/</span><span class="n">middleware</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">rescues</span><span class="o">/</span><span class="n">_request_and_response</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="n">ms</span><span class="p">)</span>
+</span><span class='line'>  <span class="no">Rendered</span> <span class="n">vendor</span><span class="o">/</span><span class="n">bundle</span><span class="o">/</span><span class="n">ruby</span><span class="o">/</span><span class="mi">2</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">actionpack</span><span class="o">-</span><span class="mi">4</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">action_dispatch</span><span class="o">/</span><span class="n">middleware</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">rescues</span><span class="o">/</span><span class="n">template_error</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span> <span class="n">within</span> <span class="n">rescues</span><span class="o">/</span><span class="n">layout</span> <span class="p">(</span><span class="mi">16</span><span class="o">.</span><span class="mi">9</span><span class="n">ms</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<h1>date.orderの指定</h1>
+
+<h2>発生箇所</h2>
+
+<p>該当するソースコードはこちらです。<br/>
+ちなみに、i18nを無効化(<code>config.i18n.default_locale</code>を初期状態のようにコメントアウト)していると発生しません。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'>  <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;form-group&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="sx">%= f.label :start_time %&gt;</span>
+</span><span class='line'><span class="sx">    &lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">datetime_select</span> <span class="ss">:start_time</span><span class="p">,</span> <span class="ss">start_year</span><span class="p">:</span> <span class="n">now</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="ss">end_year</span><span class="p">:</span> <span class="n">now</span><span class="o">.</span><span class="n">year</span> <span class="o">+</span> <span class="mi">1</span> <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">  &lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>エラーメッセージからすると、<code>ja.date.order</code>で翻訳に失敗しちゃったよテヘってなってるんで、ja.yml修正すれば良さそう。</p>
+
+<h2>解決策</h2>
+
+<p>2つあります。</p>
+
+<p><a href="https://github.com/rails/rails/blob/a8eb6018318f65e34486da8d1860b3f0d774383d/guides/source/i18n.md#action-view-helper-methods">ここ</a>に書いてありますね。</p>
+
+<blockquote><p>datetime_select also looks up the order option from date.order (unless you pass the option explicitly).</p></blockquote>
+
+<h3>ja.ymlに設定を追加</h3>
+
+<p>翻訳ファイルの修正です。</p>
+
+<figure class='code'><figcaption><span>config/locals/ja.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">ja</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">date</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">order</span><span class="p-Indicator">:</span>
+</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">:year</span>
+</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">:month</span>
+</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">:day</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>なお、デフォルト(en)の場合は、activesupportの設定が適用されています。</p>
+
+<h3>datetime_selectのoptionにorderを追加</h3>
+
+<p>datetime_selectに<code>order</code>というoptionを追加することで、ja.ymlの修正をしないで対応できます。 <br/>
+優先順位は<code>ja.ymlで設定 &lt; datetime_selectでoption指定</code>なので、必要があれば設定すればいいと思います。</p>
+
+<figure class='code'><figcaption><span>config/locals/ja.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'>  <span class="l-Scalar-Plain">&lt;div class=&quot;form-group&quot;&gt;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">&lt;%= f.label :start_time %&gt;</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">&lt;%= f.datetime_select :start_time, start_year</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">now.year, end_year</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">now.year + 1, order</span><span class="p-Indicator">:</span> <span class="p-Indicator">[:</span><span class="nv">year</span><span class="p-Indicator">,</span> <span class="p-Indicator">:</span><span class="nv">month</span><span class="p-Indicator">,</span> <span class="p-Indicator">:</span><span class="nv">day</span><span class="p-Indicator">]</span> <span class="err">%</span><span class="p-Indicator">&gt;</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[RailsでLocaleを指定する]]></title>
     <link href="http://jangajan.com/blog/2014/09/11/perfect-rails-locale/"/>
     <updated>2014-09-11T15:34:56+09:00</updated>
     <id>http://jangajan.com/blog/2014/09/11/perfect-rails-locale</id>
-    <content type="html"><![CDATA[<p>RailsにおけるTimezoneの設定方法です。
+    <content type="html"><![CDATA[<p><a href="http://www.amazon.co.jp/gp/product/4774165166/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=4774165166&linkCode=as2&tag=pochan0919-22">パーフェクト Ruby on Rails</a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=4774165166" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />を、第6章からやってます。</p>
+
+<p>RailsにおけるTimezoneの設定方法です。
 <code>config/application.rb</code>で設定します。</p>
 
 <!-- more -->
@@ -88,7 +207,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Bootstrap3 With Rails4z]]></title>
+    <title type="html"><![CDATA[Bootstrap3 With Rails4]]></title>
     <link href="http://jangajan.com/blog/2014/09/10/perfect-rails-6-bootstrap/"/>
     <updated>2014-09-10T01:40:22+09:00</updated>
     <id>http://jangajan.com/blog/2014/09/10/perfect-rails-6-bootstrap</id>
@@ -2127,305 +2246,6 @@ heroku、wercker用の設定ファイルと、jekyllのmarkdownの設定をし�
 
 <p>成功していればDeploysのデプロイ結果のURLからアクセス可能です。
 (あるいは<code>heroku open</code>)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Sample Post]]></title>
-    <link href="http://jangajan.com/blog/2013/10/08/sample/"/>
-    <updated>2013-10-08T19:08:20+09:00</updated>
-    <id>http://jangajan.com/blog/2013/10/08/sample</id>
-    <content type="html"><![CDATA[<!-- more -->
-
-
-<p>Incorporated provides a great typography, responsive design, author details, semantic markup and more.</p>
-
-<p>You can set customize post covers, and other things directly in the post front matter:</p>
-
-<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">layout</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">post</span>
-
-<span class="l-Scalar-Plain">title</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Jekyll Incorporated Features</span>
-<span class="l-Scalar-Plain">subtitle</span><span class="p-Indicator">:</span> <span class="s">&quot;What&#39;s</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">box&quot;</span>
-
-<span class="c1"># Setup post cover image in /images/</span>
-<span class="l-Scalar-Plain">cover_image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">blog-cover.jpg</span>
-
-<span class="l-Scalar-Plain">excerpt</span><span class="p-Indicator">:</span> <span class="s">&quot;Incorporated</span><span class="nv"> </span><span class="s">provides</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">great</span><span class="nv"> </span><span class="s">typography,</span><span class="nv"> </span><span class="s">responsive</span><span class="nv"> </span><span class="s">design,</span><span class="nv"> </span><span class="s">author</span><span class="nv"> </span><span class="s">details,</span><span class="nv"> </span><span class="s">semantic</span><span class="nv"> </span><span class="s">markup</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">more.&quot;</span>
-
-<span class="c1"># Author details, including Google Plus authorship</span>
-<span class="l-Scalar-Plain">author</span><span class="p-Indicator">:</span>
-  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Karri Saarinen</span>
-  <span class="l-Scalar-Plain">twitter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">karrisaarinen</span>
-  <span class="l-Scalar-Plain">gplus</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">100687498195339762535</span> 
-  <span class="l-Scalar-Plain">bio</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Co-founder, Design</span>
-  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ks.jpg</span>
-  
-<span class="c1"># Keep it as draft, not published in index.html or feed.xml</span>
-<span class="l-Scalar-Plain">draft</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">false</span></code></pre></div>
-
-
-<h4>Configurable &amp; Code Snipped Highlighting</h4>
-
-<p>/assets/stylesheets/main.scss:</p>
-
-<div class="highlight"><pre><code class="language-scss" data-lang="scss"><span class="cm">/* Bodytext font */</span>
-<span class="nv">$font</span><span class="o">:</span> <span class="s2">&quot;Droid Sans&quot;</span><span class="o">,</span> <span class="s2">&quot;Helvetica Neue&quot;</span><span class="o">,</span> <span class="n">Helvetica</span><span class="o">,</span> <span class="n">Arial</span><span class="o">,</span> <span class="no">sans-serif</span><span class="p">;</span>
-
-<span class="cm">/* Font for headings */</span>
-<span class="nv">$fontheadings</span><span class="o">:</span> <span class="s2">&quot;Droid Sans&quot;</span><span class="o">,</span> <span class="s2">&quot;Helvetica Neue&quot;</span><span class="o">,</span> <span class="n">Helvetica</span><span class="o">,</span> <span class="n">Arial</span><span class="o">,</span> <span class="no">sans-serif</span><span class="p">;</span>
-
-<span class="cm">/* Text colors */</span>
-<span class="nv">$text</span><span class="o">:</span> <span class="mh">#21272d</span><span class="p">;</span>
-<span class="nv">$textmuted</span><span class="o">:</span> <span class="mh">#848484</span><span class="p">;</span>
-<span class="nv">$accent</span><span class="o">:</span> <span class="mh">#2077b2</span><span class="p">;</span></code></pre></div>
-
-
-<p>config.yml:</p>
-
-<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">inc</span><span class="p-Indicator">:</span>
-  <span class="c1"># Blog Information</span>
-  <span class="l-Scalar-Plain">title</span><span class="p-Indicator">:</span>        <span class="s">&quot;Jekyll</span><span class="nv"> </span><span class="s">Incorporated&quot;</span>
-  <span class="l-Scalar-Plain">subtitle</span><span class="p-Indicator">:</span>     <span class="s">&quot;Modern</span><span class="nv"> </span><span class="s">Jekyll</span><span class="nv"> </span><span class="s">based</span><span class="nv"> </span><span class="s">blog</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">companies&quot;</span>
-  <span class="l-Scalar-Plain">cover_image</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">blog-cover.jpg</span>
-  
-  <span class="c1"># Company information</span>
-  <span class="l-Scalar-Plain">company</span><span class="p-Indicator">:</span>      <span class="l-Scalar-Plain">Incorporated</span>
-  <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span>          <span class="l-Scalar-Plain">http://incorporated.sendtoinc.com/</span>
-  <span class="l-Scalar-Plain">facebook</span><span class="p-Indicator">:</span>     <span class="l-Scalar-Plain">sendtoinc</span>
-  <span class="l-Scalar-Plain">twitter</span><span class="p-Indicator">:</span>      <span class="l-Scalar-Plain">sendtoinc</span>
-  <span class="l-Scalar-Plain">about_link</span><span class="p-Indicator">:</span>   <span class="l-Scalar-Plain">https://sendtoinc.com/about/</span>
-  
-  <span class="c1"># Product Information</span>
-  <span class="l-Scalar-Plain">product_link</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://incorporated.sendtoinc.com/</span>
-  <span class="l-Scalar-Plain">tagline</span><span class="p-Indicator">:</span>      <span class="s">&quot;Get</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">modern</span><span class="nv"> </span><span class="s">blog</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">your</span><span class="nv"> </span><span class="s">company&quot;</span>
-  
-  <span class="c1"># Comments</span>
-  <span class="l-Scalar-Plain">disqus</span><span class="p-Indicator">:</span>
-    <span class="c1"># Eg. &quot;exampleblog&quot; Set to false to disable comments</span>
-    <span class="l-Scalar-Plain">shortname</span><span class="p-Indicator">:</span>  <span class="l-Scalar-Plain">false</span>
-  
-  
-  <span class="c1"># Sharing settings</span>
-  <span class="l-Scalar-Plain">sharing</span><span class="p-Indicator">:</span>
-    <span class="l-Scalar-Plain">twitter</span><span class="p-Indicator">:</span>    <span class="l-Scalar-Plain">false</span>
-    <span class="l-Scalar-Plain">facebook</span><span class="p-Indicator">:</span>   <span class="l-Scalar-Plain">false</span>
-    <span class="l-Scalar-Plain">gplus</span><span class="p-Indicator">:</span>      <span class="l-Scalar-Plain">false</span>
-    <span class="l-Scalar-Plain">hn</span><span class="p-Indicator">:</span>         <span class="l-Scalar-Plain">false</span>
-    
-  
- <span class="c1"># Analytics     </span>
-  <span class="l-Scalar-Plain">analytics</span><span class="p-Indicator">:</span>
-    <span class="l-Scalar-Plain">google</span><span class="p-Indicator">:</span> 
-      <span class="c1"># eg. &#39;UA-123-12&#39;</span>
-      <span class="l-Scalar-Plain">id</span><span class="p-Indicator">:</span>       <span class="l-Scalar-Plain">false</span></code></pre></div>
-
-
-<p><strong>Zoomable images</strong></p>
-
-<div class="full zoomable"><img src="http://jangajan.com/images/incorporated.jpg"></div>
-
-
-<p><strong>Awesome quotes</strong></p>
-
-<blockquote><p>“Effective companies tend to communicate more, their people are curious and they have opinions”</p></blockquote>
-
-<p>Stay tuned for updates.</p>
-
-<h1>H1</h1>
-
-<h2>H2</h2>
-
-<h3>H3</h3>
-
-<h4>H4</h4>
-
-<h5>H5</h5>
-
-<h6>H6</h6>
-
-<p>Alternatively, for H1 and H2, an underline-ish style:</p>
-
-<h1>Alt-H1</h1>
-
-<h2>Alt-H2</h2>
-
-<p>Emphasis, aka italics, with <em>asterisks</em> or <em>underscores</em>.</p>
-
-<p>Strong emphasis, aka bold, with <strong>asterisks</strong> or <strong>underscores</strong>.</p>
-
-<p>Combined emphasis with <strong>asterisks and <em>underscores</em></strong>.</p>
-
-<p>[NG]Strikethrough uses two tildes. <del>Scratch this.</del></p>
-
-<ol>
-<li>First ordered list item</li>
-<li>Another item
-⋅⋅* Unordered sub-list.</li>
-<li>Actual numbers don&rsquo;t matter, just that it&rsquo;s a number
-⋅⋅1. Ordered sub-list</li>
-<li>And another item.</li>
-</ol>
-
-
-<p>⋅⋅⋅You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we&rsquo;ll use three here to also align the raw Markdown).</p>
-
-<p>⋅⋅⋅To have a line break without a paragraph, you will need to use two trailing spaces.⋅⋅
-⋅⋅⋅Note that this line is separate, but within the same paragraph.⋅⋅
-⋅⋅⋅(This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)</p>
-
-<ul>
-<li>Unordered list can use asterisks</li>
-<li>Or minuses</li>
-<li>Or pluses</li>
-</ul>
-
-
-<p><a href="https://www.google.com">I&rsquo;m an inline-style link</a></p>
-
-<p><a href="https://www.google.com" title="Google's Homepage">I&rsquo;m an inline-style link with title</a></p>
-
-<p>[NG][I&rsquo;m a reference-style link][Arbitrary case-insensitive reference text]</p>
-
-<p><a href="../blob/master/LICENSE">I&rsquo;m a relative reference to a repository file</a></p>
-
-<p>[NG][You can use numbers for reference-style link definitions][1]</p>
-
-<p>Or leave it empty and use the [link text itself]</p>
-
-<p>Some text to show that the reference links can follow later.</p>
-
-<p>Here&rsquo;s our logo (hover to see the title text):</p>
-
-<p>Inline-style:
-<img src="https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png" title="Logo Title Text 1" alt="alt text" /></p>
-
-<p>[NG]Reference-style:
-![alt text][logo]</p>
-
-<p>Inline <code>code</code> has <code>back-ticks around</code> it.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="s2">&quot;JavaScript syntax highlighting&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="nx">alert</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">s</span> <span class="o">=</span> <span class="s">&quot;Python syntax highlighting&quot;</span>
-</span><span class='line'><span class="k">print</span> <span class="n">s</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">No</span> <span class="n">language</span> <span class="n">indicated</span><span class="p">,</span> <span class="n">so</span> <span class="n">no</span> <span class="n">syntax</span> <span class="n">highlighting</span><span class="o">.</span>
-</span><span class='line'><span class="n">But</span> <span class="n">let</span><span class="s">&#39;s throw in a &lt;b&gt;tag&lt;/b&gt;.</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>[NG]Colons can be used to align columns.</p>
-
-<table>
-<thead>
-<tr>
-<th> Tables        </th>
-<th style="text-align:center;"> Are           </th>
-<th style="text-align:right;"> Cool  </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> col 3 is      </td>
-<td style="text-align:center;"> right-aligned </td>
-<td style="text-align:right;"> $1600 </td>
-</tr>
-<tr>
-<td> col 2 is      </td>
-<td style="text-align:center;"> centered      </td>
-<td style="text-align:right;">   $12 </td>
-</tr>
-<tr>
-<td> zebra stripes </td>
-<td style="text-align:center;"> are neat      </td>
-<td style="text-align:right;">    $1 </td>
-</tr>
-</tbody>
-</table>
-
-
-<p>[NG]The outer pipes (|) are optional, and you don&rsquo;t need to make the raw Markdown line up prettily. You can also use inline Markdown.</p>
-
-<table>
-<thead>
-<tr>
-<th>Markdown </th>
-<th> Less </th>
-<th> Pretty</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><em>Still</em> </td>
-<td> <code>renders</code> </td>
-<td> <strong>nicely</strong></td>
-</tr>
-<tr>
-<td>1 </td>
-<td> 2 </td>
-<td> 3</td>
-</tr>
-</tbody>
-</table>
-
-
-<blockquote><p>Blockquotes are very handy in email to emulate reply text.
-This line is part of the same quote.</p></blockquote>
-
-<p>Quote break.</p>
-
-<blockquote><p>This is a very long line that will still be quoted properly when it wraps. Oh boy let&rsquo;s keep writing to make sure this is long enough to actually wrap for everyone. Oh, you can <em>put</em> <strong>Markdown</strong> into a blockquote.</p></blockquote>
-
-<dl>
-  <dt>Definition list</dt>
-  <dd>Is something people use sometimes.</dd>
-
-  <dt>Markdown in HTML</dt>
-  <dd>Does *not* work **very** well. Use HTML <em>tags</em>.</dd>
-</dl>
-
-
-<p>Three or more&hellip;</p>
-
-<hr />
-
-<p>Hyphens</p>
-
-<hr />
-
-<p>Asterisks</p>
-
-<hr />
-
-<p>Underscores</p>
-
-<p>Here&rsquo;s a line for us to start with.</p>
-
-<p>This line is separated from the one above by two newlines, so it will be a <em>separate paragraph</em>.</p>
-
-<p>This line is also a separate paragraph, but&hellip;
-This line is only separated by a single newline, so it&rsquo;s a separate line in the <em>same paragraph</em>.</p>
-
-<p><a href="http://www.youtube.com/watch?feature=player_embedded&v=YOUTUBE_VIDEO_ID_HERE
-" target="_blank"><img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg"
-alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a></p>
-
-<p><a href="http://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE"><img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" alt="IMAGE ALT TEXT HERE" /></a></p>
 ]]></content>
   </entry>
   
