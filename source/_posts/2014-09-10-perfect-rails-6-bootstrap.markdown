@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Bootstrap3 with Rails4z"
+title: "Bootstrap3 with Rails4"
 date: 2014-09-10 01:40:22 +0900
 comments: true
 categories: [ruby-on-rails]
