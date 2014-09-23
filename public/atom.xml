@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-12T19:19:41+09:00</updated>
+  <updated>2014-09-24T03:11:34+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,150 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ForbiddenAttributesErrorが発生]]></title>
+    <link href="http://jangajan.com/blog/2014/09/24/forbiddenattributeserror-in-rails/"/>
+    <updated>2014-09-24T02:33:27+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/24/forbiddenattributeserror-in-rails</id>
+    <content type="html"><![CDATA[<p>Rails4で、ForbiddenAttributesErrorが発生した場合の対応です。</p>
+
+<h1>ActiveModel::ForbiddenAttributesError発生</h1>
+
+<p>次のようなエラーが発生しました。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>ActiveModel::ForbiddenAttributesError <span class="o">(</span>ActiveModel::ForbiddenAttributesError<span class="o">)</span>:
+</span><span class='line'>  app/controllers/posts_controller.rb:13:in <span class="sb">`</span>create<span class="err">&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>13行目が悪さをしているらしい&hellip;</p>
+
+<figure class='code'><figcaption><span>app/controllers/posts_controller.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">def</span> <span class="nf">create</span>
+</span><span class='line'>  <span class="vi">@feed</span> <span class="o">=</span> <span class="no">Feed</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:post</span><span class="o">]</span><span class="p">)</span> <span class="c1"># 13行目</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<p>これはmass assignmentの問題を解決するために、Rails4から標準で導入された対応により発生しました。<br/>
+mass assignmentとはsubmitしたデータから簡単にModelを作ることができるRailsの仕組みです。<br/>
+しかし、意図しないパラメータも含んだ状態でModelが作られるという脆弱性のため、このようなエラーが発生するようになりました。<br/>
+mass assignmentの問題とその対策についての詳細な説明は<a href="http://www.willnet.in/48">Rails4.0に含まれる strong_parameters について</a>を参考にしてください。</p>
+
+<h1>対応</h1>
+
+<h2>Model作成に必要なsubmitデータを指定する方法</h2>
+
+<p>Model作成に必要なsubmitデータを明示的に指定し、チェックする方法です。
+permitメソッドを使うことで、submitデータを絞り込みます。</p>
+
+<figure class='code'><figcaption><span>app/controllers/posts_controller.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">def</span> <span class="nf">create</span>
+</span><span class='line'>  <span class="vi">@feed</span> <span class="o">=</span> <span class="no">Post</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">post_params</span><span class="p">)</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="kp">private</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">post_params</span>
+</span><span class='line'>  <span class="c1"># submitしたデータのうち、Model作成に必要なものを</span>
+</span><span class='line'>  <span class="c1"># permitの引数に指定する</span>
+</span><span class='line'>  <span class="n">params</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:params</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span>
+</span><span class='line'>    <span class="ss">:title</span><span class="p">,</span> <span class="ss">:body</span>
+</span><span class='line'>  <span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>エラーを発生させない方法</h2>
+
+<p>こちらはmass assignmentの問題を解決していないため、お勧めしません。<br/>
+pertmitメソッドを通さず、全てのsubmitデータを利用します。</p>
+
+<figure class='code'><figcaption><span>config/application.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'>  <span class="k">class</span> <span class="nc">Application</span> <span class="o">&lt;</span> <span class="no">Rails</span><span class="o">::</span><span class="no">Application</span>
+</span><span class='line'>    <span class="c1"># デフォルトはfalseに設定されている</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">action_controller</span><span class="o">.</span><span class="n">permit_all_parameters</span> <span class="o">=</span> <span class="kp">true</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>エラー発生場所</h1>
+
+<p><code>ActiveModel::ForbiddenAttributesError</code>は次の処理で発生します。</p>
+
+<ul>
+<li>ActiveModel::ForbiddenAttributesProtection#sanitize_for_mass_assignment(attributes)</li>
+</ul>
+
+
+<p>上述のpermitメソッドを実行することで、データはチェック済みの状態になります。<br/>
+このチェック済み状態を確認するのが、<code>sanitize_for_mass_assignment</code>の役割です。<br/>
+permitメソッドは<code>ActionController::Parameters</code>に定義してあります。</p>
+
+<h1>未チェックのsumitデータがあった場合の対応</h1>
+
+<p>未チェックのsubmitデータがあった場合の挙動をコントロールできます。<br/>
+<code>config.action_controller.action_on_unpermitted_parameters</code>を使います。</p>
+
+<h2>エラーにする</h2>
+
+<figure class='code'><figcaption><span>config/application.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'>  <span class="k">class</span> <span class="nc">Application</span> <span class="o">&lt;</span> <span class="no">Rails</span><span class="o">::</span><span class="no">Application</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">action_controller</span><span class="o">.</span><span class="n">action_on_unpermitted_parameters</span> <span class="o">=</span> <span class="ss">:raise</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>ログに出力する</h2>
+
+<figure class='code'><figcaption><span>config/application.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'>  <span class="k">class</span> <span class="nc">Application</span> <span class="o">&lt;</span> <span class="no">Rails</span><span class="o">::</span><span class="no">Application</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">action_controller</span><span class="o">.</span><span class="n">action_on_unpermitted_parameters</span> <span class="o">=</span> <span class="ss">:log</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>出力結果はこうなります。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>Unpermitted parameters: hogehoge
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[I18nの設定でdatetime_selectの月表示がおかしい]]></title>
@@ -2021,78 +2165,6 @@ viewを独自拡張したものを使用しなかったので次はその辺り�
 面白かったのでまた行きたいですね。</p>
 
 <p><img src="http://photos-e.ak.instagram.com/hphotos-ak-prn/926456_466559483474076_986180211_n.jpg" title="baseball game" alt="alt text" /></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[独自ドメイン設定]]></title>
-    <link href="http://jangajan.com/blog/2014/05/08/get-original-domain/"/>
-    <updated>2014-05-08T00:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/05/08/get-original-domain</id>
-    <content type="html"><![CDATA[<h1>独自ドメイン設定の道程</h1>
-
-<p>せっかくなので独自ドメインでも設定してみよう。<br/>
-そうすれば否が応でも書かずにはいられないはず。<br/>
-有料だもの。現金な人間です。</p>
-
-<p>手順としてはこんな感じでした。</p>
-
-<!-- more -->
-
-
-<ol>
-<li>独自ドメイン取得(お名前.com)</li>
-<li>cloudflareで独自ドメインとherokuを紐付け</li>
-<li>herokuに独自ドメイン設定</li>
-<li>おまけ:google analyticsの設定</li>
-</ol>
-
-
-<hr />
-
-<h1>独自ドメイン取得</h1>
-
-<p>お名前.comで独自ドメイン購入。<br/>
-最近は.tokyoやら.redやらあるんですね。<br/>
-.comにしました。<br/>
-あらかじめ候補探しておきましょう。<br/>
-大体は使われています。
-悩んでいると日が暮れます。</p>
-
-<hr />
-
-<h1>cloudflare独自ドメインとheroku連携</h1>
-
-<p>wwwつけると入力手間だな〜っていう理由でルートドメインはしたくない。<br/>
-たまたま<a href="http://blog.jnito.com/entry/2014/05/04/090537">こちらの記事</a>を見かけまして。<br/>
-cloudflareを利用することにしました。<br/>
-用途はブログを公開するだけだし、SSL利用するまでもなかったので無料プランで試してみました。<br/>
-使い切れてないですが、設定だけでもできたの良し。目的達成。<br/>
-設定完了後、whoisコマンドのName Serverの値がcloudflare用に変わります。<br/>
-反映されるのに待ちます。</p>
-
-<hr />
-
-<h1>herokuに独自ドメイン設定</h1>
-
-<p>herokuアプリのSettingsのDomainsに独自ドメインを追加。<br/>
-これしないと、herokuの404画面が出てくる。</p>
-
-<hr />
-
-<h1>google analyticsの設定</h1>
-
-<p>トラッキング情報のトラッキングコードを<em>google-analytics.htmlにコピペ。<br/>
-</em>config.ymlを以下の通り変更
-<code>yaml
-  analytics:
-+    google: false
-+    google: true</code></p>
-
-<p>夜明けに寝て夕暮れ時に目覚めても反映されてませんでした。<br/>
-気長に待ちましょう。</p>
-
-<p>どれも長い。</p>
 ]]></content>
   </entry>
   
