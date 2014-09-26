@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-24T03:11:34+09:00</updated>
+  <updated>2014-09-27T04:35:00+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,155 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ページ単位のjavascriptにcontent_forを使う]]></title>
+    <link href="http://jangajan.com/blog/2014/09/27/content-for/"/>
+    <updated>2014-09-27T04:14:07+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/27/content-for</id>
+    <content type="html"><![CDATA[<p>ページ単位で特定のjavascriptを実行させたい時に、content_forを使えばいいんだね、という結論でした。</p>
+
+<!-- more -->
+
+
+<h1>javascriptをページごとのファイルに書けない理由</h1>
+
+<p>そもそもbootstrapで作成したコンテンツにこんな記載がありました。
+hamlでyatiのテーマを適用しています。</p>
+
+<figure class='code'><figcaption><span>app/views/layouts/application.html.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="c">/ ...ページ最下部</span>
+</span><span class='line'>      <span class="c">= yield</span>
+</span><span class='line'><span class="c">/</span>
+</span><span class='line'>  <span class="c">Javascripts</span>
+</span><span class='line'>  <span class="c">\==================================================</span>
+</span><span class='line'><span class="c">/ Placed at the end of the document so the pages load faster</span>
+</span><span class='line'><span class="p">=</span> <span class="n">javascript_include_tag</span> <span class="s2">&quot;yeti&quot;</span>
+</span><span class='line'><span class="p">=</span> <span class="k">yield</span><span class="p">(</span><span class="ss">:page_javascript</span><span class="p">)</span> <span class="k">if</span> <span class="n">content_for?</span><span class="p">(</span><span class="ss">:page_javascript</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>各ページのコンテンツは、<code>= yield</code>に埋め込まれます。<br/>
+しかし、<code>= javascript_include_tag "yeti"</code>という処理でJavascriptの定義を追加するため、各ページのhamlにjavascriptを書くとjQueryの処理が動きません。<br/>
+そこで、<code>= yield(:page_javascript) if content_for?(:page_javascript)</code>を利用します。</p>
+
+<h1>content_forの使い方</h1>
+
+<p>各ページのhamlの下部でcontent_forを利用することにより、application.html.hamlの<code>= yield(:page_javascript) if...</code>のところに出力されます。</p>
+
+<figure class='code'><figcaption><span>app/views/tasks/new.html.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="p">-</span> <span class="n">content_for</span> <span class="ss">:page_javascript</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nd">:javascript</span>
+</span><span class='line'>    <span class="nd">jQuery(&#39;#datetimepicker&#39;).datetimepicker();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>なので、ページごとのjavascriptは<code>content_for :page_javascript</code>を利用して書くようにしましょう。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Railsでbootswitchのテーマを適用したらActionView::Template::Error]]></title>
+    <link href="http://jangajan.com/blog/2014/09/26/include-css-error-in-rails/"/>
+    <updated>2014-09-26T16:49:11+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/26/include-css-error-in-rails</id>
+    <content type="html"><![CDATA[<p>bootswitch適用時に発生したActionView::Template::Errorの解消方法です。</p>
+
+<!-- more -->
+
+
+<h1>bootswatch適用</h1>
+
+<p>以下のようにbootswatchを適用しました。</p>
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;twitter-bootswatch-rails&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;twitter-bootswatch-rails-helpers&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;therubyracer&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>今回はyetiを適用しています。<br/>
+テンプレートエンジンはslimを使っています。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle <span class="nb">exec </span>rails g bootswatch:install yeti
+</span><span class='line'>bundle <span class="nb">exec </span>rails g bootswatch:import yeti
+</span><span class='line'>bundle <span class="nb">exec </span>rails g bootswatch:layout yeti
+</span><span class='line'>mv app/views/layouts/yeti.html.slim app/views/layouts/application.html.slim
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最後のmvでテンプレートファイルの入れ替えを行っています。</p>
+
+<h1>ActionView::Template::Errorエラー</h1>
+
+<p>ここで<code>rails s</code>すると、以下のエラーが発生しました。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>ActionView::Template::Error <span class="o">(</span>Asset filtered out and will not be served: add <span class="sb">`</span>Rails.application.config.assets.precompile +<span class="o">=</span> %w<span class="o">(</span> yeti.css <span class="o">)</span><span class="sb">`</span> to <span class="sb">`</span>config/initializers/assets.rb<span class="sb">`</span> and restart your server<span class="o">)</span>:
+</span><span class='line'>     9:     / Le HTML5 shim, <span class="k">for</span> IE6-8 support of HTML elements
+</span><span class='line'>    10:     /<span class="o">[</span><span class="k">if</span> lt IE 9<span class="o">]</span>
+</span><span class='line'>    11:       <span class="o">=</span> javascript_include_tag <span class="s2">&quot;http://html5shim.googlecode.com/svn/trunk/html5.js&quot;</span>
+</span><span class='line'>    12:     <span class="o">=</span> stylesheet_link_tag <span class="s2">&quot;yeti&quot;</span>, :media <span class="o">=</span>&gt; <span class="s2">&quot;all&quot;</span>
+</span><span class='line'>    13:     <span class="o">=</span> yield<span class="o">(</span>:page_stylesheet<span class="o">)</span> <span class="k">if</span> content_for?<span class="o">(</span>:page_stylesheet<span class="o">)</span>
+</span><span class='line'>    14:
+</span><span class='line'>    15:
+</span><span class='line'>  app/views/layouts/application.html.slim:12:in <span class="sb">`</span>_app_views_layouts_application_html_slim__3298097478580668215_70163995513140<span class="err">&#39;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  Rendered vendor/bundle/ruby/2.1.0/gems/actionpack-4.1.6/lib/action_dispatch/middleware/templates/rescues/_trace.html.erb <span class="o">(</span>1.0ms<span class="o">)</span>
+</span><span class='line'>  Rendered vendor/bundle/ruby/2.1.0/gems/actionpack-4.1.6/lib/action_dispatch/middleware/templates/rescues/_request_and_response.html.erb <span class="o">(</span>1.0ms<span class="o">)</span>
+</span><span class='line'>  Rendered vendor/bundle/ruby/2.1.0/gems/actionpack-4.1.6/lib/action_dispatch/middleware/templates/rescues/template_error.html.erb within rescues/layout <span class="o">(</span>15.5ms<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>テンプレートファイルの12行目、ちょうどyetinテーマのcssのところですね。<br/>
+どうやら、呼び込みたいassetsファイルがちゃんとprecompileされていないらしい。<br/>
+追加したいなら、<code>config/initializers/assets.rb</code>にこんな感じに追加しろぼけってエラーメッセージ優しい。</p>
+
+<h1>エラー解消</h1>
+
+<p>そんなわけでこんな感じで修正。</p>
+
+<figure class='code'><figcaption><span>config/initializers/assets.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">precompile</span> <span class="o">+=</span> <span class="sx">%w( yeti.css yeti.js )</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>yeti.jsも同じエラーが出たのであわせて解消。<br/>
+これで<code>rails s</code>したらスタイル代わった。やった。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ForbiddenAttributesErrorが発生]]></title>
@@ -2102,69 +2251,6 @@ viewを独自拡張したものを使用しなかったので次はその辺り�
 <p>まとなものは初めて作ったので、よかったらお試しください。
 使用感などフィードバックをいただけると嬉しいです。
 一人でざーっと作ったのでソースの指摘も嬉しいです。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Warning on Navigation Barnavigation Bar]]></title>
-    <link href="http://jangajan.com/blog/2014/06/25/warning-add-button-on-navigationbar/"/>
-    <updated>2014-06-25T00:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/06/25/warning-add-button-on-navigationbar</id>
-    <content type="html"><![CDATA[<p>storyboardでnavigation barの右側にbackとは異なるボタンを配置したら下の警告が出た。</p>
-
-<blockquote><p>unsupported configuration plain style unsupported in a navigation item</p></blockquote>
-
-<!-- more -->
-
-
-<p>Buttonではなく、Bar Button Itemを使うのが正しいんですね。</p>
-
-<ul>
-<li>参考
-
-<ul>
-<li><a href="http://stackoverflow.com/questions/8531972/unsupported-configuration-plain-style-unsupported-in-a-navigation-item">stackoverflowの回答欄</a></li>
-</ul>
-</li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[初野球観戦]]></title>
-    <link href="http://jangajan.com/blog/2014/05/10/baseball-game-watching/"/>
-    <updated>2014-05-10T00:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/05/10/baseball-game-watching</id>
-    <content type="html"><![CDATA[<h1>野球観戦</h1>
-
-<p>野球観戦なんて高校以来です。</p>
-
-<!-- more -->
-
-
-<p>知り合いに誘われて人生初のプロ野球観戦をしました。<br/>
-カードは、横浜DeNAベイスターズ VS 東京ヤクルトスワローズ。<br/>
-観戦席はベイスターズサイド。<br/>
-野球はそれほど興味もなく、ホッシーがいなくなっていたのも、この日初めて知ったぐらい
-(ファンの方々すんません)</p>
-
-<p>序盤からもの凄く静かな試合。出塁のほとんど4球で、時たまスワローズヒットを打つ程度。<br/>
-ベイスターズはヒットが一本もなく、ナーブソンとモスコーソの投球数にも徐々に差が広がる。<br/>
-疲れもあるせいか、時たま危ういシーンもあったが、大切なところはきっちり守りきるモスコーソ。<br/>
-ターニングポイントは7回裏。バルディリス、痺れを切らした１発２ラン。<br/>
-ベイスターズ、この試合唯一のヒットで試合を決めてしまった。<br/>
-一番会場が沸いた瞬間。歓声と大声援とハイタッチの嵐。  <br/>
-それまで堪えていたものが爆発してました。<br/>
-8回の表で、１失点、１アウト満塁という状況も、ソーサが２者連続三振できっちり抑え込む。<br/>
-たったの１点差。少しでも弛みが生じたらいつ逆転されてもおかしくない状況だが、9回表も難無く無失点に抑え込む。<br/>
-(僕が言うのもなんですが)多くのベイスターズファンの期待に応えていたと思います。
-試合後も優勝したかのような盛り上がりでした。</p>
-
-<p>この試合がちょうど横浜スタジアム通算1000勝目という記念になったようで、このゲームを観戦できたことは幸運だったかな。<br/>
-面白かったのでまた行きたいですね。</p>
-
-<p><img src="http://photos-e.ak.instagram.com/hphotos-ak-prn/926456_466559483474076_986180211_n.jpg" title="baseball game" alt="alt text" /></p>
 ]]></content>
   </entry>
   

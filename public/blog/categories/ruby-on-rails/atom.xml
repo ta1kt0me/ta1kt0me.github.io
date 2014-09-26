@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby-on-rails | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby-on-rails/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-27T02:08:10+09:00</updated>
+  <updated>2014-09-27T04:35:43+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,264 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ページ単位のjavascriptにcontent_forを使う]]></title>
+    <link href="http://jangajan.com/blog/2014/09/27/content-for/"/>
+    <updated>2014-09-27T04:14:07+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/27/content-for</id>
+    <content type="html"><![CDATA[<p>ページ単位で特定のjavascriptを実行させたい時に、content_forを使えばいいんだね、という結論でした。</p>
+
+<!-- more -->
+
+
+<h1>javascriptをページごとのファイルに書けない理由</h1>
+
+<p>そもそもbootstrapで作成したコンテンツにこんな記載がありました。
+hamlでyatiのテーマを適用しています。</p>
+
+<pre><code class="haml app/views/layouts/application.html.haml">/ ...ページ最下部
+      = yield
+/
+  Javascripts
+  \==================================================
+/ Placed at the end of the document so the pages load faster
+= javascript_include_tag "yeti"
+= yield(:page_javascript) if content_for?(:page_javascript)
+</code></pre>
+
+<p>各ページのコンテンツは、<code>= yield</code>に埋め込まれます。<br/>
+しかし、<code>= javascript_include_tag "yeti"</code>という処理でJavascriptの定義を追加するため、各ページのhamlにjavascriptを書くとjQueryの処理が動きません。<br/>
+そこで、<code>= yield(:page_javascript) if content_for?(:page_javascript)</code>を利用します。</p>
+
+<h1>content_forの使い方</h1>
+
+<p>各ページのhamlの下部でcontent_forを利用することにより、application.html.hamlの<code>= yield(:page_javascript) if...</code>のところに出力されます。</p>
+
+<pre><code class="haml app/views/tasks/new.html.haml">- content_for :page_javascript do
+  :javascript
+    jQuery('#datetimepicker').datetimepicker();
+</code></pre>
+
+<p>なので、ページごとのjavascriptは<code>content_for :page_javascript</code>を利用して書くようにしましょう。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Railsでbootswitchのテーマを適用したらActionView::Template::Error]]></title>
+    <link href="http://jangajan.com/blog/2014/09/26/include-css-error-in-rails/"/>
+    <updated>2014-09-26T16:49:11+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/26/include-css-error-in-rails</id>
+    <content type="html"><![CDATA[<p>bootswitch適用時に発生したActionView::Template::Errorの解消方法です。</p>
+
+<!-- more -->
+
+
+<h1>bootswatch適用</h1>
+
+<p>以下のようにbootswatchを適用しました。</p>
+
+<pre><code class="rb Gemfile">...
+gem 'twitter-bootswatch-rails'
+gem 'twitter-bootswatch-rails-helpers'
+gem 'therubyracer'
+</code></pre>
+
+<p>今回はyetiを適用しています。<br/>
+テンプレートエンジンはslimを使っています。</p>
+
+<pre><code class="sh">bundle exec rails g bootswatch:install yeti
+bundle exec rails g bootswatch:import yeti
+bundle exec rails g bootswatch:layout yeti
+mv app/views/layouts/yeti.html.slim app/views/layouts/application.html.slim
+</code></pre>
+
+<p>最後のmvでテンプレートファイルの入れ替えを行っています。</p>
+
+<h1>ActionView::Template::Errorエラー</h1>
+
+<p>ここで<code>rails s</code>すると、以下のエラーが発生しました。</p>
+
+<pre><code>ActionView::Template::Error (Asset filtered out and will not be served: add `Rails.application.config.assets.precompile += %w( yeti.css )` to `config/initializers/assets.rb` and restart your server):
+     9:     / Le HTML5 shim, for IE6-8 support of HTML elements
+    10:     /[if lt IE 9]
+    11:       = javascript_include_tag "http://html5shim.googlecode.com/svn/trunk/html5.js"
+    12:     = stylesheet_link_tag "yeti", :media =&gt; "all"
+    13:     = yield(:page_stylesheet) if content_for?(:page_stylesheet)
+    14: 
+    15: 
+  app/views/layouts/application.html.slim:12:in `_app_views_layouts_application_html_slim__3298097478580668215_70163995513140'
+
+
+  Rendered vendor/bundle/ruby/2.1.0/gems/actionpack-4.1.6/lib/action_dispatch/middleware/templates/rescues/_trace.html.erb (1.0ms)
+  Rendered vendor/bundle/ruby/2.1.0/gems/actionpack-4.1.6/lib/action_dispatch/middleware/templates/rescues/_request_and_response.html.erb (1.0ms)
+  Rendered vendor/bundle/ruby/2.1.0/gems/actionpack-4.1.6/lib/action_dispatch/middleware/templates/rescues/template_error.html.erb within rescues/layout (15.5ms)
+</code></pre>
+
+<p>テンプレートファイルの12行目、ちょうどyetinテーマのcssのところですね。<br/>
+どうやら、呼び込みたいassetsファイルがちゃんとprecompileされていないらしい。<br/>
+追加したいなら、<code>config/initializers/assets.rb</code>にこんな感じに追加しろぼけってエラーメッセージ優しい。</p>
+
+<h1>エラー解消</h1>
+
+<p>そんなわけでこんな感じで修正。</p>
+
+<pre><code class="rb config/initializers/assets.rb">Rails.application.config.assets.precompile += %w( yeti.css yeti.js )
+</code></pre>
+
+<p>yeti.jsも同じエラーが出たのであわせて解消。<br/>
+これで<code>rails s</code>したらスタイル代わった。やった。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ForbiddenAttributesErrorが発生]]></title>
+    <link href="http://jangajan.com/blog/2014/09/24/forbiddenattributeserror-in-rails/"/>
+    <updated>2014-09-24T02:33:27+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/24/forbiddenattributeserror-in-rails</id>
+    <content type="html"><![CDATA[<p>Rails4で、ForbiddenAttributesErrorが発生した場合の対応です。</p>
+
+<h1>ActiveModel::ForbiddenAttributesError発生</h1>
+
+<p>次のようなエラーが発生しました。</p>
+
+<pre><code class="sh">ActiveModel::ForbiddenAttributesError (ActiveModel::ForbiddenAttributesError):
+  app/controllers/posts_controller.rb:13:in `create'
+</code></pre>
+
+<p>13行目が悪さをしているらしい&hellip;</p>
+
+<pre><code class="rb app/controllers/posts_controller.rb">def create
+  @feed = Feed.new(params[:post]) # 13行目
+  ...
+end
+</code></pre>
+
+<!-- more -->
+
+
+<p>これはmass assignmentの問題を解決するために、Rails4から標準で導入された対応により発生しました。<br/>
+mass assignmentとはsubmitしたデータから簡単にModelを作ることができるRailsの仕組みです。<br/>
+しかし、意図しないパラメータも含んだ状態でModelが作られるという脆弱性のため、このようなエラーが発生するようになりました。<br/>
+mass assignmentの問題とその対策についての詳細な説明は<a href="http://www.willnet.in/48">Rails4.0に含まれる strong_parameters について</a>を参考にしてください。</p>
+
+<h1>対応</h1>
+
+<h2>Model作成に必要なsubmitデータを指定する方法</h2>
+
+<p>Model作成に必要なsubmitデータを明示的に指定し、チェックする方法です。
+permitメソッドを使うことで、submitデータを絞り込みます。</p>
+
+<pre><code class="rb app/controllers/posts_controller.rb">def create
+  @feed = Post.new(post_params)
+  ...
+end
+
+private
+
+def post_params
+  # submitしたデータのうち、Model作成に必要なものを
+  # permitの引数に指定する
+  params.require(:params).permit(
+    :title, :body
+  )
+end
+</code></pre>
+
+<h2>エラーを発生させない方法</h2>
+
+<p>こちらはmass assignmentの問題を解決していないため、お勧めしません。<br/>
+pertmitメソッドを通さず、全てのsubmitデータを利用します。</p>
+
+<pre><code class="rb config/application.rb">  class Application &lt; Rails::Application
+    # デフォルトはfalseに設定されている
+    config.action_controller.permit_all_parameters = true
+  end
+</code></pre>
+
+<h1>エラー発生場所</h1>
+
+<p><code>ActiveModel::ForbiddenAttributesError</code>は次の処理で発生します。</p>
+
+<ul>
+<li>ActiveModel::ForbiddenAttributesProtection#sanitize_for_mass_assignment(attributes)</li>
+</ul>
+
+
+<p>上述のpermitメソッドを実行することで、データはチェック済みの状態になります。<br/>
+このチェック済み状態を確認するのが、<code>sanitize_for_mass_assignment</code>の役割です。<br/>
+permitメソッドは<code>ActionController::Parameters</code>に定義してあります。</p>
+
+<h1>未チェックのsumitデータがあった場合の対応</h1>
+
+<p>未チェックのsubmitデータがあった場合の挙動をコントロールできます。<br/>
+<code>config.action_controller.action_on_unpermitted_parameters</code>を使います。</p>
+
+<h2>エラーにする</h2>
+
+<pre><code class="rb config/application.rb">  class Application &lt; Rails::Application
+    config.action_controller.action_on_unpermitted_parameters = :raise
+  end
+</code></pre>
+
+<h2>ログに出力する</h2>
+
+<pre><code class="rb config/application.rb">  class Application &lt; Rails::Application
+    config.action_controller.action_on_unpermitted_parameters = :log
+  end
+</code></pre>
+
+<p>出力結果はこうなります。
+<code>sh
+Unpermitted parameters: hogehoge
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[I18nの設定でdatetime_selectの月表示がおかしい]]></title>
+    <link href="http://jangajan.com/blog/2014/09/12/perfect-rails-i18n-months/"/>
+    <updated>2014-09-12T19:09:36+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/12/perfect-rails-i18n-months</id>
+    <content type="html"><![CDATA[<p>前記事に引き続き、i18nの対応です。<br/>
+これいっぱいありそう。<br/>
+datetime_selectで表示した<code>月</code>欄の表示が妙だ。</p>
+
+<!-- more -->
+
+
+<h1>ja.ymlにmonth_namesを追加</h1>
+
+<p>翻訳ファイルに<code>month_names</code>を追加しましょう。</p>
+
+<pre><code class="yaml config/locals/ja.yml">ja:
+  date:
+    order: 
+      - :year
+      - :month
+      - :day
+    month_names: [~, 1月, 2月, 3月, 4月, 5月, 6月, 7月, 8月, 9月, 10月, 11月, 12月]
+</code></pre>
+
+<p>ちなみに月表示には省略形も存在します。(JanuaryだとJanとか)<br/>
+この時は<code>abbr_month_names</code>というものを使います。<br/>
+日本語だとそもそも表記が短いのであまり意味はないと思いますが、思わぬところでエラーが発生したらそちらを疑いましょう。</p>
+
+<p>これもactivesupportにenの設定はありました。<br/>
+曜日も同様なんでご注意を。
+と思ったら、素晴らしいものがありました。</p>
+
+<ul>
+<li><a href="https://github.com/svenfuchs/rails-i18n/blob/master/rails/locale/ja.yml">https://github.com/svenfuchs/rails-i18n/blob/master/rails/locale/ja.yml</a>
+
+<ul>
+<li>各言語ごとにあるのでこれベースにするのがいいですね。</li>
+</ul>
+</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[I18nの設定でdatetime_selectのエラー対応]]></title>
@@ -90,83 +348,6 @@
     &lt;%= f.datetime_select :start_time, start_year: now.year, end_year: now.year + 1, order: [:year, :month, :day] %&gt;
   &lt;/div&gt;
 </code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[RailsでLocaleを指定する]]></title>
-    <link href="http://jangajan.com/blog/2014/09/11/perfect-rails-locale/"/>
-    <updated>2014-09-11T15:34:56+09:00</updated>
-    <id>http://jangajan.com/blog/2014/09/11/perfect-rails-locale</id>
-    <content type="html"><![CDATA[<p><a href="http://www.amazon.co.jp/gp/product/4774165166/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=4774165166&linkCode=as2&tag=pochan0919-22">パーフェクト Ruby on Rails</a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=4774165166" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />を、第6章からやってます。</p>
-
-<p>RailsにおけるTimezoneの設定方法です。
-<code>config/application.rb</code>で設定します。</p>
-
-<!-- more -->
-
-
-<h1>Timezoneの日時設定</h1>
-
-<p>Timezoneを指定した日時は、<code>Time.zone.nowe</code>で取得します。
-デフォルトでは、<code>UTC</code>となります。</p>
-
-<pre><code class="rb rails console">irb(main):001:0&gt; Time.zone.now
-=&gt; Thu, 11 Sep 2014 06:33:19 UTC +00:00
-</code></pre>
-
-<p>これを<code>JST</code>に変更するには、以下の修正をします。</p>
-
-<pre><code class="rb config/application.rb">module AwesomeEvents
-  class Application &lt; Rails::Application
-    ...
-    config.time_zone = 'Tokyo'
-    ...
-  end
-end
-</code></pre>
-
-<pre><code class="rb rails console">irb(main):003:0* Time.zone.now
-=&gt; Thu, 11 Sep 2014 15:33:47 JST +09:00
-</code></pre>
-
-<h1>time_zoneに設定できる値</h1>
-
-<p><code>config/application.rb</code>の<code>config.time_zone</code>に設定できる情報を確認できます。</p>
-
-<pre><code class="sh"># time_zoneに設定できる値の一覧を表示
-bundle exec rake time:zones:all
-
-# 現在有効なtime_zoneの値を表示
-# 設定していない場合、システムのタイムゾーンの値を表示
-bundle exec rake time:zones:local
-</code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Bootstrap3 With Rails4]]></title>
-    <link href="http://jangajan.com/blog/2014/09/10/perfect-rails-6-bootstrap/"/>
-    <updated>2014-09-10T01:40:22+09:00</updated>
-    <id>http://jangajan.com/blog/2014/09/10/perfect-rails-6-bootstrap</id>
-    <content type="html"><![CDATA[<p><a href="http://www.amazon.co.jp/gp/product/4774165166/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=4774165166&linkCode=as2&tag=pochan0919-22">パーフェクト Ruby on Rails</a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=4774165166" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />を、第6章からやってます。</p>
-
-<p>Bootstrapの導入をzipから展開したので、Gemで導入する方法を調査しました。</p>
-
-<!-- more -->
-
-
-<h1>twitter-bootstrap-rails gemを使う</h1>
-
-<p><a href="https://rubygems.org/gems/twitter-bootstrap-rails">twitter-bootstrap-rails</a>というGemを使うことで、テキスト同様の表示ができます。<br/>
-(後の手順で一部テキスト外の修正を行う必要があるかもしれません)</p>
-
-<pre><code class="sh">echo "gem 'twitter-bootstrap-rails', '&gt;= 3.1.1'" &gt;&gt; Gemfile
-bundle install --path vendor/bundle
-bundle exec rails generate bootstrap:install static
-</code></pre>
-
-<p><code>p.167 リスト6.3</code>の通り<code>app/views/layouts/application.html.erb</code>を修正すれば完了です。</p>
 ]]></content>
   </entry>
   
