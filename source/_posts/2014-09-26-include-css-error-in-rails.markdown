@@ -3,7 +3,7 @@ layout: post
 title: "Railsでbootswitchのテーマを適用したらActionView::Template::Error"
 date: 2014-09-26 16:49:11 +0900
 comments: true
-categories: 
+categories: ruby-on-rails
 ---
 
 bootswitch適用時に発生したActionView::Template::Errorの解消方法です。
@@ -37,7 +37,7 @@ mv app/views/layouts/yeti.html.slim app/views/layouts/application.html.slim
 
 ここで`rails s`すると、以下のエラーが発生しました。
 
-```log
+```
 ActionView::Template::Error (Asset filtered out and will not be served: add `Rails.application.config.assets.precompile += %w( yeti.css )` to `config/initializers/assets.rb` and restart your server):
      9:     / Le HTML5 shim, for IE6-8 support of HTML elements
     10:     /[if lt IE 9]
