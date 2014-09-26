@@ -3,7 +3,7 @@ layout: post
 title: "Railsでbootswitchのテーマを適用したらActionView::Template::Error"
 date: 2014-09-26 16:49:11 +0900
 comments: true
-categories: ruby-on-rails
+categories: [ruby-on-rails]
 ---
 
 bootswitch適用時に発生したActionView::Template::Errorの解消方法です。

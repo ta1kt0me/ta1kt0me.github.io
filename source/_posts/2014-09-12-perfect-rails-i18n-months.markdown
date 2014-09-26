@@ -3,7 +3,7 @@ layout: post
 title: "i18nの設定でdatetime_selectの月表示がおかしい"
 date: 2014-09-12 19:09:36 +0900
 comments: true
-categories: 
+categories: [ruby-on-rails]
 ---
 
 前記事に引き続き、i18nの対応です。  

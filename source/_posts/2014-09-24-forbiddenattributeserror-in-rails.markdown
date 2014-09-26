@@ -3,7 +3,7 @@ layout: post
 title: "ForbiddenAttributesErrorが発生"
 date: 2014-09-24 02:33:27 +0900
 comments: true
-categories: ruby-on-rails
+categories: [ruby-on-rails]
 ---
 
 Rails4で、ForbiddenAttributesErrorが発生した場合の対応です。  

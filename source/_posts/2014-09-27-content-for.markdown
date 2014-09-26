@@ -3,7 +3,7 @@ layout: post
 title: "ページ単位のjavascriptにcontent_forを使う"
 date: 2014-09-27 04:14:07 +0900
 comments: true
-categories: ruby-on-rails
+categories: [ruby-on-rails]
 ---
 
 ページ単位で特定のjavascriptを実行させたい時に、content_forを使えばいいんだね、という結論でした。  
