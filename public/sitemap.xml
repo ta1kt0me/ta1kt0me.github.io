@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://jangajan.com/blog/2014/09/29/haml-modal-in-bootstrap/</loc>
+    <lastmod>2014-09-29T19:50:21+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://jangajan.com/blog/2014/09/27/content-for/</loc>
     <lastmod>2014-09-27T04:14:07+09:00</lastmod>
     <priority>0.8</priority>
@@ -155,14 +161,14 @@
   
   <url>
     <loc>http://jangajan.com/blog/archives/</loc>
-    <lastmod>2014-09-27T04:35:43+09:00</lastmod>
+    <lastmod>2014-09-29T19:53:26+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://jangajan.com/</loc>
-    <lastmod>2014-09-27T04:35:43+09:00</lastmod>
+    <lastmod>2014-09-29T19:53:26+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>

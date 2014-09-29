@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-27T04:35:00+09:00</updated>
+  <updated>2014-09-29T19:52:31+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,68 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[bootstrap3のモーダル表示（HAMLサンプル）]]></title>
+    <link href="http://jangajan.com/blog/2014/09/29/haml-modal-in-bootstrap/"/>
+    <updated>2014-09-29T19:50:21+09:00</updated>
+    <id>http://jangajan.com/blog/2014/09/29/haml-modal-in-bootstrap</id>
+    <content type="html"><![CDATA[<p>bootstrap3でModalウインドウを表示するサンプルです。
+サンプルはHAML形式です。</p>
+
+<!-- more -->
+
+
+<p>呼び出しのボタンで、<code>data-toggle="modal"</code>と<code>data-target="#表示するモーダルのid"</code>を指定します。<br/>
+Modalは下のdiv構成で組むことで表示できます。<br/>
+<code>#task-modal</code>は呼び出すModalで設定したものを指定します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="c">/ Modalの呼び出し元になるボタン</span>
+</span><span class='line'><span class="nt">%button</span><span class="nc">.btn.btn-info.btn-lg.btn-block</span><span class="p">{</span><span class="ss">data</span><span class="p">:</span> <span class="p">{</span><span class="ss">toggle</span><span class="p">:</span> <span class="s1">&#39;modal&#39;</span><span class="p">,</span> <span class="ss">target</span><span class="p">:</span> <span class="s1">&#39;#task-modal&#39;</span><span class="p">}</span>}
+</span><span class='line'>  Create Modal Task
+</span><span class='line'>
+</span><span class='line'>...(略)
+</span><span class='line'>
+</span><span class='line'><span class="c">/ 表示するModal</span>
+</span><span class='line'><span class="nt">%div</span><span class="nc">.modal</span><span class="nf">#task-modal</span>
+</span><span class='line'>  <span class="nt">%div</span><span class="nc">.modal-dialog</span>
+</span><span class='line'>    <span class="nt">%div</span><span class="nc">.modal-content</span>
+</span><span class='line'>      <span class="nt">%div</span><span class="nc">.modal-header</span>
+</span><span class='line'>        <span class="nt">%button</span><span class="nc">.close</span><span class="p">{</span><span class="ss">type</span><span class="p">:</span><span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="ss">data</span><span class="p">:</span> <span class="p">{</span><span class="ss">dismiss</span><span class="p">:</span> <span class="s1">&#39;modal&#39;</span><span class="p">}</span>}
+</span><span class='line'>          X
+</span><span class='line'>        <span class="nt">%h4</span><span class="nc">.modal-title</span>
+</span><span class='line'>          TITLE
+</span><span class='line'>      <span class="nt">%div</span><span class="nc">.modal-body</span>
+</span><span class='line'>        <span class="nt">%p</span>
+</span><span class='line'>          BODY
+</span><span class='line'>      <span class="nt">%div</span><span class="nc">.modal-footer</span>
+</span><span class='line'>        <span class="nt">%button</span><span class="nc">.btn.btn-primary</span><span class="p">{</span><span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;button&#39;</span><span class="p">}</span>
+</span><span class='line'>          Save
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ページ単位のjavascriptにcontent_forを使う]]></title>
@@ -2204,53 +2266,6 @@ ctrl+n,pで上下に移動できます。</p>
 
 <p>peco便利。
 気がついたら試合終わって、PK見逃してた。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Dict-en2jaというatomのpackageを公開しました]]></title>
-    <link href="http://jangajan.com/blog/2014/07/03/release-dict-en2ja/"/>
-    <updated>2014-07-03T00:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/07/03/release-dict-en2ja</id>
-    <content type="html"><![CDATA[<h1>dict-en2jaというatomのpackageを公開しました</h1>
-
-<p><code>publish</code>するときにバージョンの指定がまずったせいで、公開初版が2.0.0となりました。<br/>
-いまだに<code>publish</code>コマンドの正解がわからない。そんな打たないし。</p>
-
-<!-- more -->
-
-
-<p>初めてatomのパッケージ作りました。<br/>
-初めてcoffeescriptでもの作りました。<br/>
-初めてgithubで作ったものがforkされました。(forkされてしまった！)</p>
-
-<p>辞書のAPiを呼び出して英単語の意味を表するatomのpackageです。<br/>
-エディタ内で完結したかったので作ってみました。
-(本当はAPIも自分で作った方がいいのかなぁ)</p>
-
-<h2>atom packageの感想</h2>
-
-<p>atom!痒いところに手が届かなくてsublimeに戻りがちですが、ちょくちょく使っています。<br/>
-viewとpaneのところ、coffeescriptが初めてっていうのもありますが、情報もそんなに多くなかった（しググラビリティ悪い）ので使い方わかるまでに時間かかりました。<br/>
-viewの種類はいくつかあったので色々試してみたいな。結局htmlなので、ムリクリ表示する領域を生成していたりするのもありましたね。<br/>
-タグ構造もですが、やり方が諸々で。基本的な仕組みであればatom自体のソースコードが一番参考になるかもしれません。<br/>
-viewを独自拡張したものを使用しなかったので次はその辺りをうまく使えるようになりたい。<br/>
-後、修正を適用するときにいちいちreloadしなきゃいけないのは手間でした。何かいい方法ないのかな。</p>
-
-<h2>coffeescriptの感想</h2>
-
-<p>coffeescriptの練習も着手理由１つでした。
-コンパイルしたjsみなくても挙動が判断できるようにならないとだめですね。<br/>
-スペース１つでコンパイル結果がかわるのでちょっとしたtypoでおかしなことになるのはしんどい。でも書きやすかった。<br/>
-それと、実はhtml(xml)へのアクセスには向かない感じ？この辺りはjsのplugin入れて対応しました。<br/>
-こっちはhubot-scriptを参考にしました。githubは宝の山ですね。<br/>
-まだ使いどころが悩ましいですが、少しずつ仲良くしていきたいです。</p>
-
-<h2>そんなところで</h2>
-
-<p>まとなものは初めて作ったので、よかったらお試しください。
-使用感などフィードバックをいただけると嬉しいです。
-一人でざーっと作ったのでソースの指摘も嬉しいです。</p>
 ]]></content>
   </entry>
   
