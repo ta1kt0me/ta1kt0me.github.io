@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-09-30T12:38:21+09:00</updated>
+  <updated>2014-10-03T03:26:44+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,38 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ヘルパーメソッドでHaml::Helpersを使う]]></title>
+    <link href="http://jangajan.com/blog/2014/10/03/haml-helper/"/>
+    <updated>2014-10-03T03:16:51+09:00</updated>
+    <id>http://jangajan.com/blog/2014/10/03/haml-helper</id>
+    <content type="html"><![CDATA[<p>HAMLのViewのヘルパーメソッドどう書くのかという話です。<br/>
+<a href="http://haml.info/docs/yardoc/Haml/Helpers.html">Module Haml::Helpers</a>を使います。</p>
+
+<!-- more -->
+
+
+<p>普通にタグを書く分には<code>haml_tag</code>を使います。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">module</span> <span class="nn">ApplicationHelper</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">alert_close_icon</span>
+</span><span class='line'>    <span class="n">haml_tag</span><span class="p">(</span><span class="ss">:button</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span> <span class="s1">&#39;close&#39;</span><span class="p">,</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="s1">&#39;data-dismiss&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;alert&#39;</span><span class="p">,</span> <span class="s1">&#39;aria-hidden&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;true&#39;</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">haml_concat</span> <span class="s1">&#39;&amp;times;&#39;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[bootstrap3のモーダル表示（HAMLサンプル）]]></title>
@@ -2193,79 +2225,6 @@ view_flowの中を覗いてみるとこんな感じ。</p>
 <p>view_flowからnameのシンボルをとってきて、html_safeってメソッドを呼び出してる。これはActiveSupportのString拡張クラスで新しい文字列オブジェクト作っているだけみたい。
 なので、この結果がyieldの結果になっているんですね。<br/>
 すっきりした。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Peco入れてみました]]></title>
-    <link href="http://jangajan.com/blog/2014/07/05/peco-peco/"/>
-    <updated>2014-07-05T00:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/07/05/peco-peco</id>
-    <content type="html"><![CDATA[<p>なぜか4時に起きてしまったのでブラジル-コロンビア戦を見る傍ら、昨日はてなで見かけた<a href="http://blog.horimisli.me/entry/terminal-env-2014">面白コンテンツ探求日記のこちら</a>の記事を眺めてたら<a href="https://github.com/peco/peco">peco</a>面白そうと思い立って試してみました。<br/>
-インタラクティブgrep。</p>
-
-<!-- more -->
-
-
-<h2>導入</h2>
-
-<p>python製のpercolをGoで作ってみたものだとか。homebrewでインストール。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew tap peco/peco
-</span><span class='line'>$ brew install peco</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>psお試し</h2>
-
-<p><code>ps aux | peco</code>と打つとモードが切り替わって、psコマンドの結果を、入力した値でフィルタリングして表示してくれる〜。
-ctrl+n,pで上下に移動できます。</p>
-
-<h2>続けてhistoryコマンドに応用</h2>
-
-<p><a href="http://qiita.com/uchiko/items/f6b1528d7362c9310da0">oh-my-zsh の環境で、peco-select-history が動かない</a>を参考に<code>ctrl+r</code>でコマンド履歴検索をインタラクティブに！これいい。</p>
-
-<h2>z.shを入れる</h2>
-
-<p>面白コンテンツ探求日記の記事を参考にこれも入れてみました。ググらずに素直にgithubで検索したらすぐでた。過去に行ったことのあるディレクトリの履歴を表示するツール。使いやすそう。pecoと連携しやすそう。というわけで、homebrewでインストール。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$brew install z</span></code></pre></td></tr></table></div></figure>
-
-
-<p>それで<code>.zshrc</code>を修正。<a href="http://blog.en30.net/2014/06/25/peco.html">こちらのブログ</a>を参考にさせてもらいました。<br/>
-これも便利。すごく便利。ちょっとしたパス入力のストレスが激減しそう。</p>
-
-<h2>ghq</h2>
-
-<p>peco関連で漁っていたらghqなるものを利用している人が多かった。cloneしてきたリポジトリを一元管理するツールだそうでGo言語の発想とのこと。確かにgithubやら、bitbucketやら散らかってて収集つかなくなってたので入れてみました。
-まずは入れてみる。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew install go
-</span><span class='line'>$ echo "export GOPATH=~/Dev/src" &gt;&gt; ~/.zshrc
-</span><span class='line'>$ echo "export PATH=${PATH}:~/Dev/src/bin" &gt;&gt; ~/.zshrc
-</span><span class='line'>$ . ~/.zshrc
-</span><span class='line'>$ go get github.com/motemen/ghq
-</span><span class='line'>$ git config --global ghq.root ~/.ghq
-</span><span class='line'>$ ghq get git@github.com:ta1kt0me/dict-en2ja.git</span></code></pre></td></tr></table></div></figure>
-
-
-<p>それからpecoる。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ ghq list | peco</span></code></pre></td></tr></table></div></figure>
-
-
-<p>peco便利。
-気がついたら試合終わって、PK見逃してた。</p>
 ]]></content>
   </entry>
   

@@ -5,13 +5,18 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>bootstrap3のモーダル表示（HAMLサンプル） - JanGaJan.com</title>
+  <title>ヘルパーメソッドでHaml::Helpersを使う - JanGaJan.com</title>
   <meta name="author" content="talkto_me">
   
-  <meta name="description" content="bootstrap3でModalウインドウを表示するサンプルです。
-サンプルはHAML形式です。 呼び出しのボタンで、data-toggle="modal"とdata-target="#表示するモーダルのid"を指定します。
-Modalは下のdiv構成で組むことで表示できます。
-#task- &hellip;">
+  <meta name="description" content="HAMLのViewのヘルパーメソッドどう書くのかという話です。
+Module Haml::Helpersを使います。 普通にタグを書く分にはhaml_tagを使います。 1
+2
+3
+4
+5
+6
+7
+module ApplicationHelper def alert_close_icon &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +25,7 @@ Modalは下のdiv構成で組むことで表示できます。
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jangajan.com/blog/2014/09/29/haml-modal-in-bootstrap/">
+  <link rel="canonical" href="http://jangajan.com/blog/2014/10/03/haml-helper/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="JanGaJan.com" type="application/atom+xml">
@@ -113,7 +118,7 @@ Modalは下のdiv構成で組むことで表示できます。
   <header>
     
       
-        <h1 class="entry-title">bootstrap3のモーダル表示（HAMLサンプル）</h1>
+        <h1 class="entry-title">ヘルパーメソッドでHaml::Helpersを使う</h1>
       
     
     
@@ -123,22 +128,20 @@ Modalは下のdiv構成で組むことで表示できます。
 
 
 
-<time class='entry-date' datetime='2014-09-29T19:50:21+09:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>7:50 pm</span></time>
+<time class='entry-date' datetime='2014-10-03T03:16:51+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2014</span></span> <span class='time'>3:16 am</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>bootstrap3でModalウインドウを表示するサンプルです。
-サンプルはHAML形式です。</p>
+<div class="entry-content"><p>HAMLのViewのヘルパーメソッドどう書くのかという話です。<br/>
+<a href="http://haml.info/docs/yardoc/Haml/Helpers.html">Module Haml::Helpers</a>を使います。</p>
 
 <!-- more -->
 
 
-<p>呼び出しのボタンで、<code>data-toggle="modal"</code>と<code>data-target="#表示するモーダルのid"</code>を指定します。<br/>
-Modalは下のdiv構成で組むことで表示できます。<br/>
-<code>#task-modal</code>は呼び出すModalで設定したものを指定します。</p>
+<p>普通にタグを書く分には<code>haml_tag</code>を使います。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -147,41 +150,13 @@ Modalは下のdiv構成で組むことで表示できます。<br/>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="c">/ Modalの呼び出し元になるボタン</span>
-</span><span class='line'><span class="nt">%button</span><span class="nc">.btn.btn-info.btn-lg.btn-block</span><span class="p">{</span><span class="ss">data</span><span class="p">:</span> <span class="p">{</span><span class="ss">toggle</span><span class="p">:</span> <span class="s1">&#39;modal&#39;</span><span class="p">,</span> <span class="ss">target</span><span class="p">:</span> <span class="s1">&#39;#task-modal&#39;</span><span class="p">}</span>}
-</span><span class='line'>  Create Modal Task
-</span><span class='line'>
-</span><span class='line'>...(略)
-</span><span class='line'>
-</span><span class='line'><span class="c">/ 表示するModal</span>
-</span><span class='line'><span class="nt">%div</span><span class="nc">.modal</span><span class="nf">#task-modal</span>
-</span><span class='line'>  <span class="nt">%div</span><span class="nc">.modal-dialog</span>
-</span><span class='line'>    <span class="nt">%div</span><span class="nc">.modal-content</span>
-</span><span class='line'>      <span class="nt">%div</span><span class="nc">.modal-header</span>
-</span><span class='line'>        <span class="nt">%button</span><span class="nc">.close</span><span class="p">{</span><span class="ss">type</span><span class="p">:</span><span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="ss">data</span><span class="p">:</span> <span class="p">{</span><span class="ss">dismiss</span><span class="p">:</span> <span class="s1">&#39;modal&#39;</span><span class="p">}</span>}
-</span><span class='line'>          X
-</span><span class='line'>        <span class="nt">%h4</span><span class="nc">.modal-title</span>
-</span><span class='line'>          TITLE
-</span><span class='line'>      <span class="nt">%div</span><span class="nc">.modal-body</span>
-</span><span class='line'>        <span class="nt">%p</span>
-</span><span class='line'>          BODY
-</span><span class='line'>      <span class="nt">%div</span><span class="nc">.modal-footer</span>
-</span><span class='line'>        <span class="nt">%button</span><span class="nc">.btn.btn-primary</span><span class="p">{</span><span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;button&#39;</span><span class="p">}</span>
-</span><span class='line'>          Save
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">module</span> <span class="nn">ApplicationHelper</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">alert_close_icon</span>
+</span><span class='line'>    <span class="n">haml_tag</span><span class="p">(</span><span class="ss">:button</span><span class="p">,</span> <span class="ss">class</span><span class="p">:</span> <span class="s1">&#39;close&#39;</span><span class="p">,</span> <span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="s1">&#39;data-dismiss&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;alert&#39;</span><span class="p">,</span> <span class="s1">&#39;aria-hidden&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;true&#39;</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">haml_concat</span> <span class="s1">&#39;&amp;times;&#39;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
 </div>
@@ -208,12 +183,12 @@ Modalは下のdiv構成で組むことで表示できます。<br/>
 
 
 
-<time class='entry-date' datetime='2014-09-29T19:50:21+09:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>7:50 pm</span></time>
+<time class='entry-date' datetime='2014-10-03T03:16:51+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2014</span></span> <span class='time'>3:16 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/bootstrap/'>bootstrap</a>
+    <a class='category' href='/blog/categories/haml/'>haml</a>
   
 </span>
 
@@ -221,9 +196,9 @@ Modalは下のdiv構成で組むことで表示できます。<br/>
     </p>
     
       <div class="sharing">
-  <a href="http://b.hatena.ne.jp/entry/http://jangajan.com/blog/2014/09/29/haml-modal-in-bootstrap/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  <a href="http://b.hatena.ne.jp/entry/http://jangajan.com/blog/2014/10/03/haml-helper/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jangajan.com/blog/2014/09/29/haml-modal-in-bootstrap/" data-via="talkto_me" data-counturl="http://jangajan.com/blog/2014/09/29/haml-modal-in-bootstrap/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jangajan.com/blog/2014/10/03/haml-helper/" data-via="talkto_me" data-counturl="http://jangajan.com/blog/2014/10/03/haml-helper/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -243,10 +218,8 @@ Modalは下のdiv構成で組むことで表示できます。<br/>
 </script>
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/09/27/content-for/" title="Previous Post: ページ単位のjavascriptにcontent_forを使う">&laquo; ページ単位のjavascriptにcontent_forを使う</a>
+        <a class="basic-alignment left" href="/blog/2014/09/29/haml-modal-in-bootstrap/" title="Previous Post: bootstrap3のモーダル表示（HAMLサンプル）">&laquo; bootstrap3のモーダル表示（HAMLサンプル）</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/10/03/haml-helper/" title="Next Post: ヘルパーメソッドでHaml::Helpersを使う">ヘルパーメソッドでHaml::Helpersを使う &raquo;</a>
       
     </p>
     <p>
@@ -289,8 +262,8 @@ Modalは下のdiv構成で組むことで表示できます。<br/>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://jangajan.com/blog/2014/09/29/haml-modal-in-bootstrap/';
-        var disqus_url = 'http://jangajan.com/blog/2014/09/29/haml-modal-in-bootstrap/';
+        var disqus_identifier = 'http://jangajan.com/blog/2014/10/03/haml-helper/';
+        var disqus_url = 'http://jangajan.com/blog/2014/10/03/haml-helper/';
         var disqus_script = 'embed.js';
       
     (function () {

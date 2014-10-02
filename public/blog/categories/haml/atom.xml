@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Haml | JanGaJan.com]]></title>
+  <link href="http://jangajan.com/blog/categories/haml/atom.xml" rel="self"/>
+  <link href="http://jangajan.com/"/>
+  <updated>2014-10-03T03:26:44+09:00</updated>
+  <id>http://jangajan.com/</id>
+  <author>
+    <name><![CDATA[talkto_me]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[ヘルパーメソッドでHaml::Helpersを使う]]></title>
+    <link href="http://jangajan.com/blog/2014/10/03/haml-helper/"/>
+    <updated>2014-10-03T03:16:51+09:00</updated>
+    <id>http://jangajan.com/blog/2014/10/03/haml-helper</id>
+    <content type="html"><![CDATA[<p>HAMLのViewのヘルパーメソッドどう書くのかという話です。<br/>
+<a href="http://haml.info/docs/yardoc/Haml/Helpers.html">Module Haml::Helpers</a>を使います。</p>
+
+<!-- more -->
+
+
+<p>普通にタグを書く分には<code>haml_tag</code>を使います。<br/>
+<code>rb
+module ApplicationHelper
+  def alert_close_icon
+    haml_tag(:button, class: 'close', type: 'button', 'data-dismiss' =&gt; 'alert', 'aria-hidden' =&gt; 'true') do
+      haml_concat '&amp;times;'
+    end
+  end
+end
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>
