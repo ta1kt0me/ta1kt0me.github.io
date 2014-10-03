@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby-on-rails | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby-on-rails/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-10-03T03:26:44+09:00</updated>
+  <updated>2014-10-04T03:43:26+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,120 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rails4でacts-as-taggable-on Gemを使う]]></title>
+    <link href="http://jangajan.com/blog/2014/10/04/acts-as-taggable-on-in-rails/"/>
+    <updated>2014-10-04T03:40:31+09:00</updated>
+    <id>http://jangajan.com/blog/2014/10/04/acts-as-taggable-on-in-rails</id>
+    <content type="html"><![CDATA[<p>ユーザーに紐づくタスクに、タグ付けをするという機能を実現する方法です。<br/>
+<code>acts-as-taggable-on</code>というgemを利用することで簡単(苦戦した&hellip;)にタグ機能は実現できるそうです。<br/>
+なんとかできたっぽい&hellip;</p>
+
+<p>環境は、こんな感じです。</p>
+
+<ul>
+<li>Rails 4.1.6</li>
+<li>ruby 2.1.2p95</li>
+<li>acts-as-taggable-on 3.4.2</li>
+</ul>
+
+
+<p>Githubの<a href="https://github.com/mbleigh/acts-as-taggable-on#tag-ownership">README</a>を参考にしました</p>
+
+<!-- more -->
+
+
+<h1>Model</h1>
+
+<p>そもそもリレーション関係の設定でハマりましたが、これで良さそうです。<br/>
+関係としては<code>user 1-n task</code>となり、taskにタグを設定します。<br/>
+タグは、userごとに別々に管理します。</p>
+
+<pre><code class="rb app/models/user.rb">class User &lt; ActiveRecord::Base
+  acts_as_tagger
+  has_many :tasks, dependent: :destroy
+  ...
+end
+</code></pre>
+
+<pre><code class="rb app/models/task.rb">class Task &lt; ActiveRecord::Base
+  acts_as_taggable
+  belongs_to :user
+  ...
+end
+</code></pre>
+
+<h1>View</h1>
+
+<p>タグのところだけピックアップ。<br/>
+（簡単なサンプル作れば良かった）  <br/>
+画面表示するController内のメソッドで、選択可能なタグを<code>@user_tags</code>に入れています。<br/>
+タグは複数選択可能にするため、checkboxを利用しました。<br/>
+checkbox生成でrailsの仕組みを利用しようとしたのですが、以下の2点を実現しようとしてうまいやり方が見つからなかった&hellip;</p>
+
+<ul>
+<li>labelでクリック連携</li>
+<li>valueの値をタグの名前</li>
+</ul>
+
+
+<p>form_for内に記述します。</p>
+
+<pre><code class="haml app/views/tasks/_form.html.haml">/ @user_tagsはcontrollerで配列で設定 ex) =&gt; ["tag1", "tag2"]
+- @user_tags.each do |tag|
+  / tagを複数選択可能にするため、checkboxを利用
+  %input{id:"tag-#{tag}" ,name:'task[tag_list][]', type:'checkbox',value:"#{tag}"}
+  %label{for:"tag-#{tag}"}
+    %span.task-tag
+      = "#{tag}"
+</code></pre>
+
+<p>タグ付けよりもrailsでcheckbox使うところに時間とられた&hellip;宿題ですね。</p>
+
+<h1>Controller</h1>
+
+<p>リクエストのtask[tag_list]という値の中に、タグが含まれます。<br/>
+<code>permit</code>で、配列をチェックしたい場合は、<code>tag_list: []</code>と指定してあげる必要がありました。</p>
+
+<pre><code class="rb app/controllers/tasks_controller.rb">class TasksController &lt; ApplicationController
+  ...
+  def create
+    # current_user =&gt; User.find(session[:user_id])
+    @task = current_user.tasks.build(task_params)
+    @task.user = current_user
+    # tagの設定処理 :withには'tag1, tag2'という形式の文字列を設定することでタグを登録できる
+    current_user.tag(@task, :with =&gt; @task.tag_list.join(', '), :on =&gt; :tags)
+    if @task.save
+      # 成功処理
+    else
+      # 失敗処理
+    end
+  end
+  ...
+
+  private
+  def task_params
+    params.require(:task).permit(
+      # tag_list: []を指定することで、checkboxの複数の値を配列にして、tag_listに設定可能になる
+      :id, :name, :deadline, tag_list: []
+    )
+  end
+end
+</code></pre>
+
+<p>もしかしたらもっといいやり方があるかもしれません。<br/>
+気をつける場所はいくつかあるものの、意外と簡単かも。</p>
+
+<h1>補足</h1>
+
+<h2>ユーザーが設定しているタグの一覧を取得する</h2>
+
+<pre><code class="rb">@user_tags = current_user.owned_tag_list
+=&gt; ["tag1", "tag2"]
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ページ単位のjavascriptにcontent_forを使う]]></title>
@@ -268,86 +382,6 @@ datetime_selectで表示した<code>月</code>欄の表示が妙だ。</p>
 </li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[I18nの設定でdatetime_selectのエラー対応]]></title>
-    <link href="http://jangajan.com/blog/2014/09/12/perfect-rails-i18n/"/>
-    <updated>2014-09-12T18:25:27+09:00</updated>
-    <id>http://jangajan.com/blog/2014/09/12/perfect-rails-i18n</id>
-    <content type="html"><![CDATA[<p><a href="http://www.amazon.co.jp/gp/product/4774165166/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=4774165166&linkCode=as2&tag=pochan0919-22">パーフェクト Ruby on Rails</a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=4774165166" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />を、第6章からやってます。</p>
-
-<p>日本語対応のi18nの設定でエラーが発生しました。<br/>
-補足ですが、私のRailsの環境は<code>4.1.5</code>です。</p>
-
-<pre><code class="rb">ActionView::Template::Error (undefined method `map' for "translation missing: ja.date.order":String):
-    27:   &lt;/div&gt;
-    28:   &lt;div class="form-group"&gt;
-    29:     &lt;%= f.label :end_time %&gt;
-    30:     &lt;%= f.datetime_select :end_time, start_year: now.year, end_year: now.year + 1 %&gt;
-    31:   &lt;/div&gt;
-    32:   &lt;div class="form-group"&gt;
-    33:     &lt;%= f.label :content %&gt;
-  app/views/events/new.html.erb:30:in `block in _app_views_events_new_html_erb__622987462779560017_70179900721920'
-  app/views/events/new.html.erb:5:in `_app_views_events_new_html_erb__622987462779560017_70179900721920'
-
-
-  Rendered vendor/bundle/ruby/2.1.0/gems/actionpack-4.1.5/lib/action_dispatch/middleware/templates/rescues/_trace.html.erb (1.8ms)
-  Rendered vendor/bundle/ruby/2.1.0/gems/actionpack-4.1.5/lib/action_dispatch/middleware/templates/rescues/_request_and_response.html.erb (1.5ms)
-  Rendered vendor/bundle/ruby/2.1.0/gems/actionpack-4.1.5/lib/action_dispatch/middleware/templates/rescues/template_error.html.erb within rescues/layout (16.9ms)
-</code></pre>
-
-<!-- more -->
-
-
-<h1>date.orderの指定</h1>
-
-<h2>発生箇所</h2>
-
-<p>該当するソースコードはこちらです。<br/>
-ちなみに、i18nを無効化(<code>config.i18n.default_locale</code>を初期状態のようにコメントアウト)していると発生しません。</p>
-
-<pre><code>  &lt;div class="form-group"&gt;
-    &lt;%= f.label :start_time %&gt;
-    &lt;%= f.datetime_select :start_time, start_year: now.year, end_year: now.year + 1 %&gt;
-  &lt;/div&gt;
-</code></pre>
-
-<p>エラーメッセージからすると、<code>ja.date.order</code>で翻訳に失敗しちゃったよテヘってなってるんで、ja.yml修正すれば良さそう。</p>
-
-<h2>解決策</h2>
-
-<p>2つあります。</p>
-
-<p><a href="https://github.com/rails/rails/blob/a8eb6018318f65e34486da8d1860b3f0d774383d/guides/source/i18n.md#action-view-helper-methods">ここ</a>に書いてありますね。</p>
-
-<blockquote><p>datetime_select also looks up the order option from date.order (unless you pass the option explicitly).</p></blockquote>
-
-<h3>ja.ymlに設定を追加</h3>
-
-<p>翻訳ファイルの修正です。</p>
-
-<pre><code class="yaml config/locals/ja.yml">ja:
-  date:
-    order: 
-      - :year
-      - :month
-      - :day
-</code></pre>
-
-<p>なお、デフォルト(en)の場合は、activesupportの設定が適用されています。</p>
-
-<h3>datetime_selectのoptionにorderを追加</h3>
-
-<p>datetime_selectに<code>order</code>というoptionを追加することで、ja.ymlの修正をしないで対応できます。 <br/>
-優先順位は<code>ja.ymlで設定 &lt; datetime_selectでoption指定</code>なので、必要があれば設定すればいいと思います。</p>
-
-<pre><code>  &lt;div class="form-group"&gt;
-    &lt;%= f.label :start_time %&gt;
-    &lt;%= f.datetime_select :start_time, start_year: now.year, end_year: now.year + 1, order: [:year, :month, :day] %&gt;
-  &lt;/div&gt;
-</code></pre>
 ]]></content>
   </entry>
   

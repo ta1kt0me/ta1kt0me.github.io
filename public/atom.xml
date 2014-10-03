@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-10-03T03:26:44+09:00</updated>
+  <updated>2014-10-04T03:43:26+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,170 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rails4でacts-as-taggable-on Gemを使う]]></title>
+    <link href="http://jangajan.com/blog/2014/10/04/acts-as-taggable-on-in-rails/"/>
+    <updated>2014-10-04T03:40:31+09:00</updated>
+    <id>http://jangajan.com/blog/2014/10/04/acts-as-taggable-on-in-rails</id>
+    <content type="html"><![CDATA[<p>ユーザーに紐づくタスクに、タグ付けをするという機能を実現する方法です。<br/>
+<code>acts-as-taggable-on</code>というgemを利用することで簡単(苦戦した&hellip;)にタグ機能は実現できるそうです。<br/>
+なんとかできたっぽい&hellip;</p>
+
+<p>環境は、こんな感じです。</p>
+
+<ul>
+<li>Rails 4.1.6</li>
+<li>ruby 2.1.2p95</li>
+<li>acts-as-taggable-on 3.4.2</li>
+</ul>
+
+
+<p>Githubの<a href="https://github.com/mbleigh/acts-as-taggable-on#tag-ownership">README</a>を参考にしました</p>
+
+<!-- more -->
+
+
+<h1>Model</h1>
+
+<p>そもそもリレーション関係の設定でハマりましたが、これで良さそうです。<br/>
+関係としては<code>user 1-n task</code>となり、taskにタグを設定します。<br/>
+タグは、userごとに別々に管理します。</p>
+
+<figure class='code'><figcaption><span>app/models/user.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="n">acts_as_tagger</span>
+</span><span class='line'>  <span class="n">has_many</span> <span class="ss">:tasks</span><span class="p">,</span> <span class="ss">dependent</span><span class="p">:</span> <span class="ss">:destroy</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>app/models/task.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Task</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="n">acts_as_taggable</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:user</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>View</h1>
+
+<p>タグのところだけピックアップ。<br/>
+（簡単なサンプル作れば良かった）  <br/>
+画面表示するController内のメソッドで、選択可能なタグを<code>@user_tags</code>に入れています。<br/>
+タグは複数選択可能にするため、checkboxを利用しました。<br/>
+checkbox生成でrailsの仕組みを利用しようとしたのですが、以下の2点を実現しようとしてうまいやり方が見つからなかった&hellip;</p>
+
+<ul>
+<li>labelでクリック連携</li>
+<li>valueの値をタグの名前</li>
+</ul>
+
+
+<p>form_for内に記述します。</p>
+
+<figure class='code'><figcaption><span>app/views/tasks/_form.html.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="c">/ @user_tagsはcontrollerで配列で設定 ex) =&gt; [&quot;tag1&quot;, &quot;tag2&quot;]</span>
+</span><span class='line'><span class="p">-</span> <span class="vi">@user_tags</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">tag</span><span class="o">|</span>
+</span><span class='line'>  <span class="c">/ tagを複数選択可能にするため、checkboxを利用</span>
+</span><span class='line'>  <span class="nt">%input</span><span class="p">{</span><span class="nb">id</span><span class="ss">:&quot;tag-</span><span class="si">#{</span><span class="n">tag</span><span class="si">}</span>&quot; ,name:&#39;task[tag_list][]&#39;, type:&#39;checkbox&#39;,value:&quot;<span class="si">#{</span><span class="n">tag</span><span class="si">}</span>&quot;}
+</span><span class='line'>  <span class="nt">%label</span><span class="p">{</span><span class="k">for</span><span class="ss">:&quot;tag-</span><span class="si">#{</span><span class="n">tag</span><span class="si">}</span>&quot;}
+</span><span class='line'>    <span class="nt">%span</span><span class="nc">.task-tag</span>
+</span><span class='line'>      <span class="p">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">tag</span><span class="si">}</span><span class="s2">&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>タグ付けよりもrailsでcheckbox使うところに時間とられた&hellip;宿題ですね。</p>
+
+<h1>Controller</h1>
+
+<p>リクエストのtask[tag_list]という値の中に、タグが含まれます。<br/>
+<code>permit</code>で、配列をチェックしたい場合は、<code>tag_list: []</code>と指定してあげる必要がありました。</p>
+
+<figure class='code'><figcaption><span>app/controllers/tasks_controller.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">TasksController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">create</span>
+</span><span class='line'>    <span class="c1"># current_user =&gt; User.find(session[:user_id])</span>
+</span><span class='line'>    <span class="vi">@task</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">task_params</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@task</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">current_user</span>
+</span><span class='line'>    <span class="c1"># tagの設定処理 :withには&#39;tag1, tag2&#39;という形式の文字列を設定することでタグを登録できる</span>
+</span><span class='line'>    <span class="n">current_user</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="vi">@task</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="vi">@task</span><span class="o">.</span><span class="n">tag_list</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">),</span> <span class="ss">:on</span> <span class="o">=&gt;</span> <span class="ss">:tags</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="vi">@task</span><span class="o">.</span><span class="n">save</span>
+</span><span class='line'>      <span class="c1"># 成功処理</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="c1"># 失敗処理</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">private</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">task_params</span>
+</span><span class='line'>    <span class="n">params</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:task</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span>
+</span><span class='line'>      <span class="c1"># tag_list: []を指定することで、checkboxの複数の値を配列にして、tag_listに設定可能になる</span>
+</span><span class='line'>      <span class="ss">:id</span><span class="p">,</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:deadline</span><span class="p">,</span> <span class="ss">tag_list</span><span class="p">:</span> <span class="o">[]</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>もしかしたらもっといいやり方があるかもしれません。<br/>
+気をつける場所はいくつかあるものの、意外と簡単かも。</p>
+
+<h1>補足</h1>
+
+<h2>ユーザーが設定しているタグの一覧を取得する</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="vi">@user_tags</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">owned_tag_list</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;tag1&quot;</span><span class="p">,</span> <span class="s2">&quot;tag2&quot;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ヘルパーメソッドでHaml::Helpersを使う]]></title>
@@ -2007,224 +2171,6 @@ YAPCラーメンチャレンジのせいで、（回ってきてもいないの�
 
 
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Erbのyieldの挙動]]></title>
-    <link href="http://jangajan.com/blog/2014/07/08/yield-for-erb/"/>
-    <updated>2014-07-08T00:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/07/08/yield-for-erb</id>
-    <content type="html"><![CDATA[<p>railsでerbファイルでyieldを呼び出すと読み込むコンテンツを表示しているけど、実際何がおこっているのかわからない。<br/>
-yield自体はrubyのそれだと思うんだけど。</p>
-
-<!-- more -->
-
-
-<h1>block_given?の結果</h1>
-
-<p>yieldが実行されているということは、呼び出し時にブロック関数が渡されているんだよね、多分。<br/>
-とりあえず、pryで確認してみる。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[1] pry(#&lt;#&lt;Class:0x007ff76226d908&gt;&gt;)&gt; block_given?
-</span><span class='line'>=&gt; true</span></code></pre></td></tr></table></div></figure>
-
-
-<p>はい。ブロック関数はありますね。</p>
-
-<h1>関数のスタック</h1>
-
-<p>先にこっちを見た方がいいのかな。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="o">=&gt;</span> <span class="c1">#0  _app_views_layouts_application_html_erb__4523233871588515359_70350238470280 &lt;ActionView::CompiledTemplates#_app_views_layouts_application_html_erb__4523233871588515359_70350238470280(local_assigns, output_buffer)&gt;</span>
-</span><span class='line'>   <span class="c1">#1 [block]   block in render &lt;ActionView::Template#render(view, locals, buffer=?, &amp;block)&gt;</span>
-</span><span class='line'>   <span class="c1">#2 [method]  instrument &lt;ActiveSupport::Notifications.instrument(name, payload=?)&gt;</span>
-</span><span class='line'>   <span class="c1">#3 [method]  render &lt;ActionView::Template#render(view, locals, buffer=?, &amp;block)&gt;</span>
-</span><span class='line'>   <span class="c1">#4 [method]  render_with_layout &lt;ActionView::TemplateRenderer#render_with_layout(path, locals)&gt;</span>
-</span><span class='line'>   <span class="c1">#5 [method]  render_template &lt;ActionView::TemplateRenderer#render_template(template, layout_name=?, locals=?)&gt;</span>
-</span><span class='line'>   <span class="c1">#6 [method]  render &lt;ActionView::TemplateRenderer#render(context, options)&gt;</span>
-</span><span class='line'>   <span class="c1">#7 [method]  render_template &lt;ActionView::Renderer#render_template(context, options)&gt;</span>
-</span><span class='line'>   <span class="c1">#8 [method]  render &lt;ActionView::Renderer#render(context, options)&gt;</span>
-</span><span class='line'>   <span class="c1">#9 [method]  _render_template &lt;AbstractController::Rendering#_render_template(options)&gt;</span>
-</span><span class='line'>   <span class="c1">#10 [method]  _render_template &lt;ActionController::Streaming#_render_template(options)&gt;</span>
-</span><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>まずは<code>ActionView::Template#render</code>から。<br/>
-<code>action_view/template.rb</code>の中にいました。
-順当にいけばreturnされるのは、<code>&amp;block</code>を引数に含んでいる<code>view.send</code>メソッドっぽい。<br/>
-<code>&amp;block</code>は<code>ActionView::Template#render</code>の引数で渡ってきてる。<br/>
-<code>ActionView::TemplateRenderer#render_with_layout</code>が元になるのかな。<br/>
-<code>action_view/renderer/template_renderer.rb</code>の中に</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">layout</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">locals</span><span class="p">){</span> <span class="o">|*</span><span class="nb">name</span><span class="o">|</span>
-</span><span class='line'>  <span class="n">view</span><span class="o">.</span><span class="n">_layout_for</span><span class="p">(</span><span class="o">*</span><span class="nb">name</span><span class="p">)</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>それっぽいのがあった。</p>
-
-<h1>ブロック内の処理</h1>
-
-<p><code>view._layout_for</code>がどこで呼ばれているのか。
-とりあえず、<code>view.class.ancestors</code>してみる！</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="o">[</span><span class="mi">21</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="c1">#&lt;ActionView::TemplateRenderer&gt;)&gt; view.class.ancestors</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="c1">#&lt;Class:0x007f9798335bf8&gt;,</span>
-</span><span class='line'> <span class="c1">#&lt;Module:0x007f9798274958&gt;,</span>
-</span><span class='line'> <span class="c1">#&lt;Module:0x007f9793d33150&gt;,</span>
-</span><span class='line'> <span class="no">StaticPagesHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ApplicationHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="c1">#&lt;Module:0x007f9799261078&gt;,</span>
-</span><span class='line'> <span class="no">ActionDispatch</span><span class="o">::</span><span class="no">Routing</span><span class="o">::</span><span class="no">RouteSet</span><span class="o">::</span><span class="no">MountedHelpers</span><span class="p">,</span>
-</span><span class='line'> <span class="c1">#&lt;Module:0x007f9793ca6278&gt;,</span>
-</span><span class='line'> <span class="c1">#&lt;Module:0x007f97991b97b0&gt;,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">RoutingUrlFor</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionDispatch</span><span class="o">::</span><span class="no">Routing</span><span class="o">::</span><span class="no">UrlFor</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionDispatch</span><span class="o">::</span><span class="no">Routing</span><span class="o">::</span><span class="no">PolymorphicRoutes</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionController</span><span class="o">::</span><span class="no">ModelNaming</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Base</span><span class="p">,</span>
-</span><span class='line'> <span class="no">Sprockets</span><span class="o">::</span><span class="no">Rails</span><span class="o">::</span><span class="no">Helper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">TranslationHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">RenderingHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">RecordTagHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">RecordIdentifier</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">FormHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">ModelNaming</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">OutputSafetyHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">NumberHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">JavaScriptHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">FormOptionsHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">FormTagHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">TextHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">DebugHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">SanitizeHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">CacheHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">AtomFeedHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">UrlHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">AssetTagHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">AssetUrlHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">ActiveModelHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Benchmarkable</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">TagHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">DateHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">CsrfHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">ControllerHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Helpers</span><span class="o">::</span><span class="no">CaptureHelper</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ERB</span><span class="o">::</span><span class="no">Util</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">Context</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActionView</span><span class="o">::</span><span class="no">CompiledTemplates</span><span class="p">,</span>
-</span><span class='line'> <span class="no">Object</span><span class="p">,</span>
-</span><span class='line'> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">Dependencies</span><span class="o">::</span><span class="no">Loadable</span><span class="p">,</span>
-</span><span class='line'> <span class="no">PP</span><span class="o">::</span><span class="no">ObjectMixin</span><span class="p">,</span>
-</span><span class='line'> <span class="no">JSON</span><span class="o">::</span><span class="no">Ext</span><span class="o">::</span><span class="no">Generator</span><span class="o">::</span><span class="no">GeneratorMethods</span><span class="o">::</span><span class="no">Object</span><span class="p">,</span>
-</span><span class='line'> <span class="no">Kernel</span><span class="p">,</span>
-</span><span class='line'> <span class="no">BasicObject</span><span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>なんかいっぱい出てきた&hellip;一個一個見てくのはつらいなぁ&hellip;<br/>
-renderメソッドの直前で、<code>view.view_flow.set(:layout, content)</code>という処理をしている。<br/>
-view_flowの中を覗いてみるとこんな感じ。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="o">[</span><span class="mi">22</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="c1">#&lt;ActionView::TemplateRenderer&gt;)&gt; view.view_flow</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;ActionView::OutputFlow:0x007f9798335c70</span>
-</span><span class='line'> <span class="vi">@content</span><span class="o">=</span><span class="p">{</span><span class="ss">:title</span><span class="o">=&gt;</span><span class="s2">&quot;Home&quot;</span><span class="p">,</span> <span class="ss">:layout</span><span class="o">=&gt;</span><span class="s2">&quot;&lt;h1&gt;Sample App&lt;/h1&gt;</span><span class="se">\n</span><span class="s2">&lt;p&gt;</span><span class="se">\n</span><span class="s2">    This is the home page for the</span><span class="se">\n</span><span class="s2">  &lt;a href=</span><span class="se">\&quot;</span><span class="s2">http://railstutorial.jp/</span><span class="se">\&quot;</span><span class="s2">&gt;Ruby on Rails Tutorial&lt;/a&gt;</span><span class="se">\n</span><span class="s2">    sample application.</span><span class="se">\n</span><span class="s2">&lt;/p&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">}</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>実際に埋め込まれている内容のHashじゃないか。<br/>
-この辺にあたりをつけたら<code>action_view/context.rb</code>にいた。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">def</span> <span class="nf">_layout_for</span><span class="p">(</span><span class="nb">name</span><span class="o">=</span><span class="kp">nil</span><span class="p">)</span>
-</span><span class='line'>  <span class="nb">name</span> <span class="o">||=</span> <span class="ss">:layout</span>
-</span><span class='line'>  <span class="n">view_flow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span><span class="o">.</span><span class="n">html_safe</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>view_flowからnameのシンボルをとってきて、html_safeってメソッドを呼び出してる。これはActiveSupportのString拡張クラスで新しい文字列オブジェクト作っているだけみたい。
-なので、この結果がyieldの結果になっているんですね。<br/>
-すっきりした。</p>
 ]]></content>
   </entry>
   
