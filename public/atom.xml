@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-10-04T03:43:26+09:00</updated>
+  <updated>2014-10-05T01:22:57+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,86 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rails4.1でherokuへのデプロイに失敗(Missing `secret_key_base`)]]></title>
+    <link href="http://jangajan.com/blog/2014/10/05/secrets-dot-yml-on-heroku-in-rails4-dot-1/"/>
+    <updated>2014-10-05T01:14:13+09:00</updated>
+    <id>http://jangajan.com/blog/2014/10/05/secrets-dot-yml-on-heroku-in-rails4-dot-1</id>
+    <content type="html"><![CDATA[<p>Rails4.1でherokuへのデプロイに失敗(Missing <code>secret_key_base</code>)</p>
+
+<p>Rails4.1から<code>secrets.yml</code>がサポートされました。<br/>
+これの扱いが良くわかっていなかったため、heroku push後、以下のエラーが発生してアプリ起動に失敗しました。</p>
+
+<blockquote><p>app error: Missing <code>secret_key_base</code> for &lsquo;production&rsquo; environment, set this value in <code>config/secrets.yml</code> (RuntimeError)</p></blockquote>
+
+<!-- more -->
+
+
+<h1>解決策</h1>
+
+<p>ちなみに、heroku create済みです。</p>
+
+<h2>secrets.ymlをgitで管理する</h2>
+
+<p><code>.gitignore</code>に<code>/config/secrets.yml</code>を含めてしまっている場合は、削除してください。<br/>
+その後、git管理化におくため、commitします。</p>
+
+<p>productionの<code>secret_key_base</code>は環境変数から取得するようになっているため、herokuの環境変数に<code>SECRET_KEY_BASE</code>を設定する必要があります。</p>
+
+<h2>環境変数SECRET_KEY_BASEを設定する</h2>
+
+<p>やり方が２通りあります。</p>
+
+<h3>heroku_secretsを使う</h3>
+
+<p>この方法では、<a href="https://github.com/alexpeattie/heroku_secrets">heroku_secrets</a>というgemを利用することでherokuコマンドを打つ必要はありません。</p>
+
+<h4>gemのインストール</h4>
+
+<p>Gemfileにgemを追加して、bundle updateを実行します。</p>
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">gem</span> <span class="s1">&#39;heroku_secrets&#39;</span><span class="p">,</span> <span class="ss">github</span><span class="p">:</span> <span class="s1">&#39;alexpeattie/heroku_secrets&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>rakeコマンドを実行</h4>
+
+<p>その後、rakeコマンドを実行します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle <span class="nb">exec </span>rake heroku:secrets<span class="o">[</span>app-name<span class="o">]</span> <span class="nv">RAILS_ENV</span><span class="o">=</span>production
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>もう一つの方も作業量としては変わらなそうですね。</p>
+
+<h3>heroku configで環境変数を設定する</h3>
+
+<p>この方法では、heroku config:add で環境変数を直接設定します。</p>
+
+<h4>設定値を作成する</h4>
+
+<p>環境変数に設定する値を取得します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle <span class="nb">exec </span>rake secret <span class="nv">RAILS_ENV</span><span class="o">=</span>production
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>herokuの環境変数を設定する</h4>
+
+<p>上記の実行結果を値とした環境変数(SECRET_KEY_BASE)を設定します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>heroku config:add <span class="nv">SECRET_KEY_BASE</span><span class="o">=</span>rake secretの実行結果
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rails4でacts-as-taggable-on Gemを使う]]></title>
@@ -1848,329 +1928,6 @@ YAPCラーメンチャレンジのせいで、（回ってきてもいないの�
 
 
 <p>access_tokenを利用した方式で試していますが、LOGIN IDとパスワードにも対応しています。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[RailsアプリケーションでGithub連携]]></title>
-    <link href="http://jangajan.com/blog/2014/08/16/rails-omniauth-github/"/>
-    <updated>2014-08-16T00:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/08/16/rails-omniauth-github</id>
-    <content type="html"><![CDATA[<p>Railsアプリケーションにomuniauth-githubを利用したGithubログイン連携機能を追加する方法を調査しました。
-作業の概要は↓の通りです。</p>
-
-<ol>
-<li>Githubで連携キーの発行</li>
-<li>連携キーの環境変数設定</li>
-<li>Railsアプリケーションの作成</li>
-<li>ログインに使用するModel、Controllerの生成</li>
-<li>ホーム画面にGithubログインのリンクを作る</li>
-</ol>
-
-
-<p>それでは始めます。</p>
-
-<!-- more -->
-
-
-<h1>Github連携準備(&ldquo;Client ID&rdquo; &amp; &ldquo;Client Secret&#8221;作成)</h1>
-
-<p>まず、連携に必要な情報を取得します。</p>
-
-<h2>Githubのアプリケーション登録</h2>
-
-<p>Githubの設定画面 -> Application -> Developer applications の Register new applicationボタンをクリック。<br/>
-次の情報を環境に合わせて設定してください。設定したらRegister Applicationボタンを押すのを忘れずに。</p>
-
-<ul>
-<li>Application name
-
-<ul>
-<li>sample</li>
-</ul>
-</li>
-<li>Authorization callback URL
-
-<ul>
-<li><a href="http://localhost:3000/">http://localhost:3000/</a></li>
-</ul>
-</li>
-<li>Application description
-
-<ul>
-<li>アプリの説明</li>
-</ul>
-</li>
-<li>Authorization callback URL
-
-<ul>
-<li><a href="http://localhost:3000/auth/github/callback">http://localhost:3000/auth/github/callback</a></li>
-<li>ここ大事。config/routes.rbに設定するcallbackメソッドのURLを記載</li>
-</ul>
-</li>
-</ul>
-
-
-<h2>連携キーを環境変数に設定</h2>
-
-<p>今回は、連携情報を環境変数から取得してGithubログインを実現します。<br/>
-上の手順で取得したClient IDとClient Secretを、以下コマンドで環境変数に設定してください。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">export </span><span class="nv">GITHUB_KEY</span><span class="o">=</span><span class="c">#{GithubのClient ID}</span>
-</span><span class='line'><span class="nb">export </span><span class="nv">GITHUB_SECRET</span><span class="o">=</span><span class="c">#{GithubのClient Secret}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>サンプルアプリケーション作成</h1>
-
-<h2>Railsアプリケーション作成</h2>
-
-<p>タイトル通りです。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle <span class="nb">exec </span>rails new SampleApp<span class="p">;</span><span class="nb">cd </span>SampleApp
-</span><span class='line'>bundle install --path vendor/bundle
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>add Gem for omniauth-github</h2>
-
-<p>次に、Githubログイン連携に必要なGemをインストールします。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;omniauth&#39;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;omniauth-github&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle install --path vendor/bundle
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>initializer for omniauth</h2>
-
-<p>環境変数から連携情報を取得する処理を記載します。
-アプリ起動時に読み込むようにするため、config/initializersディレクトリ配下に作成します。</p>
-
-<ul>
-<li>新規
-
-<ul>
-<li>config/initializers/omniauth.rb</li>
-</ul>
-</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="no">OmniAuth</span><span class="o">::</span><span class="no">Builder</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">provider</span> <span class="ss">:github</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GITHUB_KEY&#39;</span><span class="o">]</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GITHUB_SECRET&#39;</span><span class="o">]</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>create user model</h2>
-
-<p>Githubログインで登録するユーザー情報のModelです。providerとuidは多分必須です。
-まずはrailsコマンドからModelを生成します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle <span class="nb">exec </span>rails g model user provider:string uid:string name:string
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>次に、連携時に取得したデータから必要な項目をModelに設定します。</p>
-
-<ul>
-<li>編集
-
-<ul>
-<li>app/models/user.rb</li>
-</ul>
-</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">create_with_omniauth</span><span class="p">(</span><span class="n">auth</span><span class="p">)</span>
-</span><span class='line'>      <span class="n">create!</span> <span class="k">do</span> <span class="o">|</span><span class="n">user</span><span class="o">|</span>
-</span><span class='line'>          <span class="n">user</span><span class="o">.</span><span class="n">provider</span> <span class="o">=</span> <span class="n">auth</span><span class="o">[</span><span class="s2">&quot;provider&quot;</span><span class="o">]</span>
-</span><span class='line'>          <span class="n">user</span><span class="o">.</span><span class="n">uid</span>      <span class="o">=</span> <span class="n">auth</span><span class="o">[</span><span class="s2">&quot;uid&quot;</span><span class="o">]</span>
-</span><span class='line'>          <span class="n">user</span><span class="o">.</span><span class="n">name</span>     <span class="o">=</span> <span class="n">auth</span><span class="o">[</span><span class="s2">&quot;info&quot;</span><span class="o">][</span><span class="s2">&quot;nickname&quot;</span><span class="o">]</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'> <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>create session controller</h2>
-
-<p>Modelができたので、次は連携処理に使うControllerの作成です。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle <span class="nb">exec </span>rails g controller sessions
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>追加するのは、Github連携後のcallback処理と、ログアウト時にSessionを破棄する処理です。</p>
-
-<ul>
-<li>編集
-
-<ul>
-<li>app/controllers/sessions_controller.rb</li>
-</ul>
-</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="k">class</span> <span class="nc">SessionsController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">callback</span>
-</span><span class='line'>      <span class="n">auth</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">env</span><span class="o">[</span><span class="s1">&#39;omniauth.auth&#39;</span><span class="o">]</span>
-</span><span class='line'>      <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find_by_provider_and_uid</span><span class="p">(</span><span class="n">auth</span><span class="o">[</span><span class="s2">&quot;provider&quot;</span><span class="o">]</span><span class="p">,</span> <span class="n">auth</span><span class="o">[</span><span class="s2">&quot;uid&quot;</span><span class="o">]</span><span class="p">)</span> <span class="o">||</span> <span class="no">User</span><span class="o">.</span><span class="n">create_with_omniauth</span><span class="p">(</span><span class="n">auth</span><span class="p">)</span>
-</span><span class='line'>      <span class="n">session</span><span class="o">[</span><span class="ss">:user_id</span><span class="o">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span>
-</span><span class='line'>      <span class="n">redirect_to</span> <span class="n">root_path</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">destroy</span>
-</span><span class='line'>      <span class="n">reset_session</span>
-</span><span class='line'>      <span class="n">redirect_to</span> <span class="n">root_path</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'> <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>それからルーティング設定を追加します。</p>
-
-<ul>
-<li>編集
-
-<ul>
-<li>config/routes.rb</li>
-</ul>
-</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">get</span> <span class="s2">&quot;/auth/:provider/callback&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;sessions#callback&quot;</span>
-</span><span class='line'>  <span class="n">get</span> <span class="s2">&quot;/signout&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;sessions#destroy&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>login helper method</h2>
-
-<p>ログイン状態の判定に利用するヘルパーメソッドを追加します。</p>
-
-<ul>
-<li>編集
-
-<ul>
-<li>app/controllers/application_controller.rb</li>
-</ul>
-</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">helper_method</span> <span class="ss">:current_user</span>
-</span><span class='line'>
-</span><span class='line'><span class="kp">private</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">current_user</span>
-</span><span class='line'>      <span class="vi">@current_user</span> <span class="o">||=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">session</span><span class="o">[</span><span class="ss">:user_id</span><span class="o">]</span><span class="p">)</span> <span class="k">if</span> <span class="n">session</span><span class="o">[</span><span class="ss">:user_id</span><span class="o">]</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>create home view</h2>
-
-<p>最後に連携用のリンクをテストする画面を用意します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle <span class="nb">exec </span>rails g controller home index
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>編集
-
-<ul>
-<li>config/routes.rb</li>
-</ul>
-</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="n">get</span> <span class="s1">&#39;home/index&#39;</span>
-</span><span class='line'>  <span class="n">root</span> <span class="ss">to</span><span class="p">:</span> <span class="s1">&#39;home#index&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>ヘルパーメソッドを利用して、ログインリンクと、ログアウトリンクの出し分けを行います。</p>
-
-<ul>
-<li>編集
-
-<ul>
-<li>app/views/home/index.html.erb</li>
-</ul>
-</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="cp">&lt;%</span> <span class="k">if</span> <span class="n">current_user</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Sign out&quot;</span><span class="p">,</span> <span class="s2">&quot;/signout&quot;</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="cp">&lt;%</span> <span class="k">else</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="cp">&lt;%=</span> <span class="n">link_to</span> <span class="s2">&quot;Sign in with GitHub&quot;</span><span class="p">,</span> <span class="s2">&quot;/auth/github&quot;</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span><span class='line'><span class="cp">&lt;%</span> <span class="k">end</span> <span class="cp">%&gt;</span><span class="x"></span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
 ]]></content>
   </entry>
   

@@ -8,9 +8,8 @@
   <title>JanGaJan.com</title>
   <meta name="author" content="talkto_me">
   
-  <meta name="description" content="ユーザーに紐づくタスクに、タグ付けをするという機能を実現する方法です。
-acts-as-taggable-onというgemを利用することで簡単(苦戦した&hellip;)にタグ機能は実現できるそうです。
-なんとかできたっぽい&hellip; 環境は、こんな感じです。 Rails 4.1.6 &hellip;">
+  <meta name="description" content="Rails4.1でherokuへのデプロイに失敗(Missing secret_key_base) Rails4.1からsecrets.ymlがサポートされました。
+これの扱いが良くわかっていなかったため、heroku push後、以下のエラーが発生してアプリ起動に失敗しました。 app &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,6 +107,45 @@ acts-as-taggable-onというgemを利用することで簡単(苦戦した&helli
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/10/05/secrets-dot-yml-on-heroku-in-rails4-dot-1/">Rails4.1でherokuへのデプロイに失敗(Missing `secret_key_base`)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-10-05T01:14:13+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>1:14 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Rails4.1でherokuへのデプロイに失敗(Missing <code>secret_key_base</code>)</p>
+
+<p>Rails4.1から<code>secrets.yml</code>がサポートされました。<br/>
+これの扱いが良くわかっていなかったため、heroku push後、以下のエラーが発生してアプリ起動に失敗しました。</p>
+
+<blockquote><p>app error: Missing <code>secret_key_base</code> for &lsquo;production&rsquo; environment, set this value in <code>config/secrets.yml</code> (RuntimeError)</p></blockquote>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/10/05/secrets-dot-yml-on-heroku-in-rails4-dot-1/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -493,42 +531,6 @@ datetime_selectで表示した<code>月</code>欄の表示が妙だ。</p>
   
     <footer>
       <a rel="full-article" href="/blog/2014/09/11/perfect-rails-locale/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/09/10/perfect-rails-6-bootstrap/">Bootstrap3 With Rails4</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-09-10T01:40:22+09:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>1:40 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://www.amazon.co.jp/gp/product/4774165166/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=4774165166&linkCode=as2&tag=pochan0919-22">パーフェクト Ruby on Rails</a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=4774165166" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />を、第6章からやってます。</p>
-
-<p>Bootstrapの導入をzipから展開したので、Gemで導入する方法を調査しました。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/09/10/perfect-rails-6-bootstrap/">Read on &rarr;</a>
     </footer>
   
 
