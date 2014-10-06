@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-10-06T18:44:30+09:00</updated>
+  <updated>2014-10-06T20:41:49+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,17 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[TodoGrowというアプリを作りました]]></title>
+    <link href="http://jangajan.com/blog/2014/10/06/todogrow/"/>
+    <updated>2014-10-06T20:35:42+09:00</updated>
+    <id>http://jangajan.com/blog/2014/10/06/todogrow</id>
+    <content type="html"><![CDATA[<p><a href="http://todogrow.herokuapp.com/">TodoGrow</a>というアプリを作りました。</p>
+
+<p>タグが削除できない、名称変更できない等、まだ機能的に至らないところもありますが、使用感などフィードバックをいただけると嬉しいです。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[RailsでBowerを使いHerokuにデプロイ]]></title>
@@ -2052,58 +2063,6 @@ YAPCラーメンチャレンジのせいで、（回ってきてもいないの�
 <p>こちらもあわせて</p>
 
 <p><a href="http://qiita.com/ktsujichan/items/b42b5346d1d4704425ef">http://qiita.com/ktsujichan/items/b42b5346d1d4704425ef</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Railsでソーシャルログインボタン(Github)]]></title>
-    <link href="http://jangajan.com/blog/2014/08/21/github-login-bottun/"/>
-    <updated>2014-08-21T00:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/08/21/github-login-bottun</id>
-    <content type="html"><![CDATA[<p>RailsでGithub、twitter、facebookといったソーシャルのoauthログインボタンを出したい人向けです。</p>
-
-<p>Githubのomniauth連携をした時に、専用のログインボタンを簡単に用意できないか探してみたところ、いい感じのGemがありました。</p>
-
-<!-- more -->
-
-
-<p>さて、今回使用するのは<a href="https://github.com/jeffleeismyhero/Zocial-Rails">こちら</a></p>
-
-<h1>使い方</h1>
-
-<h2>インストール</h2>
-
-<p>Gemfileに書いて、bundle installします。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;zocial-rails&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>導入</h2>
-
-<p>application.cssに以下を記述します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="o">*=</span> <span class="nt">require</span> <span class="nt">zocial</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>ボタン</h2>
-
-<p>elementのclassに、&#8217;zocial&#8217;と利用したいサービス(例では&#8217;github&#8217;)を記述します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;zocial github&quot;</span> <span class="na">href=</span><span class="s">&quot;/auth/github&quot;</span><span class="nt">&gt;</span>Sign in with Github<span class="nt">&lt;/a&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>ちなみに、hamlの場合はこちら。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="p">=</span> <span class="n">link_to</span><span class="p">(</span><span class="s1">&#39;Sign in with Github&#39;</span><span class="p">,</span> <span class="s1">&#39;/auth/github&#39;</span><span class="p">,</span>  <span class="ss">:class</span><span class="o">=&gt;</span> <span class="o">[</span><span class="s1">&#39;zocial&#39;</span><span class="p">,</span> <span class="s1">&#39;github&#39;</span><span class="o">]</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   
