@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-10-05T01:22:57+09:00</updated>
+  <updated>2014-10-06T18:44:30+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,220 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[RailsでBowerを使いHerokuにデプロイ]]></title>
+    <link href="http://jangajan.com/blog/2014/10/05/bower-and-rails-on-heroku/"/>
+    <updated>2014-10-05T22:35:42+09:00</updated>
+    <id>http://jangajan.com/blog/2014/10/05/bower-and-rails-on-heroku</id>
+    <content type="html"><![CDATA[<p>RailsアプリケーションでJavascriptプラグインの管理をgemに依存したくないなと思ったので、bowerなるものを試してみました。</p>
+
+<p>環境です。</p>
+
+<ul>
+<li>bower 1.3.12</li>
+<li>rails 4.1.6</li>
+<li>ruby 2.1.2</li>
+<li>heroku-buildpack-ruby-bower</li>
+</ul>
+
+
+<p>今回は使いませんでしたが、bower-railsというgemの説明も最後に追記しています。</p>
+
+<!-- more -->
+
+
+<h1>Rails + bower + heroku + heroku-buildpack-ruby-bower</h1>
+
+<p>参考にしたのは<a href="https://gist.github.com/afeld/5704079">こちら</a>です。</p>
+
+<h2>herokuに設定追加</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>heroku create app_name
+</span><span class='line'>
+</span><span class='line'>bundle exec rake secret RAILS_ENV=production
+</span><span class='line'>=&gt; 2d9dc90XXXXXXXXXXXXX...
+</span><span class='line'>
+</span><span class='line'># rake secretの結果を値として設定
+</span><span class='line'>heroku config:add SECRET_KEY_BASE=2d9dc90XXXXXXXXXXXXX...
+</span><span class='line'>
+</span><span class='line'>heroku run bundle exec rake RAILS_ENV=production db:migrate
+</span><span class='line'>
+</span><span class='line'>heroku config:set BUILDPACK_URL='git://github.com/qnyp/heroku-buildpack-ruby-bower.git#run-bower' </span></code></pre></td></tr></table></div></figure>
+
+
+<h2>.gitignore修正</h2>
+
+<p>bowerでコンポーネントをインストールするパスを管理対象外に設定しておきます。</p>
+
+<figure class='code'><figcaption><span>.gitignore</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="sr">/vendor/</span><span class="n">assets</span><span class="o">/</span><span class="n">components</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>bowerでコンポーネント追加</h2>
+
+<p>npmでbowerをインストールします。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>npm install bower
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>続いてRailsアプリケーションのルートパスでbowerの設定を追加します。</p>
+
+<figure class='code'><figcaption><span>.bowerrc</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;directory&quot;</span><span class="p">:</span> <span class="s2">&quot;vendor/assets/components&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;json&quot;</span><span class="p">:</span> <span class="s2">&quot;bower.json&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>bower.json</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;my application&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;moment&quot;</span><span class="p">:</span> <span class="s2">&quot;latest&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>依存関係のあるコンポーネントをインストールします。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>bower install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Railsの設定</h2>
+
+<p>お好みでGemファイル追加(このあたりはbowerと関係ないですね)</p>
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># このあたりはお好みで</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;unicorn&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 4.8.3&#39;</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;pg&#39;</span><span class="p">,</span> <span class="ss">group</span><span class="p">:</span> <span class="ss">:production</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;rails_12factor&#39;</span><span class="p">,</span> <span class="ss">group</span><span class="p">:</span> <span class="ss">:production</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>Procfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="ss">web</span><span class="p">:</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">unicorn</span> <span class="o">-</span><span class="nb">p</span> <span class="vg">$PORT</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>config/environments/production.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">compile</span> <span class="o">=</span> <span class="kp">true</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>bowerでインストールしたコンポーネントをassetsのパスに追加します。</p>
+
+<figure class='code'><figcaption><span>config/initializers/assets.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">paths</span> <span class="o">&lt;&lt;</span> <span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;vendor&#39;</span><span class="p">,</span> <span class="s1">&#39;assets&#39;</span><span class="p">,</span> <span class="s1">&#39;components&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>コンポーネントの読み込み設定</h2>
+
+<figure class='code'><figcaption><span>app/assets/javascript/application.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="p">...</span>
+</span><span class='line'><span class="c1">//= require moment/moment</span>
+</span><span class='line'><span class="p">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>公開設定</h2>
+
+<p>最後に修正をherokuにpushします。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>git add .
+</span><span class='line'>git commit
+</span><span class='line'>git push heroku master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>bower-rails</h1>
+
+<p><code>bower-rails</code>というgemがあったのですが、herokuへのデプロイのところで色々はまったので、今回は見送りました。<br/>
+ローカルで試す分にはこのGemは非常に使いやすかったので、環境によっては導入すると良さそうです。</p>
+
+<p>こちらの基本的な使い方は以下です。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># Bowerfile作成</span>
+</span><span class='line'><span class="c"># rails g bower_rails:initialize json とすることで、bower.jsonを作成することも可能</span>
+</span><span class='line'>bundle <span class="nb">exec </span>rails g bower_rails:initialize
+</span><span class='line'><span class="o">=</span>&gt; アプリケーションルートに、Bowerfileが作成される
+</span><span class='line'>
+</span><span class='line'><span class="c"># Bowerfileの編集</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;asset &#39;moment&#39;&quot;</span> &gt;&gt; Bowerjson
+</span><span class='line'>
+</span><span class='line'><span class="c"># 依存関係の解決</span>
+</span><span class='line'>bundle <span class="nb">exec </span>rake bower:install
+</span><span class='line'><span class="o">=</span>&gt; vnedor/assets/bower_componentsにコンポーネントをインストール
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上記に加え、<code>config/initializers/assets.rb</code>を修正することで利用できます。</p>
+
+<figure class='code'><figcaption><span>config/initializers/assets.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">paths</span> <span class="o">&lt;&lt;</span> <span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;vendor&#39;</span><span class="p">,</span> <span class="s1">&#39;assets&#39;</span><span class="p">,</span> <span class="s1">&#39;bower_components&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>BowerfileがGemfileのように簡単な形式で書けて、bower.jsonを動的に生成してくれるので、使いやすいですね。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rails4.1でherokuへのデプロイに失敗(Missing `secret_key_base`)]]></title>
@@ -1890,44 +2104,6 @@ YAPCラーメンチャレンジのせいで、（回ってきてもいないの�
 </pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="p">=</span> <span class="n">link_to</span><span class="p">(</span><span class="s1">&#39;Sign in with Github&#39;</span><span class="p">,</span> <span class="s1">&#39;/auth/github&#39;</span><span class="p">,</span>  <span class="ss">:class</span><span class="o">=&gt;</span> <span class="o">[</span><span class="s1">&#39;zocial&#39;</span><span class="p">,</span> <span class="s1">&#39;github&#39;</span><span class="o">]</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Github APIを使いやすくするoctokitを触ってみる]]></title>
-    <link href="http://jangajan.com/blog/2014/08/18/use-octokit/"/>
-    <updated>2014-08-18T00:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/08/18/use-octokit</id>
-    <content type="html"><![CDATA[<p>GithubのAPIを使いやすくしてくれるoctokitに触ってみました。試すのはcontributorsの一覧の取得です。</p>
-
-<!-- more -->
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;octokit&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;octokit&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">client</span> <span class="o">=</span> <span class="no">Octokit</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">new</span> <span class="ss">access_token</span><span class="p">:</span> <span class="s1">&#39;xxx&#39;</span>
-</span><span class='line'><span class="n">client</span><span class="o">.</span><span class="n">contributors_stats</span><span class="p">(</span><span class="s1">&#39;rails/rails&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort</span><span class="p">{</span><span class="o">|</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="o">|</span> <span class="n">b</span><span class="o">[</span><span class="ss">:total</span><span class="o">]</span> <span class="o">&lt;=&gt;</span> <span class="n">a</span><span class="o">[</span><span class="ss">:total</span><span class="o">]</span><span class="p">}</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span><span class="o">|</span><span class="n">member</span><span class="o">|</span>
-</span><span class='line'>  <span class="nb">p</span> <span class="n">member</span><span class="o">[</span><span class="ss">:author</span><span class="o">][</span><span class="ss">:login</span><span class="o">]</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>access_tokenを利用した方式で試していますが、LOGIN IDとパスワードにも対応しています。</p>
 ]]></content>
   </entry>
   

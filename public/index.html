@@ -8,8 +8,10 @@
   <title>JanGaJan.com</title>
   <meta name="author" content="talkto_me">
   
-  <meta name="description" content="Rails4.1でherokuへのデプロイに失敗(Missing secret_key_base) Rails4.1からsecrets.ymlがサポートされました。
-これの扱いが良くわかっていなかったため、heroku push後、以下のエラーが発生してアプリ起動に失敗しました。 app &hellip;">
+  <meta name="description" content="RailsアプリケーションでJavascriptプラグインの管理をgemに依存したくないなと思ったので、bowerなるものを試してみました。 環境です。 bower 1.3.12
+rails 4.1.6
+ruby 2.1.2
+heroku-buildpack-ruby-bower &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -107,6 +109,52 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/10/05/bower-and-rails-on-heroku/">RailsでBowerを使いHerokuにデプロイ</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-10-05T22:35:42+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>10:35 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>RailsアプリケーションでJavascriptプラグインの管理をgemに依存したくないなと思ったので、bowerなるものを試してみました。</p>
+
+<p>環境です。</p>
+
+<ul>
+<li>bower 1.3.12</li>
+<li>rails 4.1.6</li>
+<li>ruby 2.1.2</li>
+<li>heroku-buildpack-ruby-bower</li>
+</ul>
+
+
+<p>今回は使いませんでしたが、bower-railsというgemの説明も最後に追記しています。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/10/05/bower-and-rails-on-heroku/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -494,43 +542,6 @@ datetime_selectで表示した<code>月</code>欄の表示が妙だ。</p>
   
     <footer>
       <a rel="full-article" href="/blog/2014/09/12/perfect-rails-i18n/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/09/11/perfect-rails-locale/">RailsでLocaleを指定する</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-09-11T15:34:56+09:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>3:34 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://www.amazon.co.jp/gp/product/4774165166/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=4774165166&linkCode=as2&tag=pochan0919-22">パーフェクト Ruby on Rails</a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=4774165166" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />を、第6章からやってます。</p>
-
-<p>RailsにおけるTimezoneの設定方法です。
-<code>config/application.rb</code>で設定します。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/09/11/perfect-rails-locale/">Read on &rarr;</a>
     </footer>
   
 

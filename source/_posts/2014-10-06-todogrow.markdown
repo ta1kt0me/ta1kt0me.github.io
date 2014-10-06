@@ -1,0 +1,11 @@
+---
+layout: post
+title: "TodoGrowというアプリを作りました"
+date: 2014-10-06 20:35:42 +0900
+comments: true
+categories: [todogrow]
+---
+
+[TodoGrow](http://todogrow.herokuapp.com/)というアプリを作りました。
+
+タグが削除できない、名称変更できない等、まだ機能的に至らないところもありますが、使用感などフィードバックをいただけると嬉しいです。
