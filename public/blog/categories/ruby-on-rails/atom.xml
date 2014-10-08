@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby-on-rails | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby-on-rails/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-10-07T00:09:19+09:00</updated>
+  <updated>2014-10-08T14:26:27+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Factorygirlの読み込みでエラー]]></title>
+    <link href="http://jangajan.com/blog/2014/10/08/require-rspec/"/>
+    <updated>2014-10-08T14:19:07+09:00</updated>
+    <id>http://jangajan.com/blog/2014/10/08/require-rspec</id>
+    <content type="html"><![CDATA[<p>パーフェクトRuby on Rails の7章のFactoryGirlを省略するところ(リスト7.12)で<code>uninitialized constant FactoryGirl (NameError)</code>が発生しました。</p>
+
+<!-- more -->
+
+
+<p><code>factory_girl_rails</code>を読み込んであげればおーけーです。</p>
+
+<pre><code class="rb spec/spec_helper.rb">require 'factory_girl_rails'
+
+RSpec.configure do |config|
+  config.include FactoryGirl::Syntax::Methods
+end
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rails4.1でherokuへのデプロイに失敗(Missing `secret_key_base`)]]></title>
@@ -303,110 +324,6 @@ mv app/views/layouts/yeti.html.slim app/views/layouts/application.html.slim
 
 <p>yeti.jsも同じエラーが出たのであわせて解消。<br/>
 これで<code>rails s</code>したらスタイル代わった。やった。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ForbiddenAttributesErrorが発生]]></title>
-    <link href="http://jangajan.com/blog/2014/09/24/forbiddenattributeserror-in-rails/"/>
-    <updated>2014-09-24T02:33:27+09:00</updated>
-    <id>http://jangajan.com/blog/2014/09/24/forbiddenattributeserror-in-rails</id>
-    <content type="html"><![CDATA[<p>Rails4で、ForbiddenAttributesErrorが発生した場合の対応です。</p>
-
-<h1>ActiveModel::ForbiddenAttributesError発生</h1>
-
-<p>次のようなエラーが発生しました。</p>
-
-<pre><code class="sh">ActiveModel::ForbiddenAttributesError (ActiveModel::ForbiddenAttributesError):
-  app/controllers/posts_controller.rb:13:in `create'
-</code></pre>
-
-<p>13行目が悪さをしているらしい&hellip;</p>
-
-<pre><code class="rb app/controllers/posts_controller.rb">def create
-  @feed = Feed.new(params[:post]) # 13行目
-  ...
-end
-</code></pre>
-
-<!-- more -->
-
-
-<p>これはmass assignmentの問題を解決するために、Rails4から標準で導入された対応により発生しました。<br/>
-mass assignmentとはsubmitしたデータから簡単にModelを作ることができるRailsの仕組みです。<br/>
-しかし、意図しないパラメータも含んだ状態でModelが作られるという脆弱性のため、このようなエラーが発生するようになりました。<br/>
-mass assignmentの問題とその対策についての詳細な説明は<a href="http://www.willnet.in/48">Rails4.0に含まれる strong_parameters について</a>を参考にしてください。</p>
-
-<h1>対応</h1>
-
-<h2>Model作成に必要なsubmitデータを指定する方法</h2>
-
-<p>Model作成に必要なsubmitデータを明示的に指定し、チェックする方法です。
-permitメソッドを使うことで、submitデータを絞り込みます。</p>
-
-<pre><code class="rb app/controllers/posts_controller.rb">def create
-  @feed = Post.new(post_params)
-  ...
-end
-
-private
-
-def post_params
-  # submitしたデータのうち、Model作成に必要なものを
-  # permitの引数に指定する
-  params.require(:params).permit(
-    :title, :body
-  )
-end
-</code></pre>
-
-<h2>エラーを発生させない方法</h2>
-
-<p>こちらはmass assignmentの問題を解決していないため、お勧めしません。<br/>
-pertmitメソッドを通さず、全てのsubmitデータを利用します。</p>
-
-<pre><code class="rb config/application.rb">  class Application &lt; Rails::Application
-    # デフォルトはfalseに設定されている
-    config.action_controller.permit_all_parameters = true
-  end
-</code></pre>
-
-<h1>エラー発生場所</h1>
-
-<p><code>ActiveModel::ForbiddenAttributesError</code>は次の処理で発生します。</p>
-
-<ul>
-<li>ActiveModel::ForbiddenAttributesProtection#sanitize_for_mass_assignment(attributes)</li>
-</ul>
-
-
-<p>上述のpermitメソッドを実行することで、データはチェック済みの状態になります。<br/>
-このチェック済み状態を確認するのが、<code>sanitize_for_mass_assignment</code>の役割です。<br/>
-permitメソッドは<code>ActionController::Parameters</code>に定義してあります。</p>
-
-<h1>未チェックのsumitデータがあった場合の対応</h1>
-
-<p>未チェックのsubmitデータがあった場合の挙動をコントロールできます。<br/>
-<code>config.action_controller.action_on_unpermitted_parameters</code>を使います。</p>
-
-<h2>エラーにする</h2>
-
-<pre><code class="rb config/application.rb">  class Application &lt; Rails::Application
-    config.action_controller.action_on_unpermitted_parameters = :raise
-  end
-</code></pre>
-
-<h2>ログに出力する</h2>
-
-<pre><code class="rb config/application.rb">  class Application &lt; Rails::Application
-    config.action_controller.action_on_unpermitted_parameters = :log
-  end
-</code></pre>
-
-<p>出力結果はこうなります。
-<code>sh
-Unpermitted parameters: hogehoge
-</code></p>
 ]]></content>
   </entry>
   
