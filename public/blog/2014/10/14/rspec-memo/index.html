@@ -5,10 +5,10 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Factorygirlの読み込みでエラー - JanGaJan.com</title>
+  <title>Rspecメモ - JanGaJan.com</title>
   <meta name="author" content="talkto_me">
   
-  <meta name="description" content="パーフェクトRuby on Rails の7章のFactoryGirlを省略するところ(リスト7.12)でuninitialized constant FactoryGirl (NameError)が発生しました。 factory_girl_railsを読み込んであげればおーけーです。 spec/ &hellip;">
+  <meta name="description" content="rspecの学習中です。 rspecのワークショップ 以下のチュートリアルでrspecの学習をした時のメモです。 http://d.hatena.ne.jp/t-wada/20100228/p1 http://qiita.com/jnchito/items/624f6d5023c279046a1c &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -17,7 +17,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jangajan.com/blog/2014/10/08/require-rspec/">
+  <link rel="canonical" href="http://jangajan.com/blog/2014/10/14/rspec-memo/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="JanGaJan.com" type="application/atom+xml">
@@ -110,7 +110,7 @@
   <header>
     
       
-        <h1 class="entry-title">Factorygirlの読み込みでエラー</h1>
+        <h1 class="entry-title">Rspecメモ</h1>
       
     
     
@@ -120,31 +120,90 @@
 
 
 
-<time class='entry-date' datetime='2014-10-08T14:19:07+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:19 pm</span></time>
+<time class='entry-date' datetime='2014-10-14T18:00:00+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:00 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>パーフェクトRuby on Rails の7章のFactoryGirlを省略するところ(リスト7.12)で<code>uninitialized constant FactoryGirl (NameError)</code>が発生しました。</p>
+<div class="entry-content"><p>rspecの学習中です。</p>
 
 <!-- more -->
 
 
-<p><code>factory_girl_rails</code>を読み込んであげればおーけーです。</p>
+<h1>rspecのワークショップ</h1>
 
-<figure class='code'><figcaption><span>spec/spec_helper.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;factory_girl_rails&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">RSpec</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
-</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">include</span> <span class="no">FactoryGirl</span><span class="o">::</span><span class="no">Syntax</span><span class="o">::</span><span class="no">Methods</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>以下のチュートリアルでrspecの学習をした時のメモです。</p>
+
+<p><a href="http://d.hatena.ne.jp/t-wada/20100228/p1">http://d.hatena.ne.jp/t-wada/20100228/p1</a>  <br/>
+<a href="http://qiita.com/jnchito/items/624f6d5023c279046a1c">http://qiita.com/jnchito/items/624f6d5023c279046a1c</a></p>
+
+<h1>describeとcontextとit</h1>
+
+<ul>
+<li><code>describe</code>は対象を説明</li>
+<li><code>context</code>は状況を説明</li>
+<li><code>it</code>は試験内容を説明</li>
+<li><code>it</code>内に具体的な試験を記述</li>
+<li><code>it</code>の引数の説明を省略しても試験内容をrspecが判断して仕様記述を組み立てる</li>
+<li>読みやすさ次第で<code>it</code>の文字列引数を使うことを推奨</li>
+<li>内容を確認したい時は、<code>rspec -fd specfile</code></li>
+</ul>
+
+
+<h1>beforeにテスト実行前処理を記述</h1>
+
+<ul>
+<li><code>before</code>の引数のデフォルトは<code>:each</code></li>
+</ul>
+
+
+<h1>subjectでブロックの評価結果がit内のshouldのレシーバになる</h1>
+
+<ul>
+<li>明示的に<code>it</code>内で<code>subject</code>メソッドを利用することで、<code>subject</code>ブロックの評価結果を使うことができる</li>
+</ul>
+
+
+<h1><code>shared_examples</code>と<code>it_behaves_like</code></h1>
+
+<ul>
+<li><code>shared_examples_for 'キー名' do ~ end</code>とするとブロック内の処理を<code>it_should_behave_like 'キー名'</code>で呼び出してテストできる</li>
+<li>ただし、キー名は全てのテストで重複しないように注意する</li>
+</ul>
+
+
+<h1>predicateマッチャ</h1>
+
+<ul>
+<li><code>expect(xxx).to eq false -&gt; expect(xxx).not_to be_empty</code></li>
+</ul>
+
+
+<h1>rspec3で標準から外れた機能</h1>
+
+<ul>
+<li><code>its</code>メソッドは<code>rspec-its gem</code>で提供</li>
+<li>have マッチャ
+
+<ul>
+<li>サイズのチェックをテストしやすくするマッチャ(ただし、rspec3ではgemに外出しされた)</li>
+<li>have マッチャを使った場合、 <code>have(n).item</code> と <code>have(n).items</code> は互いに置換可能
+
+<ul>
+<li>nの値により自然な形にするのがいい</li>
+</ul>
+</li>
+<li>have(n).named_collection記法でもかける
+
+<ul>
+<li><code>it {is_expected.to have(n).xxx }</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
 </div>
 
@@ -170,22 +229,16 @@
 
 
 
-<time class='entry-date' datetime='2014-10-08T14:19:07+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:19 pm</span></time>
+<time class='entry-date' datetime='2014-10-14T18:00:00+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:00 pm</span></time>
       
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/ruby-on-rails/'>ruby-on-rails</a>
-  
-</span>
 
 
     </p>
     
       <div class="sharing">
-  <a href="http://b.hatena.ne.jp/entry/http://jangajan.com/blog/2014/10/08/require-rspec/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  <a href="http://b.hatena.ne.jp/entry/http://jangajan.com/blog/2014/10/14/rspec-memo/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jangajan.com/blog/2014/10/08/require-rspec/" data-via="talkto_me" data-counturl="http://jangajan.com/blog/2014/10/08/require-rspec/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jangajan.com/blog/2014/10/14/rspec-memo/" data-via="talkto_me" data-counturl="http://jangajan.com/blog/2014/10/14/rspec-memo/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -205,10 +258,8 @@
 </script>
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/10/06/todogrow/" title="Previous Post: TodoGrowというアプリを作りました">&laquo; TodoGrowというアプリを作りました</a>
+        <a class="basic-alignment left" href="/blog/2014/10/08/require-rspec/" title="Previous Post: factorygirlの読み込みでエラー">&laquo; factorygirlの読み込みでエラー</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/10/14/rspec-memo/" title="Next Post: Rspecメモ">Rspecメモ &raquo;</a>
       
     </p>
     <p>
@@ -252,8 +303,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://jangajan.com/blog/2014/10/08/require-rspec/';
-        var disqus_url = 'http://jangajan.com/blog/2014/10/08/require-rspec/';
+        var disqus_identifier = 'http://jangajan.com/blog/2014/10/14/rspec-memo/';
+        var disqus_url = 'http://jangajan.com/blog/2014/10/14/rspec-memo/';
         var disqus_script = 'embed.js';
       
     (function () {

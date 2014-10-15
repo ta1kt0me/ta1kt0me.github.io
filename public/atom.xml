@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-10-08T14:26:27+09:00</updated>
+  <updated>2014-10-15T14:43:45+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,92 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rspecメモ]]></title>
+    <link href="http://jangajan.com/blog/2014/10/14/rspec-memo/"/>
+    <updated>2014-10-14T18:00:00+09:00</updated>
+    <id>http://jangajan.com/blog/2014/10/14/rspec-memo</id>
+    <content type="html"><![CDATA[<p>rspecの学習中です。</p>
+
+<!-- more -->
+
+
+<h1>rspecのワークショップ</h1>
+
+<p>以下のチュートリアルでrspecの学習をした時のメモです。</p>
+
+<p><a href="http://d.hatena.ne.jp/t-wada/20100228/p1">http://d.hatena.ne.jp/t-wada/20100228/p1</a>  <br/>
+<a href="http://qiita.com/jnchito/items/624f6d5023c279046a1c">http://qiita.com/jnchito/items/624f6d5023c279046a1c</a></p>
+
+<h1>describeとcontextとit</h1>
+
+<ul>
+<li><code>describe</code>は対象を説明</li>
+<li><code>context</code>は状況を説明</li>
+<li><code>it</code>は試験内容を説明</li>
+<li><code>it</code>内に具体的な試験を記述</li>
+<li><code>it</code>の引数の説明を省略しても試験内容をrspecが判断して仕様記述を組み立てる</li>
+<li>読みやすさ次第で<code>it</code>の文字列引数を使うことを推奨</li>
+<li>内容を確認したい時は、<code>rspec -fd specfile</code></li>
+</ul>
+
+
+<h1>beforeにテスト実行前処理を記述</h1>
+
+<ul>
+<li><code>before</code>の引数のデフォルトは<code>:each</code></li>
+</ul>
+
+
+<h1>subjectでブロックの評価結果がit内のshouldのレシーバになる</h1>
+
+<ul>
+<li>明示的に<code>it</code>内で<code>subject</code>メソッドを利用することで、<code>subject</code>ブロックの評価結果を使うことができる</li>
+</ul>
+
+
+<h1><code>shared_examples</code>と<code>it_behaves_like</code></h1>
+
+<ul>
+<li><code>shared_examples_for 'キー名' do ~ end</code>とするとブロック内の処理を<code>it_should_behave_like 'キー名'</code>で呼び出してテストできる</li>
+<li>ただし、キー名は全てのテストで重複しないように注意する</li>
+</ul>
+
+
+<h1>predicateマッチャ</h1>
+
+<ul>
+<li><code>expect(xxx).to eq false -&gt; expect(xxx).not_to be_empty</code></li>
+</ul>
+
+
+<h1>rspec3で標準から外れた機能</h1>
+
+<ul>
+<li><code>its</code>メソッドは<code>rspec-its gem</code>で提供</li>
+<li>have マッチャ
+
+<ul>
+<li>サイズのチェックをテストしやすくするマッチャ(ただし、rspec3ではgemに外出しされた)</li>
+<li>have マッチャを使った場合、 <code>have(n).item</code> と <code>have(n).items</code> は互いに置換可能
+
+<ul>
+<li>nの値により自然な形にするのがいい</li>
+</ul>
+</li>
+<li>have(n).named_collection記法でもかける
+
+<ul>
+<li><code>it {is_expected.to have(n).xxx }</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Factorygirlの読み込みでエラー]]></title>
@@ -1866,61 +1952,6 @@ writerやreaderでwrite/readするためのデータの取り出し口ですね�
 それまでは好きなだけ<code>write</code>でデータを溜め込みます。<br/>
 しかし、<code>read</code>するためには、<code>close</code>でデータの区切りを宣言しないといけません。<br/>
 宣言しない限り<code>read</code>でのデータの読み込み処理は完了しないんですね。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hubotでデータを保存する]]></title>
-    <link href="http://jangajan.com/blog/2014/09/02/hubot-brain-sample/"/>
-    <updated>2014-09-02T20:38:53+09:00</updated>
-    <id>http://jangajan.com/blog/2014/09/02/hubot-brain-sample</id>
-    <content type="html"><![CDATA[<p>hubotでデータを永続的に保存するためにはredisとの連携が必要です。</p>
-
-<!-- more -->
-
-
-<h1>使い方</h1>
-
-<p>redisとセットで使うので、redisを起動しておくことを忘れずに。<br/>
-herokuで使いたい場合は、addonが必要になります。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="nv">module.exports = </span><span class="nf">(robot) -&gt;</span>
-</span><span class='line'>  <span class="nx">robot</span><span class="p">.</span><span class="nx">hear</span> <span class="sr">/janga/i</span><span class="p">,</span> <span class="nf">(msg) -&gt;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># データ取得</span>
-</span><span class='line'>  <span class="nv">jangajan = </span><span class="nx">robot</span><span class="p">.</span><span class="nx">brain</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s">&#39;janga&#39;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># データ更新</span>
-</span><span class='line'>  <span class="nx">robot</span><span class="p">.</span><span class="nx">brain</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s">&#39;janga&#39;</span><span class="p">,</span> <span class="nx">jangajan</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># データ保存 - redis起動してないと保存できない</span>
-</span><span class='line'>  <span class="nx">robot</span><span class="p">.</span><span class="nx">brain</span><span class="p">.</span><span class="nx">save</span><span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># データの保存場所</span>
-</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">robot</span><span class="p">.</span><span class="nx">brain</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">]</span>
-</span><span class='line'>  <span class="c1"># =&gt; { users: { &#39;1&#39;: { id: &#39;1&#39;, name: &#39;Shell&#39;, room: &#39;Shell&#39; } },</span>
-</span><span class='line'>  <span class="c1">#     _private: { janga: [ [Object] ] } }</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>実際には<code>_private</code>というキーの値として保存されています。<br/>
-あまりよくはないけれど、<code>robot.brain['data']['_pravate']['janga']</code>で取得することもできます。</p>
 ]]></content>
   </entry>
   
