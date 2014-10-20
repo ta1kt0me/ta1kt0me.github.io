@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby-on-rails | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby-on-rails/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-10-15T14:44:18+09:00</updated>
+  <updated>2014-10-20T16:04:18+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,93 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[herokuで動くRailsアプリケーションにNew Relicを入れる]]></title>
+    <link href="http://jangajan.com/blog/2014/10/20/use-new-relic-in-rails4-at-heroku/"/>
+    <updated>2014-10-20T15:30:52+09:00</updated>
+    <id>http://jangajan.com/blog/2014/10/20/use-new-relic-in-rails4-at-heroku</id>
+    <content type="html"><![CDATA[<p>Rails4アプリにNew Relicを入れます。<br/>
+herokuで動かす場合はadd-onとかの設定が必要でした。</p>
+
+<p><a href="https://docs.newrelic.com/docs/agents/ruby-agent/installation-configuration/ruby-agent-installation">New Relicの本家</a>と<a href="https://devcenter.heroku.com/articles/newrelic#ruby-configuration">herokuのNew Relicの適用ページ</a>が参考になります。</p>
+
+<!-- more -->
+
+
+<p>New Relicへの登録をすませると、手順ページが表示されていきます。</p>
+
+<h1>New Relicの設定</h1>
+
+<h2>Choose your language</h2>
+
+<p>言語をRubyに選択します。</p>
+
+<h2>Get your license key</h2>
+
+<p>Generate license keyを単にクリックするだけです。<br/>
+これで、newrelic.ymlをダウンロードできます。</p>
+
+<h2>Install the New Relic agent with bundler</h2>
+
+<p>Gemfileの修正と、gemのインストールを実行します。</p>
+
+<h2>Download newrelic.yml</h2>
+
+<p>license keyを生成すると、Donwload the newrelic.yml fileが有効になりますので、クリックしてファイルを取得します。
+その後、<code>${APP_ROOT}/config/newrelic.yml</code>にダウンロードしたファイルを配置します。</p>
+
+<h2>アプリ名の設定</h2>
+
+<p>newrelic.ymlにアプリ名を設定します。</p>
+
+<pre><code class="yaml config/newrelic.yml">common: &amp;default_settings
+...
+  app_name: #{アプリケーション名}
+...
+</code></pre>
+
+<h2>Postgles</h2>
+
+<p>postgresqlの場合は特殊な設定が必要になります。
+なくても動きますが,New Relicの一部機能は動作しません。</p>
+
+<pre><code class="yaml config/newrelic.yml">common: &amp;default_settings
+  transaction_tracer:
+    explain_enabled: false
+</code></pre>
+
+<h2>ローカルで確認</h2>
+
+<p>この状態でローカルで確認できます。<br/>
+ローカルがPostgresqlでなければ直前の対応は不要かもしれません。</p>
+
+<p><a href="http://localhost:3000/newrelic">http://localhost:3000/newrelic</a></p>
+
+<h1>herokuの設定</h1>
+
+<p>herokuではadd-onでnew relicと連携します。</p>
+
+<h2>Add-onの設定</h2>
+
+<p>add-on追加のためにはクレジットカードの情報が必須です。
+(無料プランがあります)</p>
+
+<p><a href="https://addons.heroku.com/newrelic">New RelicのAdd-onページ</a>から設定を有効にしてください。</p>
+
+<h2>環境変数の設定</h2>
+
+<p><code>heroku config</code>で設定を変更。</p>
+
+<pre><code class="sh">heroku config:set NEW_RELIC_APP_NAME="各自のアプリケーション名"
+heroku config:set RACK_ENV=production
+</code></pre>
+
+<h2>本番で確認</h2>
+
+<p>このままherokuへのpushが成功した後、数分してからNew Relicにアクセスすれば接続確認できます。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Factorygirlの読み込みでエラー]]></title>
@@ -257,73 +344,6 @@ hamlでyatiのテーマを適用しています。</p>
 </code></pre>
 
 <p>なので、ページごとのjavascriptは<code>content_for :page_javascript</code>を利用して書くようにしましょう。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Railsでbootswitchのテーマを適用したらActionView::Template::Error]]></title>
-    <link href="http://jangajan.com/blog/2014/09/26/include-css-error-in-rails/"/>
-    <updated>2014-09-26T16:49:11+09:00</updated>
-    <id>http://jangajan.com/blog/2014/09/26/include-css-error-in-rails</id>
-    <content type="html"><![CDATA[<p>bootswitch適用時に発生したActionView::Template::Errorの解消方法です。</p>
-
-<!-- more -->
-
-
-<h1>bootswatch適用</h1>
-
-<p>以下のようにbootswatchを適用しました。</p>
-
-<pre><code class="rb Gemfile">...
-gem 'twitter-bootswatch-rails'
-gem 'twitter-bootswatch-rails-helpers'
-gem 'therubyracer'
-</code></pre>
-
-<p>今回はyetiを適用しています。<br/>
-テンプレートエンジンはslimを使っています。</p>
-
-<pre><code class="sh">bundle exec rails g bootswatch:install yeti
-bundle exec rails g bootswatch:import yeti
-bundle exec rails g bootswatch:layout yeti
-mv app/views/layouts/yeti.html.slim app/views/layouts/application.html.slim
-</code></pre>
-
-<p>最後のmvでテンプレートファイルの入れ替えを行っています。</p>
-
-<h1>ActionView::Template::Errorエラー</h1>
-
-<p>ここで<code>rails s</code>すると、以下のエラーが発生しました。</p>
-
-<pre><code>ActionView::Template::Error (Asset filtered out and will not be served: add `Rails.application.config.assets.precompile += %w( yeti.css )` to `config/initializers/assets.rb` and restart your server):
-     9:     / Le HTML5 shim, for IE6-8 support of HTML elements
-    10:     /[if lt IE 9]
-    11:       = javascript_include_tag "http://html5shim.googlecode.com/svn/trunk/html5.js"
-    12:     = stylesheet_link_tag "yeti", :media =&gt; "all"
-    13:     = yield(:page_stylesheet) if content_for?(:page_stylesheet)
-    14: 
-    15: 
-  app/views/layouts/application.html.slim:12:in `_app_views_layouts_application_html_slim__3298097478580668215_70163995513140'
-
-
-  Rendered vendor/bundle/ruby/2.1.0/gems/actionpack-4.1.6/lib/action_dispatch/middleware/templates/rescues/_trace.html.erb (1.0ms)
-  Rendered vendor/bundle/ruby/2.1.0/gems/actionpack-4.1.6/lib/action_dispatch/middleware/templates/rescues/_request_and_response.html.erb (1.0ms)
-  Rendered vendor/bundle/ruby/2.1.0/gems/actionpack-4.1.6/lib/action_dispatch/middleware/templates/rescues/template_error.html.erb within rescues/layout (15.5ms)
-</code></pre>
-
-<p>テンプレートファイルの12行目、ちょうどyetinテーマのcssのところですね。<br/>
-どうやら、呼び込みたいassetsファイルがちゃんとprecompileされていないらしい。<br/>
-追加したいなら、<code>config/initializers/assets.rb</code>にこんな感じに追加しろぼけってエラーメッセージ優しい。</p>
-
-<h1>エラー解消</h1>
-
-<p>そんなわけでこんな感じで修正。</p>
-
-<pre><code class="rb config/initializers/assets.rb">Rails.application.config.assets.precompile += %w( yeti.css yeti.js )
-</code></pre>
-
-<p>yeti.jsも同じエラーが出たのであわせて解消。<br/>
-これで<code>rails s</code>したらスタイル代わった。やった。</p>
 ]]></content>
   </entry>
   

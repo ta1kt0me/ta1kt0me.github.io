@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-10-15T14:43:45+09:00</updated>
+  <updated>2014-10-20T16:04:18+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,105 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[herokuで動くRailsアプリケーションにNew Relicを入れる]]></title>
+    <link href="http://jangajan.com/blog/2014/10/20/use-new-relic-in-rails4-at-heroku/"/>
+    <updated>2014-10-20T15:30:52+09:00</updated>
+    <id>http://jangajan.com/blog/2014/10/20/use-new-relic-in-rails4-at-heroku</id>
+    <content type="html"><![CDATA[<p>Rails4アプリにNew Relicを入れます。<br/>
+herokuで動かす場合はadd-onとかの設定が必要でした。</p>
+
+<p><a href="https://docs.newrelic.com/docs/agents/ruby-agent/installation-configuration/ruby-agent-installation">New Relicの本家</a>と<a href="https://devcenter.heroku.com/articles/newrelic#ruby-configuration">herokuのNew Relicの適用ページ</a>が参考になります。</p>
+
+<!-- more -->
+
+
+<p>New Relicへの登録をすませると、手順ページが表示されていきます。</p>
+
+<h1>New Relicの設定</h1>
+
+<h2>Choose your language</h2>
+
+<p>言語をRubyに選択します。</p>
+
+<h2>Get your license key</h2>
+
+<p>Generate license keyを単にクリックするだけです。<br/>
+これで、newrelic.ymlをダウンロードできます。</p>
+
+<h2>Install the New Relic agent with bundler</h2>
+
+<p>Gemfileの修正と、gemのインストールを実行します。</p>
+
+<h2>Download newrelic.yml</h2>
+
+<p>license keyを生成すると、Donwload the newrelic.yml fileが有効になりますので、クリックしてファイルを取得します。
+その後、<code>${APP_ROOT}/config/newrelic.yml</code>にダウンロードしたファイルを配置します。</p>
+
+<h2>アプリ名の設定</h2>
+
+<p>newrelic.ymlにアプリ名を設定します。</p>
+
+<figure class='code'><figcaption><span>config/newrelic.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">common</span><span class="p-Indicator">:</span> <span class="nl">&amp;default_settings</span>
+</span><span class='line'><span class="nn">...</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">app_name</span><span class="p-Indicator">:</span> <span class="c1">#{アプリケーション名}</span>
+</span><span class='line'><span class="nn">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Postgles</h2>
+
+<p>postgresqlの場合は特殊な設定が必要になります。
+なくても動きますが,New Relicの一部機能は動作しません。</p>
+
+<figure class='code'><figcaption><span>config/newrelic.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">common</span><span class="p-Indicator">:</span> <span class="nl">&amp;default_settings</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">transaction_tracer</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="l-Scalar-Plain">explain_enabled</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">false</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>ローカルで確認</h2>
+
+<p>この状態でローカルで確認できます。<br/>
+ローカルがPostgresqlでなければ直前の対応は不要かもしれません。</p>
+
+<p><a href="http://localhost:3000/newrelic">http://localhost:3000/newrelic</a></p>
+
+<h1>herokuの設定</h1>
+
+<p>herokuではadd-onでnew relicと連携します。</p>
+
+<h2>Add-onの設定</h2>
+
+<p>add-on追加のためにはクレジットカードの情報が必須です。
+(無料プランがあります)</p>
+
+<p><a href="https://addons.heroku.com/newrelic">New RelicのAdd-onページ</a>から設定を有効にしてください。</p>
+
+<h2>環境変数の設定</h2>
+
+<p><code>heroku config</code>で設定を変更。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>heroku config:set <span class="nv">NEW_RELIC_APP_NAME</span><span class="o">=</span><span class="s2">&quot;各自のアプリケーション名&quot;</span>
+</span><span class='line'>heroku config:set <span class="nv">RACK_ENV</span><span class="o">=</span>production
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>本番で確認</h2>
+
+<p>このままherokuへのpushが成功した後、数分してからNew Relicにアクセスすれば接続確認できます。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rspecメモ]]></title>
@@ -1774,184 +1873,6 @@ pipeではできなかったデータの双方向の通信ができます。</p>
 
 
 <p><code>child_socket</code>と<code>parent_socket</code>でそれぞれ、メッセージをやり取りしています。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[UnixのパイプをRubyで扱う]]></title>
-    <link href="http://jangajan.com/blog/2014/09/03/unix-process-in-ruby/"/>
-    <updated>2014-09-03T18:20:35+09:00</updated>
-    <id>http://jangajan.com/blog/2014/09/03/unix-process-in-ruby</id>
-    <content type="html"><![CDATA[<p>積読消化シリーズです。<br/>
-<a href="http://tatsu-zine.com/books/naruhounix">なるほどUnixプロセス ― Rubyで学ぶUnixの基礎</a><br/>
-UnixでのパイプをRubyで表すとどうなるか。</p>
-
-<!-- more -->
-
-
-<h1>Rubyで扱うパイプ</h1>
-
-<h2>パイプとは</h2>
-
-<p>パイプとは、「単方向のデータの流れ」です。<br/>
-パイプでは、２つのプロセス(A,B)で、ストリームを介して、一方通行に通信します。<br/>
-(ストリームは最後の方に補足します。データを溜めておく場所のイメージ)</p>
-
-<h2>単一プロセスでのパイプ</h2>
-
-<p>一つのプロセスでの、パイプを表現すると以下の通りです。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">p</span> <span class="no">IO</span><span class="o">.</span><span class="n">pipe</span> <span class="c1">#=&gt; [#&lt;IO:fd 7&gt;, #&lt;IO:fd 8&gt;]</span>
-</span><span class='line'><span class="n">reader</span><span class="p">,</span> <span class="n">writer</span> <span class="o">=</span> <span class="no">IO</span><span class="o">.</span><span class="n">pipe</span>
-</span><span class='line'><span class="c1"># reader =&gt; #&lt;IO:fd 7&gt;</span>
-</span><span class='line'><span class="c1"># writer =&gt; #&lt;IO:fd 8&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;書き込みました。&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="n">writer</span><span class="o">.</span><span class="n">close</span>
-</span><span class='line'><span class="nb">puts</span> <span class="n">reader</span><span class="o">.</span><span class="n">read</span> <span class="c1"># =&gt;書き込みました。</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>reader(A)、writer(B)とした場合、<code>B =&gt; A</code>というデータの流れは可能ですが、<code>A =&gt; B</code>はできません。<br/>
-<code>writer.write</code>でストリームに情報を書き込みます。<br/>
-<code>reader.read</code>でストリームに書き込まれた情報を読み込みます。</p>
-
-<h3>メモ</h3>
-
-<ul>
-<li><code>reader.read</code>の前に、<code>writer.close</code>をする
-
-<ul>
-<li><code>reader.read</code>は区切り文字が見つかるまでストリームを読み込み続けます</li>
-<li><code>writer.close</code>することで、ストリームへの書き込みが終了させ、区切り文字を設定します</li>
-</ul>
-</li>
-<li><code>writer.close</code>で閉じたストリームを更新することはできない</li>
-</ul>
-
-
-<h2>親子プロセスでのパイプ</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">reader</span><span class="p">,</span> <span class="n">writer</span> <span class="o">=</span> <span class="no">IO</span><span class="o">.</span><span class="n">pipe</span>
-</span><span class='line'><span class="c1"># reader =&gt; #&lt;IO:fd 7&gt;</span>
-</span><span class='line'><span class="c1"># writer =&gt; #&lt;IO:fd 8&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># forkにより子プロセスを生成</span>
-</span><span class='line'><span class="nb">fork</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">reader</span><span class="o">.</span><span class="n">close</span>
-</span><span class='line'>  <span class="mi">10</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">writer</span><span class="o">.</span><span class="n">write</span> <span class="s2">&quot;Another one bite the dust</span><span class="se">\n</span><span class="s2">&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">writer</span><span class="o">.</span><span class="n">close</span>
-</span><span class='line'><span class="nb">print</span> <span class="n">reader</span><span class="o">.</span><span class="n">read</span>
-</span><span class='line'><span class="c1"># =&gt; Another one bite the dust</span>
-</span><span class='line'><span class="c1"># Another one bite the dust</span>
-</span><span class='line'><span class="c1"># Another one bite the dust</span>
-</span><span class='line'><span class="c1"># Another one bite the dust</span>
-</span><span class='line'><span class="c1"># Another one bite the dust</span>
-</span><span class='line'><span class="c1"># Another one bite the dust</span>
-</span><span class='line'><span class="c1"># Another one bite the dust</span>
-</span><span class='line'><span class="c1"># Another one bite the dust</span>
-</span><span class='line'><span class="c1"># Another one bite the dust</span>
-</span><span class='line'><span class="c1"># Another one bite the dust</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>親プロセス、子プロセスでは、それぞれ使用しないIOインスタンスをcloseしています。<br/>
-これは、子プロセスが親のファイルディクリプタを複製して利用するためです。<br/>
-ファイルディスクリプタというのは、ストリームの出入り口をイメージすると分かりやすいかもしれません。<br/>
-writerやreaderでwrite/readするためのデータの取り出し口ですね。<br/>
-* 親プロセスでは、write処理は行わないため、<code>writer.close</code>をします。<br/>
-* forkした子プロセスでは、read処理は行わないため、<code>reader.close</code>をします。<br/>
-これで、利用しないファイルディクリプタに影響を与えなくなります。</p>
-
-<h3>親子プロセス両方でreader.close</h3>
-
-<p>forkした子プロセスがwriteする前に、親プロセスで<code>reader.close</code>をすると、どうなるでしょうか。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">reader</span><span class="p">,</span> <span class="n">writer</span> <span class="o">=</span> <span class="no">IO</span><span class="o">.</span><span class="n">pipe</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">fork</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">reader</span><span class="o">.</span><span class="n">close</span>
-</span><span class='line'>  <span class="mi">10</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">writer</span><span class="o">.</span><span class="n">write</span> <span class="s2">&quot;Another one bite the dust</span><span class="se">\n</span><span class="s2">&quot;</span>
-</span><span class='line'>    <span class="c1"># =&gt; `write&#39;: Broken pipe (Errno::EPIPE)が発生</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">reader</span><span class="o">.</span><span class="n">close</span> <span class="c1"># この行を追加</span>
-</span><span class='line'><span class="n">writer</span><span class="o">.</span><span class="n">close</span>
-</span><span class='line'><span class="nb">print</span> <span class="n">reader</span><span class="o">.</span><span class="n">read</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>親子でreader.closeをすると、書き込んだ情報の出力先がなくなります。<br/>
-そのため、子プロセスで書き込みをするとエラーが発生します。</p>
-
-<h2>補足:ストリーム</h2>
-
-<p>スラッシュドットの以下の記事がイメージしやすかったです。
-<a href="http://slashdot.jp/journal/160355/TCP%E3%81%A8UDP%E3%81%AE%E9%81%95%E3%81%84">gatekeeperの日記： TCPとUDPの違い</a></p>
-
-<blockquote><p>ストリーム型というのは１個のデーターをためておく場所（ストリーム）があって、
-ストリームの性質としては最初に入れたデーターが最初に出てくる。（要はFIFOだな）
-&hellip;
-それがどういうことになるかというと、ストリーム型では何回かに分けて書き込んだデーターを一気に読み込んだり、
-一気に読み込んだり、 逆に一度に書き込んだデーターを細切れで読み出したりできる。
-つまり、読み書きの境界はストリームに入った時点で保存されない。</p></blockquote>
-
-<p>ストリームはデータを溜めておく場所で、明示的に終了したよって宣言しないと、データの区切りが分からないものなんですね。<br/>
-<code>close</code>することで、データの境界を設定します。<br/>
-それまでは好きなだけ<code>write</code>でデータを溜め込みます。<br/>
-しかし、<code>read</code>するためには、<code>close</code>でデータの区切りを宣言しないといけません。<br/>
-宣言しない限り<code>read</code>でのデータの読み込み処理は完了しないんですね。</p>
 ]]></content>
   </entry>
   
