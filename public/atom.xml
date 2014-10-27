@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-10-27T19:00:56+09:00</updated>
+  <updated>2014-10-28T06:35:51+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,96 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rubyでメソッドを定義しているクラスを調べたい]]></title>
+    <link href="http://jangajan.com/blog/2014/10/28/which-of-the-class-dose-have-the-method/"/>
+    <updated>2014-10-28T05:55:25+09:00</updated>
+    <id>http://jangajan.com/blog/2014/10/28/which-of-the-class-dose-have-the-method</id>
+    <content type="html"><![CDATA[<p>メソッドを定義していくクラスを探る方法です。</p>
+
+<!-- more -->
+
+
+<h1>定義しているClassを知りたい</h1>
+
+<p>クラス名だけを知りたいのであれば<code>Method#owner</code>を利用します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># singleton method</span>
+</span><span class='line'><span class="nb">String</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:try_convert</span><span class="p">)</span><span class="o">.</span><span class="n">owner</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;Class:String&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># instance method</span>
+</span><span class='line'><span class="s2">&quot;s&quot;</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:method_missing</span><span class="p">)</span><span class="o">.</span><span class="n">owner</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="no">BasicObject</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>もうちょっと詳しい情報が知りたい</h1>
+
+<p><code>Method#inspect</code>を使うともう少し詳しい情報を取得できます。
+といってもそんなに大きく変わりません。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># singleton method</span>
+</span><span class='line'><span class="nb">String</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:try_convert</span><span class="p">)</span><span class="o">.</span><span class="n">inspect</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;#&lt;Method: String.try_convert&gt;&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># instance method</span>
+</span><span class='line'><span class="s2">&quot;s&quot;</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:method_missing</span><span class="p">)</span><span class="o">.</span><span class="n">inspect</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;#&lt;Method: String(BasicObject)#method_missing&gt;&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>当たり前の話ですが、特異メソッド(クラスメソッド、singleton method)は継承されないですね。
+どいうことかというと、DateTimeクラスでは、Dateクラスの得意メソッドを呼び出せない、ということに気付かされました。
+クラスメソッドに対してownerとかするの意味ねぇ。</p>
+
+<h1>定義している場所を知りたい</h1>
+
+<p>1.9以降(1.9.3?)では<code>Method#source_location</code>というメソッドで、メソッドの定義された具体的な場所の情報が分かります。
+ただし、取得できるのはrubyで定義されたものに限るようです。
+(ネイティブで定義されているメソッドの場合nilになる)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># singleton method</span>
+</span><span class='line'><span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:where</span><span class="p">)</span><span class="o">.</span><span class="n">source_location</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">APP_ROOT</span><span class="si">}</span><span class="s2">/vendor/bundle/ruby/2.0.0/gems/activerecord-4.0.2/lib/active_record/querying.rb&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># instance method</span>
+</span><span class='line'><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:blank?</span><span class="p">)</span><span class="o">.</span><span class="n">source_location</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">APP_ROOT</span><span class="si">}</span><span class="s2">/vendor/bundle/ruby/2.0.0/gems/activesupport-4.0.2/lib/active_support/core_ext/object/blank.rb&quot;</span><span class="p">,</span> <span class="mi">92</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># ネイティブで定義されたメソッドはnilを返す</span>
+</span><span class='line'><span class="s2">&quot;s&quot;</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:method_missing</span><span class="p">)</span><span class="o">.</span><span class="n">source_location</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="kp">nil</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[メモ : Array#each_with_objectの簡単な使い方]]></title>
@@ -1654,189 +1744,6 @@ Webサーバーの例では複数のProcessを管理していました。<br/>
 <p>実際のところ、<code>socket</code>を複数Threadで共有した場合どうなるか、とかは調査する必要がありますね。<br/>
 ただ、Threadで置き換えることもできたということで。<br/>
 これでも一応動きます。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[RubyのProcessを利用したWebサーバーを作る]]></title>
-    <link href="http://jangajan.com/blog/2014/09/05/unix-process-socket-server-in-ruby/"/>
-    <updated>2014-09-05T19:08:20+09:00</updated>
-    <id>http://jangajan.com/blog/2014/09/05/unix-process-socket-server-in-ruby</id>
-    <content type="html"><![CDATA[<p>積読消化シリーズです。<br/>
-<a href="http://tatsu-zine.com/books/naruhounix">なるほどUnixプロセス ― Rubyで学ぶUnixの基礎</a><br/>
-簡単なWebサーバーを作ります。</p>
-
-<ul>
-<li>telnetでアクセスするWebサーバー</li>
-<li>ブラウザでアクセスするWebサーバー</li>
-<li>forkしたProcessでリクエストを処理するWebサーバー</li>
-</ul>
-
-
-<!-- more -->
-
-
-<h1>telnetでアクセスするWebサーバー</h1>
-
-<p>まずはtelnetでアクセスするためのシンプルなWebサーバーを用意します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1">#!/usr/bin/env ruby</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;socket&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># 127.0.0.1(localhost)で8080ポートで立ち上げる</span>
-</span><span class='line'><span class="n">socket</span> <span class="o">=</span> <span class="no">TCPServer</span><span class="o">.</span><span class="n">open</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">8080</span>
-</span><span class='line'>
-</span><span class='line'><span class="kp">loop</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">connection</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">accept</span>
-</span><span class='line'>  <span class="n">connection</span><span class="o">.</span><span class="n">puts</span> <span class="s1">&#39;Hello Readers!&#39;</span>
-</span><span class='line'>  <span class="n">connection</span><span class="o">.</span><span class="n">close</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>サーバーを起動し、ターミナルを立ち上げて、telnetでアクセスしてみます。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>telnet 127.0.0.1 <span class="nv">8080</span>
-</span><span class='line'><span class="o">=</span>&gt; Hello Readers!
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>ただし、このままだとブラウザで<code>http://127.0.0.1:8080</code>にアクセスできません。<br/>
-次はブラウザでアクセスできるように修正します。</p>
-
-<h1>ブラウザでアクセスするWebサーバー</h1>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1">#!/usr/bin/env ruby</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;socket&#39;</span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;time&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">socket</span> <span class="o">=</span> <span class="no">TCPServer</span><span class="o">.</span><span class="n">open</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">8080</span>
-</span><span class='line'>
-</span><span class='line'><span class="kp">loop</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">connection</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">accept</span>
-</span><span class='line'>  <span class="c1"># response headerを設定</span>
-</span><span class='line'>  <span class="n">connection</span><span class="o">.</span><span class="n">puts</span> <span class="o">[</span><span class="s1">&#39;HTTP/1.1 200 OK&#39;</span><span class="p">,</span>
-</span><span class='line'>                   <span class="s2">&quot;Date: </span><span class="si">#{</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">httpdate</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-</span><span class='line'>                   <span class="s1">&#39;Server: Ruby&#39;</span><span class="p">,</span>
-</span><span class='line'>                   <span class="s1">&#39;Content-Type: text/html; charset=utf-8&#39;</span><span class="p">,</span>
-</span><span class='line'>                   <span class="s2">&quot;Content-Length: </span><span class="si">#{</span><span class="n">response_body</span><span class="o">.</span><span class="n">length</span><span class="si">}</span><span class="se">\r\n\r\n</span><span class="s2">&quot;</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span class='line'>  <span class="c1"># response bodyを設定</span>
-</span><span class='line'>  <span class="n">connection</span><span class="o">.</span><span class="n">puts</span> <span class="s1">&#39;Hello Readers!&#39;</span>
-</span><span class='line'>  <span class="n">connection</span><span class="o">.</span><span class="n">close</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>レスポンスのヘッダー情報を追加しました。<br/>
-ヘッダーとボディは改行<code>\r\n</code>で区切ります。</p>
-
-<p>これでブラウザでアクセスできるようになりました。</p>
-
-<h1>forkしたProcessでリクエストを処理するWebサーバー</h1>
-
-<p>続いては、アクセスを子プロセスで処理するように変更します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1">#!/usr/bin/env ruby                           </span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;socket&#39;</span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;time&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">socket</span> <span class="o">=</span> <span class="no">TCPServer</span><span class="o">.</span><span class="n">open</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">8080</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">worker_pid</span> <span class="o">=</span> <span class="nb">fork</span> <span class="k">do</span>
-</span><span class='line'>  <span class="c1"># 子プロセスで処理</span>
-</span><span class='line'>  <span class="kp">loop</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">response_body</span> <span class="o">=</span> <span class="s1">&#39;Hello Browser!&#39;</span>
-</span><span class='line'>    <span class="n">connection</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">accept</span>
-</span><span class='line'>    <span class="n">connection</span><span class="o">.</span><span class="n">puts</span> <span class="o">[</span><span class="s1">&#39;HTTP/1.1 200 OK&#39;</span><span class="p">,</span>
-</span><span class='line'>                   <span class="s2">&quot;Date: </span><span class="si">#{</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">httpdate</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-</span><span class='line'>                   <span class="s1">&#39;Server: Ruby&#39;</span><span class="p">,</span>
-</span><span class='line'>                   <span class="s1">&#39;Content-Type: text/html; charset=utf-8&#39;</span><span class="p">,</span>
-</span><span class='line'>                   <span class="s2">&quot;Content-Length: </span><span class="si">#{</span><span class="n">response_body</span><span class="o">.</span><span class="n">length</span><span class="si">}</span><span class="se">\r\n\r\n</span><span class="s2">&quot;</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">connection</span><span class="o">.</span><span class="n">puts</span> <span class="n">response_body</span>
-</span><span class='line'>    <span class="n">connection</span><span class="o">.</span><span class="n">close</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># Signalを受け取ったらprocessをkillする</span>
-</span><span class='line'><span class="o">[</span><span class="ss">:INT</span><span class="p">,</span> <span class="ss">:QUIT</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">signal</span><span class="o">|</span>
-</span><span class='line'>  <span class="no">Signal</span><span class="o">.</span><span class="n">trap</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="no">Process</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">worker_pid</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># 親プロセスの処理を待ちにする</span>
-</span><span class='line'><span class="no">Process</span><span class="o">.</span><span class="n">waitpid</span> <span class="n">worker_pid</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>forkで子プロセスを生成し、リクエストを子プロセスで処理しています。<br/>
-親プロセスは子プロセスが処理が完了するまでwaitします。<br/>
-(子プロセスはloop処理を行っているため、シグナルを受け取るまでは生き続けます)</p>
 ]]></content>
   </entry>
   

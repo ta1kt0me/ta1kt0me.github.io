@@ -5,27 +5,19 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>メモ : Array#each_with_objectの簡単な使い方 - JanGaJan.com</title>
+  <title>Rubyでメソッドを定義しているクラスを調べたい - JanGaJan.com</title>
   <meta name="author" content="talkto_me">
   
-  <meta name="description" content="each_with_objectの簡単な使い方。
-使い方は気をつけないといけないですね。 1
+  <meta name="description" content="メソッドを定義していくクラスを探る方法です。 定義しているClassを知りたい クラス名だけを知りたいのであればMethod#ownerを利用します。 1
 2
 3
 4
 5
 6
 7
-8
-9
-10
-11
-12
-13
-14
-15
-[1,2,3].each_with_object(n=[]){|v| n &lt;&lt; v + 5}
-=&gt; [6, 7, 8 &hellip;">
+# singleton method
+String.method(:try_convert).owner
+=&gt &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -34,7 +26,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jangajan.com/blog/2014/10/27/each-with-object-memo/">
+  <link rel="canonical" href="http://jangajan.com/blog/2014/10/28/which-of-the-class-dose-have-the-method/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="JanGaJan.com" type="application/atom+xml">
@@ -127,7 +119,7 @@
   <header>
     
       
-        <h1 class="entry-title">メモ : Array#each_with_objectの簡単な使い方</h1>
+        <h1 class="entry-title">Rubyでメソッドを定義しているクラスを調べたい</h1>
       
     
     
@@ -137,20 +129,70 @@
 
 
 
-<time class='entry-date' datetime='2014-10-27T18:50:07+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>27</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:50 pm</span></time>
+<time class='entry-date' datetime='2014-10-28T05:55:25+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>5:55 am</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>each_with_objectの簡単な使い方。
-使い方は気をつけないといけないですね。</p>
+<div class="entry-content"><p>メソッドを定義していくクラスを探る方法です。</p>
 
 <!-- more -->
 
 
+<h1>定義しているClassを知りたい</h1>
 
+<p>クラス名だけを知りたいのであれば<code>Method#owner</code>を利用します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># singleton method</span>
+</span><span class='line'><span class="nb">String</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:try_convert</span><span class="p">)</span><span class="o">.</span><span class="n">owner</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;Class:String&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># instance method</span>
+</span><span class='line'><span class="s2">&quot;s&quot;</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:method_missing</span><span class="p">)</span><span class="o">.</span><span class="n">owner</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="no">BasicObject</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>もうちょっと詳しい情報が知りたい</h1>
+
+<p><code>Method#inspect</code>を使うともう少し詳しい情報を取得できます。
+といってもそんなに大きく変わりません。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># singleton method</span>
+</span><span class='line'><span class="nb">String</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:try_convert</span><span class="p">)</span><span class="o">.</span><span class="n">inspect</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;#&lt;Method: String.try_convert&gt;&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># instance method</span>
+</span><span class='line'><span class="s2">&quot;s&quot;</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:method_missing</span><span class="p">)</span><span class="o">.</span><span class="n">inspect</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;#&lt;Method: String(BasicObject)#method_missing&gt;&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>当たり前の話ですが、特異メソッド(クラスメソッド、singleton method)は継承されないですね。
+どいうことかというと、DateTimeクラスでは、Dateクラスの得意メソッドを呼び出せない、ということに気付かされました。
+クラスメソッドに対してownerとかするの意味ねぇ。</p>
+
+<h1>定義している場所を知りたい</h1>
+
+<p>1.9以降(1.9.3?)では<code>Method#source_location</code>というメソッドで、メソッドの定義された具体的な場所の情報が分かります。
+ただし、取得できるのはrubyで定義されたものに限るようです。
+(ネイティブで定義されているメソッドの場合nilになる)</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -163,28 +205,18 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="o">].</span><span class="n">each_with_object</span><span class="p">(</span><span class="n">n</span><span class="o">=[]</span><span class="p">){</span><span class="o">|</span><span class="n">v</span><span class="o">|</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">5</span><span class="p">}</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="o">]</span>
-</span><span class='line'><span class="c1"># nを初期化しないで処理</span>
-</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="o">].</span><span class="n">each_with_object</span><span class="p">(</span><span class="n">n</span><span class="p">){</span><span class="o">|</span><span class="n">v</span><span class="o">|</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">5</span><span class="p">}</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="o">]</span>
-</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="o">].</span><span class="n">each_with_object</span><span class="p">(</span><span class="n">n</span><span class="p">){</span><span class="o">|</span><span class="n">v</span><span class="o">|</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">5</span><span class="p">}</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="o">]</span>
-</span><span class='line'><span class="c1"># nをeach_with_objectで初期化</span>
-</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="o">].</span><span class="n">each_with_object</span><span class="p">(</span><span class="n">n</span><span class="o">=[]</span><span class="p">){</span><span class="o">|</span><span class="n">v</span><span class="o">|</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">5</span><span class="p">}</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="o">]</span>
-</span><span class='line'><span class="c1"># nをeach_with_objectの前に宣言</span>
-</span><span class='line'><span class="n">n</span> <span class="o">=</span> <span class="o">[</span><span class="mi">10</span><span class="o">]</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">10</span><span class="o">]</span>
-</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="o">].</span><span class="n">each_with_object</span><span class="p">(</span><span class="n">n</span><span class="p">){</span><span class="o">|</span><span class="n">v</span><span class="o">|</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">5</span><span class="p">}</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="o">]</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># singleton method</span>
+</span><span class='line'><span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:where</span><span class="p">)</span><span class="o">.</span><span class="n">source_location</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">APP_ROOT</span><span class="si">}</span><span class="s2">/vendor/bundle/ruby/2.0.0/gems/activerecord-4.0.2/lib/active_record/querying.rb&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># instance method</span>
+</span><span class='line'><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:blank?</span><span class="p">)</span><span class="o">.</span><span class="n">source_location</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">APP_ROOT</span><span class="si">}</span><span class="s2">/vendor/bundle/ruby/2.0.0/gems/activesupport-4.0.2/lib/active_support/core_ext/object/blank.rb&quot;</span><span class="p">,</span> <span class="mi">92</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># ネイティブで定義されたメソッドはnilを返す</span>
+</span><span class='line'><span class="s2">&quot;s&quot;</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:method_missing</span><span class="p">)</span><span class="o">.</span><span class="n">source_location</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="kp">nil</span>
 </span></code></pre></td></tr></table></div></figure>
-
-
 
 </div>
 
@@ -210,7 +242,7 @@
 
 
 
-<time class='entry-date' datetime='2014-10-27T18:50:07+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>27</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:50 pm</span></time>
+<time class='entry-date' datetime='2014-10-28T05:55:25+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>5:55 am</span></time>
       
 
 <span class="categories">
@@ -223,9 +255,9 @@
     </p>
     
       <div class="sharing">
-  <a href="http://b.hatena.ne.jp/entry/http://jangajan.com/blog/2014/10/27/each-with-object-memo/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  <a href="http://b.hatena.ne.jp/entry/http://jangajan.com/blog/2014/10/28/which-of-the-class-dose-have-the-method/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jangajan.com/blog/2014/10/27/each-with-object-memo/" data-via="talkto_me" data-counturl="http://jangajan.com/blog/2014/10/27/each-with-object-memo/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jangajan.com/blog/2014/10/28/which-of-the-class-dose-have-the-method/" data-via="talkto_me" data-counturl="http://jangajan.com/blog/2014/10/28/which-of-the-class-dose-have-the-method/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -245,10 +277,8 @@
 </script>
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/10/20/use-new-relic-in-rails4-at-heroku/" title="Previous Post: herokuで動くRailsアプリケーションにNew Relicを入れる">&laquo; herokuで動くRailsアプリケーションにNew Relicを入れる</a>
+        <a class="basic-alignment left" href="/blog/2014/10/27/each-with-object-memo/" title="Previous Post: メモ : Array#each_with_objectの簡単な使い方">&laquo; メモ : Array#each_with_objectの簡単な使い方</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/10/28/which-of-the-class-dose-have-the-method/" title="Next Post: Rubyでメソッドを定義しているクラスを調べたい">Rubyでメソッドを定義しているクラスを調べたい &raquo;</a>
       
     </p>
     <p>
@@ -292,8 +322,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://jangajan.com/blog/2014/10/27/each-with-object-memo/';
-        var disqus_url = 'http://jangajan.com/blog/2014/10/27/each-with-object-memo/';
+        var disqus_identifier = 'http://jangajan.com/blog/2014/10/28/which-of-the-class-dose-have-the-method/';
+        var disqus_url = 'http://jangajan.com/blog/2014/10/28/which-of-the-class-dose-have-the-method/';
         var disqus_script = 'embed.js';
       
     (function () {
