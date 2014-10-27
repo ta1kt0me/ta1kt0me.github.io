@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "each_with_objectの簡単な使い方"
+title: "メモ : Array#each_with_objectの簡単な使い方"
 date: 2014-10-27 18:50:07 +0900
 comments: true
 categories: [ruby]

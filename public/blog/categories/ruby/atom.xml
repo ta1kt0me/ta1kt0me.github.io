@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-10-20T16:04:18+09:00</updated>
+  <updated>2014-10-27T19:00:56+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,36 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[メモ : Array#each_with_objectの簡単な使い方]]></title>
+    <link href="http://jangajan.com/blog/2014/10/27/each-with-object-memo/"/>
+    <updated>2014-10-27T18:50:07+09:00</updated>
+    <id>http://jangajan.com/blog/2014/10/27/each-with-object-memo</id>
+    <content type="html"><![CDATA[<p>each_with_objectの簡単な使い方。
+使い方は気をつけないといけないですね。</p>
+
+<!-- more -->
+
+
+<pre><code class="rb">[1,2,3].each_with_object(n=[]){|v| n &lt;&lt; v + 5}
+=&gt; [6, 7, 8]
+# nを初期化しないで処理
+[1,2,3].each_with_object(n){|v| n &lt;&lt; v + 5}
+=&gt; [6, 7, 8, 6, 7, 8]
+[1,2,3].each_with_object(n){|v| n &lt;&lt; v + 5}
+=&gt; [6, 7, 8, 6, 7, 8, 6, 7, 8]
+# nをeach_with_objectで初期化
+[1,2,3].each_with_object(n=[]){|v| n &lt;&lt; v + 5}
+=&gt; [6, 7, 8]
+# nをeach_with_objectの前に宣言
+n = [10]
+=&gt; [10]
+[1,2,3].each_with_object(n){|v| n &lt;&lt; v + 5}
+=&gt; [10, 6, 7, 8]
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[RubyのThreadを利用したWebサーバーを作る]]></title>
@@ -433,31 +463,6 @@ print reader.read
 それまでは好きなだけ<code>write</code>でデータを溜め込みます。<br/>
 しかし、<code>read</code>するためには、<code>close</code>でデータの区切りを宣言しないといけません。<br/>
 宣言しない限り<code>read</code>でのデータの読み込み処理は完了しないんですね。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Github APIを使いやすくするoctokitを触ってみる]]></title>
-    <link href="http://jangajan.com/blog/2014/08/18/use-octokit/"/>
-    <updated>2014-08-18T00:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/08/18/use-octokit</id>
-    <content type="html"><![CDATA[<p>GithubのAPIを使いやすくしてくれるoctokitに触ってみました。試すのはcontributorsの一覧の取得です。</p>
-
-<!-- more -->
-
-
-<pre><code class="ruby">gem 'octokit'
-</code></pre>
-
-<pre><code class="ruby">require 'octokit'
-
-client = Octokit::Client.new access_token: 'xxx'
-client.contributors_stats('rails/rails').sort{|a,b| b[:total] &lt;=&gt; a[:total]}.map {|member|
-    p member[:author][:login]
-}
-</code></pre>
-
-<p>access_tokenを利用した方式で試していますが、LOGIN IDとパスワードにも対応しています。</p>
 ]]></content>
   </entry>
   
