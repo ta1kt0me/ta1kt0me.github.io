@@ -52,7 +52,9 @@ Command Paletteから`Evernote:Send to Evernote as new note`を選択。
 
 とりわけ使いやすそうだったもの。
 Command Paletteから入力します。  
-* `Evernote:Open Evernote Note`
+
+* Evernote:Open Evernote Note
     * notebook > titleから使いたいノートを検索
-* `Evernote:List recent notes`
+* Evernote:List recent notes
     * 最近使ったノートを表示
+
