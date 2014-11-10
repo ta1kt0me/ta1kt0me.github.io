@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby-on-rails | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby-on-rails/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-11-03T23:59:54+09:00</updated>
+  <updated>2014-11-10T16:23:20+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,76 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Railsのexists?とfind_byはどっちが早いのか]]></title>
+    <link href="http://jangajan.com/blog/2014/11/10/exists-or-find-by-in-rails/"/>
+    <updated>2014-11-10T16:01:44+09:00</updated>
+    <id>http://jangajan.com/blog/2014/11/10/exists-or-find-by-in-rails</id>
+    <content type="html"><![CDATA[<p>Railsで特定するレコードが存在するかbooleanで取得したい時、</p>
+
+<ol>
+<li>Table.exists?(a: id)</li>
+<li>!!Table.find_by(a: id)</li>
+</ol>
+
+
+<p>いずれのやり方のほうが処理が早いか計測してみました。</p>
+
+<!-- more -->
+
+
+<h1>ケース</h1>
+
+<p>環境は、<code>Rails 4.1.7</code>と<code>ruby 2.1.4</code>です。</p>
+
+<ul>
+<li>1万件のレコードがあるVoteテーブルに対して、voting_user_idを検索条件に指定して該当するレコードがあるか確認する。</li>
+<li>Vote.voting_user_idにはIndexをつける</li>
+<li>1万回問い合わせした時間で比較</li>
+</ul>
+
+
+<p>1の場合、<code>Vote.exists?(voting_user_id: 1098)</code><br/>
+2の場合、<code>!!Vote.find_by(voting_user_id: 1098)</code></p>
+
+<p>となります。</p>
+
+<h1>計測</h1>
+
+<p>計測してみました。Databaseはsqlite3です。</p>
+
+<pre><code class="rb"># 1.exists?のケース
+Benchmark.realtime { 10000.times {|e|Vote.exists?(voting_user_id: 1098)}}
+# SQL: SELECT  1 AS one FROM "votes"  WHERE "votes"."voting_user_id" = 1098 LIMIT 1
+# =&gt; 6.658646
+
+# 2.find_byのケース
+Benchmark.realtime { 10000.times {|e|!!Vote.find_by(voting_user_id: 1098)}}
+# SQL: SELECT  "votes".* FROM "votes"  WHERE "votes"."voting_user_id" = 1098 LIMIT 1
+# =&gt; 5.506756
+</code></pre>
+
+<p>find_byのほうが早いんですね。取得結果の情報が多い分、find_byのほうがメモリは食ってそうなので、遅いかなと思ったら想像と逆の結果でした。</p>
+
+<h1>Postgresqlで試してみる</h1>
+
+<p>アプリをHeroku+Postgresqlで動かす機会が多いので、ローカルのPostgresqlで試してみます。</p>
+
+<pre><code class="rb"># 1.exists?のケース
+Benchmark.realtime { 10000.times {|e|Vote.exists?(voting_user_id: 1098)}}
+# SQL: SELECT  1 AS one FROM "votes"  WHERE "votes"."voting_user_id" = 1098 LIMIT 1
+# =&gt; 9.905989
+
+# 2.find_byのケース
+Benchmark.realtime { 10000.times {|e|!!Vote.find_by(voting_user_id: 1098)}}
+# SQL: SELECT  "votes".* FROM "votes"  WHERE "votes"."voting_user_id" = 1098 LIMIT 1
+# =&gt; 7.289921
+</code></pre>
+
+<p>やっぱり、find_byの方が早いのかー。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[herokuで動くRailsアプリケーションにNew Relicを入れる]]></title>
@@ -302,48 +372,6 @@ end
 <pre><code class="rb">@user_tags = current_user.owned_tag_list
 =&gt; ["tag1", "tag2"]
 </code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ページ単位のjavascriptにcontent_forを使う]]></title>
-    <link href="http://jangajan.com/blog/2014/09/27/content-for/"/>
-    <updated>2014-09-27T04:14:07+09:00</updated>
-    <id>http://jangajan.com/blog/2014/09/27/content-for</id>
-    <content type="html"><![CDATA[<p>ページ単位で特定のjavascriptを実行させたい時に、content_forを使えばいいんだね、という結論でした。</p>
-
-<!-- more -->
-
-
-<h1>javascriptをページごとのファイルに書けない理由</h1>
-
-<p>そもそもbootstrapで作成したコンテンツにこんな記載がありました。
-hamlでyatiのテーマを適用しています。</p>
-
-<pre><code class="haml app/views/layouts/application.html.haml">/ ...ページ最下部
-      = yield
-/
-  Javascripts
-  \==================================================
-/ Placed at the end of the document so the pages load faster
-= javascript_include_tag "yeti"
-= yield(:page_javascript) if content_for?(:page_javascript)
-</code></pre>
-
-<p>各ページのコンテンツは、<code>= yield</code>に埋め込まれます。<br/>
-しかし、<code>= javascript_include_tag "yeti"</code>という処理でJavascriptの定義を追加するため、各ページのhamlにjavascriptを書くとjQueryの処理が動きません。<br/>
-そこで、<code>= yield(:page_javascript) if content_for?(:page_javascript)</code>を利用します。</p>
-
-<h1>content_forの使い方</h1>
-
-<p>各ページのhamlの下部でcontent_forを利用することにより、application.html.hamlの<code>= yield(:page_javascript) if...</code>のところに出力されます。</p>
-
-<pre><code class="haml app/views/tasks/new.html.haml">- content_for :page_javascript do
-  :javascript
-    jQuery('#datetimepicker').datetimepicker();
-</code></pre>
-
-<p>なので、ページごとのjavascriptは<code>content_for :page_javascript</code>を利用して書くようにしましょう。</p>
 ]]></content>
   </entry>
   

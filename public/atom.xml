@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-11-03T23:59:54+09:00</updated>
+  <updated>2014-11-10T16:23:20+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,96 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Railsのexists?とfind_byはどっちが早いのか]]></title>
+    <link href="http://jangajan.com/blog/2014/11/10/exists-or-find-by-in-rails/"/>
+    <updated>2014-11-10T16:01:44+09:00</updated>
+    <id>http://jangajan.com/blog/2014/11/10/exists-or-find-by-in-rails</id>
+    <content type="html"><![CDATA[<p>Railsで特定するレコードが存在するかbooleanで取得したい時、</p>
+
+<ol>
+<li>Table.exists?(a: id)</li>
+<li>!!Table.find_by(a: id)</li>
+</ol>
+
+
+<p>いずれのやり方のほうが処理が早いか計測してみました。</p>
+
+<!-- more -->
+
+
+<h1>ケース</h1>
+
+<p>環境は、<code>Rails 4.1.7</code>と<code>ruby 2.1.4</code>です。</p>
+
+<ul>
+<li>1万件のレコードがあるVoteテーブルに対して、voting_user_idを検索条件に指定して該当するレコードがあるか確認する。</li>
+<li>Vote.voting_user_idにはIndexをつける</li>
+<li>1万回問い合わせした時間で比較</li>
+</ul>
+
+
+<p>1の場合、<code>Vote.exists?(voting_user_id: 1098)</code><br/>
+2の場合、<code>!!Vote.find_by(voting_user_id: 1098)</code></p>
+
+<p>となります。</p>
+
+<h1>計測</h1>
+
+<p>計測してみました。Databaseはsqlite3です。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># 1.exists?のケース</span>
+</span><span class='line'><span class="no">Benchmark</span><span class="o">.</span><span class="n">realtime</span> <span class="p">{</span> <span class="mi">10000</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span><span class="o">|</span><span class="n">e</span><span class="o">|</span><span class="no">Vote</span><span class="o">.</span><span class="n">exists?</span><span class="p">(</span><span class="ss">voting_user_id</span><span class="p">:</span> <span class="mi">1098</span><span class="p">)}}</span>
+</span><span class='line'><span class="c1"># SQL: SELECT  1 AS one FROM &quot;votes&quot;  WHERE &quot;votes&quot;.&quot;voting_user_id&quot; = 1098 LIMIT 1</span>
+</span><span class='line'><span class="c1"># =&gt; 6.658646</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># 2.find_byのケース</span>
+</span><span class='line'><span class="no">Benchmark</span><span class="o">.</span><span class="n">realtime</span> <span class="p">{</span> <span class="mi">10000</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span><span class="o">|</span><span class="n">e</span><span class="o">|!!</span><span class="no">Vote</span><span class="o">.</span><span class="n">find_by</span><span class="p">(</span><span class="ss">voting_user_id</span><span class="p">:</span> <span class="mi">1098</span><span class="p">)}}</span>
+</span><span class='line'><span class="c1"># SQL: SELECT  &quot;votes&quot;.* FROM &quot;votes&quot;  WHERE &quot;votes&quot;.&quot;voting_user_id&quot; = 1098 LIMIT 1</span>
+</span><span class='line'><span class="c1"># =&gt; 5.506756</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>find_byのほうが早いんですね。取得結果の情報が多い分、find_byのほうがメモリは食ってそうなので、遅いかなと思ったら想像と逆の結果でした。</p>
+
+<h1>Postgresqlで試してみる</h1>
+
+<p>アプリをHeroku+Postgresqlで動かす機会が多いので、ローカルのPostgresqlで試してみます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># 1.exists?のケース</span>
+</span><span class='line'><span class="no">Benchmark</span><span class="o">.</span><span class="n">realtime</span> <span class="p">{</span> <span class="mi">10000</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span><span class="o">|</span><span class="n">e</span><span class="o">|</span><span class="no">Vote</span><span class="o">.</span><span class="n">exists?</span><span class="p">(</span><span class="ss">voting_user_id</span><span class="p">:</span> <span class="mi">1098</span><span class="p">)}}</span>
+</span><span class='line'><span class="c1"># SQL: SELECT  1 AS one FROM &quot;votes&quot;  WHERE &quot;votes&quot;.&quot;voting_user_id&quot; = 1098 LIMIT 1</span>
+</span><span class='line'><span class="c1"># =&gt; 9.905989</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># 2.find_byのケース</span>
+</span><span class='line'><span class="no">Benchmark</span><span class="o">.</span><span class="n">realtime</span> <span class="p">{</span> <span class="mi">10000</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span><span class="o">|</span><span class="n">e</span><span class="o">|!!</span><span class="no">Vote</span><span class="o">.</span><span class="n">find_by</span><span class="p">(</span><span class="ss">voting_user_id</span><span class="p">:</span> <span class="mi">1098</span><span class="p">)}}</span>
+</span><span class='line'><span class="c1"># SQL: SELECT  &quot;votes&quot;.* FROM &quot;votes&quot;  WHERE &quot;votes&quot;.&quot;voting_user_id&quot; = 1098 LIMIT 1</span>
+</span><span class='line'><span class="c1"># =&gt; 7.289921</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>やっぱり、find_byの方が早いのかー。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Sublime Text 3でEvernoteを使う]]></title>
@@ -1679,123 +1769,6 @@ datetime_selectで表示した<code>月</code>欄の表示が妙だ。</p>
 </ul>
 </li>
 </ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[I18nの設定でdatetime_selectのエラー対応]]></title>
-    <link href="http://jangajan.com/blog/2014/09/12/perfect-rails-i18n/"/>
-    <updated>2014-09-12T18:25:27+09:00</updated>
-    <id>http://jangajan.com/blog/2014/09/12/perfect-rails-i18n</id>
-    <content type="html"><![CDATA[<p><a href="http://www.amazon.co.jp/gp/product/4774165166/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=4774165166&linkCode=as2&tag=pochan0919-22">パーフェクト Ruby on Rails</a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=4774165166" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />を、第6章からやってます。</p>
-
-<p>日本語対応のi18nの設定でエラーが発生しました。<br/>
-補足ですが、私のRailsの環境は<code>4.1.5</code>です。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">ActionView</span><span class="o">::</span><span class="no">Template</span><span class="o">::</span><span class="no">Error</span> <span class="p">(</span><span class="n">undefined</span> <span class="nb">method</span> <span class="sb">`map&#39; for &quot;translation missing: ja.date.order&quot;:String):</span>
-</span><span class='line'><span class="sb">    27:   &lt;/div&gt;</span>
-</span><span class='line'><span class="sb">    28:   &lt;div class=&quot;form-group&quot;&gt;</span>
-</span><span class='line'><span class="sb">    29:     &lt;%= f.label :end_time %&gt;</span>
-</span><span class='line'><span class="sb">    30:     &lt;%= f.datetime_select :end_time, start_year: now.year, end_year: now.year + 1 %&gt;</span>
-</span><span class='line'><span class="sb">    31:   &lt;/div&gt;</span>
-</span><span class='line'><span class="sb">    32:   &lt;div class=&quot;form-group&quot;&gt;</span>
-</span><span class='line'><span class="sb">    33:     &lt;%= f.label :content %&gt;</span>
-</span><span class='line'><span class="sb">  app/views/events/new.html.erb:30:in `</span><span class="n">block</span> <span class="k">in</span> <span class="n">_app_views_events_new_html_erb__622987462779560017_70179900721920</span><span class="s1">&#39;</span>
-</span><span class='line'><span class="s1">  app/views/events/new.html.erb:5:in `_app_views_events_new_html_erb__622987462779560017_70179900721920&#39;</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>  <span class="no">Rendered</span> <span class="n">vendor</span><span class="o">/</span><span class="n">bundle</span><span class="o">/</span><span class="n">ruby</span><span class="o">/</span><span class="mi">2</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">actionpack</span><span class="o">-</span><span class="mi">4</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">action_dispatch</span><span class="o">/</span><span class="n">middleware</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">rescues</span><span class="o">/</span><span class="n">_trace</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="n">ms</span><span class="p">)</span>
-</span><span class='line'>  <span class="no">Rendered</span> <span class="n">vendor</span><span class="o">/</span><span class="n">bundle</span><span class="o">/</span><span class="n">ruby</span><span class="o">/</span><span class="mi">2</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">actionpack</span><span class="o">-</span><span class="mi">4</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">action_dispatch</span><span class="o">/</span><span class="n">middleware</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">rescues</span><span class="o">/</span><span class="n">_request_and_response</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="n">ms</span><span class="p">)</span>
-</span><span class='line'>  <span class="no">Rendered</span> <span class="n">vendor</span><span class="o">/</span><span class="n">bundle</span><span class="o">/</span><span class="n">ruby</span><span class="o">/</span><span class="mi">2</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">actionpack</span><span class="o">-</span><span class="mi">4</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">action_dispatch</span><span class="o">/</span><span class="n">middleware</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">rescues</span><span class="o">/</span><span class="n">template_error</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span> <span class="n">within</span> <span class="n">rescues</span><span class="o">/</span><span class="n">layout</span> <span class="p">(</span><span class="mi">16</span><span class="o">.</span><span class="mi">9</span><span class="n">ms</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<!-- more -->
-
-
-<h1>date.orderの指定</h1>
-
-<h2>発生箇所</h2>
-
-<p>該当するソースコードはこちらです。<br/>
-ちなみに、i18nを無効化(<code>config.i18n.default_locale</code>を初期状態のようにコメントアウト)していると発生しません。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'>  <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;form-group&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="o">&lt;</span><span class="sx">%= f.label :start_time %&gt;</span>
-</span><span class='line'><span class="sx">    &lt;%=</span> <span class="n">f</span><span class="o">.</span><span class="n">datetime_select</span> <span class="ss">:start_time</span><span class="p">,</span> <span class="ss">start_year</span><span class="p">:</span> <span class="n">now</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="ss">end_year</span><span class="p">:</span> <span class="n">now</span><span class="o">.</span><span class="n">year</span> <span class="o">+</span> <span class="mi">1</span> <span class="sx">%&gt;</span>
-</span><span class='line'><span class="sx">  &lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>エラーメッセージからすると、<code>ja.date.order</code>で翻訳に失敗しちゃったよテヘってなってるんで、ja.yml修正すれば良さそう。</p>
-
-<h2>解決策</h2>
-
-<p>2つあります。</p>
-
-<p><a href="https://github.com/rails/rails/blob/a8eb6018318f65e34486da8d1860b3f0d774383d/guides/source/i18n.md#action-view-helper-methods">ここ</a>に書いてありますね。</p>
-
-<blockquote><p>datetime_select also looks up the order option from date.order (unless you pass the option explicitly).</p></blockquote>
-
-<h3>ja.ymlに設定を追加</h3>
-
-<p>翻訳ファイルの修正です。</p>
-
-<figure class='code'><figcaption><span>config/locals/ja.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">ja</span><span class="p-Indicator">:</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">date</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">order</span><span class="p-Indicator">:</span>
-</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">:year</span>
-</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">:month</span>
-</span><span class='line'>      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">:day</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>なお、デフォルト(en)の場合は、activesupportの設定が適用されています。</p>
-
-<h3>datetime_selectのoptionにorderを追加</h3>
-
-<p>datetime_selectに<code>order</code>というoptionを追加することで、ja.ymlの修正をしないで対応できます。 <br/>
-優先順位は<code>ja.ymlで設定 &lt; datetime_selectでoption指定</code>なので、必要があれば設定すればいいと思います。</p>
-
-<figure class='code'><figcaption><span>config/locals/ja.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'>  <span class="l-Scalar-Plain">&lt;div class=&quot;form-group&quot;&gt;</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">&lt;%= f.label :start_time %&gt;</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">&lt;%= f.datetime_select :start_time, start_year</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">now.year, end_year</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">now.year + 1, order</span><span class="p-Indicator">:</span> <span class="p-Indicator">[:</span><span class="nv">year</span><span class="p-Indicator">,</span> <span class="p-Indicator">:</span><span class="nv">month</span><span class="p-Indicator">,</span> <span class="p-Indicator">:</span><span class="nv">day</span><span class="p-Indicator">]</span> <span class="err">%</span><span class="p-Indicator">&gt;</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
 
 ]]></content>
   </entry>
