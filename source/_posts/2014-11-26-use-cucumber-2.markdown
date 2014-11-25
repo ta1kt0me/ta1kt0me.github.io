@@ -1,8 +1,9 @@
 ---
 layout: post
-title: "use-cucumber-2"
+title: "Cucumber on Rails 入門2"
 date: 2014-11-26 00:01:19 +0900
 comments: true
+published: false
 categories: 
 ---
 
@@ -62,7 +63,7 @@ end
 ...
 ```
 
-(自分用メモ:改善点)
+(自分用メモ:改善点)  
 シングルクォートで囲まないでもいいかも。  
 テストケース内で利用しない限りあえてインスタンス変数にする必要もないなー。  
 
