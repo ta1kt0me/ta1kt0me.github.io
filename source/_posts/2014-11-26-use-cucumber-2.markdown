@@ -3,7 +3,6 @@ layout: post
 title: "Cucumber on Rails 入門2"
 date: 2014-11-26 00:01:19 +0900
 comments: true
-published: false
 categories: 
 ---
 
