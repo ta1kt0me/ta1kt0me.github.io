@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://jangajan.com/blog/2014/12/02/release-pr-comment/</loc>
+    <lastmod>2014-12-02T18:18:46+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://jangajan.com/blog/2014/11/26/use-cucumber-2/</loc>
     <lastmod>2014-11-26T00:01:19+09:00</lastmod>
     <priority>0.8</priority>
@@ -269,14 +275,14 @@
   
   <url>
     <loc>http://jangajan.com/blog/archives/</loc>
-    <lastmod>2014-11-28T09:41:09+09:00</lastmod>
+    <lastmod>2014-12-02T18:44:03+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://jangajan.com/</loc>
-    <lastmod>2014-11-28T09:41:09+09:00</lastmod>
+    <lastmod>2014-12-02T18:44:03+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>

@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-11-28T09:41:09+09:00</updated>
+  <updated>2014-12-02T18:44:03+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,50 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Gem:pr-commentをリリース]]></title>
+    <link href="http://jangajan.com/blog/2014/12/02/release-pr-comment/"/>
+    <updated>2014-12-02T18:18:46+09:00</updated>
+    <id>http://jangajan.com/blog/2014/12/02/release-pr-comment</id>
+    <content type="html"><![CDATA[<p><a href="https://rubygems.org/gems/pr-comment">pr-comment</a>というGemを作りました。</p>
+
+<!-- more -->
+
+
+<p>自分用に作ったスクリプトをGem化してみました。不満駆動開発。<br/>
+用途はターミナルでPull Requestのレビューとかコメントを見やすくするものです。<br/>
+中でoctokit呼び出して、結果を並び替えて表示しているだけです。<br/>
+使っているかというとうーん、ですね。<br/>
+一昨日ぐらいに実行したらちゃんと出ていないところがあったので直さないと。
+テストもそうだけど、例外処理もずさんなんでそのへんも、含めてここ汚いとか雑とかもっとこうしろとかISSUEで鉞いただけると喜びます。<br/>
+デザインだけは見やすい案を随時募集中です。</p>
+
+<p>&lsquo;競合プロダクトがあっても挫けずに自分の道を進んでもらえればなと思いました&#8217;といういただいた言葉を胸に刻んでちょっとずつ改善していきたい。</p>
+
+<h1>使い方</h1>
+
+<p>一応使い方を。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>prc all owner/repo pull-request-no
+</span><span class='line'>prc close owner/repo pull-request-no
+</span><span class='line'>prc open owner/repo pull-request-no
+</span><span class='line'>
+</span><span class='line'>prc close yochiyochirb/kajaeru <span class="m">83</span> <span class="c"># こんな感じで使う</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>感想</h1>
+
+<p>作りながら面白いGemや知識がちょこちょことありました。アプリケーションしか書いていないと気づかない<code>thor</code>や<code>simple-color</code>(こっちは使わなかったけど)などなど。<br/>
+今はgithubのtokenを手動で環境変数に設定しないといけないから、そこ直したいな。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Cucumber on Rails 入門2]]></title>
@@ -2035,61 +2079,6 @@ Modalは下のdiv構成で組むことで表示できます。<br/>
 </span><span class='line'>          Save
 </span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ページ単位のjavascriptにcontent_forを使う]]></title>
-    <link href="http://jangajan.com/blog/2014/09/27/content-for/"/>
-    <updated>2014-09-27T04:14:07+09:00</updated>
-    <id>http://jangajan.com/blog/2014/09/27/content-for</id>
-    <content type="html"><![CDATA[<p>ページ単位で特定のjavascriptを実行させたい時に、content_forを使えばいいんだね、という結論でした。</p>
-
-<!-- more -->
-
-
-<h1>javascriptをページごとのファイルに書けない理由</h1>
-
-<p>そもそもbootstrapで作成したコンテンツにこんな記載がありました。
-hamlでyatiのテーマを適用しています。</p>
-
-<figure class='code'><figcaption><span>app/views/layouts/application.html.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="c">/ ...ページ最下部</span>
-</span><span class='line'>      <span class="c">= yield</span>
-</span><span class='line'><span class="c">/</span>
-</span><span class='line'>  <span class="c">Javascripts</span>
-</span><span class='line'>  <span class="c">\==================================================</span>
-</span><span class='line'><span class="c">/ Placed at the end of the document so the pages load faster</span>
-</span><span class='line'><span class="p">=</span> <span class="n">javascript_include_tag</span> <span class="s2">&quot;yeti&quot;</span>
-</span><span class='line'><span class="p">=</span> <span class="k">yield</span><span class="p">(</span><span class="ss">:page_javascript</span><span class="p">)</span> <span class="k">if</span> <span class="n">content_for?</span><span class="p">(</span><span class="ss">:page_javascript</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>各ページのコンテンツは、<code>= yield</code>に埋め込まれます。<br/>
-しかし、<code>= javascript_include_tag "yeti"</code>という処理でJavascriptの定義を追加するため、各ページのhamlにjavascriptを書くとjQueryの処理が動きません。<br/>
-そこで、<code>= yield(:page_javascript) if content_for?(:page_javascript)</code>を利用します。</p>
-
-<h1>content_forの使い方</h1>
-
-<p>各ページのhamlの下部でcontent_forを利用することにより、application.html.hamlの<code>= yield(:page_javascript) if...</code>のところに出力されます。</p>
-
-<figure class='code'><figcaption><span>app/views/tasks/new.html.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="p">-</span> <span class="n">content_for</span> <span class="ss">:page_javascript</span> <span class="k">do</span>
-</span><span class='line'>  <span class="nd">:javascript</span>
-</span><span class='line'>    <span class="nd">jQuery(&#39;#datetimepicker&#39;).datetimepicker();</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>なので、ページごとのjavascriptは<code>content_for :page_javascript</code>を利用して書くようにしましょう。</p>
 ]]></content>
   </entry>
   

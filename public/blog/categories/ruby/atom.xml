@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-11-28T09:41:09+09:00</updated>
+  <updated>2014-12-02T18:44:03+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,44 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Gem:pr-commentをリリース]]></title>
+    <link href="http://jangajan.com/blog/2014/12/02/release-pr-comment/"/>
+    <updated>2014-12-02T18:18:46+09:00</updated>
+    <id>http://jangajan.com/blog/2014/12/02/release-pr-comment</id>
+    <content type="html"><![CDATA[<p><a href="https://rubygems.org/gems/pr-comment">pr-comment</a>というGemを作りました。</p>
+
+<!-- more -->
+
+
+<p>自分用に作ったスクリプトをGem化してみました。不満駆動開発。<br/>
+用途はターミナルでPull Requestのレビューとかコメントを見やすくするものです。<br/>
+中でoctokit呼び出して、結果を並び替えて表示しているだけです。<br/>
+使っているかというとうーん、ですね。<br/>
+一昨日ぐらいに実行したらちゃんと出ていないところがあったので直さないと。
+テストもそうだけど、例外処理もずさんなんでそのへんも、含めてここ汚いとか雑とかもっとこうしろとかISSUEで鉞いただけると喜びます。<br/>
+デザインだけは見やすい案を随時募集中です。</p>
+
+<p>&lsquo;競合プロダクトがあっても挫けずに自分の道を進んでもらえればなと思いました&#8217;といういただいた言葉を胸に刻んでちょっとずつ改善していきたい。</p>
+
+<h1>使い方</h1>
+
+<p>一応使い方を。</p>
+
+<pre><code class="sh">prc all owner/repo pull-request-no
+prc close owner/repo pull-request-no
+prc open owner/repo pull-request-no
+
+prc close yochiyochirb/kajaeru 83 # こんな感じで使う
+</code></pre>
+
+<h1>感想</h1>
+
+<p>作りながら面白いGemや知識がちょこちょことありました。アプリケーションしか書いていないと気づかない<code>thor</code>や<code>simple-color</code>(こっちは使わなかったけど)などなど。<br/>
+今はgithubのtokenを手動で環境変数に設定しないといけないから、そこ直したいな。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[MetaNight 第2回を開催しました]]></title>
@@ -354,36 +392,6 @@ ActiveRecord::Base.method(:where).source_location
 # ネイティブで定義されたメソッドはnilを返す
 "s".method(:method_missing).source_location
 =&gt; nil
-</code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[メモ : Array#each_with_objectの簡単な使い方]]></title>
-    <link href="http://jangajan.com/blog/2014/10/27/each-with-object-memo/"/>
-    <updated>2014-10-27T18:50:07+09:00</updated>
-    <id>http://jangajan.com/blog/2014/10/27/each-with-object-memo</id>
-    <content type="html"><![CDATA[<p>each_with_objectの簡単な使い方。
-使い方は気をつけないといけないですね。</p>
-
-<!-- more -->
-
-
-<pre><code class="rb">[1,2,3].each_with_object(n=[]){|v| n &lt;&lt; v + 5}
-=&gt; [6, 7, 8]
-# nを初期化しないで処理
-[1,2,3].each_with_object(n){|v| n &lt;&lt; v + 5}
-=&gt; [6, 7, 8, 6, 7, 8]
-[1,2,3].each_with_object(n){|v| n &lt;&lt; v + 5}
-=&gt; [6, 7, 8, 6, 7, 8, 6, 7, 8]
-# nをeach_with_objectで初期化
-[1,2,3].each_with_object(n=[]){|v| n &lt;&lt; v + 5}
-=&gt; [6, 7, 8]
-# nをeach_with_objectの前に宣言
-n = [10]
-=&gt; [10]
-[1,2,3].each_with_object(n){|v| n &lt;&lt; v + 5}
-=&gt; [10, 6, 7, 8]
 </code></pre>
 ]]></content>
   </entry>
