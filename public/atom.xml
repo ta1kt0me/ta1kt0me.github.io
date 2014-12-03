@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-12-02T18:44:03+09:00</updated>
+  <updated>2014-12-04T00:36:51+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,78 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[MetaNight 第3回を開催しました]]></title>
+    <link href="http://jangajan.com/blog/2014/12/03/e-g-d-meta-night-3rd/"/>
+    <updated>2014-12-03T23:55:01+09:00</updated>
+    <id>http://jangajan.com/blog/2014/12/03/e-g-d-meta-night-3rd</id>
+    <content type="html"><![CDATA[<p>イベント概要については、<a href="http://jangajan.com/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+
+<p><a href="http://e-g-d.doorkeeper.jp/events/16300">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第３回目を開催しました。</p>
+
+<p><a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=B00N9I0RMQ&linkCode=as2&tag=pochan0919-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00N9I0RMQ&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=pochan0919-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=B00N9I0RMQ" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
+
+<!-- more -->
+
+
+<h1>活動内容</h1>
+
+<p>Part 1 Chapter 2のThe Problem with Open ClassesからChapter 2の終わりまでやりました。<br/>
+読みながらの意見とかはこちらに載せてあります。<br/>
+<a href="https://trello.com/b/5WFCQ2ER/metanight-3rd">https://trello.com/b/5WFCQ2ER/metanight-3rd</a></p>
+
+<h1>感想</h1>
+
+<p>前回ダメだったフリーマンカフェに行きました。</p>
+
+<h2>a dark side of open class</h2>
+
+<p>オープンクラスのネガティブな側面が紹介されていました。<br/>
+Monkeypatchの例としてリファクタリングの過程で<code>Array#replace</code>というメソッドを用意すると、既存機能をoverrideしてしまってテストでこけたという内容です。<br/>
+テストのおかげでリファクタリングの不具合に気付かせておいてさりげなくテストいいぜアピールをしていますね。</p>
+
+<p>overrideは必ずしも悪いことではなくて、例えばRailsなんかでも、<code>require</code>メソッドをoverrideしていたりします。Railsは標準ライブラリのクラスにも様々なメソッドを追加して、あると便利！と思わせるものは多いです。</p>
+
+<p>Billがさらっと、<code>grep(/regex/)</code>を使っていて、pipe感覚でメソッドチェインをできるのはRubyで書いていていいところだという気づきもありました。</p>
+
+<p>それと<code>Array#replace</code>は実は破壊的らしい。Ruby Sliverのひっかけ問題によく出るので要注意らしい！</p>
+
+<h2>英語</h2>
+
+<ul>
+<li>fire up irb</li>
+</ul>
+
+
+<p>irbを起動する、というニュアンス。発火を表現するいい日本語ってありそうで見つからなかった。</p>
+
+<ul>
+<li>perplex</li>
+</ul>
+
+
+<p>なぜconfuseではダメなのか。ニュアンスの違いが難しい。</p>
+
+<ul>
+<li>pique</li>
+</ul>
+
+
+<p>駆り立てる。ネガティブな意味合いを持っている表現だけど、ここの場合だとどうなんだろう。</p>
+
+<h2>その他</h2>
+
+<ul>
+<li>エディターは何を使っているのか。４人全員バラバラだった</li>
+<li>スクラムというものについてかじりました</li>
+<li>tapはメソッドチェイン中にログ出力したいときに使いやすそう</li>
+</ul>
+
+
+<p>第4回を12月中にできたらやりたいな。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Gem:pr-commentをリリース]]></title>
@@ -2015,68 +2087,6 @@ checkbox生成でrailsの仕組みを利用しようとしたのですが、以�
 </span><span class='line'>    <span class="k">end</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[bootstrap3のモーダル表示（HAMLサンプル）]]></title>
-    <link href="http://jangajan.com/blog/2014/09/29/haml-modal-in-bootstrap/"/>
-    <updated>2014-09-29T19:50:21+09:00</updated>
-    <id>http://jangajan.com/blog/2014/09/29/haml-modal-in-bootstrap</id>
-    <content type="html"><![CDATA[<p>bootstrap3でModalウインドウを表示するサンプルです。
-サンプルはHAML形式です。</p>
-
-<!-- more -->
-
-
-<p>呼び出しのボタンで、<code>data-toggle="modal"</code>と<code>data-target="#表示するモーダルのid"</code>を指定します。<br/>
-Modalは下のdiv構成で組むことで表示できます。<br/>
-<code>#task-modal</code>は呼び出すModalで設定したものを指定します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="c">/ Modalの呼び出し元になるボタン</span>
-</span><span class='line'><span class="nt">%button</span><span class="nc">.btn.btn-info.btn-lg.btn-block</span><span class="p">{</span><span class="ss">data</span><span class="p">:</span> <span class="p">{</span><span class="ss">toggle</span><span class="p">:</span> <span class="s1">&#39;modal&#39;</span><span class="p">,</span> <span class="ss">target</span><span class="p">:</span> <span class="s1">&#39;#task-modal&#39;</span><span class="p">}</span>}
-</span><span class='line'>  Create Modal Task
-</span><span class='line'>
-</span><span class='line'>...(略)
-</span><span class='line'>
-</span><span class='line'><span class="c">/ 表示するModal</span>
-</span><span class='line'><span class="nt">%div</span><span class="nc">.modal</span><span class="nf">#task-modal</span>
-</span><span class='line'>  <span class="nt">%div</span><span class="nc">.modal-dialog</span>
-</span><span class='line'>    <span class="nt">%div</span><span class="nc">.modal-content</span>
-</span><span class='line'>      <span class="nt">%div</span><span class="nc">.modal-header</span>
-</span><span class='line'>        <span class="nt">%button</span><span class="nc">.close</span><span class="p">{</span><span class="ss">type</span><span class="p">:</span><span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="ss">data</span><span class="p">:</span> <span class="p">{</span><span class="ss">dismiss</span><span class="p">:</span> <span class="s1">&#39;modal&#39;</span><span class="p">}</span>}
-</span><span class='line'>          X
-</span><span class='line'>        <span class="nt">%h4</span><span class="nc">.modal-title</span>
-</span><span class='line'>          TITLE
-</span><span class='line'>      <span class="nt">%div</span><span class="nc">.modal-body</span>
-</span><span class='line'>        <span class="nt">%p</span>
-</span><span class='line'>          BODY
-</span><span class='line'>      <span class="nt">%div</span><span class="nc">.modal-footer</span>
-</span><span class='line'>        <span class="nt">%button</span><span class="nc">.btn.btn-primary</span><span class="p">{</span><span class="ss">type</span><span class="p">:</span> <span class="s1">&#39;button&#39;</span><span class="p">}</span>
-</span><span class='line'>          Save
 </span></code></pre></td></tr></table></div></figure>
 
 ]]></content>

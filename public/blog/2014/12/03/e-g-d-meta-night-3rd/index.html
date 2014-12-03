@@ -5,13 +5,10 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Gem:pr-commentをリリース - JanGaJan.com</title>
+  <title>MetaNight 第3回を開催しました - JanGaJan.com</title>
   <meta name="author" content="talkto_me">
   
-  <meta name="description" content="pr-commentというGemを作りました。 自分用に作ったスクリプトをGem化してみました。不満駆動開発。
-用途はターミナルでPull Requestのレビューとかコメントを見やすくするものです。
-中でoctokit呼び出して、結果を並び替えて表示しているだけです。
-使っているかというとうーん &hellip;">
+  <meta name="description" content="イベント概要については、About MetaNightをご覧ください。 MetaNightというMetaprogramming Ruby 2の読書会の第３回目を開催しました。 活動内容 Part 1 Chapter 2のThe Problem with Open ClassesからChapter &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +17,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jangajan.com/blog/2014/12/02/release-pr-comment/">
+  <link rel="canonical" href="http://jangajan.com/blog/2014/12/03/e-g-d-meta-night-3rd/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="JanGaJan.com" type="application/atom+xml">
@@ -113,7 +110,7 @@
   <header>
     
       
-        <h1 class="entry-title">Gem:pr-commentをリリース</h1>
+        <h1 class="entry-title">MetaNight 第3回を開催しました</h1>
       
     
     
@@ -123,49 +120,77 @@
 
 
 
-<time class='entry-date' datetime='2014-12-02T18:18:46+09:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>6:18 pm</span></time>
+<time class='entry-date' datetime='2014-12-03T23:55:01+09:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2014</span></span> <span class='time'>11:55 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><a href="https://rubygems.org/gems/pr-comment">pr-comment</a>というGemを作りました。</p>
+<div class="entry-content"><p>イベント概要については、<a href="/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+
+<p><a href="http://e-g-d.doorkeeper.jp/events/16300">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第３回目を開催しました。</p>
+
+<p><a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=B00N9I0RMQ&linkCode=as2&tag=pochan0919-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00N9I0RMQ&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=pochan0919-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=B00N9I0RMQ" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
 
 <!-- more -->
 
 
-<p>自分用に作ったスクリプトをGem化してみました。不満駆動開発。<br/>
-用途はターミナルでPull Requestのレビューとかコメントを見やすくするものです。<br/>
-中でoctokit呼び出して、結果を並び替えて表示しているだけです。<br/>
-使っているかというとうーん、ですね。<br/>
-一昨日ぐらいに実行したらちゃんと出ていないところがあったので直さないと。
-テストもそうだけど、例外処理もずさんなんでそのへんも、含めてここ汚いとか雑とかもっとこうしろとかISSUEで鉞いただけると喜びます。<br/>
-デザインだけは見やすい案を随時募集中です。</p>
+<h1>活動内容</h1>
 
-<p>&lsquo;競合プロダクトがあっても挫けずに自分の道を進んでもらえればなと思いました&#8217;といういただいた言葉を胸に刻んでちょっとずつ改善していきたい。</p>
-
-<h1>使い方</h1>
-
-<p>一応使い方を。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>prc all owner/repo pull-request-no
-</span><span class='line'>prc close owner/repo pull-request-no
-</span><span class='line'>prc open owner/repo pull-request-no
-</span><span class='line'>
-</span><span class='line'>prc close yochiyochirb/kajaeru <span class="m">83</span> <span class="c"># こんな感じで使う</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<p>Part 1 Chapter 2のThe Problem with Open ClassesからChapter 2の終わりまでやりました。<br/>
+読みながらの意見とかはこちらに載せてあります。<br/>
+<a href="https://trello.com/b/5WFCQ2ER/metanight-3rd">https://trello.com/b/5WFCQ2ER/metanight-3rd</a></p>
 
 <h1>感想</h1>
 
-<p>作りながら面白いGemや知識がちょこちょことありました。アプリケーションしか書いていないと気づかない<code>thor</code>や<code>simple-color</code>(こっちは使わなかったけど)などなど。<br/>
-今はgithubのtokenを手動で環境変数に設定しないといけないから、そこ直したいな。</p>
+<p>前回ダメだったフリーマンカフェに行きました。</p>
+
+<h2>a dark side of open class</h2>
+
+<p>オープンクラスのネガティブな側面が紹介されていました。<br/>
+Monkeypatchの例としてリファクタリングの過程で<code>Array#replace</code>というメソッドを用意すると、既存機能をoverrideしてしまってテストでこけたという内容です。<br/>
+テストのおかげでリファクタリングの不具合に気付かせておいてさりげなくテストいいぜアピールをしていますね。</p>
+
+<p>overrideは必ずしも悪いことではなくて、例えばRailsなんかでも、<code>require</code>メソッドをoverrideしていたりします。Railsは標準ライブラリのクラスにも様々なメソッドを追加して、あると便利！と思わせるものは多いです。</p>
+
+<p>Billがさらっと、<code>grep(/regex/)</code>を使っていて、pipe感覚でメソッドチェインをできるのはRubyで書いていていいところだという気づきもありました。</p>
+
+<p>それと<code>Array#replace</code>は実は破壊的らしい。Ruby Sliverのひっかけ問題によく出るので要注意らしい！</p>
+
+<h2>英語</h2>
+
+<ul>
+<li>fire up irb</li>
+</ul>
+
+
+<p>irbを起動する、というニュアンス。発火を表現するいい日本語ってありそうで見つからなかった。</p>
+
+<ul>
+<li>perplex</li>
+</ul>
+
+
+<p>なぜconfuseではダメなのか。ニュアンスの違いが難しい。</p>
+
+<ul>
+<li>pique</li>
+</ul>
+
+
+<p>駆り立てる。ネガティブな意味合いを持っている表現だけど、ここの場合だとどうなんだろう。</p>
+
+<h2>その他</h2>
+
+<ul>
+<li>エディターは何を使っているのか。４人全員バラバラだった</li>
+<li>スクラムというものについてかじりました</li>
+<li>tapはメソッドチェイン中にログ出力したいときに使いやすそう</li>
+</ul>
+
+
+<p>第4回を12月中にできたらやりたいな。</p>
 </div>
 
 
@@ -190,7 +215,7 @@
 
 
 
-<time class='entry-date' datetime='2014-12-02T18:18:46+09:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2014</span></span> <span class='time'>6:18 pm</span></time>
+<time class='entry-date' datetime='2014-12-03T23:55:01+09:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2014</span></span> <span class='time'>11:55 pm</span></time>
       
 
 <span class="categories">
@@ -203,9 +228,9 @@
     </p>
     
       <div class="sharing">
-  <a href="http://b.hatena.ne.jp/entry/http://jangajan.com/blog/2014/12/02/release-pr-comment/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  <a href="http://b.hatena.ne.jp/entry/http://jangajan.com/blog/2014/12/03/e-g-d-meta-night-3rd/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jangajan.com/blog/2014/12/02/release-pr-comment/" data-via="talkto_me" data-counturl="http://jangajan.com/blog/2014/12/02/release-pr-comment/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jangajan.com/blog/2014/12/03/e-g-d-meta-night-3rd/" data-via="talkto_me" data-counturl="http://jangajan.com/blog/2014/12/03/e-g-d-meta-night-3rd/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -225,10 +250,8 @@
 </script>
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/11/26/use-cucumber-2/" title="Previous Post: Cucumber on Rails 入門2">&laquo; Cucumber on Rails 入門2</a>
+        <a class="basic-alignment left" href="/blog/2014/12/02/release-pr-comment/" title="Previous Post: Gem:pr-commentをリリース">&laquo; Gem:pr-commentをリリース</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/12/03/e-g-d-meta-night-3rd/" title="Next Post: MetaNight 第3回を開催しました">MetaNight 第3回を開催しました &raquo;</a>
       
     </p>
     <p>
@@ -272,8 +295,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://jangajan.com/blog/2014/12/02/release-pr-comment/';
-        var disqus_url = 'http://jangajan.com/blog/2014/12/02/release-pr-comment/';
+        var disqus_identifier = 'http://jangajan.com/blog/2014/12/03/e-g-d-meta-night-3rd/';
+        var disqus_url = 'http://jangajan.com/blog/2014/12/03/e-g-d-meta-night-3rd/';
         var disqus_script = 'embed.js';
       
     (function () {
