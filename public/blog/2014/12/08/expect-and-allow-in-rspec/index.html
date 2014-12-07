@@ -8,7 +8,7 @@
   <title>Rspec3のexpectとallowの違い - JanGaJan.com</title>
   <meta name="author" content="talkto_me">
   
-  <meta name="description" content="よちよち.rb Advent Calendar 2014 8日目の記事です。 昨日は、bonbon0605さんの2014年に読んだり積んだりした本とその思い出を振り返りますでした。
+  <meta name="description" content="よちよち.rb Advent Calendar 2014 8日目の記事です。 昨日は、bonbon0605さんの2014年に読んだり積んだりした本とその思い出を振り返ります、でした。
 Ruby初学者がワンステップレベルアップする時に参考となる良書を紹介していただきました！ さて、 &hellip;">
   
 
@@ -129,29 +129,31 @@ Ruby初学者がワンステップレベルアップする時に参考となる�
 
 
 <div class="entry-content"><p><a href="http://www.adventar.org/calendars/582">よちよち.rb Advent Calendar 2014</a> 8日目の記事です。 <br/>
-昨日は、bonbon0605さんの<a href="http://genius.hateblo.jp/entry/2014/12/07/093454">2014年に読んだり積んだりした本とその思い出を振り返ります</a>でした。<br/>
+昨日は、bonbon0605さんの<a href="http://genius.hateblo.jp/entry/2014/12/07/093454">2014年に読んだり積んだりした本とその思い出を振り返ります</a>、でした。<br/>
 Ruby初学者がワンステップレベルアップする時に参考となる良書を紹介していただきました！</p>
 
-<p>さて、今日は少し前に参加してよちよち.rbで疑問になった、mockとstubの違いについて書きます。</p>
-
-<p>最近rspecを使った時に、次の２つのメソッドに出会いました。</p>
+<p>さて、今日はRspecのとあるメソッドから学んだ、mockとstubの違いについて書きます。  mockとstubの違いは、少し前に参加したよちよち.rbで疑問のまま終わってしまっていました。</p>
 
 <!-- more -->
 
 
+<p>最近になってRubyとRailsの仕事に関わっているのですが、Rspecに苦戦しています。   <br/>
+Rspecを使っている時に、次の２つのメソッドに出会いました。</p>
+
 <ul>
-<li>A: allow(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;)  <a href="https://relishapp.com/rspec/rspec-mocks/v/3-1/docs/basics/allowing-messages">参考</a></li>
-<li>B: expect(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;) <a href="https://relishapp.com/rspec/rspec-mocks/v/3-1/docs/basics/expecting-messages">参考</a></li>
+<li>allow(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;)  <a href="https://relishapp.com/rspec/rspec-mocks/v/3-1/docs/basics/allowing-messages">参考</a></li>
+<li>expect(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;) <a href="https://relishapp.com/rspec/rspec-mocks/v/3-1/docs/basics/expecting-messages">参考</a></li>
 </ul>
 
 
-<p>この使い分けを知る過程でstubとmockの違いが自分の中でイメージできてきました。
-まずは、上記２つのメソッドの使い方を非常に単純な例に落とし込んでみます。</p>
+<p>この使い分けを知る過程でstubとmockの違いが自分の中でイメージできてきました。</p>
+
+<p>まずは、上記２つのメソッドの使い方を非常に単純な例に落とし込んでみます。</p>
 
 <p>上記はメソッドはどちらも、<code>object.hoge</code>ってメソッドを呼び出すと、戻り値が<code>fuga</code>となります。<br/>
 さて、どう違うのか、試してみます。</p>
 
-<h1>テスト対象のサンプルクラス</h1>
+<h1>事前準備</h1>
 
 <p>問題を単純化します。(逆にわかりづらいかもしれないし、ソースコード減らしたかったのであまりいい書き方ではありません)<br/>
 <code>true</code>と<code>false</code>を返すだけのprivateメソッドとそのラッパーメソッドを用意します。</p>
@@ -220,7 +222,7 @@ Ruby初学者がワンステップレベルアップする時に参考となる�
 
 <p>準備ができました。まずは<code>allow</code>から見ていきましょう。</p>
 
-<h1>A: allow(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;)</h1>
+<h1>allow(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;)</h1>
 
 <p><code>allow</code>はstubとして働きます。<br/>
 <code>allow</code>を使うと、上述の説明どおり、<code>object.hoge</code>というメソッドを呼び出すと、<code>fuga</code>が返ってきます。</p>
@@ -279,7 +281,7 @@ Ruby初学者がワンステップレベルアップする時に参考となる�
 
 <p>上記のように、<code>A: allow</code>はメソッドコールがあった時に指定した値を利用してテストすることができます。</p>
 
-<h1>B. expect(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;)</h1>
+<h1>expect(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;)</h1>
 
 <p>続いて<code>expect</code>で、こちらはmockです。<br/>
 <code>allow</code>と<code>expect</code>の違いは、メソッドコールの検証の有無です。<code>expect</code>では<code>receive</code>で指定したメソッドが呼び出されていない場合、failします。</p>
@@ -352,9 +354,21 @@ itのブロック自体は正しいため、beforeの<code>expect</code>を<code
 <blockquote><p>モックオブジェクトはXPコミュニティから出てきたものだ。また、XPの主な特徴の一つは、テストドリブン開発を重要視していることだ。テストドリブン開発では、テストを書くことで推進される反復を通じてシステム設計も進んでいく。
 そういったわけで、モックオブジェクトの支持者達が相互作用テストの設計における効果についてことさら語るのも驚くことではない。このスタイルでは、主要なオブジェクトに対する最初のテストを書くから [それらのオブジェクトの] 振る舞いの開発を始めることになる。</p></blockquote>
 
-<p>とあるので、テスト駆動開発するなら、モック使うでいいと思います。</p>
+<p>とあるので、TDDするならmock使うでいいと思います。</p>
 
-<p>ひとまず、それで試してみて、きになることがあれば、また何か書くかもしれません。</p>
+<p>ひとまず、色々試してみて、気になることがあれば、また何か書くかもしれません。</p>
+
+<h1>最後に</h1>
+
+<p>そして、今日は<a href="http://yochiyochirb.doorkeeper.jp/events/18227">よちよち.rb 第48回 &ldquo;よちよちもくもく会&rdquo;</a>です(予定があって行けなくて残念)</p>
+
+<p>プログラミング未経験でも参加できる一番初心者に優しいRubyの勉強会、もといコミュニティです。<br/>
+後一枠余っているので、試しに参加して楽しんでみてください。<br/>
+当日キャンセルがちょこっと出たりすることが多いので、満席でもキャンセル待ちにしておくと、いいことがあるかもしれません。</p>
+
+<p>明日はまだ決まっていません&hellip;(紹介したかった&hellip;) # TODO:誰か現れたら更新するかも<br/>
+きっと今日参加する誰かが書いてくれるはずです。<br/>
+楽しみにお待ち下さい。</p>
 </div>
 
 
