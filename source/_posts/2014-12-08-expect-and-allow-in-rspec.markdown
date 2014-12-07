@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "rspec3のexpectとallowの違い"
+title: "Rspec3のexpectとallowの違い"
 date: 2014-12-08 00:00:35 +0900
 comments: true
 published: true
@@ -8,25 +8,27 @@ categories: [ruby rspec]
 ---
 
 [よちよち.rb Advent Calendar 2014](http://www.adventar.org/calendars/582) 8日目の記事です。   
-昨日は、bonbon0605さんの[2014年に読んだり積んだりした本とその思い出を振り返ります](http://genius.hateblo.jp/entry/2014/12/07/093454)でした。  
-Ruby初学者がワンステップレベルアップする時に参考となる良書を紹介していただきました！  
+昨日は、bonbon0605さんの[2014年に読んだり積んだりした本とその思い出を振り返ります](http://genius.hateblo.jp/entry/2014/12/07/093454)、でした。  
+Ruby初学者がワンステップレベルアップする時に参考となる良書を紹介していただきました！
 
-さて、今日は少し前に参加してよちよち.rbで疑問になった、mockとstubの違いについて書きます。  
-
-最近rspecを使った時に、次の２つのメソッドに出会いました。
+さて、今日はRspecのとあるメソッドから学んだ、mockとstubの違いについて書きます。  mockとstubの違いは、少し前に参加したよちよち.rbで疑問のまま終わってしまっていました。    
 
 <!-- more -->
 
-* A: allow(object).to receive(:hoge).and_return('fuga')  [参考](https://relishapp.com/rspec/rspec-mocks/v/3-1/docs/basics/allowing-messages)
-* B: expect(object).to receive(:hoge).and_return('fuga') [参考](https://relishapp.com/rspec/rspec-mocks/v/3-1/docs/basics/expecting-messages)
+最近になってRubyとRailsの仕事に関わっているのですが、Rspecに苦戦しています。     
+Rspecを使っている時に、次の２つのメソッドに出会いました。
 
-この使い分けを知る過程でstubとmockの違いが自分の中でイメージできてきました。
+* allow(object).to receive(:hoge).and_return('fuga')  [参考](https://relishapp.com/rspec/rspec-mocks/v/3-1/docs/basics/allowing-messages)
+* expect(object).to receive(:hoge).and_return('fuga') [参考](https://relishapp.com/rspec/rspec-mocks/v/3-1/docs/basics/expecting-messages)
+
+この使い分けを知る過程でstubとmockの違いが自分の中でイメージできてきました。  
+
 まずは、上記２つのメソッドの使い方を非常に単純な例に落とし込んでみます。
 
 上記はメソッドはどちらも、`object.hoge`ってメソッドを呼び出すと、戻り値が`fuga`となります。  
 さて、どう違うのか、試してみます。
 
-# テスト対象のサンプルクラス
+# 事前準備
 
 問題を単純化します。(逆にわかりづらいかもしれないし、ソースコード減らしたかったのであまりいい書き方ではありません)  
 `true`と`false`を返すだけのprivateメソッドとそのラッパーメソッドを用意します。
@@ -68,7 +70,7 @@ end
 
 準備ができました。まずは`allow`から見ていきましょう。
 
-# A: allow(object).to receive(:hoge).and_return('fuga')
+# allow(object).to receive(:hoge).and_return('fuga')
 
 `allow`はstubとして働きます。  
 `allow`を使うと、上述の説明どおり、`object.hoge`というメソッドを呼び出すと、`fuga`が返ってきます。  
@@ -110,7 +112,7 @@ end
 
 上記のように、`A: allow`はメソッドコールがあった時に指定した値を利用してテストすることができます。  
 
-# B. expect(object).to receive(:hoge).and_return('fuga')
+# expect(object).to receive(:hoge).and_return('fuga')
 
 続いて`expect`で、こちらはmockです。  
 `allow`と`expect`の違いは、メソッドコールの検証の有無です。`expect`では`receive`で指定したメソッドが呼び出されていない場合、failします。  
@@ -165,6 +167,19 @@ allowのexpectの違いはメソッドコールの検査になります。これ
 >モックオブジェクトはXPコミュニティから出てきたものだ。また、XPの主な特徴の一つは、テストドリブン開発を重要視していることだ。テストドリブン開発では、テストを書くことで推進される反復を通じてシステム設計も進んでいく。
 そういったわけで、モックオブジェクトの支持者達が相互作用テストの設計における効果についてことさら語るのも驚くことではない。このスタイルでは、主要なオブジェクトに対する最初のテストを書くから [それらのオブジェクトの] 振る舞いの開発を始めることになる。
 
-とあるので、テスト駆動開発するなら、モック使うでいいと思います。  
+とあるので、TDDするならmock使うでいいと思います。  
 
-ひとまず、それで試してみて、きになることがあれば、また何か書くかもしれません。
+ひとまず、色々試してみて、気になることがあれば、また何か書くかもしれません。
+
+# 最後に
+
+そして、今日は[よちよち.rb 第48回 "よちよちもくもく会"](http://yochiyochirb.doorkeeper.jp/events/18227)です(予定があって行けなくて残念)  
+
+プログラミング未経験でも参加できる一番初心者に優しいRubyの勉強会、もといコミュニティです。  
+後一枠余っているので、試しに参加して楽しんでみてください。  
+当日キャンセルがちょこっと出たりすることが多いので、満席でもキャンセル待ちにしておくと、いいことがあるかもしれません。  
+
+明日はまだ決まっていません...(紹介したかった...) # TODO:誰か現れたら更新するかも  
+きっと今日参加する誰かが書いてくれるはずです。  
+楽しみにお待ち下さい。  
+
