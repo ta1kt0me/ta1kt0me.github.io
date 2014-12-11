@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Blog | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/blog/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-12-07T21:26:32+09:00</updated>
+  <updated>2014-12-12T02:44:19+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -118,13 +118,14 @@ githubはprivate repositoryが有料なので、bitbucketを使用。<br/>
 テンプレートとして、<a href="https://github.com/kippt/jekyll-incorporated.git">jekyll-incorporated</a>を使ってみます。<br/>
 なかなかいい感じにデザインしてくれる。</p>
 
-<p><div class="highlight"><pre><code class="language-bash" data-lang="bash">&lt;/p&gt;
+<p>{% highlight bash %}</p>
 
-&lt;blockquote&gt;&lt;p&gt;gem install jekyll
-git clone &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;https://github.com/kippt/jekyll-incorporated.git&quot;</span>&gt;https://github.com/kippt/jekyll-incorporated.git&lt;/a&gt; blog
-<span class="nb">cd </span>blog
+<blockquote><p>gem install jekyll
+git clone <a href="https://github.com/kippt/jekyll-incorporated.git">https://github.com/kippt/jekyll-incorporated.git</a> blog
+cd blog
 git branch myblog
-git checkout myblog</code></pre></div></p></blockquote>
+git checkout myblog
+{% endhighlight %}</p></blockquote>
 
 <hr />
 
@@ -133,24 +134,27 @@ git checkout myblog</code></pre></div></p></blockquote>
 <p>環境用のファイルを作成。<br/>
 heroku、wercker用の設定ファイルと、jekyllのmarkdownの設定をします。</p>
 
-<p><div class="highlight"><pre><code class="language-text" data-lang="text">blog
+<p>{% highlight text %}
+blog
 ├── Gemfile      # 必要なGemを追加
 ├── Gemfile.lock
 ├── Procfile     # heroku用
 ├── _config.yml
 ├── config.ru    # heroku用
 ├── unicorn.rb   # heroku用
-&amp;hellip;
-└── wercker.yml  # wercker用</code></pre></div></p>
+&hellip;
+└── wercker.yml  # wercker用{% endhighlight %}</p>
 
 <h2>Gemfile</h2>
 
-<p><div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">+</span> <span class="n">gem</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">rack</span><span class="o">-</span><span class="n">jekyll</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
-<span class="o">+</span> <span class="n">gem</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">unicorn</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span></code></pre></div></p>
+<p>{% highlight ruby %}
++ gem &lsquo;rack-jekyll&rsquo;
++ gem &lsquo;unicorn&rsquo;{% endhighlight %}</p>
 
 <h2>Procfile</h2>
 
-<p><div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">+</span> <span class="ss">web</span><span class="p">:</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">unicorn</span> <span class="o">-</span><span class="nb">p</span> <span class="vg">$PORT</span> <span class="o">-</span><span class="n">c</span> <span class="o">.</span><span class="n">/unicorn</span><span class="o">.</span><span class="n">rb</span></code></pre></div></p>
+<p>{% highlight ruby %}
++ web: bundle exec unicorn -p $PORT -c ./unicorn.rb{% endhighlight %}</p>
 
 <h2>_config.yml</h2>
 
@@ -185,19 +189,20 @@ heroku、wercker用の設定ファイルと、jekyllのmarkdownの設定をし�
 <p>indentは半角スペース2つじゃないと怒られる。<br/>
 <a href="http://devcenter.wercker.com/articles/werckeryml/validate.html">ここ</a>でフォーマットのチェックができて便利ですね。</p>
 
-<p><div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="l-Scalar-Plain">+ box</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">wercker/ruby</span>
-<span class="l-Scalar-Plain">+ build</span><span class="p-Indicator">:</span>
-<span class="l-Scalar-Plain">+   steps</span><span class="p-Indicator">:</span>
-<span class="l-Scalar-Plain">+     - bundle-install</span>
-<span class="l-Scalar-Plain">+     - script</span><span class="p-Indicator">:</span>
-<span class="l-Scalar-Plain">+         name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">echo ruby information</span>
-<span class="l-Scalar-Plain">+         code</span><span class="p-Indicator">:</span> <span class="p-Indicator">|</span>
-<span class="l-Scalar-Plain">+             echo &amp;ldquo;ruby version $(ruby &amp;ndash;version) running!&amp;rdquo;</span>
-<span class="l-Scalar-Plain">+             echo &amp;ldquo;from location $(which ruby)&amp;rdquo;</span>
-<span class="l-Scalar-Plain">+             echo -p &amp;ldquo;gem list</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">$(gem list)&amp;rdquo;</span>
-<span class="l-Scalar-Plain">+ deploy</span><span class="p-Indicator">:</span>
-<span class="l-Scalar-Plain">+   steps</span><span class="p-Indicator">:</span>
-<span class="l-Scalar-Plain">+   - heroku-deploy</span></code></pre></div></p>
+<p>{% highlight yaml %}
++ box: wercker/ruby
++ build:
++   steps:
++     - bundle-install
++     - script:
++         name: echo ruby information
++         code: |
++             echo &ldquo;ruby version $(ruby &ndash;version) running!&rdquo;
++             echo &ldquo;from location $(which ruby)&rdquo;
++             echo -p &ldquo;gem list: $(gem list)&rdquo;
++ deploy:
++   steps:
++   - heroku-deploy{% endhighlight %}</p>
 
 <hr />
 
@@ -207,20 +212,20 @@ heroku、wercker用の設定ファイルと、jekyllのmarkdownの設定をし�
 実際はちまちまコミットしちゃいました。<br/>
 ついでにherokuでアプリ作成。</p>
 
-<p><div class="highlight"><pre><code class="language-bash" data-lang="bash">&lt;/p&gt;
+<p>{% highlight bash %}</p>
 
-&lt;blockquote&gt;&lt;p&gt;bundle install
+<blockquote><p>bundle install
 git remote add bitbucket git@bitbucket.org:xxxx/jekyllblog.git
 git add .
-git commit -m <span class="p">&amp;</span>lsquo<span class="p">;</span>initial commit <span class="k">for</span> myblog<span class="p">&amp;</span>rsquo<span class="p">;</span>&lt;/p&gt;
+git commit -m &lsquo;initial commit for myblog&rsquo;</p>
 
-&lt;h1&gt;bitbucketにpush&lt;/h1&gt;
+<h1>bitbucketにpush</h1>
 
-&lt;p&gt;git push bitbucket myblog&lt;/p&gt;
+<p>git push bitbucket myblog</p>
 
-&lt;h1&gt;herokuに専用アプリ作成&lt;/h1&gt;
+<h1>herokuに専用アプリ作成</h1>
 
-&lt;p&gt;heroku create myblog</code></pre></div></p></blockquote>
+<p>heroku create myblog{% endhighlight %}</p></blockquote>
 
 <p>ちなみに、ここでherokuにpushして、<code>heroku open</code>すれば確認できる。<br/>
 やっぱりこっちの方が楽なんじゃ&hellip;</p>

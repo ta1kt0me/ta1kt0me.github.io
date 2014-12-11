@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-12-07T21:26:32+09:00</updated>
+  <updated>2014-12-12T02:36:44+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,105 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[2014年反省会]]></title>
+    <link href="http://jangajan.com/blog/2014/12/12/reviewing-2014/"/>
+    <updated>2014-12-12T02:36:07+09:00</updated>
+    <id>http://jangajan.com/blog/2014/12/12/reviewing-2014</id>
+    <content type="html"><![CDATA[<p><a href="http://www.adventar.org/calendars/582">よちよち.rb Advent Calendar 2014</a> 12日目の記事です。   <br/>
+昨日は、waterlowさんの<a href="http://waterlow2013.hatenablog.com/entry/2014/12/11/125423">私のよちよち.rb活用法</a>、でした。私は初めて参加した勉強会がよちよち.rbだったのですが、&#8217;悩むのOKの場所として&#8217;っていうのは、このコミュニティの大好きなところ一つです。誰かに教えてもらうのではなく、わからないことは声をあげて、一緒に調べて解決していくアプローチ。<br/>
+最初は難しかったのですが(特にわからないことを声に出すところ)、誰にでも発言できる雰囲気をうまく作り出していて、また参加したいなって思わせてくれます。</p>
+
+<p>さて、今回は自分なりに2014年を振り返ってみます。</p>
+
+<h1>２月に引越し</h1>
+
+<p>引っ越しました。といっても、同じくで前住んでいたところから歩いて30分かからないところです。駅近くなってバス使わなくなった。部屋が広くなった、車の音で起こされることがなくなった、けど家賃は上がった。雪の日に前の家から荷物運んでたのいい思い出です。</p>
+
+<h1>3月に初めて勉強会に参加</h1>
+
+<p>引っ越しのときに積ん読になっていた<a href="http://www.amazon.co.jp/gp/product/4274068579/ref=as_li_ss_tl?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=4274068579&amp;linkCode=as2&amp;tag=pochan0919-22">7つの言語、7つの世界</a>という良書を発見して、読んでみたらRubyがなんか面白そうということに気が付きました。<br/>
+勢いで<a href="http://www.amazon.co.jp/gp/product/4774162876/ref=as_li_ss_tl?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=4774162876&amp;linkCode=as2&amp;tag=pochan0919-22">WEB+DB PRESSのRubyの特集が組まれていたやつ</a>を買ってみてRuby入れて、よしRailsだ！っていじってみたものの、仕組みが全くわからなかったんですね。何がわからないかわからない状態。一人でやるのちょっとつらそうだなぁと思い、初心者向けのRubyの勉強会を探していると、よちよち.rb 第12回の募集を見つけました。<br/>
+参加直前にTutorialをやって追いついたのとか懐かしいです。そういえば、@ohtsuka_t さんとはよちよち同期でした。<br/>
+参加して衝撃だったのは、エンジニア以外の参加者がいたこと。プログラミングのバックグラウンドはないけれど、継続参加している方が多かったんです。<br/>
+よちよち.rbの魅力やコミュニティの色は、アドベントカレンダーで余すことなく伝えてくれているので是非見てみてください！</p>
+
+<p>この時、4月に浅草でRubyのカンファレンスみたいなのが行われるという話を聞いて早速申し込みました。</p>
+
+<h1>4月に初めてのRubyのカンファレンスに参加</h1>
+
+<p>それで、大江戸Ruby会議04というイベントに参加しました。こういうイベントに参加したことがなかったので、スーツ着ていかないといけないのかと勘ぐってしまいましたが、誰もスーツなんて着ていなかったですね。場違いにならなくてよかった。<br/>
+カジュアルそうに見えて、話している内容が濃密でした。今スピーカー眺めたんですけど本当に豪華なイベントでしたね。<br/>
+参加してわかったのですが、皆さんRubyへの並々ならない愛を持っているなと感じました。<br/>
+参加した後の勢いでブログを立てました。</p>
+
+<h1>5月に初めてiOSのアプリをリリース</h1>
+
+<p>ちょっと脱線して、iphoneアプリを作ってリリースしたのですが、１週間ぐらいしたら、Macが壊れてソースコードが消えました。お蔵入りです。バージョン管理の大切さを学びました。<br/>
+よちよちのおかげで少しずつgitの使い方やGitHubの触り方が分かってきたところです。</p>
+
+<h1>6月にGithub Kaigiに参加</h1>
+
+<p>バージョン管理の大切さもわかってきたところでGitHub Kaigiです。Rubyに限らず普段GitHubを使っている人、後Atomのセッションとかありましたね。よくよく思い出してみたら、Github Kaigi、YAPC::Asia Tokyo 2014、Ruby Kaigi全部でGitHubの人の話聞いてる。Githubのおっかけしてる&hellip;</p>
+
+<h1>8月にRailsとGitHubを使った初めてのチーム開発とYAPC::Asia Tokyo 2014に参加</h1>
+
+<p>@katorieさんと@Yuki3738さんの思いつきにより、コミュニティのKajaの選出アプリを作ろうという話が盛り上がりました。多分２週間ぐらいでコミュニティの数名で作りました。大事なのは動くものを作って世の中に出すことをモットーになんとかリリースできました。<br/>
+空いている時間を利用した開発やリモートでのコミュニケーションの方法を手探りでやりつつ、なんとか形になるものを作れたのは嬉しかったです。<br/>
+ちなみに、月末で退職したのですが、最後の金曜を休みにしてYAPC::Asia Tokyo 2014へ。Rubyのカンファレンスとは違う面白さ、もっと緩くて自由な風潮がありました。<br/>
+2015年も行きたいし、最後とアナウンスがあったのは悲しいけれどもし、形態を変えて、例えばPerlじゃなくてプログラミングのカンファレンスとして続くことがあれば、毎年参加したい。そういえばしゅーさんがこっそりスタッフで参加してましたね。</p>
+
+<h1>9月にRubyKaigi 2014のレポート班を担当しました</h1>
+
+<p>やめた直後はほとんど家から出ず、ダラーっと過ごしていました。楽だけどまじでダメになりますね。<br/>
+@odailly_jpさんに声をかけていただき、RubyKaigiのレポート班に参加してみました。参加できなかった人は是非次回参加してください。この時の参加のモチベーションや人間関係が今も生きていて、一つの転換期になりました。<br/>
+後、Hirobaに参加しました。家族よりも毎日顔合わせている人がいて面白かったです。Hirobaの考え方は素敵ですよね。</p>
+
+<h1>10月、11月はよちよち.rbの外に目を向けてみた</h1>
+
+<p>ホームコミュニティはよちよち.rbですが、Ruby KaigiやHirobaで色々なコミュニティがあることを知り、ニートで時間もあるし外に目を向けてみようと思い、近場の勉強会やカンファレンスに参加しました。(時間に余裕があれば継続して行く)</p>
+
+<ul>
+<li>Shibuya.rb</li>
+<li>Rustful勉強会</li>
+<li>渋谷Ruby会議01</li>
+<li>デザインビギナーズ</li>
+<li>Nishishinjuku rb</li>
+<li>dev morning</li>
+<li>Ebisu.rb</li>
+<li>TokyuRuby会議07</li>
+</ul>
+
+
+<p>会う人会う人皆凄腕の方々ばかりで恐々としてますが、どこも独特の色を持っていて面白いです。もちろん参加するたびに新しい知見が溢れているので、勇気を出して行ってみると良いと思います。</p>
+
+<h1>読書会を始めた</h1>
+
+<p>レポート班で知り合った@tkymtkに声をかけてもらって一緒に読書会を開くことになりました。metanightというイベントで、meta programming 2の英語版の読書会です。マイペースでやっているので読み終わるのはだいぶ未来だと思います(できれば国内版が出る前に終わらせたい) ただ、焦る必要もないのでお酒飲みながら(私は下戸なのでコーヒーか紅茶飲んでます)雑談して少しずつ読み進めています。<br/>
+英語というところで抵抗感ある人は多いかもしれません。ただ、一人じゃ理解できない英語の表現も３人、４人となることで、より理解が深まります。この辺はよちよち.rbに参加したからこそ気付けた効用ですね。Railsの仕組みを知る上でRubyのメタプログラミングの概念は非常に重要ですし。<br/>
+興味のある方はぜひぜひ一緒にやりましょう。<a href="http://e-g-d.doorkeeper.jp/events/18487">年内最後の回</a>を12/17(水)にやります。</p>
+
+<h1>12月</h1>
+
+<p>忘年会楽しいですね。まだ半分です。12/20に<a href="http://yochiyochirb.doorkeeper.jp/events/17898">よちよち.rb内でLT大会</a>があります。普段のミートアップとは違い、Rails Tutorialをするわけではないので、よちよち.rbの雰囲気を味わいたい人、参加枠は残っていると思うので、足を運んでみるといいかもしれません。</p>
+
+<h1>まとめ</h1>
+
+<p>バーっと振り返りましたが、3/17によちよち.rbに参加したことがきっかけて今年一年の流れが生まれました。まさか自分が仕事やめるとも、読書会主催するとも、Railsで開発するとも思っていなかった、意識高くなってる感半端ないのでもっと脱力してモチベージョン維持しよう。<br/>
+全てはよちよち.rbの仕業ですね。よちよち.rbのせいで人生をRubyに狂わされた方が何名かいます。<br/>
+Rubyでのプログラミングは楽しい。ただ単にプログラミングが面白いだけではなく、Rubyをとりまくコミュニティの力がRubyを楽める一つの要因だと思います。今年は本当に色々な人と知り合うことができました。本当にありがとうございました。来年こそ、就職&hellip;</p>
+
+<p>長くなってしまいましたね。最後までくだらいポエム(その上よちよちとは関係無い自分の読書会の宣伝までする厚顔無恥っぷり)にお付き合いいただきありがとうございました。</p>
+
+<h1>次回</h1>
+
+<p>11月に実はもう一つ初めての体験があって、開発合宿をしました。
+よちよち.rbのいいところの一つに、良いと思ったものをすぐに取り入れて試してみるという文化があります。（すごく好きなところです） <br/>
+実はこれ、YAPC::Asia 2014の@onishiさんのトークで衝撃を受けて、Kajaeruの振り返りのKTPで提案しました。これが実現したことが個人的にはすごく嬉しかったです。色々と準備してくださった@yucao24hoursさん本当に本当にありがとうございました。<br/>
+明日は、この時一緒に開発した@highwideさんによる「よちよち合宿でやったこととか？」です(タイトル変わるのかな？)。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rspec3のexpectとallowの違い]]></title>
@@ -2141,170 +2240,6 @@ Todoアプリは世の中に山ほどありふれていて成熟している領�
 </span></code></pre></td></tr></table></div></figure>
 
 
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rails4でacts-as-taggable-on Gemを使う]]></title>
-    <link href="http://jangajan.com/blog/2014/10/04/acts-as-taggable-on-in-rails/"/>
-    <updated>2014-10-04T03:40:31+09:00</updated>
-    <id>http://jangajan.com/blog/2014/10/04/acts-as-taggable-on-in-rails</id>
-    <content type="html"><![CDATA[<p>ユーザーに紐づくタスクに、タグ付けをするという機能を実現する方法です。<br/>
-<code>acts-as-taggable-on</code>というgemを利用することで簡単(苦戦した&hellip;)にタグ機能は実現できるそうです。<br/>
-なんとかできたっぽい&hellip;</p>
-
-<p>環境は、こんな感じです。</p>
-
-<ul>
-<li>Rails 4.1.6</li>
-<li>ruby 2.1.2p95</li>
-<li>acts-as-taggable-on 3.4.2</li>
-</ul>
-
-
-<p>Githubの<a href="https://github.com/mbleigh/acts-as-taggable-on#tag-ownership">README</a>を参考にしました</p>
-
-<!-- more -->
-
-
-<h1>Model</h1>
-
-<p>そもそもリレーション関係の設定でハマりましたが、これで良さそうです。<br/>
-関係としては<code>user 1-n task</code>となり、taskにタグを設定します。<br/>
-タグは、userごとに別々に管理します。</p>
-
-<figure class='code'><figcaption><span>app/models/user.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="n">acts_as_tagger</span>
-</span><span class='line'>  <span class="n">has_many</span> <span class="ss">:tasks</span><span class="p">,</span> <span class="ss">dependent</span><span class="p">:</span> <span class="ss">:destroy</span>
-</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>app/models/task.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Task</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
-</span><span class='line'>  <span class="n">acts_as_taggable</span>
-</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:user</span>
-</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>View</h1>
-
-<p>タグのところだけピックアップ。<br/>
-（簡単なサンプル作れば良かった）  <br/>
-画面表示するController内のメソッドで、選択可能なタグを<code>@user_tags</code>に入れています。<br/>
-タグは複数選択可能にするため、checkboxを利用しました。<br/>
-checkbox生成でrailsの仕組みを利用しようとしたのですが、以下の2点を実現しようとしてうまいやり方が見つからなかった&hellip;</p>
-
-<ul>
-<li>labelでクリック連携</li>
-<li>valueの値をタグの名前</li>
-</ul>
-
-
-<p>form_for内に記述します。</p>
-
-<figure class='code'><figcaption><span>app/views/tasks/_form.html.haml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="c">/ @user_tagsはcontrollerで配列で設定 ex) =&gt; [&quot;tag1&quot;, &quot;tag2&quot;]</span>
-</span><span class='line'><span class="p">-</span> <span class="vi">@user_tags</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">tag</span><span class="o">|</span>
-</span><span class='line'>  <span class="c">/ tagを複数選択可能にするため、checkboxを利用</span>
-</span><span class='line'>  <span class="nt">%input</span><span class="p">{</span><span class="nb">id</span><span class="ss">:&quot;tag-</span><span class="si">#{</span><span class="n">tag</span><span class="si">}</span>&quot; ,name:&#39;task[tag_list][]&#39;, type:&#39;checkbox&#39;,value:&quot;<span class="si">#{</span><span class="n">tag</span><span class="si">}</span>&quot;}
-</span><span class='line'>  <span class="nt">%label</span><span class="p">{</span><span class="k">for</span><span class="ss">:&quot;tag-</span><span class="si">#{</span><span class="n">tag</span><span class="si">}</span>&quot;}
-</span><span class='line'>    <span class="nt">%span</span><span class="nc">.task-tag</span>
-</span><span class='line'>      <span class="p">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">tag</span><span class="si">}</span><span class="s2">&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>タグ付けよりもrailsでcheckbox使うところに時間とられた&hellip;宿題ですね。</p>
-
-<h1>Controller</h1>
-
-<p>リクエストのtask[tag_list]という値の中に、タグが含まれます。<br/>
-<code>permit</code>で、配列をチェックしたい場合は、<code>tag_list: []</code>と指定してあげる必要がありました。</p>
-
-<figure class='code'><figcaption><span>app/controllers/tasks_controller.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">TasksController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">create</span>
-</span><span class='line'>    <span class="c1"># current_user =&gt; User.find(session[:user_id])</span>
-</span><span class='line'>    <span class="vi">@task</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">task_params</span><span class="p">)</span>
-</span><span class='line'>    <span class="vi">@task</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">current_user</span>
-</span><span class='line'>    <span class="c1"># tagの設定処理 :withには&#39;tag1, tag2&#39;という形式の文字列を設定することでタグを登録できる</span>
-</span><span class='line'>    <span class="n">current_user</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="vi">@task</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="vi">@task</span><span class="o">.</span><span class="n">tag_list</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">),</span> <span class="ss">:on</span> <span class="o">=&gt;</span> <span class="ss">:tags</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">if</span> <span class="vi">@task</span><span class="o">.</span><span class="n">save</span>
-</span><span class='line'>      <span class="c1"># 成功処理</span>
-</span><span class='line'>    <span class="k">else</span>
-</span><span class='line'>      <span class="c1"># 失敗処理</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kp">private</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">task_params</span>
-</span><span class='line'>    <span class="n">params</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:task</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span>
-</span><span class='line'>      <span class="c1"># tag_list: []を指定することで、checkboxの複数の値を配列にして、tag_listに設定可能になる</span>
-</span><span class='line'>      <span class="ss">:id</span><span class="p">,</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:deadline</span><span class="p">,</span> <span class="ss">tag_list</span><span class="p">:</span> <span class="o">[]</span>
-</span><span class='line'>    <span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>もしかしたらもっといいやり方があるかもしれません。<br/>
-気をつける場所はいくつかあるものの、意外と簡単かも。</p>
-
-<h1>補足</h1>
-
-<h2>ユーザーが設定しているタグの一覧を取得する</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="vi">@user_tags</span> <span class="o">=</span> <span class="n">current_user</span><span class="o">.</span><span class="n">owned_tag_list</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;tag1&quot;</span><span class="p">,</span> <span class="s2">&quot;tag2&quot;</span><span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
 
 ]]></content>
   </entry>

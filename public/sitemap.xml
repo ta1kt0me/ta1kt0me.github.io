@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://jangajan.com/blog/2014/12/12/reviewing-2014/</loc>
+    <lastmod>2014-12-12T02:36:07+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://jangajan.com/blog/2014/12/08/expect-and-allow-in-rspec/</loc>
     <lastmod>2014-12-08T00:00:35+09:00</lastmod>
     <priority>0.8</priority>
@@ -287,14 +293,14 @@
   
   <url>
     <loc>http://jangajan.com/blog/archives/</loc>
-    <lastmod>2014-12-07T21:26:32+09:00</lastmod>
+    <lastmod>2014-12-12T02:44:19+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://jangajan.com/</loc>
-    <lastmod>2014-12-07T21:26:32+09:00</lastmod>
+    <lastmod>2014-12-12T02:44:19+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
