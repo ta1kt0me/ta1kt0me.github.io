@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-12-12T02:50:09+09:00</updated>
+  <updated>2014-12-16T19:23:11+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,53 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[localhostのelasticsearchにcurlしたらConnection Refused]]></title>
+    <link href="http://jangajan.com/blog/2014/12/16/fail-to-curl-to-elasticsearch/"/>
+    <updated>2014-12-16T19:13:11+09:00</updated>
+    <id>http://jangajan.com/blog/2014/12/16/fail-to-curl-to-elasticsearch</id>
+    <content type="html"><![CDATA[<p>よっしゃ、試してみよう！と思って出鼻をくじかれた話し。</p>
+
+<p>elasticsearch使ってる方多いですよね！今関わっているPJでも使っているので、どんなものか試してみました。ところが起動確認で早速つまづく始末です。</p>
+
+<p>elasticsearchの起動確認するときに、curlを使ってみたらConnection refusedが発生しました。</p>
+
+<!-- more -->
+
+
+<h1>問題: curlしたらConnection refused</h1>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>elasticsearch -d
+</span><span class='line'><span class="nv">$ </span>curl -XPUT <span class="s1">&#39;http://localhost:9200/test/&#39;</span>
+</span><span class='line'>curl: <span class="o">(</span>7<span class="o">)</span> Failed to connect to localhost port 9200: Connection refused
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>!?</p>
+
+<p>解決策は<a href="http://stackoverflow.com/questions/22952676/curl-failed-to-connect-to-localhost-port-80">こちら</a>にありました。</p>
+
+<h1>原因: IPv6使ってる</h1>
+
+<p>hostsファイル内の<code>::1 localhost</code>が有効になっていると、curlがIPv6でアクセスしてしまうらしい。<br/>
+何気ないところ見落としてました&hellip;</p>
+
+<h1>解決: IPv4使うようにする</h1>
+
+<p><code>--ipv4</code>オプション使ってやる。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>curl --ipv4 -XPUT <span class="s1">&#39;http://localhost:9200/test/&#39;</span>
+</span><span class='line'><span class="o">{</span><span class="s2">&quot;acknowledged&quot;</span>:true<span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[2014年反省会]]></title>
@@ -2164,86 +2211,6 @@ Todoアプリは世の中に山ほどありふれていて成熟している領�
 
 
 <p>BowerfileがGemfileのように簡単な形式で書けて、bower.jsonを動的に生成してくれるので、使いやすいですね。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rails4.1でherokuへのデプロイに失敗(Missing `secret_key_base`)]]></title>
-    <link href="http://jangajan.com/blog/2014/10/05/secrets-dot-yml-on-heroku-in-rails4-dot-1/"/>
-    <updated>2014-10-05T01:14:13+09:00</updated>
-    <id>http://jangajan.com/blog/2014/10/05/secrets-dot-yml-on-heroku-in-rails4-dot-1</id>
-    <content type="html"><![CDATA[<p>Rails4.1でherokuへのデプロイに失敗(Missing <code>secret_key_base</code>)</p>
-
-<p>Rails4.1から<code>secrets.yml</code>がサポートされました。<br/>
-これの扱いが良くわかっていなかったため、heroku push後、以下のエラーが発生してアプリ起動に失敗しました。</p>
-
-<blockquote><p>app error: Missing <code>secret_key_base</code> for &lsquo;production&rsquo; environment, set this value in <code>config/secrets.yml</code> (RuntimeError)</p></blockquote>
-
-<!-- more -->
-
-
-<h1>解決策</h1>
-
-<p>ちなみに、heroku create済みです。</p>
-
-<h2>secrets.ymlをgitで管理する</h2>
-
-<p><code>.gitignore</code>に<code>/config/secrets.yml</code>を含めてしまっている場合は、削除してください。<br/>
-その後、git管理化におくため、commitします。</p>
-
-<p>productionの<code>secret_key_base</code>は環境変数から取得するようになっているため、herokuの環境変数に<code>SECRET_KEY_BASE</code>を設定する必要があります。</p>
-
-<h2>環境変数SECRET_KEY_BASEを設定する</h2>
-
-<p>やり方が２通りあります。</p>
-
-<h3>heroku_secretsを使う</h3>
-
-<p>この方法では、<a href="https://github.com/alexpeattie/heroku_secrets">heroku_secrets</a>というgemを利用することでherokuコマンドを打つ必要はありません。</p>
-
-<h4>gemのインストール</h4>
-
-<p>Gemfileにgemを追加して、bundle updateを実行します。</p>
-
-<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">gem</span> <span class="s1">&#39;heroku_secrets&#39;</span><span class="p">,</span> <span class="ss">github</span><span class="p">:</span> <span class="s1">&#39;alexpeattie/heroku_secrets&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>rakeコマンドを実行</h4>
-
-<p>その後、rakeコマンドを実行します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle <span class="nb">exec </span>rake heroku:secrets<span class="o">[</span>app-name<span class="o">]</span> <span class="nv">RAILS_ENV</span><span class="o">=</span>production
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>もう一つの方も作業量としては変わらなそうですね。</p>
-
-<h3>heroku configで環境変数を設定する</h3>
-
-<p>この方法では、heroku config:add で環境変数を直接設定します。</p>
-
-<h4>設定値を作成する</h4>
-
-<p>環境変数に設定する値を取得します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle <span class="nb">exec </span>rake secret <span class="nv">RAILS_ENV</span><span class="o">=</span>production
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>herokuの環境変数を設定する</h4>
-
-<p>上記の実行結果を値とした環境変数(SECRET_KEY_BASE)を設定します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>heroku config:add <span class="nv">SECRET_KEY_BASE</span><span class="o">=</span>rake secretの実行結果
-</span></code></pre></td></tr></table></div></figure>
-
-
-
 ]]></content>
   </entry>
   
