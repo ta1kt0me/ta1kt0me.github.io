@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-12-16T19:23:11+09:00</updated>
+  <updated>2014-12-21T06:46:44+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,158 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[よちよち.rbに参加しよう]]></title>
+    <link href="http://jangajan.com/blog/2014/12/21/letsjoinyochiyochirb/"/>
+    <updated>2014-12-21T06:39:32+09:00</updated>
+    <id>http://jangajan.com/blog/2014/12/21/letsjoinyochiyochirb</id>
+    <content type="html"><![CDATA[<p><a href="http://www.adventar.org/calendars/582">よちよち.rb Advent Calendar 2014</a> 21日目の記事です。 <br/>
+昨日は、記念すべき第50回のmeetupsをtoggetterでまとめた、<a href="http://togetter.com/li/759800">よちよち.rb 第50回 みんなで LT デビューしよう会</a>でした。EMOいLT連投で初めてとは思えないクオリティでした。当の自分は遅刻した上に落ちを接続準備の時に流してしまい、スライド2ページ残しでやりきれなかったという惨い結果でした。次回リベンジしたいです。</p>
+
+<p>今回はよちよち.rbに参加する方法を紹介します。</p>
+
+<p>よちよち.rbでは初参加と、２回目以降の参加では事前準備が少し違います。<br/>
+詳しいことはdoorkeeperの申し込み画面に全て書いてあるので<a href="http://yochiyochirb.doorkeeper.jp/events/18523">こちらの「やってきてもらいたいこと」</a>をご覧ください。 <br/>
+これはあくまで今時点の最新なので、実際に参加するイベントの記載内容をご覧ください。</p>
+
+<!-- more -->
+
+
+<h1>初参加パターン</h1>
+
+<h2>事前準備</h2>
+
+<h3>GitHubのアカウントをとる</h3>
+
+<p>まずGitHubのアカウントを取得しましょう。できるならtwitterなど他のWebサービスと同じアカウント名にすると、後々いいことがあります。名前大事。超大事。</p>
+
+<h3>Doorkeeperのアカウントをとる</h3>
+
+<p><a href="https://manage.doorkeeper.jp/user/sign_up">https://manage.doorkeeper.jp/user/sign_up</a></p>
+
+<p>GitHubのアカウントでログインできます！<br/>
+できれば、GitHubとfacebookとTwitterは連携しておきましょう。</p>
+
+<h2>よちよち.rbに参加申し込みする</h2>
+
+<p>早速よちよち.rbのイベントページで参加申し込みをしましょう！<br/>
+イベントページに行って申し込みボタンを押すと、いくつかアンケートが出てきます。  なにこれわけわからない！と思った方、ちょっと調べてみて、それでもわからなければ素直にその旨を書けば大丈夫です。<br/>
+参加して一緒に解決していきましょう。</p>
+
+<h2>自己紹介を書く</h2>
+
+<p>簡単な自己紹介をGistで書きます。</p>
+
+<p><a href="https://gist.github.com/">https://gist.github.com/</a></p>
+
+<p>ここも、GitHubのアカウントでログインしてください。<br/>
+Gistは、簡単なメモ帳アプリです。メモごとにURLが作られます。<br/>
+<a href="http://tyoshikawa1106.hatenablog.com/entry/2013/04/10/000026">わかりやすい使い方はこちら</a></p>
+
+<p>書式はMarkdownという形式で書きます。<br/>
+GitHubには<a href="https://help.github.com/articles/github-flavored-markdown/">専用のMarkdown</a>があります。リンク先は英語ですけどめげないでください。初回だから書式とか気にせずいきましょう。<br/>
+下の内容を書きましょう！</p>
+
+<blockquote><p>書いておいてほしい内容</p>
+
+<p>お名前</p>
+
+<p>ご職業</p>
+
+<p>以下のリンクを参考にした Rails 4 と Github に関するあなたのステータス<a href="https://github.com/yochiyochirb/meetups/blob/master/member_status.md">各技術のステータス | よちよち.rb</a></p>
+
+<p>あと、たまに宿題(よくわからなかったりしたらスルー、だけど書いておくと面白いです)</p></blockquote>
+
+<h2>自己紹介をよちよち.rbに共有する</h2>
+
+<p>あと少し!!!<br/>
+イベントページにこんな記載があります。</p>
+
+<p><a href="http://gyazo.com/ad27260e7de843e1126b828273904580"><img src="http://i.gyazo.com/ad27260e7de843e1126b828273904580.png" alt="Gyazo" /></a></p>
+
+<p>「できあがったら、GistのURLをこちらへ貼ってください：」の下にあるURLにアクセスしましょう。<br/>
+画面の下にコメント欄があるので、Gistの自己紹介のURLを書き込んでCommentボタンを押すと準備完了です。</p>
+
+<p>長くなってしまいましたが、ここまでが初参加パターンです。<br/>
+そんなに時間はかからないはずです。</p>
+
+<p>次に行く前に、ちょっと脇道にそれます。</p>
+
+<h3>Git、GitHub、Gistの違い</h3>
+
+<p>ここまでで、Git、GitHub、Gistと似たような名前のものがいくつか出てきました。</p>
+
+<ul>
+<li>Git
+
+<ul>
+<li>バージョン管理のツール（アプリケーションと置き換えてもらっても大丈夫）</li>
+<li>バージョン管理ができるようになると、変更履歴を持つことができます</li>
+<li>つまり一つの歴史が生まれます</li>
+<li>これがあると、世の中の開発者もとい、サービスの利用者みんなが幸せになれるツールです（怪しい勧誘文句になってしまった）</li>
+</ul>
+</li>
+<li>GitHub
+
+<ul>
+<li>Gitをブラウザから使いやすくして便利な機能をいっぱいつけてくれるWebサービス</li>
+<li>しかもSNS</li>
+<li>それでもって、会社の名前(正式な社名はGitHub, Inc)</li>
+<li>これが落ちると、世の中の開発者もとい、サービスの利用者みんなが不幸になります</li>
+<li>これが落ちると、Googleキーワード検索の上位(というか一位)に滑り込んできます</li>
+<li>アクセスできないと思ったらTwitterで検索しましょう。阿鼻叫喚が聞こえます</li>
+</ul>
+</li>
+<li>Gist
+
+<ul>
+<li>GitHub, incが提供するメモ帳です。</li>
+<li>もうちょっと正確にいうと、シンプルなsnippets共有アプリです。snippetsというのはコードの断片です。コードには再利用性が高いものがたくさんあります。断片をメモしておくことで、参考にしたいアプリケーションのソースコードを開いてコピペしなくて済むようになります。</li>
+<li>Gistに保存しておくことで、他人との共有がスムーズにできたり、ブログへのソースコードの埋め込みが楽になったりします。</li>
+<li>別にコードに限らず、ただのメモ帳として使うこともできます。メリットはGitで管理可能なところ。バージョン管理できるので変更履歴とかも把握しやすい!</li>
+</ul>
+</li>
+</ul>
+
+
+<p>ちなみにGitHub, incはGitの開発にも関わっています。強大です。<br/>
+もし、キャラのOctocatグッズが欲しかったら、GitHub storeなるものを利用してみましょう。</p>
+
+<h1>2回目パターン</h1>
+
+<h2>よちよち.rbに参加申し込みする</h2>
+
+<p>初参加と同じ。</p>
+
+<h2>自己紹介を書いて、GitHubでPullRequestを出す</h2>
+
+<p>今度はGistではなく、Githubを利用します。</p>
+
+<ol>
+<li>Githubからmeetupsのリポジトリをローカルにcloneする</li>
+<li>新しいブランチを作る</li>
+<li>自己紹介のファイルを作成</li>
+<li>Gitを使ってadd, commitして、GitHubにpush</li>
+<li>GitHubでPull Request作って</li>
+<li>メンバーからLGTMを2つもらったら</li>
+<li>マージする</li>
+</ol>
+
+
+<p>駆け足でいきました。<br/>
+ここまで、Meetupsまでにやる必要があります。<br/>
+<a href="https://github.com/yochiyochirb/meetups/wiki#how-to-use-github">ここ</a>の<code>How to use Github</code>がすごく役に立ちます。<br/>
+わからなければ質問してみましょう。  <br/>
+質問することがこのコミュニティの醍醐味でもあります。<br/>
+ちなみに(おそらく間違っていないのですが)、今参加している人は皆ここで一度躓いています。</p>
+
+<h1>まとめ</h1>
+
+<p>興味があって参加を考えている方は次回以降のmeetups時に参考にしてください。<br/>
+明日はumekumiさんの「初めてLTをやった！」です。お楽しみに！</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[localhostのelasticsearchにcurlしたらConnection Refused]]></title>
@@ -1997,220 +2149,6 @@ Todoアプリは世の中に山ほどありふれていて成熟している領�
 
 <p>入力がタスク名と期限だけだったり、タグが削除できない、名称変更できない等、まだ機能的に至らないところもあったり、見た目が貧相だったり、作るだけ作ったのでテスト１行もないとか問題山積みですが、使用感などフィードバックをいただけると嬉しいです。<br/>
 今後はWebと連携したモバイル用のアプリも作ってiPhoneでも使えるようにしてみようと思います。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[RailsでBowerを使いHerokuにデプロイ]]></title>
-    <link href="http://jangajan.com/blog/2014/10/05/bower-and-rails-on-heroku/"/>
-    <updated>2014-10-05T22:35:42+09:00</updated>
-    <id>http://jangajan.com/blog/2014/10/05/bower-and-rails-on-heroku</id>
-    <content type="html"><![CDATA[<p>RailsアプリケーションでJavascriptプラグインの管理をgemに依存したくないなと思ったので、bowerなるものを試してみました。</p>
-
-<p>環境です。</p>
-
-<ul>
-<li>bower 1.3.12</li>
-<li>rails 4.1.6</li>
-<li>ruby 2.1.2</li>
-<li>heroku-buildpack-ruby-bower</li>
-</ul>
-
-
-<p>今回は使いませんでしたが、bower-railsというgemの説明も最後に追記しています。</p>
-
-<!-- more -->
-
-
-<h1>Rails + bower + heroku + heroku-buildpack-ruby-bower</h1>
-
-<p>参考にしたのは<a href="https://gist.github.com/afeld/5704079">こちら</a>です。</p>
-
-<h2>herokuに設定追加</h2>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>heroku create app_name
-</span><span class='line'>
-</span><span class='line'>bundle exec rake secret RAILS_ENV=production
-</span><span class='line'>=&gt; 2d9dc90XXXXXXXXXXXXX...
-</span><span class='line'>
-</span><span class='line'># rake secretの結果を値として設定
-</span><span class='line'>heroku config:add SECRET_KEY_BASE=2d9dc90XXXXXXXXXXXXX...
-</span><span class='line'>
-</span><span class='line'>heroku run bundle exec rake RAILS_ENV=production db:migrate
-</span><span class='line'>
-</span><span class='line'>heroku config:set BUILDPACK_URL='git://github.com/qnyp/heroku-buildpack-ruby-bower.git#run-bower' </span></code></pre></td></tr></table></div></figure>
-
-
-<h2>.gitignore修正</h2>
-
-<p>bowerでコンポーネントをインストールするパスを管理対象外に設定しておきます。</p>
-
-<figure class='code'><figcaption><span>.gitignore</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="sr">/vendor/</span><span class="n">assets</span><span class="o">/</span><span class="n">components</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>bowerでコンポーネント追加</h2>
-
-<p>npmでbowerをインストールします。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>npm install bower
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>続いてRailsアプリケーションのルートパスでbowerの設定を追加します。</p>
-
-<figure class='code'><figcaption><span>.bowerrc</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="nt">&quot;directory&quot;</span><span class="p">:</span> <span class="s2">&quot;vendor/assets/components&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;json&quot;</span><span class="p">:</span> <span class="s2">&quot;bower.json&quot;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>bower.json</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;my application&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nt">&quot;moment&quot;</span><span class="p">:</span> <span class="s2">&quot;latest&quot;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>依存関係のあるコンポーネントをインストールします。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>bower install
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Railsの設定</h2>
-
-<p>お好みでGemファイル追加(このあたりはbowerと関係ないですね)</p>
-
-<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># このあたりはお好みで</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;unicorn&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 4.8.3&#39;</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;pg&#39;</span><span class="p">,</span> <span class="ss">group</span><span class="p">:</span> <span class="ss">:production</span>
-</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;rails_12factor&#39;</span><span class="p">,</span> <span class="ss">group</span><span class="p">:</span> <span class="ss">:production</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>Procfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="ss">web</span><span class="p">:</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">unicorn</span> <span class="o">-</span><span class="nb">p</span> <span class="vg">$PORT</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>config/environments/production.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">configure</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">compile</span> <span class="o">=</span> <span class="kp">true</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>bowerでインストールしたコンポーネントをassetsのパスに追加します。</p>
-
-<figure class='code'><figcaption><span>config/initializers/assets.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">paths</span> <span class="o">&lt;&lt;</span> <span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;vendor&#39;</span><span class="p">,</span> <span class="s1">&#39;assets&#39;</span><span class="p">,</span> <span class="s1">&#39;components&#39;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>コンポーネントの読み込み設定</h2>
-
-<figure class='code'><figcaption><span>app/assets/javascript/application.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="p">...</span>
-</span><span class='line'><span class="c1">//= require moment/moment</span>
-</span><span class='line'><span class="p">...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>公開設定</h2>
-
-<p>最後に修正をherokuにpushします。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>git add .
-</span><span class='line'>git commit
-</span><span class='line'>git push heroku master
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>bower-rails</h1>
-
-<p><code>bower-rails</code>というgemがあったのですが、herokuへのデプロイのところで色々はまったので、今回は見送りました。<br/>
-ローカルで試す分にはこのGemは非常に使いやすかったので、環境によっては導入すると良さそうです。</p>
-
-<p>こちらの基本的な使い方は以下です。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># Bowerfile作成</span>
-</span><span class='line'><span class="c"># rails g bower_rails:initialize json とすることで、bower.jsonを作成することも可能</span>
-</span><span class='line'>bundle <span class="nb">exec </span>rails g bower_rails:initialize
-</span><span class='line'><span class="o">=</span>&gt; アプリケーションルートに、Bowerfileが作成される
-</span><span class='line'>
-</span><span class='line'><span class="c"># Bowerfileの編集</span>
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;asset &#39;moment&#39;&quot;</span> &gt;&gt; Bowerjson
-</span><span class='line'>
-</span><span class='line'><span class="c"># 依存関係の解決</span>
-</span><span class='line'>bundle <span class="nb">exec </span>rake bower:install
-</span><span class='line'><span class="o">=</span>&gt; vnedor/assets/bower_componentsにコンポーネントをインストール
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上記に加え、<code>config/initializers/assets.rb</code>を修正することで利用できます。</p>
-
-<figure class='code'><figcaption><span>config/initializers/assets.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">Rails</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">paths</span> <span class="o">&lt;&lt;</span> <span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;vendor&#39;</span><span class="p">,</span> <span class="s1">&#39;assets&#39;</span><span class="p">,</span> <span class="s1">&#39;bower_components&#39;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>BowerfileがGemfileのように簡単な形式で書けて、bower.jsonを動的に生成してくれるので、使いやすいですね。</p>
 ]]></content>
   </entry>
   
