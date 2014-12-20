@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2014-12-21T06:46:44+09:00</updated>
+  <updated>2014-12-21T07:15:30+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -18,7 +18,7 @@
     <link href="http://jangajan.com/blog/2014/12/03/e-g-d-meta-night-3rd/"/>
     <updated>2014-12-03T23:55:01+09:00</updated>
     <id>http://jangajan.com/blog/2014/12/03/e-g-d-meta-night-3rd</id>
-    <content type="html"><![CDATA[<p>イベント概要については、<a href="/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+    <content type="html"><![CDATA[<p>イベント概要については、<a href="{{ root_url }}{% post_url 2014-11-02-about-meta-night %}">About MetaNight</a>をご覧ください。</p>
 
 <p><a href="http://e-g-d.doorkeeper.jp/events/16300">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第３回目を開催しました。</p>
 
@@ -128,7 +128,7 @@ prc close yochiyochirb/kajaeru 83 # こんな感じで使う
     <link href="http://jangajan.com/blog/2014/11/19/e-g-d-meta-night-2nd/"/>
     <updated>2014-11-19T23:30:51+09:00</updated>
     <id>http://jangajan.com/blog/2014/11/19/e-g-d-meta-night-2nd</id>
-    <content type="html"><![CDATA[<p>イベント概要については、<a href="/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+    <content type="html"><![CDATA[<p>イベント概要については、<a href="{{ root_url }}{% post_url 2014-11-02-about-meta-night %}">About MetaNight</a>をご覧ください。</p>
 
 <p><a href="http://e-g-d.doorkeeper.jp/events/16300">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第２回目を開催しました。</p>
 
@@ -312,7 +312,7 @@ rubyではirbを使っている時に自然とやっていることなんです�
 <!-- more -->
 
 
-<p>イベント概要については、<a href="/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+<p>イベント概要については、<a href="{{ root_url }}{% post_url 2014-11-02-about-meta-night %}">About MetaNight</a>をご覧ください。</p>
 
 <p>第一回目。このイベント自体は @tkymtk さんの発案による共同運営という形で開催しました。<br/>
 ↓のコンセプトでやっているので気が向いたら遊びにきてください。</p>

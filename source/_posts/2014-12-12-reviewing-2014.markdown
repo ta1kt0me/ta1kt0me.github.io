@@ -3,6 +3,7 @@ layout: post
 title: "2014年反省会"
 date: 2014-12-12 02:36:07 +0900
 comments: true
+sharing: true
 published: true
 categories: [life]
 ---

@@ -3,6 +3,7 @@ layout: post
 title: "よちよち.rbに参加しよう"
 date: 2014-12-21 06:39:32 +0900
 comments: true
+sharing: true
 published: true
 categories: [life]
 ---

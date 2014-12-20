@@ -4,6 +4,7 @@ title: "Rspec3のexpectとallowの違い"
 date: 2014-12-08 00:00:35 +0900
 comments: true
 published: true
+sharing: true
 categories: [ruby rspec]
 ---
 

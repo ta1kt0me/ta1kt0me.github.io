@@ -2,6 +2,7 @@
 layout: post
 title: "Gem:pr-commentをリリース"
 date: 2014-12-02 18:18:46 +0900
+sharing: true
 comments: true
 categories: [ruby]
 ---

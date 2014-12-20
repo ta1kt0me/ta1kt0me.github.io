@@ -3,6 +3,7 @@ layout: post
 title: "MetaNight 第3回を開催しました"
 date: 2014-12-03 23:55:01 +0900
 comments: true
+sharing: true
 categories: [ruby]
 ---
 
