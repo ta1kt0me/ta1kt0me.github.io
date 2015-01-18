@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2015-01-04T21:54:04+09:00</updated>
+  <updated>2015-01-18T14:32:00+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,112 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rubyのヒアドキュメント]]></title>
+    <link href="http://jangajan.com/blog/2015/01/15/rubyheredocument/"/>
+    <updated>2015-01-15T19:18:55+09:00</updated>
+    <id>http://jangajan.com/blog/2015/01/15/rubyheredocument</id>
+    <content type="html"><![CDATA[<p>あまり使う機会もなく理解できていない部分があったのでヒアドキュメントについて整理しました。<br/>
+ヒアドキュメントって、heredocumentなんですね。hearだと思ってた&hellip;</p>
+
+<p>参考にしたのは<a href="http://docs.ruby-lang.org/ja/2.1.0/doc/spec=2fliteral.html#here">2.1のドキュメント</a>です。</p>
+
+<!-- more -->
+
+
+<h2>書き方</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">print</span> <span class="o">&lt;&lt;</span><span class="no">EOS</span>  <span class="c1"># &lt;&lt;の後に空白を入れたらエラー</span>
+</span><span class='line'><span class="sh">  hoge</span>
+</span><span class='line'><span class="sh">  fuga</span>
+</span><span class='line'><span class="no">EOS</span>
+</span><span class='line'><span class="c1"># 終了ラベルは行頭から始める必要がある</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>&lt;&lt;-</h2>
+
+<p>末尾のEOSの前にインデントを入れてもOK</p>
+
+<h2>&lt;&lt;&lsquo;EOS&rsquo;</h2>
+
+<p>開始ラベルをシングルクォーテーションで囲んだ場合、ヒアドキュメント内で文字列展開しない</p>
+
+<h2>&lt;&lt;&ldquo;EOS&rdquo;</h2>
+
+<p>開始ラベルをダブルクォーテーションで囲んだ場合、ヒアドキュメント内で文字列展開する</p>
+
+<h2>&lt;&lt;`EOS`</h2>
+
+<p>開始ラベルをバッククォートで囲んだ場合、ヒアドキュメント内のコマンドの実行結果を表示する</p>
+
+<h2>複数指定</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">print</span> <span class="o">&lt;&lt;</span><span class="no">EOS1</span><span class="p">,</span> <span class="o">&lt;&lt;</span><span class="no">EOS2</span>
+</span><span class='line'><span class="err">  eos1</span>
+</span><span class='line'><span class="err">EOS1  # ここまでがEOS1のヒアドキュメント、これ以降はEOS2のヒアドキュメント</span>
+</span><span class='line'><span class="err">  eos2</span>
+</span><span class='line'><span class="err">EOS2</span>
+</span><span class='line'><span class="err"># ここまでがEOS2のヒアドキュメント、  </span>
+</span><span class='line'><span class="sh">  eos1</span>
+</span><span class='line'><span class="sh">EOS1  # ここまでがEOS1のヒアドキュメント、これ以降はEOS2のヒアドキュメント</span>
+</span><span class='line'><span class="sh">  eos2</span>
+</span><span class='line'><span class="no">EOS2</span>
+</span><span class='line'><span class="c1"># ここまでがEOS2のヒアドキュメント、  </span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>EOS1終了ラベルを書く前にEOS2終了ラベルを書いたとしても、EOS1終了ラベルが出てくるまで、EOS1のヒアドキュメントとなる</p>
+
+<h2>その他</h2>
+
+<h3>開始ラベルの次の行からヒアドキュメントになる</h3>
+
+<p>読みづらいからあまりしないと思うけれど、例えば</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">printf</span><span class="p">(</span><span class="s1">&#39;%s%d&#39;</span><span class="p">,</span> <span class="o">&lt;&lt;</span><span class="no">EOS</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+</span><span class='line'><span class="sh">  hoge</span>
+</span><span class='line'><span class="no">EOS</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>という場合に、こうしたらエラー。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">printf</span><span class="p">(</span><span class="s1">&#39;%s%d&#39;</span><span class="p">,</span> <span class="o">&lt;&lt;</span><span class="no">EOS</span>
+</span><span class='line'><span class="sh">             , 1000)</span>
+</span><span class='line'><span class="sh">  hoge</span>
+</span><span class='line'><span class="no">EOS</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>コメントの不自然はご愛嬌です。嘘です。一番最後に表示したことで、表示がおかしくなったためです。<br/>
+また何かあったら追記します。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[冬休みの宿題]]></title>
@@ -2192,92 +2298,6 @@ herokuで動かす場合はadd-onとかの設定が必要でした。</p>
 <h2>本番で確認</h2>
 
 <p>このままherokuへのpushが成功した後、数分してからNew Relicにアクセスすれば接続確認できます。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rspecメモ]]></title>
-    <link href="http://jangajan.com/blog/2014/10/14/rspec-memo/"/>
-    <updated>2014-10-14T18:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/10/14/rspec-memo</id>
-    <content type="html"><![CDATA[<p>rspecの学習中です。</p>
-
-<!-- more -->
-
-
-<h1>rspecのワークショップ</h1>
-
-<p>以下のチュートリアルでrspecの学習をした時のメモです。</p>
-
-<p><a href="http://d.hatena.ne.jp/t-wada/20100228/p1">http://d.hatena.ne.jp/t-wada/20100228/p1</a>  <br/>
-<a href="http://qiita.com/jnchito/items/624f6d5023c279046a1c">http://qiita.com/jnchito/items/624f6d5023c279046a1c</a></p>
-
-<h1>describeとcontextとit</h1>
-
-<ul>
-<li><code>describe</code>は対象を説明</li>
-<li><code>context</code>は状況を説明</li>
-<li><code>it</code>は試験内容を説明</li>
-<li><code>it</code>内に具体的な試験を記述</li>
-<li><code>it</code>の引数の説明を省略しても試験内容をrspecが判断して仕様記述を組み立てる</li>
-<li>読みやすさ次第で<code>it</code>の文字列引数を使うことを推奨</li>
-<li>内容を確認したい時は、<code>rspec -fd specfile</code></li>
-</ul>
-
-
-<h1>beforeにテスト実行前処理を記述</h1>
-
-<ul>
-<li><code>before</code>の引数のデフォルトは<code>:each</code></li>
-</ul>
-
-
-<h1>subjectでブロックの評価結果がit内のshouldのレシーバになる</h1>
-
-<ul>
-<li>明示的に<code>it</code>内で<code>subject</code>メソッドを利用することで、<code>subject</code>ブロックの評価結果を使うことができる</li>
-</ul>
-
-
-<h1><code>shared_examples</code>と<code>it_behaves_like</code></h1>
-
-<ul>
-<li><code>shared_examples_for 'キー名' do ~ end</code>とするとブロック内の処理を<code>it_should_behave_like 'キー名'</code>で呼び出してテストできる</li>
-<li>ただし、キー名は全てのテストで重複しないように注意する</li>
-</ul>
-
-
-<h1>predicateマッチャ</h1>
-
-<ul>
-<li><code>expect(xxx).to eq false -&gt; expect(xxx).not_to be_empty</code></li>
-</ul>
-
-
-<h1>rspec3で標準から外れた機能</h1>
-
-<ul>
-<li><code>its</code>メソッドは<code>rspec-its gem</code>で提供</li>
-<li>have マッチャ
-
-<ul>
-<li>サイズのチェックをテストしやすくするマッチャ(ただし、rspec3ではgemに外出しされた)</li>
-<li>have マッチャを使った場合、 <code>have(n).item</code> と <code>have(n).items</code> は互いに置換可能
-
-<ul>
-<li>nの値により自然な形にするのがいい</li>
-</ul>
-</li>
-<li>have(n).named_collection記法でもかける
-
-<ul>
-<li><code>it {is_expected.to have(n).xxx }</code></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
 ]]></content>
   </entry>
   

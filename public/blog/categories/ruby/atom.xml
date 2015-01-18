@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2015-01-04T21:54:04+09:00</updated>
+  <updated>2015-01-18T14:32:00+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,80 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rubyのヒアドキュメント]]></title>
+    <link href="http://jangajan.com/blog/2015/01/15/rubyheredocument/"/>
+    <updated>2015-01-15T19:18:55+09:00</updated>
+    <id>http://jangajan.com/blog/2015/01/15/rubyheredocument</id>
+    <content type="html"><![CDATA[<p>あまり使う機会もなく理解できていない部分があったのでヒアドキュメントについて整理しました。<br/>
+ヒアドキュメントって、heredocumentなんですね。hearだと思ってた&hellip;</p>
+
+<p>参考にしたのは<a href="http://docs.ruby-lang.org/ja/2.1.0/doc/spec=2fliteral.html#here">2.1のドキュメント</a>です。</p>
+
+<!-- more -->
+
+
+<h2>書き方</h2>
+
+<pre><code class="rb ">print &lt;&lt;EOS  # &lt;&lt;の後に空白を入れたらエラー
+  hoge
+  fuga
+EOS
+# 終了ラベルは行頭から始める必要がある
+</code></pre>
+
+<h2>&lt;&lt;-</h2>
+
+<p>末尾のEOSの前にインデントを入れてもOK</p>
+
+<h2>&lt;&lt;&lsquo;EOS&rsquo;</h2>
+
+<p>開始ラベルをシングルクォーテーションで囲んだ場合、ヒアドキュメント内で文字列展開しない</p>
+
+<h2>&lt;&lt;&ldquo;EOS&rdquo;</h2>
+
+<p>開始ラベルをダブルクォーテーションで囲んだ場合、ヒアドキュメント内で文字列展開する</p>
+
+<h2>&lt;&lt;`EOS`</h2>
+
+<p>開始ラベルをバッククォートで囲んだ場合、ヒアドキュメント内のコマンドの実行結果を表示する</p>
+
+<h2>複数指定</h2>
+
+<pre><code class="rb">print &lt;&lt;EOS1, &lt;&lt;EOS2
+  eos1
+EOS1  # ここまでがEOS1のヒアドキュメント、これ以降はEOS2のヒアドキュメント
+  eos2
+EOS2
+# ここまでがEOS2のヒアドキュメント、  
+</code></pre>
+
+<p>EOS1終了ラベルを書く前にEOS2終了ラベルを書いたとしても、EOS1終了ラベルが出てくるまで、EOS1のヒアドキュメントとなる</p>
+
+<h2>その他</h2>
+
+<h3>開始ラベルの次の行からヒアドキュメントになる</h3>
+
+<p>読みづらいからあまりしないと思うけれど、例えば
+<code>rb
+printf('%s%d', &lt;&lt;EOS, 1000)
+  hoge
+EOS
+</code></p>
+
+<p>という場合に、こうしたらエラー。
+<code>
+printf('%s%d', &lt;&lt;EOS
+             , 1000)
+  hoge
+EOS
+</code></p>
+
+<p>コメントの不自然はご愛嬌です。嘘です。一番最後に表示したことで、表示がおかしくなったためです。<br/>
+また何かあったら追記します。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[MetaNight 第4回を開催しました]]></title>
@@ -278,105 +352,6 @@ rubyではirbを使っている時に自然とやっていることなんです�
 
 
 <p>第三回は再来週(12/3)開催目標。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[About MetaNight]]></title>
-    <link href="http://jangajan.com/blog/2014/11/02/about-meta-night/"/>
-    <updated>2014-11-02T22:11:20+09:00</updated>
-    <id>http://jangajan.com/blog/2014/11/02/about-meta-night</id>
-    <content type="html"><![CDATA[<p><a href="http://e-g-d.doorkeeper.jp/events/16300">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の内容です。<br/>
-※リンク先は第1回目の内容となります。イベントページから最近の情報にアクセスしてみてください</p>
-
-<p><a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=B00N9I0RMQ&linkCode=as2&tag=pochan0919-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00N9I0RMQ&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=pochan0919-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=B00N9I0RMQ" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
-
-<!-- more -->
-
-
-<h1>MetaNightについて</h1>
-
-<h2>イベント概要</h2>
-
-<p>英語の技術書を読むことを目的とした「エイゴ・ギジュツショ・ドクショカイ」というdoorkeeperのコミュニティによる、meta programming ruby 2の読書会です。</p>
-
-<p>技術(主にRuby)と英語がテーマです。<br/>
-少人数で、雑談混じりでワイワイやってます。<br/>
-1回目のペースだと読み終わるのは２年後かなぁ&hellip;</p>
-
-<h2>参加すると嬉しい人</h2>
-
-<ul>
-<li>興味を出させたい人・興味がある人</li>
-<li>メタプログラミングを教えたい人・学びたい人</li>
-<li>英語を教えたい人・学びたい人</li>
-</ul>
-
-
-<p>興味がある方からのdoorkeeperへコメントやtwitter(<a href="https://twitter.com/talkto_me">@talkto_me</a>)へのダイレクトメッセージお待ちしてます。</p>
-
-<h2>スキルレベル</h2>
-
-<ul>
-<li>英語
-
-<ul>
-<li>調べながら読めるぐらい</li>
-</ul>
-</li>
-<li>技術
-
-<ul>
-<li>Metaprogramming Ruby 2を読みたい人ならどなたでも</li>
-</ul>
-</li>
-</ul>
-
-
-<p>英語も技術も、わからないところは話し合いの時間に解決すればいいです。<br/>
-そのための読書会ですので、怖がらずに。</p>
-
-<h2>参加するために必要なもの</h2>
-
-<ul>
-<li>(忘れずに)doorkeeperへの参加申込</li>
-<li>meta programming ruby 2とそれを読める機械
-
-<ul>
-<li><a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_tl?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">kindle</a></li>
-<li><a href="https://pragprog.com/book/ppmetr2/metaprogramming-ruby-2">epub</a></li>
-</ul>
-</li>
-<li>読む時間を設けるので、前もって読んでくる必要はないです。読んでくるのは自由です。</li>
-<li>ビールやコーヒー1杯分の小銭</li>
-<li>勢い</li>
-</ul>
-
-
-<h2>参加したいけど不安な方へ</h2>
-
-<p>何かあれば気軽に連絡ください。</p>
-
-<h3>英語が不安</h3>
-
-<p>iBook使うと辞書引きやすくて楽です。<br/>
-分かりづらい場合なんかは共有時間に確認したりします。</p>
-
-<h3>Rubyがわからない</h3>
-
-<p>メタプログラミングなので、基本的なところは分かっておく必要があります。<br/>
-ドットインストールでのRubyの収録をチラ見しておくと良いです。
-もし、この収録の内容がわからなくても一緒に話しながら少しずつ理解していきましょう。</p>
-
-<h2>その他</h2>
-
-<p>Metaprogramming Ruby 2を買うときに使えるクーポン。<br/>
-いつまで使えるかはわかりませんが10月20日時点では使えてます。</p>
-
-<blockquote class="twitter-tweet" lang="en"><p>And a special treat for twitter readers: save 30% on all ebooks we publish, use coupon &quot;adalovelaceday&quot; in honor of Ada Lovelace”</p>&mdash; PragmaticProgrammers (@pragprog) <a href="https://twitter.com/pragprog/status/522034588965957633">October 14, 2014</a></blockquote>
-
-
-<p> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 ]]></content>
   </entry>
   

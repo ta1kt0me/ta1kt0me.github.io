@@ -8,7 +8,7 @@
   <title>JanGaJan.com</title>
   <meta name="author" content="talkto_me">
   
-  <meta name="description" content="パーフェクトRuby on Rails の7章のFactoryGirlを省略するところ(リスト7.12)でuninitialized constant FactoryGirl (NameError)が発生しました。 ">
+  <meta name="description" content="rspecの学習中です。 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -106,6 +106,40 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/10/14/rspec-memo/">Rspecメモ</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-10-14T18:00:00+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:00 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>rspecの学習中です。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/10/14/rspec-memo/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -439,66 +473,6 @@
   
     <footer>
       <a rel="full-article" href="/blog/2014/09/26/include-css-error-in-rails/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/09/24/forbiddenattributeserror-in-rails/">ForbiddenAttributesErrorが発生</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-09-24T02:33:27+09:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:33 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Rails4で、ForbiddenAttributesErrorが発生した場合の対応です。</p>
-
-<h1>ActiveModel::ForbiddenAttributesError発生</h1>
-
-<p>次のようなエラーが発生しました。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>ActiveModel::ForbiddenAttributesError <span class="o">(</span>ActiveModel::ForbiddenAttributesError<span class="o">)</span>:
-</span><span class='line'>  app/controllers/posts_controller.rb:13:in <span class="sb">`</span>create<span class="err">&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>13行目が悪さをしているらしい&hellip;</p>
-
-<figure class='code'><figcaption><span>app/controllers/posts_controller.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">def</span> <span class="nf">create</span>
-</span><span class='line'>  <span class="vi">@feed</span> <span class="o">=</span> <span class="no">Feed</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:post</span><span class="o">]</span><span class="p">)</span> <span class="c1"># 13行目</span>
-</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/09/24/forbiddenattributeserror-in-rails/">Read on &rarr;</a>
     </footer>
   
 
