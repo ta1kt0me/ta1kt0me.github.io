@@ -55,6 +55,9 @@ GEM
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
     mercenary (0.3.4)
+    mini_portile (0.6.2)
+    nokogiri (1.6.5)
+      mini_portile (~> 0.6.0)
     octopress-date-format (2.0.1)
       jekyll (~> 2.0)
       octopress-hooks (~> 2.0)
@@ -105,6 +108,7 @@ DEPENDENCIES
   haml (~> 4.0)
   jekyll (~> 2.0)
   jekyll-sitemap
+  nokogiri
   octopress-date-format (~> 2.0)
   octopress-hooks (~> 2.2)
   rake (~> 10.0)
