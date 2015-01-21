@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Gem Reading - active_emoji"
-date: 2015-01-21 23:14:19 +0900
+date: 2015-01-20 23:59:19 +0900
 comments: true
 sharing: true
 published: true

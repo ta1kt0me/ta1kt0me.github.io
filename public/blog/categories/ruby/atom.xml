@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2015-01-22T00:27:45+09:00</updated>
+  <updated>2015-01-22T00:29:54+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -97,9 +97,9 @@ rake update_jquery_ujs  # Update jQuery UJS version
   
   <entry>
     <title type="html"><![CDATA[Gem Reading - Active_emoji]]></title>
-    <link href="http://jangajan.com/blog/2015/01/21/gem-reading-active-emoji/"/>
-    <updated>2015-01-21T23:14:19+09:00</updated>
-    <id>http://jangajan.com/blog/2015/01/21/gem-reading-active-emoji</id>
+    <link href="http://jangajan.com/blog/2015/01/20/gem-reading-active-emoji/"/>
+    <updated>2015-01-20T23:59:19+09:00</updated>
+    <id>http://jangajan.com/blog/2015/01/20/gem-reading-active-emoji</id>
     <content type="html"><![CDATA[<p>今年の目標にGemを読むというのをあげたので、少しずつやっていきます。
 今日Ginza.rbに参加して知った、<a href="https://github.com/sferik/active_emoji">active_emoji</a>を読んでみます。</p>
 
@@ -194,7 +194,7 @@ EOS
     <link href="http://jangajan.com/blog/2014/12/21/e-g-d-meta-night-4th/"/>
     <updated>2014-12-21T18:25:54+09:00</updated>
     <id>http://jangajan.com/blog/2014/12/21/e-g-d-meta-night-4th</id>
-    <content type="html"><![CDATA[<p>イベント概要については、<a href="/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+    <content type="html"><![CDATA[<p>イベント概要については、<a href="{{ root_url }}{% post_url 2014-11-02-about-meta-night %}">About MetaNight</a>をご覧ください。</p>
 
 <p><a href="http://e-g-d.doorkeeper.jp/">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第４回目を開催しました。</p>
 
@@ -274,7 +274,7 @@ obj.methods - Object.instance_methods
     <link href="http://jangajan.com/blog/2014/12/03/e-g-d-meta-night-3rd/"/>
     <updated>2014-12-03T23:55:01+09:00</updated>
     <id>http://jangajan.com/blog/2014/12/03/e-g-d-meta-night-3rd</id>
-    <content type="html"><![CDATA[<p>イベント概要については、<a href="/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+    <content type="html"><![CDATA[<p>イベント概要については、<a href="{{ root_url }}{% post_url 2014-11-02-about-meta-night %}">About MetaNight</a>をご覧ください。</p>
 
 <p><a href="http://e-g-d.doorkeeper.jp/events/16300">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第３回目を開催しました。</p>
 
