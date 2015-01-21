@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2015-01-18T14:32:00+09:00</updated>
+  <updated>2015-01-22T00:27:45+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,135 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Gem Reading - Jquery-rails]]></title>
+    <link href="http://jangajan.com/blog/2015/01/21/gem-reading-jquery-rails/"/>
+    <updated>2015-01-21T23:14:52+09:00</updated>
+    <id>http://jangajan.com/blog/2015/01/21/gem-reading-jquery-rails</id>
+    <content type="html"><![CDATA[<p>簡単なやつから攻める。<br/>
+まずは読むことになれます。ということで、jquery-rails。</p>
+
+<!-- more -->
+
+
+<h2>眺める</h2>
+
+<p>lib配下を見ても、これといったファイルないな〜と&hellip;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>lib
+</span><span class='line'>├── jquery
+</span><span class='line'>│   ├── assert_select.rb
+</span><span class='line'>│   ├── rails
+</span><span class='line'>│   │   ├── engine.rb
+</span><span class='line'>│   │   └── version.rb
+</span><span class='line'>│   └── rails.rb
+</span><span class='line'>└── jquery-rails.rb
+</span><span class='line'>
+</span><span class='line'><span class="m">2</span> directories, <span class="m">5</span> files
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>engine.rb
+
+<ul>
+<li>Engin生成</li>
+</ul>
+</li>
+<li>version.rb
+
+<ul>
+<li>現在対応しているjqeruyのバージョンを定数で定義</li>
+</ul>
+</li>
+<li>assert_select.rb
+
+<ul>
+<li>assert_select_jqueryというテストメソッドを提供してくれる</li>
+</ul>
+</li>
+</ul>
+
+
+<p>他はモジュール定義してたり、requireしてたり。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>vendor/assets
+</span><span class='line'>└── javascripts
+</span><span class='line'>    ├── jquery.js
+</span><span class='line'>    ├── jquery.min.js
+</span><span class='line'>    ├── jquery.min.map
+</span><span class='line'>    ├── jquery2.js
+</span><span class='line'>    ├── jquery2.min.js
+</span><span class='line'>    ├── jquery2.min.map
+</span><span class='line'>    └── jquery_ujs.js
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>vendor/assets/javascriptsの中に一式揃ってますねー。<br/>
+そういえば、Rakefileあるじゃん。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>rake build              <span class="c"># Build jquery-rails-4.0.3.gem into the pkg directory</span>
+</span><span class='line'>rake install            <span class="c"># Build and install jquery-rails-4.0.3.gem into system gems</span>
+</span><span class='line'>rake release            <span class="c"># Create tag v4.0.3 and build and push jquery-rails-4.0.3.gem to Rubygems</span>
+</span><span class='line'>rake update_jquery      <span class="c"># Update jQuery versions</span>
+</span><span class='line'>rake update_jquery_ujs  <span class="c"># Update jQuery UJS version</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>中を見てみると、build、install以外のコマンドが定義されてました。</p>
+
+<p><code>release</code> は <code>version.rb</code> と <code>vendor/assets/javascripts</code>にダウンロードしたファイルのバージョン番号比較チェックしている。<br/>
+<code>update_jquery</code> と <code>update_jquery_ujs</code> は <code>vendor/assets/javascripts</code> 下に該当するバージョンのファイルをcurlしてきている。<br/>
+<code>vendor/assets/javascripts</code> に全部突っ込んでしまっているんですね。</p>
+
+<p>jsはでかかったんで、ここまで。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Gem Reading - Active_emoji]]></title>
+    <link href="http://jangajan.com/blog/2015/01/21/gem-reading-active-emoji/"/>
+    <updated>2015-01-21T23:14:19+09:00</updated>
+    <id>http://jangajan.com/blog/2015/01/21/gem-reading-active-emoji</id>
+    <content type="html"><![CDATA[<p>今年の目標にGemを読むというのをあげたので、少しずつやっていきます。
+今日Ginza.rbに参加して知った、<a href="https://github.com/sferik/active_emoji">active_emoji</a>を読んでみます。</p>
+
+<!-- more -->
+
+
+<p>Macでchromeだとソースの絵文字が文字化けするのでSafariでみましょう。<br/>
+コミットコメントから賑やかですね。
+lib配下にcore拡張があります。全部ただのaliasでした。</p>
+
+<p>何かあれば追加するのが良いでしょう。<br/>
+最後に頑張ってサンプルを読みましょう。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rubyのヒアドキュメント]]></title>
@@ -2149,155 +2278,6 @@ Bill同様、あなたも少しずつメタ・プログラミングの世界に�
 </span><span class='line'><span class="o">=&gt;</span> <span class="kp">nil</span>
 </span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[メモ : Array#each_with_objectの簡単な使い方]]></title>
-    <link href="http://jangajan.com/blog/2014/10/27/each-with-object-memo/"/>
-    <updated>2014-10-27T18:50:07+09:00</updated>
-    <id>http://jangajan.com/blog/2014/10/27/each-with-object-memo</id>
-    <content type="html"><![CDATA[<p>each_with_objectの簡単な使い方。
-使い方は気をつけないといけないですね。</p>
-
-<!-- more -->
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="o">].</span><span class="n">each_with_object</span><span class="p">(</span><span class="n">n</span><span class="o">=[]</span><span class="p">){</span><span class="o">|</span><span class="n">v</span><span class="o">|</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">5</span><span class="p">}</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="o">]</span>
-</span><span class='line'><span class="c1"># nを初期化しないで処理</span>
-</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="o">].</span><span class="n">each_with_object</span><span class="p">(</span><span class="n">n</span><span class="p">){</span><span class="o">|</span><span class="n">v</span><span class="o">|</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">5</span><span class="p">}</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="o">]</span>
-</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="o">].</span><span class="n">each_with_object</span><span class="p">(</span><span class="n">n</span><span class="p">){</span><span class="o">|</span><span class="n">v</span><span class="o">|</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">5</span><span class="p">}</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="o">]</span>
-</span><span class='line'><span class="c1"># nをeach_with_objectで初期化</span>
-</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="o">].</span><span class="n">each_with_object</span><span class="p">(</span><span class="n">n</span><span class="o">=[]</span><span class="p">){</span><span class="o">|</span><span class="n">v</span><span class="o">|</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">5</span><span class="p">}</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="o">]</span>
-</span><span class='line'><span class="c1"># nをeach_with_objectの前に宣言</span>
-</span><span class='line'><span class="n">n</span> <span class="o">=</span> <span class="o">[</span><span class="mi">10</span><span class="o">]</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">10</span><span class="o">]</span>
-</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="o">].</span><span class="n">each_with_object</span><span class="p">(</span><span class="n">n</span><span class="p">){</span><span class="o">|</span><span class="n">v</span><span class="o">|</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">5</span><span class="p">}</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[herokuで動くRailsアプリケーションにNew Relicを入れる]]></title>
-    <link href="http://jangajan.com/blog/2014/10/20/use-new-relic-in-rails4-at-heroku/"/>
-    <updated>2014-10-20T15:30:52+09:00</updated>
-    <id>http://jangajan.com/blog/2014/10/20/use-new-relic-in-rails4-at-heroku</id>
-    <content type="html"><![CDATA[<p>Rails4アプリにNew Relicを入れます。<br/>
-herokuで動かす場合はadd-onとかの設定が必要でした。</p>
-
-<p><a href="https://docs.newrelic.com/docs/agents/ruby-agent/installation-configuration/ruby-agent-installation">New Relicの本家</a>と<a href="https://devcenter.heroku.com/articles/newrelic#ruby-configuration">herokuのNew Relicの適用ページ</a>が参考になります。</p>
-
-<!-- more -->
-
-
-<p>New Relicへの登録をすませると、手順ページが表示されていきます。</p>
-
-<h1>New Relicの設定</h1>
-
-<h2>Choose your language</h2>
-
-<p>言語をRubyに選択します。</p>
-
-<h2>Get your license key</h2>
-
-<p>Generate license keyを単にクリックするだけです。<br/>
-これで、newrelic.ymlをダウンロードできます。</p>
-
-<h2>Install the New Relic agent with bundler</h2>
-
-<p>Gemfileの修正と、gemのインストールを実行します。</p>
-
-<h2>Download newrelic.yml</h2>
-
-<p>license keyを生成すると、Donwload the newrelic.yml fileが有効になりますので、クリックしてファイルを取得します。
-その後、<code>${APP_ROOT}/config/newrelic.yml</code>にダウンロードしたファイルを配置します。</p>
-
-<h2>アプリ名の設定</h2>
-
-<p>newrelic.ymlにアプリ名を設定します。</p>
-
-<figure class='code'><figcaption><span>config/newrelic.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">common</span><span class="p-Indicator">:</span> <span class="nl">&amp;default_settings</span>
-</span><span class='line'><span class="nn">...</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">app_name</span><span class="p-Indicator">:</span> <span class="c1">#{アプリケーション名}</span>
-</span><span class='line'><span class="nn">...</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Postgles</h2>
-
-<p>postgresqlの場合は特殊な設定が必要になります。
-なくても動きますが,New Relicの一部機能は動作しません。</p>
-
-<figure class='code'><figcaption><span>config/newrelic.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">common</span><span class="p-Indicator">:</span> <span class="nl">&amp;default_settings</span>
-</span><span class='line'>  <span class="l-Scalar-Plain">transaction_tracer</span><span class="p-Indicator">:</span>
-</span><span class='line'>    <span class="l-Scalar-Plain">explain_enabled</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">false</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>ローカルで確認</h2>
-
-<p>この状態でローカルで確認できます。<br/>
-ローカルがPostgresqlでなければ直前の対応は不要かもしれません。</p>
-
-<p><a href="http://localhost:3000/newrelic">http://localhost:3000/newrelic</a></p>
-
-<h1>herokuの設定</h1>
-
-<p>herokuではadd-onでnew relicと連携します。</p>
-
-<h2>Add-onの設定</h2>
-
-<p>add-on追加のためにはクレジットカードの情報が必須です。
-(無料プランがあります)</p>
-
-<p><a href="https://addons.heroku.com/newrelic">New RelicのAdd-onページ</a>から設定を有効にしてください。</p>
-
-<h2>環境変数の設定</h2>
-
-<p><code>heroku config</code>で設定を変更。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>heroku config:set <span class="nv">NEW_RELIC_APP_NAME</span><span class="o">=</span><span class="s2">&quot;各自のアプリケーション名&quot;</span>
-</span><span class='line'>heroku config:set <span class="nv">RACK_ENV</span><span class="o">=</span>production
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>本番で確認</h2>
-
-<p>このままherokuへのpushが成功した後、数分してからNew Relicにアクセスすれば接続確認できます。</p>
 ]]></content>
   </entry>
   
