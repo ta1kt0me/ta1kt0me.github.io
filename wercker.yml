@@ -8,6 +8,12 @@ build:
             echo "ruby version $(ruby --version) running!"
             echo "from location $(which ruby)"
             echo -p "gem list: $(gem list)"
+    - script:
+        name: touch hoge.txt
+        code: touch ./public/hoge.txt
+    - script:
+        name: git commit test
+        code: git -am 'hogehoge'
 deploy:
   steps:
     - heroku-deploy
