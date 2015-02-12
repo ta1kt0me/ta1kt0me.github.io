@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2015-01-22T00:27:45+09:00</updated>
+  <updated>2015-02-12T23:16:42+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,94 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[MetaNight 第5回を開催しました]]></title>
+    <link href="http://jangajan.com/blog/2015/02/12/e-g-d-meta-night-5th/"/>
+    <updated>2015-02-12T13:46:20+09:00</updated>
+    <id>http://jangajan.com/blog/2015/02/12/e-g-d-meta-night-5th</id>
+    <content type="html"><![CDATA[<p>イベント概要については、<a href="http://jangajan.com/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+
+<p><a href="http://e-g-d.doorkeeper.jp/">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第５回目を開催しました。</p>
+
+<p><a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=B00N9I0RMQ&linkCode=as2&tag=pochan0919-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00N9I0RMQ&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=pochan0919-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=B00N9I0RMQ" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
+
+<!-- more -->
+
+
+<h1>活動内容</h1>
+
+<p>フリーマンカフェで実施しました。<br/>
+Part 1 Chapter2 の The Truth About Classesから Constantの前までやりました。<br/>
+読みながらの意見とかはこちらに載せてあります。<br/>
+<a href="https://trello.com/b/6JT4fy3D/metanight-5th">https://trello.com/b/6JT4fy3D/metanight-5th</a></p>
+
+<h1>感想</h1>
+
+<p>前回よりもかなり間が空いてしまった&hellip;(結局1月にできなかった&hellip;)<br/>
+Billの図のおかげで、Rubyにおけるクラスとオブジェクトの関係性がよりはっきりわかってきました。<br/>
+Billできるやつ。</p>
+
+<h2>Classes themselves are nothing but objects</h2>
+
+<p><strong>Putting It All Together</strong> で表しているのですが、クラスはオブジェクトなんだよ、っていうことを語っています。そこが他の言語とは違うんだと。<br/>
+Classはobject_id持ってますし、変数に代入することもできます。実際にはClassへの参照を表現している定数(Class名)を変数に代入しています。ここは、次回のConstantのところに繋がってきますね。</p>
+
+<p>ClassとModuleの関係の話も出てきました。２つは非常によく似ているけれど、使い分け方の基準として</p>
+
+<ul>
+<li>インスタンス化と継承を使いたいならClass</li>
+<li>どこでもincludeできるのがModule</li>
+</ul>
+
+
+<p>と書いてありました。インスタンス化する必要があるかどうかが、おおきな分かれ目になるのかな。</p>
+
+<h2>英語</h2>
+
+<ul>
+<li>Take a deep breath</li>
+</ul>
+
+
+<p>文頭でよく見かける、一息ついて、という表現。takeの使い所ってよく分からないよね、って話が出ました。取るってニュアンスはわかるけれど、固定表現が多いのかな？</p>
+
+<ul>
+<li>get away with</li>
+</ul>
+
+
+<p>やりすごす、とか、すますことができる、とか&hellip;?</p>
+
+<ul>
+<li>Chances are</li>
+</ul>
+
+
+<p>多分、だろう、といった表現。なんでmaybeじゃないんだろう、特殊な意味が含まれてるのかな？<br/>
+微妙なニュアンスの違いがけっこう難しいです。</p>
+
+<ul>
+<li>A variable can reference a class</li>
+</ul>
+
+
+<p>referenceって形容詞だから文法的に変じゃない？って話が挙がりました。結果として、動詞としても使えるようなので、少しずつだけど、言葉が変化している面白い例なんだなと感じました。</p>
+
+<h2>その他</h2>
+
+<ul>
+<li>meta_ruby = MetaRuby.newのとき、MetaRuby.instance_methods == meta_ruby.methods</li>
+<li>allocate メソッド、rails(ActiveRecord)だと再定義されてる</li>
+<li>Class.superclassはModule、Module.classはClass、Class.super&hellip;.というループ</li>
+</ul>
+
+
+<p>今回は初参加の方が多くて新鮮でした。人数増やしたりオンライン検討したりしたほうがいいのかなぁと思ったり。</p>
+
+<p>第6回は2月末か、3月頭にやる。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Gem Reading - Jquery-rails]]></title>
@@ -124,9 +212,9 @@
   
   <entry>
     <title type="html"><![CDATA[Gem Reading - Active_emoji]]></title>
-    <link href="http://jangajan.com/blog/2015/01/21/gem-reading-active-emoji/"/>
-    <updated>2015-01-21T23:14:19+09:00</updated>
-    <id>http://jangajan.com/blog/2015/01/21/gem-reading-active-emoji</id>
+    <link href="http://jangajan.com/blog/2015/01/20/gem-reading-active-emoji/"/>
+    <updated>2015-01-20T23:59:19+09:00</updated>
+    <id>http://jangajan.com/blog/2015/01/20/gem-reading-active-emoji</id>
     <content type="html"><![CDATA[<p>今年の目標にGemを読むというのをあげたので、少しずつやっていきます。
 今日Ginza.rbに参加して知った、<a href="https://github.com/sferik/active_emoji">active_emoji</a>を読んでみます。</p>
 
@@ -2188,96 +2276,6 @@ Bill同様、あなたも少しずつメタ・プログラミングの世界に�
 
 <p>見出しぐらい英語でかけるようになりたい<br/>
 今月中に第2回を開く</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rubyでメソッドを定義しているクラスを調べたい]]></title>
-    <link href="http://jangajan.com/blog/2014/10/28/which-of-the-class-dose-have-the-method/"/>
-    <updated>2014-10-28T05:55:25+09:00</updated>
-    <id>http://jangajan.com/blog/2014/10/28/which-of-the-class-dose-have-the-method</id>
-    <content type="html"><![CDATA[<p>メソッドを定義していくクラスを探る方法です。</p>
-
-<!-- more -->
-
-
-<h1>定義しているClassを知りたい</h1>
-
-<p>クラス名だけを知りたいのであれば<code>Method#owner</code>を利用します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># singleton method</span>
-</span><span class='line'><span class="nb">String</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:try_convert</span><span class="p">)</span><span class="o">.</span><span class="n">owner</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="c1">#&lt;Class:String&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># instance method</span>
-</span><span class='line'><span class="s2">&quot;s&quot;</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:method_missing</span><span class="p">)</span><span class="o">.</span><span class="n">owner</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="no">BasicObject</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>もうちょっと詳しい情報が知りたい</h1>
-
-<p><code>Method#inspect</code>を使うともう少し詳しい情報を取得できます。
-といってもそんなに大きく変わりません。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># singleton method</span>
-</span><span class='line'><span class="nb">String</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:try_convert</span><span class="p">)</span><span class="o">.</span><span class="n">inspect</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;#&lt;Method: String.try_convert&gt;&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># instance method</span>
-</span><span class='line'><span class="s2">&quot;s&quot;</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:method_missing</span><span class="p">)</span><span class="o">.</span><span class="n">inspect</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;#&lt;Method: String(BasicObject)#method_missing&gt;&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>当たり前の話ですが、特異メソッド(クラスメソッド、singleton method)は継承されないですね。
-どいうことかというと、DateTimeクラスでは、Dateクラスの得意メソッドを呼び出せない、ということに気付かされました。
-クラスメソッドに対してownerとかするの意味ねぇ。</p>
-
-<h1>定義している場所を知りたい</h1>
-
-<p>1.9以降(1.9.3?)では<code>Method#source_location</code>というメソッドで、メソッドの定義された具体的な場所の情報が分かります。
-ただし、取得できるのはrubyで定義されたものに限るようです。
-(ネイティブで定義されているメソッドの場合nilになる)</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># singleton method</span>
-</span><span class='line'><span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:where</span><span class="p">)</span><span class="o">.</span><span class="n">source_location</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">APP_ROOT</span><span class="si">}</span><span class="s2">/vendor/bundle/ruby/2.0.0/gems/activerecord-4.0.2/lib/active_record/querying.rb&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="o">]</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># instance method</span>
-</span><span class='line'><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:blank?</span><span class="p">)</span><span class="o">.</span><span class="n">source_location</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">APP_ROOT</span><span class="si">}</span><span class="s2">/vendor/bundle/ruby/2.0.0/gems/activesupport-4.0.2/lib/active_support/core_ext/object/blank.rb&quot;</span><span class="p">,</span> <span class="mi">92</span><span class="o">]</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># ネイティブで定義されたメソッドはnilを返す</span>
-</span><span class='line'><span class="s2">&quot;s&quot;</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:method_missing</span><span class="p">)</span><span class="o">.</span><span class="n">source_location</span>
-</span><span class='line'><span class="o">=&gt;</span> <span class="kp">nil</span>
-</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   

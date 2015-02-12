@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Gem Reading - Active_emoji - JanGaJan.com</title>
+  <title>MetaNight 第5回を開催しました - JanGaJan.com</title>
   <meta name="author" content="talkto_me">
   
-  <meta name="description" content="今年の目標にGemを読むというのをあげたので、少しずつやっていきます。
-今日Ginza.rbに参加して知った、active_emojiを読んでみます。 Macでchromeだとソースの絵文字が文字化けするのでSafariでみましょう。
-コミットコメントから賑やかですね。 &hellip;">
+  <meta name="description" content="イベント概要については、About MetaNightをご覧ください。 MetaNightというMetaprogramming Ruby 2の読書会の第５回目を開催しました。 活動内容 フリーマンカフェで実施しました。
+Part 1 Chapter2 の The Truth About &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jangajan.com/blog/2015/01/21/gem-reading-active-emoji/">
+  <link rel="canonical" href="http://jangajan.com/blog/2015/02/12/e-g-d-meta-night-5th/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="JanGaJan.com" type="application/atom+xml">
@@ -112,7 +111,7 @@
   <header>
     
       
-        <h1 class="entry-title">Gem Reading - Active_emoji</h1>
+        <h1 class="entry-title">MetaNight 第5回を開催しました</h1>
       
     
     
@@ -122,25 +121,93 @@
 
 
 
-<time class='entry-date' datetime='2015-01-21T23:14:19+09:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2015</span></span> <span class='time'>11:14 pm</span></time>
+<time class='entry-date' datetime='2015-02-12T13:46:20+09:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>1:46 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>今年の目標にGemを読むというのをあげたので、少しずつやっていきます。
-今日Ginza.rbに参加して知った、<a href="https://github.com/sferik/active_emoji">active_emoji</a>を読んでみます。</p>
+<div class="entry-content"><p>イベント概要については、<a href="/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+
+<p><a href="http://e-g-d.doorkeeper.jp/">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第５回目を開催しました。</p>
+
+<p><a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=B00N9I0RMQ&linkCode=as2&tag=pochan0919-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00N9I0RMQ&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=pochan0919-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=B00N9I0RMQ" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
 
 <!-- more -->
 
 
-<p>Macでchromeだとソースの絵文字が文字化けするのでSafariでみましょう。<br/>
-コミットコメントから賑やかですね。
-lib配下にcore拡張があります。全部ただのaliasでした。</p>
+<h1>活動内容</h1>
 
-<p>何かあれば追加するのが良いでしょう。<br/>
-最後に頑張ってサンプルを読みましょう。</p>
+<p>フリーマンカフェで実施しました。<br/>
+Part 1 Chapter2 の The Truth About Classesから Constantの前までやりました。<br/>
+読みながらの意見とかはこちらに載せてあります。<br/>
+<a href="https://trello.com/b/6JT4fy3D/metanight-5th">https://trello.com/b/6JT4fy3D/metanight-5th</a></p>
+
+<h1>感想</h1>
+
+<p>前回よりもかなり間が空いてしまった&hellip;(結局1月にできなかった&hellip;)<br/>
+Billの図のおかげで、Rubyにおけるクラスとオブジェクトの関係性がよりはっきりわかってきました。<br/>
+Billできるやつ。</p>
+
+<h2>Classes themselves are nothing but objects</h2>
+
+<p><strong>Putting It All Together</strong> で表しているのですが、クラスはオブジェクトなんだよ、っていうことを語っています。そこが他の言語とは違うんだと。<br/>
+Classはobject_id持ってますし、変数に代入することもできます。実際にはClassへの参照を表現している定数(Class名)を変数に代入しています。ここは、次回のConstantのところに繋がってきますね。</p>
+
+<p>ClassとModuleの関係の話も出てきました。２つは非常によく似ているけれど、使い分け方の基準として</p>
+
+<ul>
+<li>インスタンス化と継承を使いたいならClass</li>
+<li>どこでもincludeできるのがModule</li>
+</ul>
+
+
+<p>と書いてありました。インスタンス化する必要があるかどうかが、おおきな分かれ目になるのかな。</p>
+
+<h2>英語</h2>
+
+<ul>
+<li>Take a deep breath</li>
+</ul>
+
+
+<p>文頭でよく見かける、一息ついて、という表現。takeの使い所ってよく分からないよね、って話が出ました。取るってニュアンスはわかるけれど、固定表現が多いのかな？</p>
+
+<ul>
+<li>get away with</li>
+</ul>
+
+
+<p>やりすごす、とか、すますことができる、とか&hellip;?</p>
+
+<ul>
+<li>Chances are</li>
+</ul>
+
+
+<p>多分、だろう、といった表現。なんでmaybeじゃないんだろう、特殊な意味が含まれてるのかな？<br/>
+微妙なニュアンスの違いがけっこう難しいです。</p>
+
+<ul>
+<li>A variable can reference a class</li>
+</ul>
+
+
+<p>referenceって形容詞だから文法的に変じゃない？って話が挙がりました。結果として、動詞としても使えるようなので、少しずつだけど、言葉が変化している面白い例なんだなと感じました。</p>
+
+<h2>その他</h2>
+
+<ul>
+<li>meta_ruby = MetaRuby.newのとき、MetaRuby.instance_methods == meta_ruby.methods</li>
+<li>allocate メソッド、rails(ActiveRecord)だと再定義されてる</li>
+<li>Class.superclassはModule、Module.classはClass、Class.super&hellip;.というループ</li>
+</ul>
+
+
+<p>今回は初参加の方が多くて新鮮でした。人数増やしたりオンライン検討したりしたほうがいいのかなぁと思ったり。</p>
+
+<p>第6回は2月末か、3月頭にやる。</p>
 </div>
 
 
@@ -165,7 +232,7 @@ lib配下にcore拡張があります。全部ただのaliasでした。</p>
 
 
 
-<time class='entry-date' datetime='2015-01-21T23:14:19+09:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2015</span></span> <span class='time'>11:14 pm</span></time>
+<time class='entry-date' datetime='2015-02-12T13:46:20+09:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>1:46 pm</span></time>
       
 
 <span class="categories">
@@ -178,9 +245,9 @@ lib配下にcore拡張があります。全部ただのaliasでした。</p>
     </p>
     
       <div class="sharing">
-  <a href="http://b.hatena.ne.jp/entry/http://jangajan.com/blog/2015/01/21/gem-reading-active-emoji/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  <a href="http://b.hatena.ne.jp/entry/http://jangajan.com/blog/2015/02/12/e-g-d-meta-night-5th/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jangajan.com/blog/2015/01/21/gem-reading-active-emoji/" data-via="talkto_me" data-counturl="http://jangajan.com/blog/2015/01/21/gem-reading-active-emoji/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jangajan.com/blog/2015/02/12/e-g-d-meta-night-5th/" data-via="talkto_me" data-counturl="http://jangajan.com/blog/2015/02/12/e-g-d-meta-night-5th/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -200,10 +267,8 @@ lib配下にcore拡張があります。全部ただのaliasでした。</p>
 </script>
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2015/01/15/rubyheredocument/" title="Previous Post: Rubyのヒアドキュメント">&laquo; Rubyのヒアドキュメント</a>
+        <a class="basic-alignment left" href="/blog/2015/01/21/gem-reading-jquery-rails/" title="Previous Post: Gem Reading - jquery-rails">&laquo; Gem Reading - jquery-rails</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2015/01/21/gem-reading-jquery-rails/" title="Next Post: Gem Reading - jquery-rails">Gem Reading - jquery-rails &raquo;</a>
       
     </p>
     <p>
@@ -247,8 +312,8 @@ lib配下にcore拡張があります。全部ただのaliasでした。</p>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://jangajan.com/blog/2015/01/21/gem-reading-active-emoji/';
-        var disqus_url = 'http://jangajan.com/blog/2015/01/21/gem-reading-active-emoji/';
+        var disqus_identifier = 'http://jangajan.com/blog/2015/02/12/e-g-d-meta-night-5th/';
+        var disqus_url = 'http://jangajan.com/blog/2015/02/12/e-g-d-meta-night-5th/';
         var disqus_script = 'embed.js';
       
     (function () {

@@ -5,16 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Rubyのヒアドキュメント - JanGaJan.com</title>
+  <title>Gem Reading - Active_emoji - JanGaJan.com</title>
   <meta name="author" content="talkto_me">
   
-  <meta name="description" content="あまり使う機会もなく理解できていない部分があったのでヒアドキュメントについて整理しました。
-ヒアドキュメントって、heredocumentなんですね。hearだと思ってた&hellip; 参考にしたのは2.1のドキュメントです。 書き方 1
-2
-3
-4
-5
-print &lt;&lt;EOS &hellip;">
+  <meta name="description" content="今年の目標にGemを読むというのをあげたので、少しずつやっていきます。
+今日Ginza.rbに参加して知った、active_emojiを読んでみます。 Macでchromeだとソースの絵文字が文字化けするのでSafariでみましょう。
+コミットコメントから賑やかですね。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -23,7 +19,7 @@ print &lt;&lt;EOS &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jangajan.com/blog/2015/01/15/rubyheredocument/">
+  <link rel="canonical" href="http://jangajan.com/blog/2015/01/20/gem-reading-active-emoji/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="JanGaJan.com" type="application/atom+xml">
@@ -116,7 +112,7 @@ print &lt;&lt;EOS &hellip;">
   <header>
     
       
-        <h1 class="entry-title">Rubyのヒアドキュメント</h1>
+        <h1 class="entry-title">Gem Reading - Active_emoji</h1>
       
     
     
@@ -126,111 +122,25 @@ print &lt;&lt;EOS &hellip;">
 
 
 
-<time class='entry-date' datetime='2015-01-15T19:18:55+09:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>7:18 pm</span></time>
+<time class='entry-date' datetime='2015-01-20T23:59:19+09:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:59 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>あまり使う機会もなく理解できていない部分があったのでヒアドキュメントについて整理しました。<br/>
-ヒアドキュメントって、heredocumentなんですね。hearだと思ってた&hellip;</p>
-
-<p>参考にしたのは<a href="http://docs.ruby-lang.org/ja/2.1.0/doc/spec=2fliteral.html#here">2.1のドキュメント</a>です。</p>
+<div class="entry-content"><p>今年の目標にGemを読むというのをあげたので、少しずつやっていきます。
+今日Ginza.rbに参加して知った、<a href="https://github.com/sferik/active_emoji">active_emoji</a>を読んでみます。</p>
 
 <!-- more -->
 
 
-<h2>書き方</h2>
+<p>Macでchromeだとソースの絵文字が文字化けするのでSafariでみましょう。<br/>
+コミットコメントから賑やかですね。
+lib配下にcore拡張があります。全部ただのaliasでした。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">print</span> <span class="o">&lt;&lt;</span><span class="no">EOS</span>  <span class="c1"># &lt;&lt;の後に空白を入れたらエラー</span>
-</span><span class='line'><span class="sh">  hoge</span>
-</span><span class='line'><span class="sh">  fuga</span>
-</span><span class='line'><span class="no">EOS</span>
-</span><span class='line'><span class="c1"># 終了ラベルは行頭から始める必要がある</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>&lt;&lt;-</h2>
-
-<p>末尾のEOSの前にインデントを入れてもOK</p>
-
-<h2>&lt;&lt;&lsquo;EOS&rsquo;</h2>
-
-<p>開始ラベルをシングルクォーテーションで囲んだ場合、ヒアドキュメント内で文字列展開しない</p>
-
-<h2>&lt;&lt;&ldquo;EOS&rdquo;</h2>
-
-<p>開始ラベルをダブルクォーテーションで囲んだ場合、ヒアドキュメント内で文字列展開する</p>
-
-<h2>&lt;&lt;`EOS`</h2>
-
-<p>開始ラベルをバッククォートで囲んだ場合、ヒアドキュメント内のコマンドの実行結果を表示する</p>
-
-<h2>複数指定</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">print</span> <span class="o">&lt;&lt;</span><span class="no">EOS1</span><span class="p">,</span> <span class="o">&lt;&lt;</span><span class="no">EOS2</span>
-</span><span class='line'><span class="err">  eos1</span>
-</span><span class='line'><span class="err">EOS1  # ここまでがEOS1のヒアドキュメント、これ以降はEOS2のヒアドキュメント</span>
-</span><span class='line'><span class="err">  eos2</span>
-</span><span class='line'><span class="err">EOS2</span>
-</span><span class='line'><span class="err"># ここまでがEOS2のヒアドキュメント、  </span>
-</span><span class='line'><span class="sh">  eos1</span>
-</span><span class='line'><span class="sh">EOS1  # ここまでがEOS1のヒアドキュメント、これ以降はEOS2のヒアドキュメント</span>
-</span><span class='line'><span class="sh">  eos2</span>
-</span><span class='line'><span class="no">EOS2</span>
-</span><span class='line'><span class="c1"># ここまでがEOS2のヒアドキュメント、  </span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>EOS1終了ラベルを書く前にEOS2終了ラベルを書いたとしても、EOS1終了ラベルが出てくるまで、EOS1のヒアドキュメントとなる</p>
-
-<h2>その他</h2>
-
-<h3>開始ラベルの次の行からヒアドキュメントになる</h3>
-
-<p>読みづらいからあまりしないと思うけれど、例えば</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">printf</span><span class="p">(</span><span class="s1">&#39;%s%d&#39;</span><span class="p">,</span> <span class="o">&lt;&lt;</span><span class="no">EOS</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
-</span><span class='line'><span class="sh">  hoge</span>
-</span><span class='line'><span class="no">EOS</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>という場合に、こうしたらエラー。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">printf</span><span class="p">(</span><span class="s1">&#39;%s%d&#39;</span><span class="p">,</span> <span class="o">&lt;&lt;</span><span class="no">EOS</span>
-</span><span class='line'><span class="sh">             , 1000)</span>
-</span><span class='line'><span class="sh">  hoge</span>
-</span><span class='line'><span class="no">EOS</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>コメントの不自然はご愛嬌です。嘘です。一番最後に表示したことで、表示がおかしくなったためです。<br/>
-また何かあったら追記します。</p>
+<p>何かあれば追加するのが良いでしょう。<br/>
+最後に頑張ってサンプルを読みましょう。</p>
 </div>
 
 
@@ -255,7 +165,7 @@ print &lt;&lt;EOS &hellip;">
 
 
 
-<time class='entry-date' datetime='2015-01-15T19:18:55+09:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>7:18 pm</span></time>
+<time class='entry-date' datetime='2015-01-20T23:59:19+09:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:59 pm</span></time>
       
 
 <span class="categories">
@@ -268,9 +178,9 @@ print &lt;&lt;EOS &hellip;">
     </p>
     
       <div class="sharing">
-  <a href="http://b.hatena.ne.jp/entry/http://jangajan.com/blog/2015/01/15/rubyheredocument/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  <a href="http://b.hatena.ne.jp/entry/http://jangajan.com/blog/2015/01/20/gem-reading-active-emoji/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jangajan.com/blog/2015/01/15/rubyheredocument/" data-via="talkto_me" data-counturl="http://jangajan.com/blog/2015/01/15/rubyheredocument/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jangajan.com/blog/2015/01/20/gem-reading-active-emoji/" data-via="talkto_me" data-counturl="http://jangajan.com/blog/2015/01/20/gem-reading-active-emoji/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -290,10 +200,10 @@ print &lt;&lt;EOS &hellip;">
 </script>
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2015/01/04/yochiyochi-dokusyokansoubun/" title="Previous Post: 冬休みの宿題">&laquo; 冬休みの宿題</a>
+        <a class="basic-alignment left" href="/blog/2015/01/15/rubyheredocument/" title="Previous Post: Rubyのヒアドキュメント">&laquo; Rubyのヒアドキュメント</a>
       
       
-        <a class="basic-alignment right" href="/blog/2015/01/20/gem-reading-active-emoji/" title="Next Post: Gem Reading - active_emoji">Gem Reading - active_emoji &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2015/01/21/gem-reading-jquery-rails/" title="Next Post: Gem Reading - jquery-rails">Gem Reading - jquery-rails &raquo;</a>
       
     </p>
     <p>
@@ -337,8 +247,8 @@ print &lt;&lt;EOS &hellip;">
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://jangajan.com/blog/2015/01/15/rubyheredocument/';
-        var disqus_url = 'http://jangajan.com/blog/2015/01/15/rubyheredocument/';
+        var disqus_identifier = 'http://jangajan.com/blog/2015/01/20/gem-reading-active-emoji/';
+        var disqus_url = 'http://jangajan.com/blog/2015/01/20/gem-reading-active-emoji/';
         var disqus_script = 'embed.js';
       
     (function () {
