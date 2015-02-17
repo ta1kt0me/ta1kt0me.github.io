@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby-on-rails | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby-on-rails/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2015-02-12T23:16:42+09:00</updated>
+  <updated>2015-02-17T18:38:25+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,93 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Gem Reading - Dotenv]]></title>
+    <link href="http://jangajan.com/blog/2015/02/16/gem-reading-dotenv/"/>
+    <updated>2015-02-16T17:27:40+09:00</updated>
+    <id>http://jangajan.com/blog/2015/02/16/gem-reading-dotenv</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/bkeepers/dotenv">dotenv</a>というGemを知ったので覗いてみました。</p>
+
+<!-- more -->
+
+
+<h1>about dotevn</h1>
+
+<p>読む前にどんなものか簡単に確認。</p>
+
+<h2>これなに？</h2>
+
+<p>環境変数 ENV をファイル管理できるGemです。<a href="http://qiita.com/closer/items/f8d8ba00ae86d7051764">こちら</a>の記事が参考になりました。</p>
+
+<h2>どう使うの？</h2>
+
+<pre><code class="rb Gemfile"># 後でbundle install
+gem 'dotenv'
+</code></pre>
+
+<p>デフォルトでは<code>.env</code>というファイルの中に、
+<code>yml .env
+HOGE=1
+FUGA=2
+</code>
+と書いて、<code>.env</code>を読み込むための命令 <code>Dotenv.load</code> を実行すると、 <code>ENV['HOGE']</code> が <code>1</code> を返すようになります。環境変数をわざわざexportコマンドを使ったり、<code>.zshrc</code>といった設定ファイルに書かなくても使えるようになります。<br/>
+fixtureを見た感じ<code>=</code>じゃなくて、YAMLっぽく<code>:</code>も使えそう。</p>
+
+<h1>読んでみる</h1>
+
+<h2>2つのGem</h2>
+
+<p>このGemからは2つのGemを利用できます。</p>
+
+<pre><code class="ruby Gemfile">source 'https://rubygems.org'
+gemspec :name =&gt; 'dotenv'
+gemspec :name =&gt; 'dotenv-rails'
+</code></pre>
+
+<p>gemspecファイルも2つあった。<br/>
+<code>dotenv</code>というGemはこの機能のベース部分。<code>dotenv-rails</code>というGemは、Railsを利用するときに、<code>dotenv</code>を自動で有効にしてくれるラッパーです。それと、このGemにはCLIのスクリプトも包含しています。</p>
+
+<h2>dotenv.rb</h2>
+
+<p>ここが外部から呼び出すインターフェースのメソッド(load, load!, overload)を定義しています。<code>module Dotenv extend self</code>として、これらをmoduleの特異メソッドにしています。<br/>
+環境変数を定義するファイルをこのメソッドの引数として渡せばいいが、引数なしの場合は <code>.env</code> がデフォルト値となります。</p>
+
+<p>まだ分かっていないのですが、 <code>instrument</code> というメソッドは、 <code>Active Support Instrumentation</code> という機能を使っている。  この機能はRails限定。</p>
+
+<p><code>reduce</code>が使われているんだけど、<code>inject</code> とどう使い分けするのかなって疑問に思ったら<a href="http://magazine.rubyist.net/?0038-MapAndCollect#l4">こんな記事</a>がありました。smalltalkとlispの考え方の違いか〜&hellip;実際にはaliasだから使う人の好みが出そう。</p>
+
+<h2>environment.rb</h2>
+
+<p><code>Dotenv::Environment</code>は<code>Hash</code>の子クラス。<code>.env</code>内のkey,value情報を自身に格納して、<code>apply</code> or <code>apply!</code> を呼び出すことで<code>ENV</code>に設定している。<code>apply</code>メソッドの呼び出しは、<code>dotenv.rb</code>で行っている。<code>Dotenv::Environment</code>の<code>initialize</code>の一部として<code>.env</code>の読み込みとパースをやってる。</p>
+
+<h2>parse.rb</h2>
+
+<p>大事なのは<code>call</code>メソッド。ここで<code>.env</code>の内容がパースされる。正規表現弱いんでこのあたりは宿題&hellip;orz<br/>
+<code>@@substitutions</code>というクラス変数があるんだけどここには<code>Substitutions</code>のnamespaceにあるクラスの配列が入ってる。<code>.env</code>のvalueに設定できるものとして、</p>
+
+<ol>
+<li>コマンドの出力結果</li>
+<li>変数展開</li>
+</ol>
+
+
+<p>がある。
+1 は <code>Dotenv::Substitutions::Command</code>で処理し、2 は<code>Dotenv::Substitutions::Variable</code>で処理する。  あー、実際にはそうなるように値を設定しているのかな？</p>
+
+<p>Substitutions.constants のところでクラス名が定数だということがわかった。</p>
+
+<h2>rails.rb</h2>
+
+<p>デフォルトでは、<code>before_configuration</code>のときに、<code>.env</code>を読み込む。<code>dotenv</code>と違い、ファイル名は<code>.env.local</code>,<code>.env.#{Rails.env}</code>もデフォルトで読み込み対象となる。</p>
+
+<p>それと、上述の<code>Active Support Instrumentation</code>をspringによるファイル変更時のENV再設定に利用しているっぽい。この通知の仕組み？をもうちょっと掘り下げてみようかな。</p>
+
+<h1>終わりに</h1>
+
+<p>英語が堪能は方は<a href="http://blog.mah-lab.com/2014/08/15/dotenv/">こちら</a>が参考になるかも。全然内容が頭の中に入ってこなかったのでもっとリスニング練習しよう。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Railsのexists?とfind_byはどっちが早いのか]]></title>
@@ -257,120 +344,6 @@ end
 <p>上記の実行結果を値とした環境変数(SECRET_KEY_BASE)を設定します。</p>
 
 <pre><code class="sh">heroku config:add SECRET_KEY_BASE=rake secretの実行結果
-</code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rails4でacts-as-taggable-on Gemを使う]]></title>
-    <link href="http://jangajan.com/blog/2014/10/04/acts-as-taggable-on-in-rails/"/>
-    <updated>2014-10-04T03:40:31+09:00</updated>
-    <id>http://jangajan.com/blog/2014/10/04/acts-as-taggable-on-in-rails</id>
-    <content type="html"><![CDATA[<p>ユーザーに紐づくタスクに、タグ付けをするという機能を実現する方法です。<br/>
-<code>acts-as-taggable-on</code>というgemを利用することで簡単(苦戦した&hellip;)にタグ機能は実現できるそうです。<br/>
-なんとかできたっぽい&hellip;</p>
-
-<p>環境は、こんな感じです。</p>
-
-<ul>
-<li>Rails 4.1.6</li>
-<li>ruby 2.1.2p95</li>
-<li>acts-as-taggable-on 3.4.2</li>
-</ul>
-
-
-<p>Githubの<a href="https://github.com/mbleigh/acts-as-taggable-on#tag-ownership">README</a>を参考にしました</p>
-
-<!-- more -->
-
-
-<h1>Model</h1>
-
-<p>そもそもリレーション関係の設定でハマりましたが、これで良さそうです。<br/>
-関係としては<code>user 1-n task</code>となり、taskにタグを設定します。<br/>
-タグは、userごとに別々に管理します。</p>
-
-<pre><code class="rb app/models/user.rb">class User &lt; ActiveRecord::Base
-  acts_as_tagger
-  has_many :tasks, dependent: :destroy
-  ...
-end
-</code></pre>
-
-<pre><code class="rb app/models/task.rb">class Task &lt; ActiveRecord::Base
-  acts_as_taggable
-  belongs_to :user
-  ...
-end
-</code></pre>
-
-<h1>View</h1>
-
-<p>タグのところだけピックアップ。<br/>
-（簡単なサンプル作れば良かった）  <br/>
-画面表示するController内のメソッドで、選択可能なタグを<code>@user_tags</code>に入れています。<br/>
-タグは複数選択可能にするため、checkboxを利用しました。<br/>
-checkbox生成でrailsの仕組みを利用しようとしたのですが、以下の2点を実現しようとしてうまいやり方が見つからなかった&hellip;</p>
-
-<ul>
-<li>labelでクリック連携</li>
-<li>valueの値をタグの名前</li>
-</ul>
-
-
-<p>form_for内に記述します。</p>
-
-<pre><code class="haml app/views/tasks/_form.html.haml">/ @user_tagsはcontrollerで配列で設定 ex) =&gt; ["tag1", "tag2"]
-- @user_tags.each do |tag|
-  / tagを複数選択可能にするため、checkboxを利用
-  %input{id:"tag-#{tag}" ,name:'task[tag_list][]', type:'checkbox',value:"#{tag}"}
-  %label{for:"tag-#{tag}"}
-    %span.task-tag
-      = "#{tag}"
-</code></pre>
-
-<p>タグ付けよりもrailsでcheckbox使うところに時間とられた&hellip;宿題ですね。</p>
-
-<h1>Controller</h1>
-
-<p>リクエストのtask[tag_list]という値の中に、タグが含まれます。<br/>
-<code>permit</code>で、配列をチェックしたい場合は、<code>tag_list: []</code>と指定してあげる必要がありました。</p>
-
-<pre><code class="rb app/controllers/tasks_controller.rb">class TasksController &lt; ApplicationController
-  ...
-  def create
-    # current_user =&gt; User.find(session[:user_id])
-    @task = current_user.tasks.build(task_params)
-    @task.user = current_user
-    # tagの設定処理 :withには'tag1, tag2'という形式の文字列を設定することでタグを登録できる
-    current_user.tag(@task, :with =&gt; @task.tag_list.join(', '), :on =&gt; :tags)
-    if @task.save
-      # 成功処理
-    else
-      # 失敗処理
-    end
-  end
-  ...
-
-  private
-  def task_params
-    params.require(:task).permit(
-      # tag_list: []を指定することで、checkboxの複数の値を配列にして、tag_listに設定可能になる
-      :id, :name, :deadline, tag_list: []
-    )
-  end
-end
-</code></pre>
-
-<p>もしかしたらもっといいやり方があるかもしれません。<br/>
-気をつける場所はいくつかあるものの、意外と簡単かも。</p>
-
-<h1>補足</h1>
-
-<h2>ユーザーが設定しているタグの一覧を取得する</h2>
-
-<pre><code class="rb">@user_tags = current_user.owned_tag_list
-=&gt; ["tag1", "tag2"]
 </code></pre>
 ]]></content>
   </entry>

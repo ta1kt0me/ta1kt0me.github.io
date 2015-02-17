@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2015-02-12T23:16:42+09:00</updated>
+  <updated>2015-02-17T18:38:25+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,93 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Gem Reading - Dotenv]]></title>
+    <link href="http://jangajan.com/blog/2015/02/16/gem-reading-dotenv/"/>
+    <updated>2015-02-16T17:27:40+09:00</updated>
+    <id>http://jangajan.com/blog/2015/02/16/gem-reading-dotenv</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/bkeepers/dotenv">dotenv</a>というGemを知ったので覗いてみました。</p>
+
+<!-- more -->
+
+
+<h1>about dotevn</h1>
+
+<p>読む前にどんなものか簡単に確認。</p>
+
+<h2>これなに？</h2>
+
+<p>環境変数 ENV をファイル管理できるGemです。<a href="http://qiita.com/closer/items/f8d8ba00ae86d7051764">こちら</a>の記事が参考になりました。</p>
+
+<h2>どう使うの？</h2>
+
+<pre><code class="rb Gemfile"># 後でbundle install
+gem 'dotenv'
+</code></pre>
+
+<p>デフォルトでは<code>.env</code>というファイルの中に、
+<code>yml .env
+HOGE=1
+FUGA=2
+</code>
+と書いて、<code>.env</code>を読み込むための命令 <code>Dotenv.load</code> を実行すると、 <code>ENV['HOGE']</code> が <code>1</code> を返すようになります。環境変数をわざわざexportコマンドを使ったり、<code>.zshrc</code>といった設定ファイルに書かなくても使えるようになります。<br/>
+fixtureを見た感じ<code>=</code>じゃなくて、YAMLっぽく<code>:</code>も使えそう。</p>
+
+<h1>読んでみる</h1>
+
+<h2>2つのGem</h2>
+
+<p>このGemからは2つのGemを利用できます。</p>
+
+<pre><code class="ruby Gemfile">source 'https://rubygems.org'
+gemspec :name =&gt; 'dotenv'
+gemspec :name =&gt; 'dotenv-rails'
+</code></pre>
+
+<p>gemspecファイルも2つあった。<br/>
+<code>dotenv</code>というGemはこの機能のベース部分。<code>dotenv-rails</code>というGemは、Railsを利用するときに、<code>dotenv</code>を自動で有効にしてくれるラッパーです。それと、このGemにはCLIのスクリプトも包含しています。</p>
+
+<h2>dotenv.rb</h2>
+
+<p>ここが外部から呼び出すインターフェースのメソッド(load, load!, overload)を定義しています。<code>module Dotenv extend self</code>として、これらをmoduleの特異メソッドにしています。<br/>
+環境変数を定義するファイルをこのメソッドの引数として渡せばいいが、引数なしの場合は <code>.env</code> がデフォルト値となります。</p>
+
+<p>まだ分かっていないのですが、 <code>instrument</code> というメソッドは、 <code>Active Support Instrumentation</code> という機能を使っている。  この機能はRails限定。</p>
+
+<p><code>reduce</code>が使われているんだけど、<code>inject</code> とどう使い分けするのかなって疑問に思ったら<a href="http://magazine.rubyist.net/?0038-MapAndCollect#l4">こんな記事</a>がありました。smalltalkとlispの考え方の違いか〜&hellip;実際にはaliasだから使う人の好みが出そう。</p>
+
+<h2>environment.rb</h2>
+
+<p><code>Dotenv::Environment</code>は<code>Hash</code>の子クラス。<code>.env</code>内のkey,value情報を自身に格納して、<code>apply</code> or <code>apply!</code> を呼び出すことで<code>ENV</code>に設定している。<code>apply</code>メソッドの呼び出しは、<code>dotenv.rb</code>で行っている。<code>Dotenv::Environment</code>の<code>initialize</code>の一部として<code>.env</code>の読み込みとパースをやってる。</p>
+
+<h2>parse.rb</h2>
+
+<p>大事なのは<code>call</code>メソッド。ここで<code>.env</code>の内容がパースされる。正規表現弱いんでこのあたりは宿題&hellip;orz<br/>
+<code>@@substitutions</code>というクラス変数があるんだけどここには<code>Substitutions</code>のnamespaceにあるクラスの配列が入ってる。<code>.env</code>のvalueに設定できるものとして、</p>
+
+<ol>
+<li>コマンドの出力結果</li>
+<li>変数展開</li>
+</ol>
+
+
+<p>がある。
+1 は <code>Dotenv::Substitutions::Command</code>で処理し、2 は<code>Dotenv::Substitutions::Variable</code>で処理する。  あー、実際にはそうなるように値を設定しているのかな？</p>
+
+<p>Substitutions.constants のところでクラス名が定数だということがわかった。</p>
+
+<h2>rails.rb</h2>
+
+<p>デフォルトでは、<code>before_configuration</code>のときに、<code>.env</code>を読み込む。<code>dotenv</code>と違い、ファイル名は<code>.env.local</code>,<code>.env.#{Rails.env}</code>もデフォルトで読み込み対象となる。</p>
+
+<p>それと、上述の<code>Active Support Instrumentation</code>をspringによるファイル変更時のENV再設定に利用しているっぽい。この通知の仕組み？をもうちょっと掘り下げてみようかな。</p>
+
+<h1>終わりに</h1>
+
+<p>英語が堪能は方は<a href="http://blog.mah-lab.com/2014/08/15/dotenv/">こちら</a>が参考になるかも。全然内容が頭の中に入ってこなかったのでもっとリスニング練習しよう。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[MetaNight 第5回を開催しました]]></title>
@@ -274,86 +361,6 @@ EOS
 
 <p>コメントの不自然はご愛嬌です。嘘です。一番最後に表示したことで、表示がおかしくなったためです。<br/>
 また何かあったら追記します。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MetaNight 第4回を開催しました]]></title>
-    <link href="http://jangajan.com/blog/2014/12/21/e-g-d-meta-night-4th/"/>
-    <updated>2014-12-21T18:25:54+09:00</updated>
-    <id>http://jangajan.com/blog/2014/12/21/e-g-d-meta-night-4th</id>
-    <content type="html"><![CDATA[<p>イベント概要については、<a href="/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
-
-<p><a href="http://e-g-d.doorkeeper.jp/">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第４回目を開催しました。</p>
-
-<p><a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=B00N9I0RMQ&linkCode=as2&tag=pochan0919-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00N9I0RMQ&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=pochan0919-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=B00N9I0RMQ" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
-
-<!-- more -->
-
-
-<h1>活動内容</h1>
-
-<p>Part 1 Chapter2 の Inside the Object ModelからThe Truth About Classesの前までやりました。<br/>
-読みながらの意見とかはこちらに載せてあります。<br/>
-<a href="https://trello.com/b/djxLBmZ8/metanight-4th">https://trello.com/b/djxLBmZ8/metanight-4th</a></p>
-
-<h1>感想</h1>
-
-<p>PUBLIC HOUSEに行きました。</p>
-
-<h2>inside the object model</h2>
-
-<p>Billがさらっと書いた図がこの部分で言いたいことを全てを象徴しています。オブジェクトとクラス、インスタンス変数とメソッドの関係についてです。<br/>
-今回の内容でRubyにおけるオブジェクトとクラスの役割分担や関係性が少しずつ見えてきました。図で視覚的に理解するというのは非常に大事ですね。</p>
-
-<p>立場が変わると、言葉の意味が変わってくるという点も興味深かったです。<br/>
-クラスはオブジェクトが呼び出すことのできる<code>メソッド</code>を定義しているけれども、正確には、クラスはオブジェクトが呼び出すことのできる<code>インスタンスメソッド</code>を定義しています。クラスから見た<code>インスタンスメソッド</code>はオブジェクトから見た<code>メソッド</code>となります。<br/>
-<a href="https://trello.com/c/5nrd8XoA/36--">メソッドの差分を見てみた</a>で試してみました。</p>
-
-<pre><code class="rb">obj = Object.new
-Object.instance_methods - obj.methods
-=&gt; []
-obj.methods - Object.instance_methods
-=&gt; []
-</code></pre>
-
-<p>となります。ちなみに、比較対象をObject.methodsにすると差分が出てきます。これについては後々出てくると思うのでちょっと置いておきます。</p>
-
-<p>他にも<code>methods</code>や<code>instance_methods</code>のようなオブジェクトの中を参照するコードのことを<code>introspective code</code>と言っているようでしたが、これは一般的な用語なのかな？と疑問に感じたりしました。</p>
-
-<h2>英語</h2>
-
-<ul>
-<li>Let’s wrap it all up</li>
-</ul>
-
-
-<p>しっくりきたのは、<code>まとめましょう</code>。</p>
-
-<ul>
-<li>OO speak</li>
-</ul>
-
-
-<p>OOはObject-Oriented 慣れないと？？ですね。</p>
-
-<ul>
-<li>spring into</li>
-</ul>
-
-
-<p>湧き上がる、という表現に落ち着きました。ないところから自然と生まれる、というニュアンスなのかなぁ&hellip;<br/>
-「Instance variables just spring into existence when you assign them a value」というところで使われていた。お洒落な言い回し。</p>
-
-<h2>その他</h2>
-
-<ul>
-<li>クラス図っぽい図が出てきたことを皮切りに、UMLやBPMNについて</li>
-<li>object_idはメソッドだった(どこかに持っているのかな？そういう疑問は<a href="http://www.amazon.co.jp/gp/product/4274050653/ref=as_li_ss_tl?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=4274050653&amp;linkCode=as2&amp;tag=pochan0919-22">これ</a>を読んで解決しよう！)</li>
-</ul>
-
-
-<p>第5回は1月にやります！</p>
 ]]></content>
   </entry>
   

@@ -3,6 +3,12 @@
   
   
   <url>
+    <loc>http://jangajan.com/blog/2015/02/16/gem-reading-dotenv/</loc>
+    <lastmod>2015-02-16T17:27:40+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
     <loc>http://jangajan.com/blog/2015/02/12/e-g-d-meta-night-5th/</loc>
     <lastmod>2015-02-12T13:46:20+09:00</lastmod>
     <priority>0.8</priority>
@@ -341,14 +347,14 @@
   
   <url>
     <loc>http://jangajan.com/blog/archives/</loc>
-    <lastmod>2015-02-12T23:16:42+09:00</lastmod>
+    <lastmod>2015-02-17T18:38:25+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>http://jangajan.com/</loc>
-    <lastmod>2015-02-12T23:16:42+09:00</lastmod>
+    <lastmod>2015-02-17T18:38:25+09:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
