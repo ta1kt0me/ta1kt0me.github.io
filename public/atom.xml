@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2015-02-17T18:38:25+09:00</updated>
+  <updated>2015-03-06T05:58:01+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,261 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[STIを試す]]></title>
+    <link href="http://jangajan.com/blog/2015/03/06/try-sti/"/>
+    <updated>2015-03-06T05:43:15+09:00</updated>
+    <id>http://jangajan.com/blog/2015/03/06/try-sti</id>
+    <content type="html"><![CDATA[<h1>Single Table Inheritance(STI)とは</h1>
+
+<p>単一テーブル継承というデザインパターンです。テーブルベースの継承階層を表現しています。Ruby同様、継承元は一つのテーブルだけです。<br/>
+<a href="http://www.martinfowler.com/eaaCatalog/singleTableInheritance.html">こちら</a>に具体的なイメージがあります。<br/>
+早速RailsでSTIをどうやるのか調べてみます。</p>
+
+<!-- more -->
+
+
+<h1>環境</h1>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">tool</th>
+<th style="text-align:right;">version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">ruby</td>
+<td style="text-align:right;">2.2.0</td>
+</tr>
+<tr>
+<td style="text-align:left;">rails</td>
+<td style="text-align:right;">4.2.0</td>
+</tr>
+</tbody>
+</table>
+
+
+<h1>試す</h1>
+
+<p>まずは準備をします。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails new sti_type --no-test-framework --skip-bundle
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails g model user name:string age:integer <span class="nb">type</span>:string
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:migrate
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>RailsでのSTIではmodelの <code>type</code> というカラムが重要な役割を果たします。</p>
+
+<figure class='code'><figcaption><span>app/models/guest.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Guest</span> <span class="o">&lt;</span> <span class="no">User</span><span class="p">;</span> <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>app/models/host.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Host</span> <span class="o">&lt;</span> <span class="no">User</span><span class="p">;</span> <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>継承ツリーとしてはこんな感じになります。</p>
+
+<figure class='code'><figcaption><span>app/models/host.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>        <span class="o">|</span>
+</span><span class='line'>       <span class="no">User</span>
+</span><span class='line'>   <span class="n">_____</span><span class="o">|</span><span class="n">_____</span>
+</span><span class='line'>  <span class="o">|</span>           <span class="o">|</span>
+</span><span class='line'><span class="no">Guest</span>        <span class="no">Host</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これで一通りの準備が整いました。 <code>rails console</code> で動作を確認してみます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="err">$</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">rails</span> <span class="n">c</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="no">Guest</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Mark&#39;</span><span class="p">,</span> <span class="ss">age</span><span class="p">:</span> <span class="mi">18</span><span class="p">)</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="no">Host</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Yamada&#39;</span><span class="p">,</span> <span class="ss">age</span><span class="p">:</span> <span class="mi">50</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="n">pp</span> <span class="no">User</span><span class="o">.</span><span class="n">all</span>
+</span><span class='line'><span class="o">[</span><span class="c1">#&lt;Guest:0x007f84c1279a00</span>
+</span><span class='line'>  <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>  <span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Mark&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">age</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">type</span><span class="p">:</span> <span class="s2">&quot;Guest&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">created_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">19</span><span class="p">:</span><span class="mi">43</span><span class="p">:</span><span class="mi">24</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">updated_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">19</span><span class="p">:</span><span class="mi">43</span><span class="p">:</span><span class="mi">24</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span class='line'> <span class="c1">#&lt;Host:0x007f84c1279870</span>
+</span><span class='line'>  <span class="nb">id</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class='line'>  <span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Yamada&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">age</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">type</span><span class="p">:</span> <span class="s2">&quot;Host&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">created_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">19</span><span class="p">:</span><span class="mi">44</span><span class="p">:</span><span class="mo">02</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">updated_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">19</span><span class="p">:</span><span class="mi">44</span><span class="p">:</span><span class="mo">02</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="o">&gt;]</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="n">pp</span> <span class="no">Guest</span><span class="o">.</span><span class="n">all</span>
+</span><span class='line'><span class="o">[</span><span class="c1">#&lt;Guest:0x007f84c2b54b10</span>
+</span><span class='line'>  <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>  <span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Mark&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">age</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">type</span><span class="p">:</span> <span class="s2">&quot;Guest&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">created_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">19</span><span class="p">:</span><span class="mi">43</span><span class="p">:</span><span class="mi">24</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">updated_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">19</span><span class="p">:</span><span class="mi">43</span><span class="p">:</span><span class="mi">24</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="o">&gt;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>type</code> に、自分のクラス名がGuestだったら&#8217;Guest&#8217;と入ります。 <code>Guest</code> だけの属性を集めたい場合は <code>Guest.all</code> とすることで取得できます。</p>
+
+<h1><code>type</code>以外のカラムにクラス情報を格納したい</h1>
+
+<p>なにがしかの理由で <code>type</code> は使えない場合、 <code>self.inheritance_column</code> を使うことで、別のカラムをクラス名を格納するカラムに指定することができます。
+例えば、 <code>role</code> というカラムを使いたい場合です。</p>
+
+<h2>準備</h2>
+
+<p>汚いですが前のサンプルをそのまま使います。<br/>
+<code>role</code>というカラムを追加します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="err">$</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">rails</span> <span class="n">g</span> <span class="n">migration</span> <span class="no">AddRoleToUser</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>db/migrate/20150305201347_add_role_to_user.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">AddRoleToUser</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">change</span>
+</span><span class='line'>    <span class="n">add_column</span> <span class="ss">:users</span><span class="p">,</span> <span class="ss">:role</span><span class="p">,</span> <span class="ss">:string</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>データを綺麗にしたいのでDB作り直します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:setup
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:migrate
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>大事なのはここだけです。 <code>self.inheritance_column</code> に <code>role</code> を指定します。</p>
+
+<figure class='code'><figcaption><span>app/models/user.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="nb">self</span><span class="o">.</span><span class="n">inheritance_column</span> <span class="o">=</span> <span class="ss">:role</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>確認</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="o">&gt;</span> <span class="no">Guest</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Bob&#39;</span><span class="p">,</span> <span class="ss">age</span><span class="p">:</span> <span class="mi">1000</span><span class="p">)</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="no">Host</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Tanaka&#39;</span><span class="p">,</span> <span class="ss">age</span><span class="p">:</span> <span class="mi">100</span><span class="p">)</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="n">pp</span> <span class="no">User</span><span class="o">.</span><span class="n">all</span>
+</span><span class='line'><span class="o">[</span><span class="c1">#&lt;Guest:0x007fe248c19c60</span>
+</span><span class='line'>  <span class="nb">id</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+</span><span class='line'>  <span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Bob&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">age</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">type</span><span class="p">:</span> <span class="kp">nil</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">created_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">20</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mi">55</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">updated_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">20</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mi">55</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">role</span><span class="p">:</span> <span class="s2">&quot;Guest&quot;</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span class='line'> <span class="c1">#&lt;Host:0x007fe248c19ad0</span>
+</span><span class='line'>  <span class="nb">id</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+</span><span class='line'>  <span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Tanaka&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">age</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">type</span><span class="p">:</span> <span class="kp">nil</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">created_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">20</span><span class="p">:</span><span class="mi">24</span><span class="p">:</span><span class="mi">10</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">updated_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">20</span><span class="p">:</span><span class="mi">24</span><span class="p">:</span><span class="mi">10</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">role</span><span class="p">:</span> <span class="s2">&quot;Host&quot;</span><span class="o">&gt;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>type</code> ではなく、 <code>role</code> を使用していることが確認できました。</p>
+
+<h1>注意点</h1>
+
+<p>注意しなければいけなそうな点は、こんな感じでしょうか。</p>
+
+<ul>
+<li>子クラス(<code>Guest</code> や <code>Host</code>)ごとに特別のカラムが欲しい場合、 <code>users</code> に追加する必要があり、<code>nil</code>を許容しなければいけない
+
+<ul>
+<li><code>Guest</code> で使うが <code>Host</code> では使用しないケースがあるから</li>
+</ul>
+</li>
+<li>子クラスごとに、カラムの型を変えることはできない</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Gem Reading - Dotenv]]></title>
@@ -2169,105 +2424,6 @@ SyntaxをMarkdownに設定した状態で、Command Paletteから<code>Prefrence
 
 
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[About MetaNight]]></title>
-    <link href="http://jangajan.com/blog/2014/11/02/about-meta-night/"/>
-    <updated>2014-11-02T22:11:20+09:00</updated>
-    <id>http://jangajan.com/blog/2014/11/02/about-meta-night</id>
-    <content type="html"><![CDATA[<p><a href="http://e-g-d.doorkeeper.jp/events/16300">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の内容です。<br/>
-※リンク先は第1回目の内容となります。イベントページから最近の情報にアクセスしてみてください</p>
-
-<p><a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=B00N9I0RMQ&linkCode=as2&tag=pochan0919-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00N9I0RMQ&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=pochan0919-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=B00N9I0RMQ" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
-
-<!-- more -->
-
-
-<h1>MetaNightについて</h1>
-
-<h2>イベント概要</h2>
-
-<p>英語の技術書を読むことを目的とした「エイゴ・ギジュツショ・ドクショカイ」というdoorkeeperのコミュニティによる、meta programming ruby 2の読書会です。</p>
-
-<p>技術(主にRuby)と英語がテーマです。<br/>
-少人数で、雑談混じりでワイワイやってます。<br/>
-1回目のペースだと読み終わるのは２年後かなぁ&hellip;</p>
-
-<h2>参加すると嬉しい人</h2>
-
-<ul>
-<li>興味を出させたい人・興味がある人</li>
-<li>メタプログラミングを教えたい人・学びたい人</li>
-<li>英語を教えたい人・学びたい人</li>
-</ul>
-
-
-<p>興味がある方からのdoorkeeperへコメントやtwitter(<a href="https://twitter.com/talkto_me">@talkto_me</a>)へのダイレクトメッセージお待ちしてます。</p>
-
-<h2>スキルレベル</h2>
-
-<ul>
-<li>英語
-
-<ul>
-<li>調べながら読めるぐらい</li>
-</ul>
-</li>
-<li>技術
-
-<ul>
-<li>Metaprogramming Ruby 2を読みたい人ならどなたでも</li>
-</ul>
-</li>
-</ul>
-
-
-<p>英語も技術も、わからないところは話し合いの時間に解決すればいいです。<br/>
-そのための読書会ですので、怖がらずに。</p>
-
-<h2>参加するために必要なもの</h2>
-
-<ul>
-<li>(忘れずに)doorkeeperへの参加申込</li>
-<li>meta programming ruby 2とそれを読める機械
-
-<ul>
-<li><a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_tl?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">kindle</a></li>
-<li><a href="https://pragprog.com/book/ppmetr2/metaprogramming-ruby-2">epub</a></li>
-</ul>
-</li>
-<li>読む時間を設けるので、前もって読んでくる必要はないです。読んでくるのは自由です。</li>
-<li>ビールやコーヒー1杯分の小銭</li>
-<li>勢い</li>
-</ul>
-
-
-<h2>参加したいけど不安な方へ</h2>
-
-<p>何かあれば気軽に連絡ください。</p>
-
-<h3>英語が不安</h3>
-
-<p>iBook使うと辞書引きやすくて楽です。<br/>
-分かりづらい場合なんかは共有時間に確認したりします。</p>
-
-<h3>Rubyがわからない</h3>
-
-<p>メタプログラミングなので、基本的なところは分かっておく必要があります。<br/>
-ドットインストールでのRubyの収録をチラ見しておくと良いです。
-もし、この収録の内容がわからなくても一緒に話しながら少しずつ理解していきましょう。</p>
-
-<h2>その他</h2>
-
-<p>Metaprogramming Ruby 2を買うときに使えるクーポン。<br/>
-いつまで使えるかはわかりませんが10月20日時点では使えてます。</p>
-
-<blockquote class="twitter-tweet" lang="en"><p>And a special treat for twitter readers: save 30% on all ebooks we publish, use coupon &quot;adalovelaceday&quot; in honor of Ada Lovelace”</p>&mdash; PragmaticProgrammers (@pragprog) <a href="https://twitter.com/pragprog/status/522034588965957633">October 14, 2014</a></blockquote>
-
-
-<p> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 ]]></content>
   </entry>
   

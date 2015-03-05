@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby-on-rails | JanGaJan.com]]></title>
   <link href="http://jangajan.com/blog/categories/ruby-on-rails/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2015-02-17T18:38:25+09:00</updated>
+  <updated>2015-03-06T05:58:01+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,178 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[STIを試す]]></title>
+    <link href="http://jangajan.com/blog/2015/03/06/try-sti/"/>
+    <updated>2015-03-06T05:43:15+09:00</updated>
+    <id>http://jangajan.com/blog/2015/03/06/try-sti</id>
+    <content type="html"><![CDATA[<h1>Single Table Inheritance(STI)とは</h1>
+
+<p>単一テーブル継承というデザインパターンです。テーブルベースの継承階層を表現しています。Ruby同様、継承元は一つのテーブルだけです。<br/>
+<a href="http://www.martinfowler.com/eaaCatalog/singleTableInheritance.html">こちら</a>に具体的なイメージがあります。<br/>
+早速RailsでSTIをどうやるのか調べてみます。</p>
+
+<!-- more -->
+
+
+<h1>環境</h1>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">tool</th>
+<th style="text-align:right;">version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">ruby</td>
+<td style="text-align:right;">2.2.0</td>
+</tr>
+<tr>
+<td style="text-align:left;">rails</td>
+<td style="text-align:right;">4.2.0</td>
+</tr>
+</tbody>
+</table>
+
+
+<h1>試す</h1>
+
+<p>まずは準備をします。</p>
+
+<pre><code class="sh">$ bundle exec rails new sti_type --no-test-framework --skip-bundle
+$ bundle exec rails g model user name:string age:integer type:string
+$ bundle exec rake db:migrate
+</code></pre>
+
+<p>RailsでのSTIではmodelの <code>type</code> というカラムが重要な役割を果たします。</p>
+
+<pre><code class="rb app/models/guest.rb">class Guest &lt; User; end
+</code></pre>
+
+<pre><code class="rb app/models/host.rb">class Host &lt; User; end
+</code></pre>
+
+<p>継承ツリーとしてはこんな感じになります。</p>
+
+<pre><code>ActiveRecord::Base
+        |
+       User
+   _____|_____
+  |           |
+Guest        Host
+</code></pre>
+
+<p>これで一通りの準備が整いました。 <code>rails console</code> で動作を確認してみます。</p>
+
+<pre><code class="rb">$ bundle exec rails c
+&gt; Guest.create(name: 'Mark', age: 18)
+&gt; Host.create(name: 'Yamada', age: 50)
+
+&gt; pp User.all
+[#&lt;Guest:0x007f84c1279a00
+  id: 1,
+  name: "Mark",
+  age: 18,
+  type: "Guest",
+  created_at: Thu, 05 Mar 2015 19:43:24 UTC +00:00,
+  updated_at: Thu, 05 Mar 2015 19:43:24 UTC +00:00&gt;,
+ #&lt;Host:0x007f84c1279870
+  id: 2,
+  name: "Yamada",
+  age: 50,
+  type: "Host",
+  created_at: Thu, 05 Mar 2015 19:44:02 UTC +00:00,
+  updated_at: Thu, 05 Mar 2015 19:44:02 UTC +00:00&gt;]
+
+&gt; pp Guest.all
+[#&lt;Guest:0x007f84c2b54b10
+  id: 1,
+  name: "Mark",
+  age: 18,
+  type: "Guest",
+  created_at: Thu, 05 Mar 2015 19:43:24 UTC +00:00,
+  updated_at: Thu, 05 Mar 2015 19:43:24 UTC +00:00&gt;]
+</code></pre>
+
+<p><code>type</code> に、自分のクラス名がGuestだったら&#8217;Guest&#8217;と入ります。 <code>Guest</code> だけの属性を集めたい場合は <code>Guest.all</code> とすることで取得できます。</p>
+
+<h1><code>type</code>以外のカラムにクラス情報を格納したい</h1>
+
+<p>なにがしかの理由で <code>type</code> は使えない場合、 <code>self.inheritance_column</code> を使うことで、別のカラムをクラス名を格納するカラムに指定することができます。
+例えば、 <code>role</code> というカラムを使いたい場合です。</p>
+
+<h2>準備</h2>
+
+<p>汚いですが前のサンプルをそのまま使います。<br/>
+<code>role</code>というカラムを追加します。</p>
+
+<pre><code>$ bundle exec rails g migration AddRoleToUser
+</code></pre>
+
+<pre><code class="rb db/migrate/20150305201347_add_role_to_user.rb">class AddRoleToUser &lt; ActiveRecord::Migration
+  def change
+    add_column :users, :role, :string
+  end
+end
+</code></pre>
+
+<p>データを綺麗にしたいのでDB作り直します。
+<code>sh
+$ bundle exec rake db:setup
+$ bundle exec rake db:migrate
+</code></p>
+
+<p>大事なのはここだけです。 <code>self.inheritance_column</code> に <code>role</code> を指定します。</p>
+
+<pre><code class="rb app/models/user.rb">class User &lt; ActiveRecord::Base
+  self.inheritance_column = :role
+end
+</code></pre>
+
+<h2>確認</h2>
+
+<pre><code class="rb ">&gt; Guest.create(name: 'Bob', age: 1000)
+&gt; Host.create(name: 'Tanaka', age: 100)
+&gt; pp User.all
+[#&lt;Guest:0x007fe248c19c60
+  id: 3,
+  name: "Bob",
+  age: 1000,
+  type: nil,
+  created_at: Thu, 05 Mar 2015 20:23:55 UTC +00:00,
+  updated_at: Thu, 05 Mar 2015 20:23:55 UTC +00:00,
+  role: "Guest"&gt;,
+ #&lt;Host:0x007fe248c19ad0
+  id: 4,
+  name: "Tanaka",
+  age: 100,
+  type: nil,
+  created_at: Thu, 05 Mar 2015 20:24:10 UTC +00:00,
+  updated_at: Thu, 05 Mar 2015 20:24:10 UTC +00:00,
+  role: "Host"&gt;]
+</code></pre>
+
+<p><code>type</code> ではなく、 <code>role</code> を使用していることが確認できました。</p>
+
+<h1>注意点</h1>
+
+<p>注意しなければいけなそうな点は、こんな感じでしょうか。</p>
+
+<ul>
+<li>子クラス(<code>Guest</code> や <code>Host</code>)ごとに特別のカラムが欲しい場合、 <code>users</code> に追加する必要があり、<code>nil</code>を許容しなければいけない
+
+<ul>
+<li><code>Guest</code> で使うが <code>Host</code> では使用しないケースがあるから</li>
+</ul>
+</li>
+<li>子クラスごとに、カラムの型を変えることはできない</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Gem Reading - Dotenv]]></title>
@@ -274,76 +446,6 @@ heroku config:set RACK_ENV=production
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 end
-</code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rails4.1でherokuへのデプロイに失敗(Missing `secret_key_base`)]]></title>
-    <link href="http://jangajan.com/blog/2014/10/05/secrets-dot-yml-on-heroku-in-rails4-dot-1/"/>
-    <updated>2014-10-05T01:14:13+09:00</updated>
-    <id>http://jangajan.com/blog/2014/10/05/secrets-dot-yml-on-heroku-in-rails4-dot-1</id>
-    <content type="html"><![CDATA[<p>Rails4.1でherokuへのデプロイに失敗(Missing <code>secret_key_base</code>)</p>
-
-<p>Rails4.1から<code>secrets.yml</code>がサポートされました。<br/>
-これの扱いが良くわかっていなかったため、heroku push後、以下のエラーが発生してアプリ起動に失敗しました。</p>
-
-<blockquote><p>app error: Missing <code>secret_key_base</code> for &lsquo;production&rsquo; environment, set this value in <code>config/secrets.yml</code> (RuntimeError)</p></blockquote>
-
-<!-- more -->
-
-
-<h1>解決策</h1>
-
-<p>ちなみに、heroku create済みです。</p>
-
-<h2>secrets.ymlをgitで管理する</h2>
-
-<p><code>.gitignore</code>に<code>/config/secrets.yml</code>を含めてしまっている場合は、削除してください。<br/>
-その後、git管理化におくため、commitします。</p>
-
-<p>productionの<code>secret_key_base</code>は環境変数から取得するようになっているため、herokuの環境変数に<code>SECRET_KEY_BASE</code>を設定する必要があります。</p>
-
-<h2>環境変数SECRET_KEY_BASEを設定する</h2>
-
-<p>やり方が２通りあります。</p>
-
-<h3>heroku_secretsを使う</h3>
-
-<p>この方法では、<a href="https://github.com/alexpeattie/heroku_secrets">heroku_secrets</a>というgemを利用することでherokuコマンドを打つ必要はありません。</p>
-
-<h4>gemのインストール</h4>
-
-<p>Gemfileにgemを追加して、bundle updateを実行します。</p>
-
-<pre><code class="rb Gemfile">gem 'heroku_secrets', github: 'alexpeattie/heroku_secrets'
-</code></pre>
-
-<h4>rakeコマンドを実行</h4>
-
-<p>その後、rakeコマンドを実行します。</p>
-
-<pre><code class="sh">bundle exec rake heroku:secrets[app-name] RAILS_ENV=production
-</code></pre>
-
-<p>もう一つの方も作業量としては変わらなそうですね。</p>
-
-<h3>heroku configで環境変数を設定する</h3>
-
-<p>この方法では、heroku config:add で環境変数を直接設定します。</p>
-
-<h4>設定値を作成する</h4>
-
-<p>環境変数に設定する値を取得します。</p>
-
-<pre><code class="sh">bundle exec rake secret RAILS_ENV=production
-</code></pre>
-
-<h4>herokuの環境変数を設定する</h4>
-
-<p>上記の実行結果を値とした環境変数(SECRET_KEY_BASE)を設定します。</p>
-
-<pre><code class="sh">heroku config:add SECRET_KEY_BASE=rake secretの実行結果
 </code></pre>
 ]]></content>
   </entry>
