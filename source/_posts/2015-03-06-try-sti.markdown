@@ -1,0 +1,162 @@
+---
+layout: post
+title: "STIを試す"
+date: 2015-03-06 05:43:15 +0900
+comments: true
+sharing: true
+published: true
+categories: [ruby, ruby-on-rails]
+---
+
+# Single Table Inheritance(STI)とは
+
+単一テーブル継承というデザインパターンです。テーブルベースの継承階層を表現しています。Ruby同様、継承元は一つのテーブルだけです。  
+[こちら](http://www.martinfowler.com/eaaCatalog/singleTableInheritance.html)に具体的なイメージがあります。  
+早速RailsでSTIをどうやるのか調べてみます。
+
+<!-- more -->
+
+# 環境
+
+|tool|version|
+|:---|------:|
+|ruby|2.2.0|
+|rails|4.2.0|
+
+# 試す
+
+まずは準備をします。
+
+```sh
+$ bundle exec rails new sti_type --no-test-framework --skip-bundle
+$ bundle exec rails g model user name:string age:integer type:string
+$ bundle exec rake db:migrate
+```
+
+RailsでのSTIではmodelの `type` というカラムが重要な役割を果たします。
+
+```rb app/models/guest.rb
+class Guest < User; end
+```
+
+```rb app/models/host.rb
+class Host < User; end
+```
+
+継承ツリーとしてはこんな感じになります。
+
+```
+ActiveRecord::Base
+        |
+       User
+   _____|_____
+  |           |
+Guest        Host
+```
+
+これで一通りの準備が整いました。 `rails console` で動作を確認してみます。
+
+```rb
+$ bundle exec rails c
+> Guest.create(name: 'Mark', age: 18)
+> Host.create(name: 'Yamada', age: 50)
+
+> pp User.all
+[#<Guest:0x007f84c1279a00
+  id: 1,
+  name: "Mark",
+  age: 18,
+  type: "Guest",
+  created_at: Thu, 05 Mar 2015 19:43:24 UTC +00:00,
+  updated_at: Thu, 05 Mar 2015 19:43:24 UTC +00:00>,
+ #<Host:0x007f84c1279870
+  id: 2,
+  name: "Yamada",
+  age: 50,
+  type: "Host",
+  created_at: Thu, 05 Mar 2015 19:44:02 UTC +00:00,
+  updated_at: Thu, 05 Mar 2015 19:44:02 UTC +00:00>]
+
+> pp Guest.all
+[#<Guest:0x007f84c2b54b10
+  id: 1,
+  name: "Mark",
+  age: 18,
+  type: "Guest",
+  created_at: Thu, 05 Mar 2015 19:43:24 UTC +00:00,
+  updated_at: Thu, 05 Mar 2015 19:43:24 UTC +00:00>]
+```
+
+`type` に、自分のクラス名がGuestだったら'Guest'と入ります。 `Guest` だけの属性を集めたい場合は `Guest.all` とすることで取得できます。
+
+# `type`以外のカラムにクラス情報を格納したい
+
+なにがしかの理由で `type` は使えない場合、 `self.inheritance_column` を使うことで、別のカラムをクラス名を格納するカラムに指定することができます。
+例えば、 `role` というカラムを使いたい場合です。
+
+## 準備
+
+汚いですが前のサンプルをそのまま使います。  
+`role`というカラムを追加します。
+
+```
+$ bundle exec rails g migration AddRoleToUser
+```
+
+```rb db/migrate/20150305201347_add_role_to_user.rb
+class AddRoleToUser < ActiveRecord::Migration
+  def change
+    add_column :users, :role, :string
+  end
+end
+```
+
+データを綺麗にしたいのでDB作り直します。
+```sh
+$ bundle exec rake db:setup
+$ bundle exec rake db:migrate
+```
+
+大事なのはここだけです。 `self.inheritance_column` に `role` を指定します。
+
+```rb app/models/user.rb
+class User < ActiveRecord::Base
+  self.inheritance_column = :role
+end
+```
+
+
+## 確認
+
+```rb 
+> Guest.create(name: 'Bob', age: 1000)
+> Host.create(name: 'Tanaka', age: 100)
+> pp User.all
+[#<Guest:0x007fe248c19c60
+  id: 3,
+  name: "Bob",
+  age: 1000,
+  type: nil,
+  created_at: Thu, 05 Mar 2015 20:23:55 UTC +00:00,
+  updated_at: Thu, 05 Mar 2015 20:23:55 UTC +00:00,
+  role: "Guest">,
+ #<Host:0x007fe248c19ad0
+  id: 4,
+  name: "Tanaka",
+  age: 100,
+  type: nil,
+  created_at: Thu, 05 Mar 2015 20:24:10 UTC +00:00,
+  updated_at: Thu, 05 Mar 2015 20:24:10 UTC +00:00,
+  role: "Host">]
+```
+`type` ではなく、 `role` を使用していることが確認できました。
+
+# 注意点
+
+注意しなければいけなそうな点は、こんな感じでしょうか。
+
+* 子クラス(`Guest` や `Host`)ごとに特別のカラムが欲しい場合、 `users` に追加する必要があり、`nil`を許容しなければいけない
+    - `Guest` で使うが `Host` では使用しないケースがあるから
+* 子クラスごとに、カラムの型を変えることはできない
+
+
