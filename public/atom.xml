@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2015-03-06T05:58:01+09:00</updated>
+  <updated>2015-03-07T01:18:19+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,73 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[MetaNight 第6回を開催しました]]></title>
+    <link href="http://jangajan.com/blog/2015/03/07/e-g-d-meta-night-6th/"/>
+    <updated>2015-03-07T01:02:02+09:00</updated>
+    <id>http://jangajan.com/blog/2015/03/07/e-g-d-meta-night-6th</id>
+    <content type="html"><![CDATA[<p>イベント概要については、<a href="http://jangajan.com/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+
+<p><a href="http://e-g-d.doorkeeper.jp/">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第６回目を開催しました。</p>
+
+<p><a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=B00N9I0RMQ&linkCode=as2&tag=pochan0919-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00N9I0RMQ&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=pochan0919-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=B00N9I0RMQ" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
+
+<!-- more -->
+
+
+<h1>活動内容</h1>
+
+<p>Part 1 Chapter2 の <code>Constant</code> から <code>the rake example</code> の前までやりました。<br/>
+読みながらの意見とかはこちらに載せてあります。<br/>
+<a href="https://trello.com/b/OZ3llmtE/metanight-6th">https://trello.com/b/OZ3llmtE/metanight-6th</a></p>
+
+<h1>感想</h1>
+
+<p>今回は初の一人会(いつも皆様ありがとうございます)だったので、同日あった別イベントに参加しつつ読み進めました。<br/>
+雑談メインになったので、そんなに進まなかった。</p>
+
+<h2>Constant is like in a file system</h2>
+
+<p>定数の基本的な話です。同じ定数名だとしても、定義しているスコープが違えば、別物として扱います。そのため、仕組みとしてはファイルシステムを連想するとイメージしやすいです。例えば、別ディレクトリにあるファイルは、ファイル名が一緒でも別ファイルになります。定数も同様、同じ定数名でも、定義しているスコープが違えば参照する値は異なります。</p>
+
+<ul>
+<li>定数の先頭は大文字
+
+<ul>
+<li>クラス名やモジュール名は定数である</li>
+</ul>
+</li>
+<li>定数を上書き可能だが、警告が発生</li>
+</ul>
+
+
+<h2>英語</h2>
+
+<ul>
+<li>have to do with</li>
+</ul>
+
+
+<p>関係がある</p>
+
+<ul>
+<li>go even further</li>
+</ul>
+
+
+<p>さらに掘り下げる</p>
+
+<h2>その他</h2>
+
+<ul>
+<li>酒弱いので、飲むと記憶力が薄まる</li>
+<li>Rubyは面白い</li>
+<li>沖縄合宿行きたい</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[STIを試す]]></title>
@@ -2339,90 +2406,6 @@ Command Paletteから入力します。</p>
 </ul>
 </li>
 </ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Sublime Text3にMarkdown環境を作る]]></title>
-    <link href="http://jangajan.com/blog/2014/11/03/markdown-plugin-st3/"/>
-    <updated>2014-11-03T19:23:45+09:00</updated>
-    <id>http://jangajan.com/blog/2014/11/03/markdown-plugin-st3</id>
-    <content type="html"><![CDATA[<p>Sublime Text 3にMarkdownのPluginを入れてみました。</p>
-
-<!-- more -->
-
-
-<h1>Package</h1>
-
-<p>導入したPackageは次の通り。<br/>
-使いながら減らしていくかも。</p>
-
-<h2><a href="https://sublime.wbond.net/packages/Markdown%20Extended">Markdown Extended</a></h2>
-
-<h2><a href="https://sublime.wbond.net/packages/MarkdownCodeBlockWrapper">MarkdownCodeBlockWrapper</a></h2>
-
-<h2><a href="https://sublime.wbond.net/packages/MarkdownEditing">MarkdownEditing</a></h2>
-
-<h2><a href="https://sublime.wbond.net/packages/MarkdownTOC">MarkdownTOC</a></h2>
-
-<h2><a href="https://sublime.wbond.net/packages/OmniMarkupPreviewer">OmniMarkupPreviewer</a></h2>
-
-<h2><a href="https://sublime.wbond.net/packages/Table%20Editor">Table Editor</a></h2>
-
-<h1>Preference</h1>
-
-<p>Markdownのみに適用したい設定の仕方。<br/>
-SyntaxをMarkdownに設定した状態で、Command Paletteから<code>Prefrences: Alignment File Settings Syntax Specific User</code>を選択。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="nt">&quot;enable_table_editor&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;extensions&quot;</span><span class="p">:</span>
-</span><span class='line'>    <span class="p">[</span>
-</span><span class='line'>        <span class="s2">&quot;mdown&quot;</span><span class="p">,</span>
-</span><span class='line'>        <span class="s2">&quot;txt&quot;</span><span class="p">,</span>
-</span><span class='line'>        <span class="s2">&quot;md&quot;</span><span class="p">,</span>
-</span><span class='line'>        <span class="s2">&quot;markdown&quot;</span>
-</span><span class='line'>    <span class="p">],</span>
-</span><span class='line'>    <span class="nt">&quot;tab_size&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;translate_tabs_to_spaces&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;trim_trailing_white_space_on_save&quot;</span><span class="p">:</span> <span class="kc">false</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Key-Binding</h1>
-
-<p><code>markdown</code>と<code>md</code>といったMarkdownの拡張子(syntax)の時のみキーバインドを設定する。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">[</span>
-</span><span class='line'>    <span class="err">//</span> <span class="err">Shift+enterで末尾に&#39;</span>  <span class="err">\n&#39;を入れる</span>
-</span><span class='line'>  <span class="p">{</span> <span class="nt">&quot;keys&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;shift+enter&quot;</span><span class="p">],</span> <span class="nt">&quot;command&quot;</span><span class="p">:</span> <span class="s2">&quot;insert_snippet&quot;</span><span class="p">,</span> <span class="nt">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;contents&quot;</span><span class="p">:</span> <span class="s2">&quot;  \n&quot;</span> <span class="p">},</span> <span class="nt">&quot;context&quot;</span><span class="p">:</span> <span class="p">[{</span> <span class="nt">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;selector&quot;</span><span class="p">,</span> <span class="nt">&quot;operator&quot;</span><span class="p">:</span> <span class="s2">&quot;equal&quot;</span><span class="p">,</span> <span class="nt">&quot;operand&quot;</span><span class="p">:</span> <span class="s2">&quot;text.html.markdown, text.html.md&quot;</span> <span class="p">}]},</span>
-</span><span class='line'>    <span class="err">//</span> <span class="err">alt+lで&#39;</span><span class="p">[</span><span class="err">title</span><span class="p">]</span><span class="err">(http://)&#39;を挿入する</span>
-</span><span class='line'>  <span class="p">{</span> <span class="nt">&quot;keys&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;alt+l&quot;</span> <span class="p">],</span> <span class="nt">&quot;command&quot;</span><span class="p">:</span> <span class="s2">&quot;insert_snippet&quot;</span><span class="p">,</span> <span class="nt">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span> <span class="nt">&quot;contents&quot;</span><span class="p">:</span> <span class="s2">&quot;[title](http://)&quot;</span><span class="p">},</span> <span class="nt">&quot;context&quot;</span><span class="p">:</span> <span class="p">[{</span> <span class="nt">&quot;key&quot;</span><span class="p">:</span> <span class="s2">&quot;selector&quot;</span><span class="p">,</span> <span class="nt">&quot;operator&quot;</span><span class="p">:</span> <span class="s2">&quot;equal&quot;</span><span class="p">,</span> <span class="nt">&quot;operand&quot;</span><span class="p">:</span> <span class="s2">&quot;text.html.markdown, text.html.md&quot;</span> <span class="p">}]}</span>
-</span><span class='line'><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
 
 ]]></content>
   </entry>
