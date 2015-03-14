@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2015-03-07T01:18:19+09:00</updated>
+  <updated>2015-03-15T01:30:17+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Vimのcolorschemeの設定でエラー]]></title>
+    <link href="http://jangajan.com/blog/2015/03/15/vim-colorscheme/"/>
+    <updated>2015-03-15T01:15:11+09:00</updated>
+    <id>http://jangajan.com/blog/2015/03/15/vim-colorscheme</id>
+    <content type="html"><![CDATA[<p>思うところがあって、sublime textからvimにエディタを乗り換えようとしているところです。
+vimrcを見直している途中で、最新版を入れてpluginのupdateとかしていたら、以下のエラーが発生してcolorschemeが反映されなくなってしまった。</p>
+
+<!-- more -->
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>Error detected <span class="k">while</span> processing /Users/hoge/.vimrc:
+</span><span class='line'>line  144:
+</span><span class='line'>E185: Cannot find color scheme <span class="s1">&#39;railscasts&#39;</span>
+</span><span class='line'>Press ENTER or <span class="nb">type command </span>to <span class="k">continue</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>設定箇所を見てみると、こんな感じ。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='vim'><span class='line'><span class="k">colorscheme</span> railscasts
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>え、全然問題なさそう&hellip;と思って、vim上でコマンドを実行してみると、ちゃんと適用された&hellip;なにこれ。</p>
+
+<p>パッケージ管理にNeoBundleを使用しているのですが、エラーメッセージで検索したら、<a href="https://github.com/altercation/vim-colors-solarized/issues/104#issuecomment-71037368">GitHubにこんなコメント</a>が。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='vim'><span class='line'><span class="k">call</span> neobundle#<span class="k">end</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">colorscheme</span> railscasts
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>無事themeが適用されました。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[MetaNight 第6回を開催しました]]></title>
@@ -2328,85 +2376,6 @@ rubyではirbを使っている時に自然とやっていることなんです�
 
 
 <p>やっぱり、find_byの方が早いのかー。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Sublime Text 3でEvernoteを使う]]></title>
-    <link href="http://jangajan.com/blog/2014/11/03/evernote-with-st3/"/>
-    <updated>2014-11-03T22:19:35+09:00</updated>
-    <id>http://jangajan.com/blog/2014/11/03/evernote-with-st3</id>
-    <content type="html"><![CDATA[<p>Sublime Text 3 を Evernoteのクライアントにする方法です。
-以前にも試したのですが、使いやすいPackageがなかったので、見つかって嬉しい。</p>
-
-<!-- more -->
-
-
-<p>evernoteのアカウントを持っていることが前提です。</p>
-
-<h1>必要なPackage</h1>
-
-<p><a href="https://sublime.wbond.net/packages/Evernote">Evernote</a></p>
-
-<h1>初期設定</h1>
-
-<h2>Token生成</h2>
-
-<p>Command Paletteから<code>Evernote Settings:Reconfigure Authorization</code>を選択。<br/>
-ブラウザが起動して、EvernoteのDeveloper Tokensページが開くので、Tokenを作る。<br/>
-生成した<code>Developer Token</code>と<code>NoteStore URL</code>を設定ファイルに書き込む。</p>
-
-<h2>Evernote設定ファイル作成</h2>
-
-<p>Command Paletteから<code>Evernote Settings: User</code>を選択。</p>
-
-<figure class='code'><figcaption><span>Evernote.sublime-settings</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="nt">&quot;noteStoreUrl&quot;</span><span class="p">:</span> <span class="s2">&quot;生成したNoteStore URL&quot;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nt">&quot;token&quot;</span><span class="p">:</span> <span class="s2">&quot;生成したDeveloper Token&quot;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>以上でSublime Textでの設定は完了。</p>
-
-<h1>新規メモ作成</h1>
-
-<ol>
-<li>新規ノートを作成
-Command Paletteから<code>Evernote:  New empty note</code>を選択。<br/>
-<code>title</code>と<code>notebook</code>と<code>tags</code>を入力。
-このままでは保存されません。</li>
-<li>ノートを保存
-Command Paletteから<code>Evernote:Send to Evernote as new note</code>を選択。<br/>
-これでevernoteに保存されます。
-たまに、tokenを聞かれることがありますので、その時は、上のtokenを入力する必要があります。</li>
-</ol>
-
-
-<h1>ノートを探す</h1>
-
-<p>とりわけ使いやすそうだったもの。
-Command Paletteから入力します。</p>
-
-<ul>
-<li>Evernote:Open Evernote Note
-
-<ul>
-<li>notebook > titleから使いたいノートを検索</li>
-</ul>
-</li>
-<li>Evernote:List recent notes
-
-<ul>
-<li>最近使ったノートを表示</li>
-</ul>
-</li>
-</ul>
-
 ]]></content>
   </entry>
   
