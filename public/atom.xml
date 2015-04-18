@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://jangajan.com/atom.xml" rel="self"/>
   <link href="http://jangajan.com/"/>
-  <updated>2015-03-15T01:30:17+09:00</updated>
+  <updated>2015-04-18T11:34:18+09:00</updated>
   <id>http://jangajan.com/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,20 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[My First Bouldering]]></title>
+    <link href="http://jangajan.com/blog/2015/04/18/my-first-bouldering/"/>
+    <updated>2015-04-18T11:30:08+09:00</updated>
+    <id>http://jangajan.com/blog/2015/04/18/my-first-bouldering</id>
+    <content type="html"><![CDATA[<p>初めてボルダリングを体験しました。
+8級はクリアできたけど、7級できないですね。
+翌日筋肉痛きていて、朝起きたら手を握ることができなかった。</p>
+
+<!-- more -->
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Vimのcolorschemeの設定でエラー]]></title>
@@ -2286,96 +2300,6 @@ rubyではirbを使っている時に自然とやっていることなんです�
 
 
 <p>第三回は再来週(12/3)開催目標。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Railsのexists?とfind_byはどっちが早いのか]]></title>
-    <link href="http://jangajan.com/blog/2014/11/10/exists-or-find-by-in-rails/"/>
-    <updated>2014-11-10T16:01:44+09:00</updated>
-    <id>http://jangajan.com/blog/2014/11/10/exists-or-find-by-in-rails</id>
-    <content type="html"><![CDATA[<p>Railsで特定するレコードが存在するかbooleanで取得したい時、</p>
-
-<ol>
-<li>Table.exists?(a: id)</li>
-<li>!!Table.find_by(a: id)</li>
-</ol>
-
-
-<p>いずれのやり方のほうが処理が早いか計測してみました。</p>
-
-<!-- more -->
-
-
-<h1>ケース</h1>
-
-<p>環境は、<code>Rails 4.1.7</code>と<code>ruby 2.1.4</code>です。</p>
-
-<ul>
-<li>1万件のレコードがあるVoteテーブルに対して、voting_user_idを検索条件に指定して該当するレコードがあるか確認する。</li>
-<li>Vote.voting_user_idにはIndexをつける</li>
-<li>1万回問い合わせした時間で比較</li>
-</ul>
-
-
-<p>1の場合、<code>Vote.exists?(voting_user_id: 1098)</code><br/>
-2の場合、<code>!!Vote.find_by(voting_user_id: 1098)</code></p>
-
-<p>となります。</p>
-
-<h1>計測</h1>
-
-<p>計測してみました。Databaseはsqlite3です。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># 1.exists?のケース</span>
-</span><span class='line'><span class="no">Benchmark</span><span class="o">.</span><span class="n">realtime</span> <span class="p">{</span> <span class="mi">10000</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span><span class="o">|</span><span class="n">e</span><span class="o">|</span><span class="no">Vote</span><span class="o">.</span><span class="n">exists?</span><span class="p">(</span><span class="ss">voting_user_id</span><span class="p">:</span> <span class="mi">1098</span><span class="p">)}}</span>
-</span><span class='line'><span class="c1"># SQL: SELECT  1 AS one FROM &quot;votes&quot;  WHERE &quot;votes&quot;.&quot;voting_user_id&quot; = 1098 LIMIT 1</span>
-</span><span class='line'><span class="c1"># =&gt; 6.658646</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># 2.find_byのケース</span>
-</span><span class='line'><span class="no">Benchmark</span><span class="o">.</span><span class="n">realtime</span> <span class="p">{</span> <span class="mi">10000</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span><span class="o">|</span><span class="n">e</span><span class="o">|!!</span><span class="no">Vote</span><span class="o">.</span><span class="n">find_by</span><span class="p">(</span><span class="ss">voting_user_id</span><span class="p">:</span> <span class="mi">1098</span><span class="p">)}}</span>
-</span><span class='line'><span class="c1"># SQL: SELECT  &quot;votes&quot;.* FROM &quot;votes&quot;  WHERE &quot;votes&quot;.&quot;voting_user_id&quot; = 1098 LIMIT 1</span>
-</span><span class='line'><span class="c1"># =&gt; 5.506756</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>find_byのほうが早いんですね。取得結果の情報が多い分、find_byのほうがメモリは食ってそうなので、遅いかなと思ったら想像と逆の結果でした。</p>
-
-<h1>Postgresqlで試してみる</h1>
-
-<p>アプリをHeroku+Postgresqlで動かす機会が多いので、ローカルのPostgresqlで試してみます。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># 1.exists?のケース</span>
-</span><span class='line'><span class="no">Benchmark</span><span class="o">.</span><span class="n">realtime</span> <span class="p">{</span> <span class="mi">10000</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span><span class="o">|</span><span class="n">e</span><span class="o">|</span><span class="no">Vote</span><span class="o">.</span><span class="n">exists?</span><span class="p">(</span><span class="ss">voting_user_id</span><span class="p">:</span> <span class="mi">1098</span><span class="p">)}}</span>
-</span><span class='line'><span class="c1"># SQL: SELECT  1 AS one FROM &quot;votes&quot;  WHERE &quot;votes&quot;.&quot;voting_user_id&quot; = 1098 LIMIT 1</span>
-</span><span class='line'><span class="c1"># =&gt; 9.905989</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># 2.find_byのケース</span>
-</span><span class='line'><span class="no">Benchmark</span><span class="o">.</span><span class="n">realtime</span> <span class="p">{</span> <span class="mi">10000</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span><span class="o">|</span><span class="n">e</span><span class="o">|!!</span><span class="no">Vote</span><span class="o">.</span><span class="n">find_by</span><span class="p">(</span><span class="ss">voting_user_id</span><span class="p">:</span> <span class="mi">1098</span><span class="p">)}}</span>
-</span><span class='line'><span class="c1"># SQL: SELECT  &quot;votes&quot;.* FROM &quot;votes&quot;  WHERE &quot;votes&quot;.&quot;voting_user_id&quot; = 1098 LIMIT 1</span>
-</span><span class='line'><span class="c1"># =&gt; 7.289921</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>やっぱり、find_byの方が早いのかー。</p>
 ]]></content>
   </entry>
   
