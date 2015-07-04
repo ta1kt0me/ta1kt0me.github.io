@@ -142,6 +142,7 @@ github-pages gemのインストールと不要なgemのアンインストール 
 <li><code>bundle exec rake setup_github_pages</code>を実行</li>
 <li><code>bundle exec rake deploy</code>を実行</li>
 <li>cloudflareのDNSの設定をHerokuからGitHab Pagesに変更</li>
+<li>source/CNAME にdomain情報を追加する</li>
 </ol>
 
 
@@ -149,9 +150,11 @@ github-pages gemのインストールと不要なgemのアンインストール 
 
 <p>5の時に、CNAMEを設定したファイルが必要になるんだけど、プロジェクトホーム直下において<code>rake deploy</code>しても反映されない&hellip;</p>
 
+<p>Herokuを使っている場合はDNSの設定をちゃんと消しましょう。</p>
+
 <p>実は、プロジェクトホーム直下に<code>_deploy</code>というディレクトリができて、そこがGitHub Pagesのリポジトリと同期とることになることに気がついてややこしいなって思った。</p>
 
-<p>とりあえず移行できてよかった〜。この記事が見れていれば&hellip;!!!</p>
+<p>とりあえず移行できてよかった〜。</p>
 </div>
 
 
