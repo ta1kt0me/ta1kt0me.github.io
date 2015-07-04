@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Go | JanGaJan.com]]></title>
+  <link href="http://jangajan.com/blog/categories/go/atom.xml" rel="self"/>
+  <link href="http://jangajan.com/"/>
+  <updated>2015-07-04T16:55:50+09:00</updated>
+  <id>http://jangajan.com/</id>
+  <author>
+    <name><![CDATA[talkto_me]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Peco入れてみました]]></title>
+    <link href="http://jangajan.com/blog/2014/07/05/peco-peco/"/>
+    <updated>2014-07-05T00:00:00+09:00</updated>
+    <id>http://jangajan.com/blog/2014/07/05/peco-peco</id>
+    <content type="html"><![CDATA[<p>なぜか4時に起きてしまったのでブラジル-コロンビア戦を見る傍ら、昨日はてなで見かけた<a href="http://blog.horimisli.me/entry/terminal-env-2014">面白コンテンツ探求日記のこちら</a>の記事を眺めてたら<a href="https://github.com/peco/peco">peco</a>面白そうと思い立って試してみました。<br/>
+インタラクティブgrep。</p>
+
+<!-- more -->
+
+
+<h2>導入</h2>
+
+<p>python製のpercolをGoで作ってみたものだとか。homebrewでインストール。</p>
+
+<pre><code>$ brew tap peco/peco
+$ brew install peco
+</code></pre>
+
+<h2>psお試し</h2>
+
+<p><code>ps aux | peco</code>と打つとモードが切り替わって、psコマンドの結果を、入力した値でフィルタリングして表示してくれる〜。
+ctrl+n,pで上下に移動できます。</p>
+
+<h2>続けてhistoryコマンドに応用</h2>
+
+<p><a href="http://qiita.com/uchiko/items/f6b1528d7362c9310da0">oh-my-zsh の環境で、peco-select-history が動かない</a>を参考に<code>ctrl+r</code>でコマンド履歴検索をインタラクティブに！これいい。</p>
+
+<h2>z.shを入れる</h2>
+
+<p>面白コンテンツ探求日記の記事を参考にこれも入れてみました。ググらずに素直にgithubで検索したらすぐでた。過去に行ったことのあるディレクトリの履歴を表示するツール。使いやすそう。pecoと連携しやすそう。というわけで、homebrewでインストール。</p>
+
+<pre><code>$brew install z
+</code></pre>
+
+<p>それで<code>.zshrc</code>を修正。<a href="http://blog.en30.net/2014/06/25/peco.html">こちらのブログ</a>を参考にさせてもらいました。<br/>
+これも便利。すごく便利。ちょっとしたパス入力のストレスが激減しそう。</p>
+
+<h2>ghq</h2>
+
+<p>peco関連で漁っていたらghqなるものを利用している人が多かった。cloneしてきたリポジトリを一元管理するツールだそうでGo言語の発想とのこと。確かにgithubやら、bitbucketやら散らかってて収集つかなくなってたので入れてみました。
+まずは入れてみる。</p>
+
+<pre><code>$ brew install go
+$ echo "export GOPATH=~/Dev/src" &gt;&gt; ~/.zshrc
+$ echo "export PATH=${PATH}:~/Dev/src/bin" &gt;&gt; ~/.zshrc
+$ . ~/.zshrc
+$ go get github.com/motemen/ghq
+$ git config --global ghq.root ~/.ghq
+$ ghq get git@github.com:ta1kt0me/dict-en2ja.git
+</code></pre>
+
+<p>それからpecoる。</p>
+
+<pre><code>$ ghq list | peco
+</code></pre>
+
+<p>peco便利。
+気がついたら試合終わって、PK見逃してた。</p>
+]]></content>
+  </entry>
+  
+</feed>

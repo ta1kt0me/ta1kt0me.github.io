@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: React | JanGaJan.com]]></title>
+  <link href="http://jangajan.com/blog/categories/react/atom.xml" rel="self"/>
+  <link href="http://jangajan.com/"/>
+  <updated>2015-07-04T16:55:50+09:00</updated>
+  <id>http://jangajan.com/</id>
+  <author>
+    <name><![CDATA[talkto_me]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Warning: Each Child in an Array or Iterator Should Have a Unique "Key" Prop.]]></title>
+    <link href="http://jangajan.com/blog/2015/05/05/resolve-react-warning/"/>
+    <updated>2015-05-05T11:45:28+09:00</updated>
+    <id>http://jangajan.com/blog/2015/05/05/resolve-react-warning</id>
+    <content type="html"><![CDATA[<p>最近 reactをいじっています。</p>
+
+<p>taskの配列をもつ、TaskListというコンポーネントの中で、TaskCardという子コンポーネントをループで回して生成しているところでwarningが発生した。</p>
+
+<blockquote><p>Warning: Each child in an array or iterator should have a unique &ldquo;key&rdquo; prop. Check the render method of TaskList. See <a href="http://fb.me/react-warning-keys">http://fb.me/react-warning-keys</a> for more information.</p></blockquote>
+
+<!-- more -->
+
+
+<p>ソースは↓</p>
+
+<pre><code class="coffee">@TaskList = React.createClass
+  render: -&gt;
+    tasks = @props.tasks.map (task) -&gt;
+      `&lt;TaskCard task={task}&gt;&lt;/TaskCard&gt;`
+    `&lt;div className="list-group"&gt;
+      { tasks }
+    &lt;/div&gt;
+    `
+</code></pre>
+
+<p><code>key</code> というユニークになる情報をコンポーネントに持たせろよと。
+じゃぁ、と思って、task自体を設定した。</p>
+
+<pre><code class="coffee">@TaskList = React.createClass
+  render: -&gt;
+    tasks = @props.tasks.map (task) -&gt;
+      `&lt;TaskCard key={task} task={task}&gt;&lt;/TaskCard&gt;`
+    `&lt;div className="list-group"&gt;
+      { tasks }
+    &lt;/div&gt;
+    `
+</code></pre>
+
+<p>そしたらこんなエラーが。</p>
+
+<blockquote><p>Warning: flattenChildren(&hellip;): Encountered two children with the same key, <code>.$[object Object]</code>. Child keys must be unique; when two children share a key, only the first child will be used.</p></blockquote>
+
+<p><code>index</code>なんかをもたせてあげないといけないらしい。</p>
+
+<pre><code class="coffee">@TaskList = React.createClass
+  render: -&gt;
+    tasks = @props.tasks.map (task, i) -&gt;
+      `&lt;TaskCard key={i} task={task}&gt;&lt;/TaskCard&gt;`
+    `&lt;div className="list-group"&gt;
+      { tasks }
+    &lt;/div&gt;
+    `
+</code></pre>
+
+<p><code>task</code>の<code>id</code>が一意になるなら、<code>task.id</code> としてもいいかも</p>
+]]></content>
+  </entry>
+  
+</feed>
