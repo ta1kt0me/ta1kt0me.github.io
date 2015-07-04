@@ -5,10 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Rspecメモ - JanGaJan.com</title>
+  <title>HerokuからGitHub Pagesにブログを移行した - JanGaJan.com</title>
   <meta name="author" content="talkto_me">
   
-  <meta name="description" content="rspecの学習中です。 rspecのワークショップ 以下のチュートリアルでrspecの学習をした時のメモです。 http://d.hatena.ne.jp/t-wada/20100228/p1 http://qiita.com/jnchito/items/624f6d5023c279046a1c &hellip;">
+  <meta name="description" content="Jekyllとoctopressで作っているブログをHerokuからGitHub Pagesに移行した(つもり)。この記事が見えていればできているはず。 やったことはこんな感じ。 github.ioのリポジトリを作成
+github-pages gemのインストールと不要なgemのアンインストール &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -17,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://ta1kt0me.github.io/blog/2014/10/14/rspec-memo/">
+  <link rel="canonical" href="http://ta1kt0me.github.io/blog/2015/07/04/move-to-github-dot-io/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="JanGaJan.com" type="application/atom+xml">
@@ -111,7 +112,7 @@
   <header>
     
       
-        <h1 class="entry-title">Rspecメモ</h1>
+        <h1 class="entry-title">HerokuからGitHub Pagesにブログを移行した</h1>
       
     
     
@@ -121,91 +122,36 @@
 
 
 
-<time class='entry-date' datetime='2014-10-14T18:00:00+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:00 pm</span></time>
+<time class='entry-date' datetime='2015-07-04T18:16:55+09:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:16 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>rspecの学習中です。</p>
+<div class="entry-content"><p>Jekyllとoctopressで作っているブログをHerokuからGitHub Pagesに移行した(つもり)。この記事が見えていればできているはず。</p>
 
 <!-- more -->
 
 
-<h1>rspecのワークショップ</h1>
+<p>やったことはこんな感じ。</p>
 
-<p>以下のチュートリアルでrspecの学習をした時のメモです。</p>
-
-<p><a href="http://d.hatena.ne.jp/t-wada/20100228/p1">http://d.hatena.ne.jp/t-wada/20100228/p1</a>  <br/>
-<a href="http://qiita.com/jnchito/items/624f6d5023c279046a1c">http://qiita.com/jnchito/items/624f6d5023c279046a1c</a></p>
-
-<h1>describeとcontextとit</h1>
-
-<ul>
-<li><code>describe</code>は対象を説明</li>
-<li><code>context</code>は状況を説明</li>
-<li><code>it</code>は試験内容を説明</li>
-<li><code>it</code>内に具体的な試験を記述</li>
-<li><code>it</code>の引数の説明を省略しても試験内容をrspecが判断して仕様記述を組み立てる</li>
-<li>読みやすさ次第で<code>it</code>の文字列引数を使うことを推奨</li>
-<li>内容を確認したい時は、<code>rspec -fd specfile</code></li>
-</ul>
+<ol>
+<li>github.ioのリポジトリを作成</li>
+<li><code>github-pages</code> gemのインストールと不要なgemのアンインストール</li>
+<li><code>bundle exec rake setup_github_pages</code>を実行</li>
+<li><code>bundle exec rake deploy</code>を実行</li>
+<li>cloudflareのDNSの設定をHerokuからGitHab Pagesに変更</li>
+</ol>
 
 
-<h1>beforeにテスト実行前処理を記述</h1>
+<p>github.ioのリポジトリを作った時に、<code>rake setup_github_pages</code>を実行する前にGitHub Pagesのリポジトリにpushしちゃって、<code>rake deploy</code>を実行する前に<code>push</code>コマンドに<code>-f</code>オプションつけたりした。(ちゃんと後で元に戻した)</p>
 
-<ul>
-<li><code>before</code>の引数のデフォルトは<code>:each</code></li>
-</ul>
+<p>5の時に、CNAMEを設定したファイルが必要になるんだけど、プロジェクトホーム直下において<code>rake deploy</code>しても反映されない&hellip;</p>
 
+<p>実は、プロジェクトホーム直下に<code>_deploy</code>というディレクトリができて、そこがGitHub Pagesのリポジトリと同期とることになることに気がついてややこしいなって思った。</p>
 
-<h1>subjectでブロックの評価結果がit内のshouldのレシーバになる</h1>
-
-<ul>
-<li>明示的に<code>it</code>内で<code>subject</code>メソッドを利用することで、<code>subject</code>ブロックの評価結果を使うことができる</li>
-</ul>
-
-
-<h1><code>shared_examples</code>と<code>it_behaves_like</code></h1>
-
-<ul>
-<li><code>shared_examples_for 'キー名' do ~ end</code>とするとブロック内の処理を<code>it_should_behave_like 'キー名'</code>で呼び出してテストできる</li>
-<li>ただし、キー名は全てのテストで重複しないように注意する</li>
-</ul>
-
-
-<h1>predicateマッチャ</h1>
-
-<ul>
-<li><code>expect(xxx).to eq false -&gt; expect(xxx).not_to be_empty</code></li>
-</ul>
-
-
-<h1>rspec3で標準から外れた機能</h1>
-
-<ul>
-<li><code>its</code>メソッドは<code>rspec-its gem</code>で提供</li>
-<li>have マッチャ
-
-<ul>
-<li>サイズのチェックをテストしやすくするマッチャ(ただし、rspec3ではgemに外出しされた)</li>
-<li>have マッチャを使った場合、 <code>have(n).item</code> と <code>have(n).items</code> は互いに置換可能
-
-<ul>
-<li>nの値により自然な形にするのがいい</li>
-</ul>
-</li>
-<li>have(n).named_collection記法でもかける
-
-<ul>
-<li><code>it {is_expected.to have(n).xxx }</code></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
+<p>とりあえず移行できてよかった〜。この記事が見れていれば&hellip;!!!</p>
 </div>
 
 
@@ -230,12 +176,12 @@
 
 
 
-<time class='entry-date' datetime='2014-10-14T18:00:00+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:00 pm</span></time>
+<time class='entry-date' datetime='2015-07-04T18:16:55+09:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:16 pm</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/rspec/'>rspec</a>
+    <a class='category' href='/blog/categories/blog/'>blog</a>, <a class='category' href='/blog/categories/jekyll/'>jekyll</a>
   
 </span>
 
@@ -243,9 +189,9 @@
     </p>
     
       <div class="sharing">
-  <a href="http://b.hatena.ne.jp/entry/http://ta1kt0me.github.io/blog/2014/10/14/rspec-memo/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  <a href="http://b.hatena.ne.jp/entry/http://ta1kt0me.github.io/blog/2015/07/04/move-to-github-dot-io/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ta1kt0me.github.io/blog/2014/10/14/rspec-memo/" data-via="talkto_me" data-counturl="http://ta1kt0me.github.io/blog/2014/10/14/rspec-memo/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ta1kt0me.github.io/blog/2015/07/04/move-to-github-dot-io/" data-via="talkto_me" data-counturl="http://ta1kt0me.github.io/blog/2015/07/04/move-to-github-dot-io/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -265,10 +211,8 @@
 </script>
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/10/08/require-rspec/" title="Previous Post: factorygirlの読み込みでエラー">&laquo; factorygirlの読み込みでエラー</a>
+        <a class="basic-alignment left" href="/blog/2015/05/05/resolve-react-warning/" title="Previous Post: Warning: Each child in an array or iterator should have a unique "key" prop.">&laquo; Warning: Each child in an array or iterator should have a unique &#8220;key&#8221; prop.</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/10/20/use-new-relic-in-rails4-at-heroku/" title="Next Post: herokuで動くRailsアプリケーションにNew Relicを入れる">herokuで動くRailsアプリケーションにNew Relicを入れる &raquo;</a>
       
     </p>
     <p>
@@ -312,8 +256,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://ta1kt0me.github.io/blog/2014/10/14/rspec-memo/';
-        var disqus_url = 'http://ta1kt0me.github.io/blog/2014/10/14/rspec-memo/';
+        var disqus_identifier = 'http://ta1kt0me.github.io/blog/2015/07/04/move-to-github-dot-io/';
+        var disqus_url = 'http://ta1kt0me.github.io/blog/2015/07/04/move-to-github-dot-io/';
         var disqus_script = 'embed.js';
       
     (function () {

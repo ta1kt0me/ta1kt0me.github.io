@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Vim | JanGaJan.com]]></title>
-  <link href="http://jangajan.com/blog/categories/vim/atom.xml" rel="self"/>
-  <link href="http://jangajan.com/"/>
-  <updated>2015-05-05T11:48:19+09:00</updated>
-  <id>http://jangajan.com/</id>
+  <link href="http://ta1kt0me.github.io/blog/categories/vim/atom.xml" rel="self"/>
+  <link href="http://ta1kt0me.github.io/"/>
+  <updated>2015-07-04T20:46:03+09:00</updated>
+  <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Vimのcolorschemeの設定でエラー]]></title>
-    <link href="http://jangajan.com/blog/2015/03/15/vim-colorscheme/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/03/15/vim-colorscheme/"/>
     <updated>2015-03-15T01:15:11+09:00</updated>
-    <id>http://jangajan.com/blog/2015/03/15/vim-colorscheme</id>
+    <id>http://ta1kt0me.github.io/blog/2015/03/15/vim-colorscheme</id>
     <content type="html"><![CDATA[<p>思うところがあって、sublime textからvimにエディタを乗り換えようとしているところです。
 vimrcを見直している途中で、最新版を入れてpluginのupdateとかしていたら、以下のエラーが発生してcolorschemeが反映されなくなってしまった。</p>
 

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: React | JanGaJan.com]]></title>
-  <link href="http://jangajan.com/blog/categories/react/atom.xml" rel="self"/>
-  <link href="http://jangajan.com/"/>
-  <updated>2015-05-05T11:48:19+09:00</updated>
-  <id>http://jangajan.com/</id>
+  <link href="http://ta1kt0me.github.io/blog/categories/react/atom.xml" rel="self"/>
+  <link href="http://ta1kt0me.github.io/"/>
+  <updated>2015-07-04T20:46:03+09:00</updated>
+  <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Warning: Each Child in an Array or Iterator Should Have a Unique "Key" Prop.]]></title>
-    <link href="http://jangajan.com/blog/2015/05/05/resolve-react-warning/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/05/05/resolve-react-warning/"/>
     <updated>2015-05-05T11:45:28+09:00</updated>
-    <id>http://jangajan.com/blog/2015/05/05/resolve-react-warning</id>
+    <id>http://ta1kt0me.github.io/blog/2015/05/05/resolve-react-warning</id>
     <content type="html"><![CDATA[<p>最近 reactをいじっています。</p>
 
 <p>taskの配列をもつ、TaskListというコンポーネントの中で、TaskCardという子コンポーネントをループで回して生成しているところでwarningが発生した。</p>

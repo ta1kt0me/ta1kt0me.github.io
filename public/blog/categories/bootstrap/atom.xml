@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Bootstrap | JanGaJan.com]]></title>
-  <link href="http://jangajan.com/blog/categories/bootstrap/atom.xml" rel="self"/>
-  <link href="http://jangajan.com/"/>
-  <updated>2015-05-05T11:48:19+09:00</updated>
-  <id>http://jangajan.com/</id>
+  <link href="http://ta1kt0me.github.io/blog/categories/bootstrap/atom.xml" rel="self"/>
+  <link href="http://ta1kt0me.github.io/"/>
+  <updated>2015-07-04T20:46:03+09:00</updated>
+  <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[bootstrap3のモーダル表示（HAMLサンプル）]]></title>
-    <link href="http://jangajan.com/blog/2014/09/29/haml-modal-in-bootstrap/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/09/29/haml-modal-in-bootstrap/"/>
     <updated>2014-09-29T19:50:21+09:00</updated>
-    <id>http://jangajan.com/blog/2014/09/29/haml-modal-in-bootstrap</id>
+    <id>http://ta1kt0me.github.io/blog/2014/09/29/haml-modal-in-bootstrap</id>
     <content type="html"><![CDATA[<p>bootstrap3でModalウインドウを表示するサンプルです。
 サンプルはHAML形式です。</p>
 

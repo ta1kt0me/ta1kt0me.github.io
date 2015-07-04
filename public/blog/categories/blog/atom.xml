@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Blog | JanGaJan.com]]></title>
-  <link href="http://jangajan.com/blog/categories/blog/atom.xml" rel="self"/>
-  <link href="http://jangajan.com/"/>
-  <updated>2015-05-05T11:48:19+09:00</updated>
-  <id>http://jangajan.com/</id>
+  <link href="http://ta1kt0me.github.io/blog/categories/blog/atom.xml" rel="self"/>
+  <link href="http://ta1kt0me.github.io/"/>
+  <updated>2015-07-04T20:46:03+09:00</updated>
+  <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
     
@@ -14,10 +14,41 @@
 
   
   <entry>
+    <title type="html"><![CDATA[HerokuからGitHub Pagesにブログを移行した]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2015/07/04/move-to-github-dot-io/"/>
+    <updated>2015-07-04T18:16:55+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2015/07/04/move-to-github-dot-io</id>
+    <content type="html"><![CDATA[<p>Jekyllとoctopressで作っているブログをHerokuからGitHub Pagesに移行した(つもり)。この記事が見えていればできているはず。</p>
+
+<!-- more -->
+
+
+<p>やったことはこんな感じ。</p>
+
+<ol>
+<li>github.ioのリポジトリを作成</li>
+<li><code>github-pages</code> gemのインストールと不要なgemのアンインストール</li>
+<li><code>bundle exec rake setup_github_pages</code>を実行</li>
+<li><code>bundle exec rake deploy</code>を実行</li>
+<li>cloudflareのDNSの設定をHerokuからGitHab Pagesに変更</li>
+</ol>
+
+
+<p>github.ioのリポジトリを作った時に、<code>rake setup_github_pages</code>を実行する前にGitHub Pagesのリポジトリにpushしちゃって、<code>rake deploy</code>を実行する前に<code>push</code>コマンドに<code>-f</code>オプションつけたりした。(ちゃんと後で元に戻した)</p>
+
+<p>5の時に、CNAMEを設定したファイルが必要になるんだけど、プロジェクトホーム直下において<code>rake deploy</code>しても反映されない&hellip;</p>
+
+<p>実は、プロジェクトホーム直下に<code>_deploy</code>というディレクトリができて、そこがGitHub Pagesのリポジトリと同期とることになることに気がついてややこしいなって思った。</p>
+
+<p>とりあえず移行できてよかった〜。この記事が見れていれば&hellip;!!!</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[独自ドメイン設定]]></title>
-    <link href="http://jangajan.com/blog/2014/05/08/get-original-domain/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/05/08/get-original-domain/"/>
     <updated>2014-05-08T00:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/05/08/get-original-domain</id>
+    <id>http://ta1kt0me.github.io/blog/2014/05/08/get-original-domain</id>
     <content type="html"><![CDATA[<h1>独自ドメイン設定の道程</h1>
 
 <p>せっかくなので独自ドメインでも設定してみよう。<br/>
@@ -87,9 +118,9 @@ cloudflareを利用することにしました。<br/>
   
   <entry>
     <title type="html"><![CDATA[Jekyllでブログを作ってみた]]></title>
-    <link href="http://jangajan.com/blog/2014/04/20/setup-jekyll-blog/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/04/20/setup-jekyll-blog/"/>
     <updated>2014-04-20T00:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/04/20/setup-jekyll-blog</id>
+    <id>http://ta1kt0me.github.io/blog/2014/04/20/setup-jekyll-blog</id>
     <content type="html"><![CDATA[<p>JekyllとHerokuを使ってBlogを作成しました。<br/>
 サーバーにはUnicornを利用します。<br/>
 githubはprivate repositoryが有料なので、bitbucketを使用。<br/>
