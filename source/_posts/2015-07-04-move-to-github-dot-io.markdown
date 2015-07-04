@@ -16,21 +16,20 @@ Jekyllとoctopressで作っているブログをHerokuからGitHub Pagesに移�
 1. github.ioのリポジトリを作成
 2. `github-pages` gemのインストールと不要なgemのアンインストール
 3. `bundle exec rake setup_github_pages`を実行
-4. `bundle exec rake deploy`を実行
-5. cloudflareのDNSの設定をHerokuからGitHab Pagesに変更
-6. source/CNAME にdomain情報を追加する
+4. source/CNAME にdomain情報を追加する
+5. `bundle exec rake generate`を実行
+6. `bundle exec rake deploy`を実行
+7. cloudflareのDNSの設定をHerokuからGitHab Pagesに変更
 
 github.ioのリポジトリを作った時に、`rake setup_github_pages`を実行する前にGitHub Pagesのリポジトリにpushしちゃって、`rake deploy`を実行する前に`push`コマンドに`-f`オプションつけたりした。(ちゃんと後で元に戻した)
 
 
-5の時に、CNAMEを設定したファイルが必要になるんだけど、プロジェクトホーム直下において`rake deploy`しても反映されない...
-
-
-Herokuを使っている場合はDNSの設定をちゃんと消しましょう。
-
+6の時に、CNAMEを設定したファイルが必要になるんだけど、プロジェクトホーム直下において`rake deploy`しても反映されない...
 
 実は、プロジェクトホーム直下に`_deploy`というディレクトリができて、そこがGitHub Pagesのリポジトリと同期とることになることに気がついてややこしいなって思った。
 
+
+Herokuを使っている場合はDNSの設定をちゃんと消しましょう。
 
 とりあえず移行できてよかった〜。
 
