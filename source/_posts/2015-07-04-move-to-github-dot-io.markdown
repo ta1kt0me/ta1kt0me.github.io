@@ -20,7 +20,13 @@ Jekyllとoctopressで作っているブログをHerokuからGitHub Pagesに移�
 5. cloudflareのDNSの設定をHerokuからGitHab Pagesに変更
 
 github.ioのリポジトリを作った時に、`rake setup_github_pages`を実行する前にGitHub Pagesのリポジトリにpushしちゃって、`rake deploy`を実行する前に`push`コマンドに`-f`オプションつけたりした。(ちゃんと後で元に戻した)
+
+
 5の時に、CNAMEを設定したファイルが必要になるんだけど、プロジェクトホーム直下において`rake deploy`しても反映されない...
+
+
 実は、プロジェクトホーム直下に`_deploy`というディレクトリができて、そこがGitHub Pagesのリポジトリと同期とることになることに気がついてややこしいなって思った。
+
+
 とりあえず移行できてよかった〜。この記事が見れていれば...!!!
 
