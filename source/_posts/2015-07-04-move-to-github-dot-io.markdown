@@ -1,11 +1,11 @@
 ---
 layout: post
-title: "move-to-github.io"
+title: "HerokuからGitHub Pagesにブログを移行した"
 date: 2015-07-04 18:16:55 +0900
 comments: true
 sharing: true
 published: true
-categories:
+categories: [blog, jekyll]
 ---
 
 Jekyllとoctopressで作っているブログをHerokuからGitHub Pagesに移行した(つもり)。この記事が見えていればできているはず。
