@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[JanGaJan.com]]></title>
-  <link href="http://jangajan.com/atom.xml" rel="self"/>
-  <link href="http://jangajan.com/"/>
-  <updated>2015-05-05T11:48:19+09:00</updated>
-  <id>http://jangajan.com/</id>
+  <link href="http://ta1kt0me.github.io/atom.xml" rel="self"/>
+  <link href="http://ta1kt0me.github.io/"/>
+  <updated>2015-07-04T18:44:12+09:00</updated>
+  <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
     
@@ -14,10 +14,38 @@
 
   
   <entry>
+    <title type="html"><![CDATA[HerokuからGitHub Pagesにブログを移行した]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2015/07/04/move-to-github-dot-io/"/>
+    <updated>2015-07-04T18:16:55+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2015/07/04/move-to-github-dot-io</id>
+    <content type="html"><![CDATA[<p>Jekyllとoctopressで作っているブログをHerokuからGitHub Pagesに移行した(つもり)。この記事が見えていればできているはず。</p>
+
+<!-- more -->
+
+
+<p>やったことはこんな感じ。</p>
+
+<ol>
+<li>github.ioのリポジトリを作成</li>
+<li><code>github-pages</code> gemのインストールと不要なgemのアンインストール</li>
+<li><code>bundle exec rake setup_github_pages</code>を実行</li>
+<li><code>bundle exec rake deploy</code>を実行</li>
+<li>cloudflareのDNSの設定をHerokuからGitHab Pagesに変更</li>
+</ol>
+
+
+<p>github.ioのリポジトリを作った時に、<code>rake setup_github_pages</code>を実行する前にGitHub Pagesのリポジトリにpushしちゃって、<code>rake deploy</code>を実行する前に<code>push</code>コマンドに<code>-f</code>オプションつけたりした。(ちゃんと後で元に戻した)
+5の時に、CNAMEを設定したファイルが必要になるんだけど、プロジェクトホーム直下において<code>rake deploy</code>しても反映されない&hellip;
+実は、プロジェクトホーム直下に<code>_deploy</code>というディレクトリができて、そこがGitHub Pagesのリポジトリと同期とることになることに気がついてややこしいなって思った。
+とりあえず移行できてよかった〜。この記事が見れていれば&hellip;!!!</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Warning: Each Child in an Array or Iterator Should Have a Unique "Key" Prop.]]></title>
-    <link href="http://jangajan.com/blog/2015/05/05/resolve-react-warning/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/05/05/resolve-react-warning/"/>
     <updated>2015-05-05T11:45:28+09:00</updated>
-    <id>http://jangajan.com/blog/2015/05/05/resolve-react-warning</id>
+    <id>http://ta1kt0me.github.io/blog/2015/05/05/resolve-react-warning</id>
     <content type="html"><![CDATA[<p>最近 reactをいじっています。</p>
 
 <p>taskの配列をもつ、TaskListというコンポーネントの中で、TaskCardという子コンポーネントをループで回して生成しているところでwarningが発生した。</p>
@@ -101,9 +129,9 @@
   
   <entry>
     <title type="html"><![CDATA[My First Bouldering]]></title>
-    <link href="http://jangajan.com/blog/2015/04/18/my-first-bouldering/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/04/18/my-first-bouldering/"/>
     <updated>2015-04-18T11:30:08+09:00</updated>
-    <id>http://jangajan.com/blog/2015/04/18/my-first-bouldering</id>
+    <id>http://ta1kt0me.github.io/blog/2015/04/18/my-first-bouldering</id>
     <content type="html"><![CDATA[<p>初めてボルダリングを体験しました。
 8級はクリアできたけど、7級できないですね。
 翌日筋肉痛きていて、朝起きたら手を握ることができなかった。</p>
@@ -115,9 +143,9 @@
   
   <entry>
     <title type="html"><![CDATA[Vimのcolorschemeの設定でエラー]]></title>
-    <link href="http://jangajan.com/blog/2015/03/15/vim-colorscheme/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/03/15/vim-colorscheme/"/>
     <updated>2015-03-15T01:15:11+09:00</updated>
-    <id>http://jangajan.com/blog/2015/03/15/vim-colorscheme</id>
+    <id>http://ta1kt0me.github.io/blog/2015/03/15/vim-colorscheme</id>
     <content type="html"><![CDATA[<p>思うところがあって、sublime textからvimにエディタを乗り換えようとしているところです。
 vimrcを見直している途中で、最新版を入れてpluginのupdateとかしていたら、以下のエラーが発生してcolorschemeが反映されなくなってしまった。</p>
 
@@ -163,10 +191,10 @@ vimrcを見直している途中で、最新版を入れてpluginのupdateとか
   
   <entry>
     <title type="html"><![CDATA[MetaNight 第6回を開催しました]]></title>
-    <link href="http://jangajan.com/blog/2015/03/07/e-g-d-meta-night-6th/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/03/07/e-g-d-meta-night-6th/"/>
     <updated>2015-03-07T01:02:02+09:00</updated>
-    <id>http://jangajan.com/blog/2015/03/07/e-g-d-meta-night-6th</id>
-    <content type="html"><![CDATA[<p>イベント概要については、<a href="http://jangajan.com/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+    <id>http://ta1kt0me.github.io/blog/2015/03/07/e-g-d-meta-night-6th</id>
+    <content type="html"><![CDATA[<p>イベント概要については、<a href="http://ta1kt0me.github.io/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
 
 <p><a href="http://e-g-d.doorkeeper.jp/">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第６回目を開催しました。</p>
 
@@ -230,9 +258,9 @@ vimrcを見直している途中で、最新版を入れてpluginのupdateとか
   
   <entry>
     <title type="html"><![CDATA[STIを試す]]></title>
-    <link href="http://jangajan.com/blog/2015/03/06/try-sti/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/03/06/try-sti/"/>
     <updated>2015-03-06T05:43:15+09:00</updated>
-    <id>http://jangajan.com/blog/2015/03/06/try-sti</id>
+    <id>http://ta1kt0me.github.io/blog/2015/03/06/try-sti</id>
     <content type="html"><![CDATA[<h1>Single Table Inheritance(STI)とは</h1>
 
 <p>単一テーブル継承というデザインパターンです。テーブルベースの継承階層を表現しています。Ruby同様、継承元は一つのテーブルだけです。<br/>
@@ -485,9 +513,9 @@ vimrcを見直している途中で、最新版を入れてpluginのupdateとか
   
   <entry>
     <title type="html"><![CDATA[Gem Reading - Dotenv]]></title>
-    <link href="http://jangajan.com/blog/2015/02/16/gem-reading-dotenv/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/02/16/gem-reading-dotenv/"/>
     <updated>2015-02-16T17:27:40+09:00</updated>
-    <id>http://jangajan.com/blog/2015/02/16/gem-reading-dotenv</id>
+    <id>http://ta1kt0me.github.io/blog/2015/02/16/gem-reading-dotenv</id>
     <content type="html"><![CDATA[<p><a href="https://github.com/bkeepers/dotenv">dotenv</a>というGemを知ったので覗いてみました。</p>
 
 <!-- more -->
@@ -583,10 +611,10 @@ fixtureを見た感じ<code>=</code>じゃなくて、YAMLっぽく<code>:</code
   
   <entry>
     <title type="html"><![CDATA[MetaNight 第5回を開催しました]]></title>
-    <link href="http://jangajan.com/blog/2015/02/12/e-g-d-meta-night-5th/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/02/12/e-g-d-meta-night-5th/"/>
     <updated>2015-02-12T13:46:20+09:00</updated>
-    <id>http://jangajan.com/blog/2015/02/12/e-g-d-meta-night-5th</id>
-    <content type="html"><![CDATA[<p>イベント概要については、<a href="http://jangajan.com/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+    <id>http://ta1kt0me.github.io/blog/2015/02/12/e-g-d-meta-night-5th</id>
+    <content type="html"><![CDATA[<p>イベント概要については、<a href="http://ta1kt0me.github.io/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
 
 <p><a href="http://e-g-d.doorkeeper.jp/">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第５回目を開催しました。</p>
 
@@ -671,9 +699,9 @@ Classはobject_id持ってますし、変数に代入することもできます
   
   <entry>
     <title type="html"><![CDATA[Gem Reading - Jquery-rails]]></title>
-    <link href="http://jangajan.com/blog/2015/01/21/gem-reading-jquery-rails/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/01/21/gem-reading-jquery-rails/"/>
     <updated>2015-01-21T23:14:52+09:00</updated>
-    <id>http://jangajan.com/blog/2015/01/21/gem-reading-jquery-rails</id>
+    <id>http://ta1kt0me.github.io/blog/2015/01/21/gem-reading-jquery-rails</id>
     <content type="html"><![CDATA[<p>簡単なやつから攻める。<br/>
 まずは読むことになれます。ということで、jquery-rails。</p>
 
@@ -780,9 +808,9 @@ Classはobject_id持ってますし、変数に代入することもできます
   
   <entry>
     <title type="html"><![CDATA[Gem Reading - Active_emoji]]></title>
-    <link href="http://jangajan.com/blog/2015/01/20/gem-reading-active-emoji/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/01/20/gem-reading-active-emoji/"/>
     <updated>2015-01-20T23:59:19+09:00</updated>
-    <id>http://jangajan.com/blog/2015/01/20/gem-reading-active-emoji</id>
+    <id>http://ta1kt0me.github.io/blog/2015/01/20/gem-reading-active-emoji</id>
     <content type="html"><![CDATA[<p>今年の目標にGemを読むというのをあげたので、少しずつやっていきます。
 今日Ginza.rbに参加して知った、<a href="https://github.com/sferik/active_emoji">active_emoji</a>を読んでみます。</p>
 
@@ -800,9 +828,9 @@ lib配下にcore拡張があります。全部ただのaliasでした。</p>
   
   <entry>
     <title type="html"><![CDATA[Rubyのヒアドキュメント]]></title>
-    <link href="http://jangajan.com/blog/2015/01/15/rubyheredocument/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/01/15/rubyheredocument/"/>
     <updated>2015-01-15T19:18:55+09:00</updated>
-    <id>http://jangajan.com/blog/2015/01/15/rubyheredocument</id>
+    <id>http://ta1kt0me.github.io/blog/2015/01/15/rubyheredocument</id>
     <content type="html"><![CDATA[<p>あまり使う機会もなく理解できていない部分があったのでヒアドキュメントについて整理しました。<br/>
 ヒアドキュメントって、heredocumentなんですね。hearだと思ってた&hellip;</p>
 
@@ -906,9 +934,9 @@ lib配下にcore拡張があります。全部ただのaliasでした。</p>
   
   <entry>
     <title type="html"><![CDATA[冬休みの宿題]]></title>
-    <link href="http://jangajan.com/blog/2015/01/04/yochiyochi-dokusyokansoubun/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/01/04/yochiyochi-dokusyokansoubun/"/>
     <updated>2015-01-04T21:07:32+09:00</updated>
-    <id>http://jangajan.com/blog/2015/01/04/yochiyochi-dokusyokansoubun</id>
+    <id>http://ta1kt0me.github.io/blog/2015/01/04/yochiyochi-dokusyokansoubun</id>
     <content type="html"><![CDATA[<p>よちよち.rbで冬休みの宿題をやりました。</p>
 
 <!-- more -->
@@ -1028,10 +1056,10 @@ ParserやVMの基本的な仕組みや役割をRubyのソースコードで理�
   
   <entry>
     <title type="html"><![CDATA[MetaNight 第4回を開催しました]]></title>
-    <link href="http://jangajan.com/blog/2014/12/21/e-g-d-meta-night-4th/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/12/21/e-g-d-meta-night-4th/"/>
     <updated>2014-12-21T18:25:54+09:00</updated>
-    <id>http://jangajan.com/blog/2014/12/21/e-g-d-meta-night-4th</id>
-    <content type="html"><![CDATA[<p>イベント概要については、<a href="http://jangajan.com/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+    <id>http://ta1kt0me.github.io/blog/2014/12/21/e-g-d-meta-night-4th</id>
+    <content type="html"><![CDATA[<p>イベント概要については、<a href="http://ta1kt0me.github.io/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
 
 <p><a href="http://e-g-d.doorkeeper.jp/">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第４回目を開催しました。</p>
 
@@ -1114,9 +1142,9 @@ ParserやVMの基本的な仕組みや役割をRubyのソースコードで理�
   
   <entry>
     <title type="html"><![CDATA[よちよち.rbに参加しよう]]></title>
-    <link href="http://jangajan.com/blog/2014/12/21/letsjoinyochiyochirb/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/12/21/letsjoinyochiyochirb/"/>
     <updated>2014-12-21T06:39:32+09:00</updated>
-    <id>http://jangajan.com/blog/2014/12/21/letsjoinyochiyochirb</id>
+    <id>http://ta1kt0me.github.io/blog/2014/12/21/letsjoinyochiyochirb</id>
     <content type="html"><![CDATA[<p><a href="http://www.adventar.org/calendars/582">よちよち.rb Advent Calendar 2014</a> 21日目の記事です。 <br/>
 昨日は、記念すべき第50回のmeetupsをtoggetterでまとめた、<a href="http://togetter.com/li/759800">よちよち.rb 第50回 みんなで LT デビューしよう会</a>でした。EMOいLT連投で初めてとは思えないクオリティでした。当の自分は遅刻した上に落ちを接続準備の時に流してしまい、スライド2ページ残しでやりきれなかったという惨い結果でした。次回リベンジしたいです。</p>
 
@@ -1266,9 +1294,9 @@ GitHubには<a href="https://help.github.com/articles/github-flavored-markdown/"
   
   <entry>
     <title type="html"><![CDATA[localhostのelasticsearchにcurlしたらConnection Refused]]></title>
-    <link href="http://jangajan.com/blog/2014/12/16/fail-to-curl-to-elasticsearch/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/12/16/fail-to-curl-to-elasticsearch/"/>
     <updated>2014-12-16T19:13:11+09:00</updated>
-    <id>http://jangajan.com/blog/2014/12/16/fail-to-curl-to-elasticsearch</id>
+    <id>http://ta1kt0me.github.io/blog/2014/12/16/fail-to-curl-to-elasticsearch</id>
     <content type="html"><![CDATA[<p>よっしゃ、試してみよう！と思って出鼻をくじかれた話し。</p>
 
 <p>elasticsearch使ってる方多いですよね！今関わっているPJでも使っているので、どんなものか試してみました。ところが起動確認で早速つまづく始末です。</p>
@@ -1313,9 +1341,9 @@ GitHubには<a href="https://help.github.com/articles/github-flavored-markdown/"
   
   <entry>
     <title type="html"><![CDATA[2014年反省会]]></title>
-    <link href="http://jangajan.com/blog/2014/12/12/reviewing-2014/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/12/12/reviewing-2014/"/>
     <updated>2014-12-12T02:36:07+09:00</updated>
-    <id>http://jangajan.com/blog/2014/12/12/reviewing-2014</id>
+    <id>http://ta1kt0me.github.io/blog/2014/12/12/reviewing-2014</id>
     <content type="html"><![CDATA[<p><a href="http://www.adventar.org/calendars/582">よちよち.rb Advent Calendar 2014</a> 12日目の記事です。   <br/>
 昨日は、waterlowさんの<a href="http://waterlow2013.hatenablog.com/entry/2014/12/11/125423">私のよちよち.rb活用法</a>、でした。私は初めて参加した勉強会がよちよち.rbだったのですが、&#8217;悩むのOKの場所として&#8217;っていうのは、このコミュニティの大好きなところ一つです。誰かに教えてもらうのではなく、わからないことは声をあげて、一緒に調べて解決していくアプローチ。<br/>
 最初は難しかったのですが(特にわからないことを声に出すところ)、誰にでも発言できる雰囲気をうまく作り出していて、また参加したいなって思わせてくれます。</p>
@@ -1415,9 +1443,9 @@ Rubyでのプログラミングは楽しい。ただ単にプログラミング�
   
   <entry>
     <title type="html"><![CDATA[Rspec3のexpectとallowの違い]]></title>
-    <link href="http://jangajan.com/blog/2014/12/08/expect-and-allow-in-rspec/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/12/08/expect-and-allow-in-rspec/"/>
     <updated>2014-12-08T00:00:35+09:00</updated>
-    <id>http://jangajan.com/blog/2014/12/08/expect-and-allow-in-rspec</id>
+    <id>http://ta1kt0me.github.io/blog/2014/12/08/expect-and-allow-in-rspec</id>
     <content type="html"><![CDATA[<p><a href="http://www.adventar.org/calendars/582">よちよち.rb Advent Calendar 2014</a> 8日目の記事です。 <br/>
 昨日は、bonbon0605さんの<a href="http://genius.hateblo.jp/entry/2014/12/07/093454">2014年に読んだり積んだりした本とその思い出を振り返ります</a>、でした。<br/>
 Ruby初学者がワンステップレベルアップする時に参考となる良書を紹介していただきました！</p>
@@ -1664,10 +1692,10 @@ itのブロック自体は正しいため、beforeの<code>expect</code>を<code
   
   <entry>
     <title type="html"><![CDATA[MetaNight 第3回を開催しました]]></title>
-    <link href="http://jangajan.com/blog/2014/12/03/e-g-d-meta-night-3rd/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/12/03/e-g-d-meta-night-3rd/"/>
     <updated>2014-12-03T23:55:01+09:00</updated>
-    <id>http://jangajan.com/blog/2014/12/03/e-g-d-meta-night-3rd</id>
-    <content type="html"><![CDATA[<p>イベント概要については、<a href="http://jangajan.com/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+    <id>http://ta1kt0me.github.io/blog/2014/12/03/e-g-d-meta-night-3rd</id>
+    <content type="html"><![CDATA[<p>イベント概要については、<a href="http://ta1kt0me.github.io/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
 
 <p><a href="http://e-g-d.doorkeeper.jp/events/16300">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第３回目を開催しました。</p>
 
@@ -1736,9 +1764,9 @@ Monkeypatchの例としてリファクタリングの過程で<code>Array#replac
   
   <entry>
     <title type="html"><![CDATA[Gem:pr-commentをリリース]]></title>
-    <link href="http://jangajan.com/blog/2014/12/02/release-pr-comment/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/12/02/release-pr-comment/"/>
     <updated>2014-12-02T18:18:46+09:00</updated>
-    <id>http://jangajan.com/blog/2014/12/02/release-pr-comment</id>
+    <id>http://ta1kt0me.github.io/blog/2014/12/02/release-pr-comment</id>
     <content type="html"><![CDATA[<p><a href="https://rubygems.org/gems/pr-comment">pr-comment</a>というGemを作りました。</p>
 
 <!-- more -->
@@ -1780,10 +1808,10 @@ Monkeypatchの例としてリファクタリングの過程で<code>Array#replac
   
   <entry>
     <title type="html"><![CDATA[Cucumber on Rails 入門2]]></title>
-    <link href="http://jangajan.com/blog/2014/11/26/use-cucumber-2/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/11/26/use-cucumber-2/"/>
     <updated>2014-11-26T00:01:19+09:00</updated>
-    <id>http://jangajan.com/blog/2014/11/26/use-cucumber-2</id>
-    <content type="html"><![CDATA[<p><a href="http://jangajan.com/blog/2014/11/25/use-cucumber/">前回</a>
+    <id>http://ta1kt0me.github.io/blog/2014/11/26/use-cucumber-2</id>
+    <content type="html"><![CDATA[<p><a href="http://ta1kt0me.github.io/blog/2014/11/25/use-cucumber/">前回</a>
 に引き続き簡単なCucumberのテストケースを作ります。</p>
 
 <p>サンプルソースはこちらです。<br/>
@@ -2035,279 +2063,6 @@ Bookの作成ページをテストするシナリオの前段として、トッ�
 <p>capybara-webkitですが、<a href="https://gist.github.com/zhengjia/428105">チートシート</a>があるので有効活用しましょう。</p>
 
 <p>stepsで定義した操作は共通化してあげると良いですね。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Cucumber on Rails 入門1]]></title>
-    <link href="http://jangajan.com/blog/2014/11/25/use-cucumber/"/>
-    <updated>2014-11-25T14:15:41+09:00</updated>
-    <id>http://jangajan.com/blog/2014/11/25/use-cucumber</id>
-    <content type="html"><![CDATA[<p>Railsでcucumberを動かしてみます。<br/>
-サンプルソースはこちらです。<br/>
-<a href="https://github.com/ta1kt0me/cucumber-test/tree/first-test">ta1kt0me/cucumber-test</a></p>
-
-<p>cucumberを使うことになったので簡単なサンプルを作成してみます。</p>
-
-<table>
-<thead>
-<tr>
-<th style="text-align:center;"> ライブラリ  </th>
-<th style="text-align:center;"> バージョン  </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center;"> ruby        </td>
-<td style="text-align:center;"> 2.1.5       </td>
-</tr>
-<tr>
-<td style="text-align:center;"> rails       </td>
-<td style="text-align:center;"> 4.1.5       </td>
-</tr>
-<tr>
-<td style="text-align:center;"> cucumber    </td>
-<td style="text-align:center;"> 1.3.17      </td>
-</tr>
-</tbody>
-</table>
-
-
-<p>構成はこんな感じです。</p>
-
-<!-- more -->
-
-
-<h1>Cucumberとは</h1>
-
-<p>Rubyで書けるインテグレーションテストのためのテストフレームワークの一つです。
-Cucumber自体は、Railsに依存していないため、Sinatraのアプリでも使用可能です。</p>
-
-<h1>今回やること</h1>
-
-<p>!. cucumberのインストール
-2. scaffoldで作成したアプリのトップページを表示するテストを書く</p>
-
-<p>事前にscaffoldで適当なアプリを作成します。<br/>
-今回は以下のコマンドを実行しました。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle <span class="nb">exec </span>rails g scaffold Book title:string author:string price:integer
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>Cucumber</h1>
-
-<h2>最低限覚えること</h2>
-
-<p>Cucumberのテストシナリオは、GherkinというDSLで書きます。<br/>
-今回はGherkinの一部だけを利用して簡単なテストを書きます。<br/>
-Gherkinについては、<a href="http://blog.eiel.info/blog/2013/02/12/gherkin/">こちら</a>のサイトにわかりやすい解説があります。<br/>
-また、今回のサンプルですが<a href="https://semaphoreapp.com/blog/2013/08/14/setting-up-bdd-stack-on-a-new-rails-4-application.html">こちら</a>のサイトの内容をもとに確認しています。</p>
-
-<h3>言葉</h3>
-
-<ul>
-<li>Feature
-
-<ul>
-<li>機能を表します。1つのファイルに1つだけ</li>
-</ul>
-</li>
-<li>Scenario
-
-<ul>
-<li>テストのシナリオです</li>
-</ul>
-</li>
-<li>When
-
-<ul>
-<li>ユーザーの動作を表します。リンクをクリックする、とか</li>
-</ul>
-</li>
-<li>Then
-
-<ul>
-<li>Whenの結果どうなるか、を表します</li>
-</ul>
-</li>
-</ul>
-
-
-<p>階層構造としてはこうなります。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>Feature: 機能A
-</span><span class='line'>    Scenario: シナリオ1
-</span><span class='line'>        When ユーザーがTopページにきた時
-</span><span class='line'>        Then タイトルにhogeが表示されている
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>ファイル</h3>
-
-<ul>
-<li>features/hoge.feature
-
-<ul>
-<li>テストのシナリオを書くところ</li>
-</ul>
-</li>
-<li>features/step_definitions/hoge.rb
-
-<ul>
-<li>シナリオの動作を定義するところ</li>
-</ul>
-</li>
-</ul>
-
-
-<h2>インストール</h2>
-
-<h3>Gemfile変更 &amp; install</h3>
-
-<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">group</span> <span class="ss">:test</span> <span class="k">do</span>
-</span><span class='line'>  <span class="c1"># gem &#39;cucumber&#39; # githubのサンプルコードには入ってますが、いらないです。</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;cucumber-rails&#39;</span><span class="p">,</span> <span class="nb">require</span><span class="p">:</span> <span class="kp">false</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;database_cleaner&#39;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle install
-</span><span class='line'>bundle <span class="nb">exec </span>rails generate cucumber:install
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>シナリオを書く</h2>
-
-<p>今回はユーザーがトップページにいる時に、タイトル文字列&#8217;Listing books&#8217;が表示されていることを確認します。</p>
-
-<figure class='code'><figcaption><span>features/home_page.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="ss">Feature</span><span class="p">:</span> <span class="no">Home</span> <span class="n">page</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="ss">Scenario</span><span class="p">:</span> <span class="no">Viwing</span> <span class="n">application</span><span class="s1">&#39;s home page</span>
-</span><span class='line'><span class="s1">    When I am on the top page</span>
-</span><span class='line'><span class="s1">    Then I should see the &#39;</span><span class="no">Listing</span> <span class="n">books</span><span class="err">&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>この時点でテストを実行するとエラーが出ます。</p>
-
-<figure class='code'><figcaption><span>features/home_page.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="err">$</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">rake</span> <span class="n">cucumber</span>
-</span><span class='line'>   <span class="no">Then</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;Listing books&#39;</span>  <span class="c1"># features/home_page.feature:5</span>
-</span><span class='line'>      <span class="no">Undefined</span> <span class="ss">step</span><span class="p">:</span> <span class="s2">&quot;I should see the &#39;Listing books&#39;&quot;</span> <span class="p">(</span><span class="no">Cucumber</span><span class="o">::</span><span class="no">Undefined</span><span class="p">)</span>
-</span><span class='line'>      <span class="n">features</span><span class="o">/</span><span class="n">home_page</span><span class="o">.</span><span class="n">feature</span><span class="p">:</span><span class="mi">5</span><span class="ss">:in</span> <span class="sb">`Then I should see the &#39;Listing books&#39;&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sb">1 scenario (1 undefined)</span>
-</span><span class='line'><span class="sb">2 steps (2 undefined)</span>
-</span><span class='line'><span class="sb">0m0.005s</span>
-</span><span class='line'>
-</span><span class='line'><span class="sb">You can implement step definitions for undefined steps with these snippets:</span>
-</span><span class='line'>
-</span><span class='line'><span class="sb">When(/^I am on the homepage$/) do</span>
-</span><span class='line'><span class="sb">  pending # express the regexp above with the code you wish you had</span>
-</span><span class='line'><span class="sb">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="sb">Then(/^I should see the &#39;Listing books&#39;$/) do</span>
-</span><span class='line'><span class="sb">  pending # express the regexp above with the code you wish you had</span>
-</span><span class='line'><span class="sb">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>When</code>と<code>Then</code>で指定した動作（ステップ）が定義されてないことが原因です。</p>
-
-<h2>ステップを定義する</h2>
-
-<p>シナリオに書いた<code>When</code>と<code>Then</code>のステップを定義します。<br/>
-文字列一致で挙動を設定します。</p>
-
-<figure class='code'><figcaption><span>features/step_definitions/home_page_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">When</span><span class="p">(</span><span class="sr">/^I am on the top page$/</span><span class="p">)</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">visit</span> <span class="n">root_path</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">Then</span><span class="p">(</span><span class="sr">/^I should see the &#39;(.*?)&#39;$/</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">title</span><span class="o">|</span>
-</span><span class='line'>  <span class="n">assert</span> <span class="n">page</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="n">title</span><span class="p">)</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">0</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>もう一度実行します。</p>
-
-<figure class='code'><figcaption><span>features/step_definitions/home_page_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="err">$</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">rake</span> <span class="n">cucumber</span>
-</span><span class='line'><span class="ss">eature</span><span class="p">:</span> <span class="no">Home</span> <span class="n">page</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="ss">Scenario</span><span class="p">:</span> <span class="no">Viwing</span> <span class="n">application</span><span class="s1">&#39;s home page # features/home_page.feature:3</span>
-</span><span class='line'><span class="s1">    When I am on the top page              # features/step_definitions/home_page_steps.rb:1</span>
-</span><span class='line'><span class="s1">    Then I should see the &#39;</span><span class="no">Listing</span> <span class="n">books</span><span class="err">&#39;</span>  <span class="c1"># features/step_definitions/home_page_steps.rb:5</span>
-</span><span class='line'>
-</span><span class='line'><span class="mi">1</span> <span class="n">scenario</span> <span class="p">(</span><span class="mi">1</span> <span class="n">passed</span><span class="p">)</span>
-</span><span class='line'><span class="mi">2</span> <span class="n">steps</span> <span class="p">(</span><span class="mi">2</span> <span class="n">passed</span><span class="p">)</span>
-</span><span class='line'><span class="mi">0</span><span class="n">m0</span><span class="o">.</span><span class="mi">081</span><span class="n">s</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>成功しましたね。<br/>
-rspecと組み合わせることでrspecの記法できるようなります。<br/>
-またcapybara-webkitやwebratと組み合わせることで、よりStepが簡単に実装できるようになると思います。</p>
-
-<h1>課題</h1>
-
-<p>次はFactorygirlを使ってシナリオの前提条件となるGiveを使ってみます。</p>
-
-<p>しまった。cucumberの最初のcは大文字が正しいかもしれない&hellip;</p>
 ]]></content>
   </entry>
   

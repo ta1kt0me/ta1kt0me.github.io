@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Life | JanGaJan.com]]></title>
-  <link href="http://jangajan.com/blog/categories/life/atom.xml" rel="self"/>
-  <link href="http://jangajan.com/"/>
-  <updated>2015-05-05T11:48:19+09:00</updated>
-  <id>http://jangajan.com/</id>
+  <link href="http://ta1kt0me.github.io/blog/categories/life/atom.xml" rel="self"/>
+  <link href="http://ta1kt0me.github.io/"/>
+  <updated>2015-07-04T18:44:12+09:00</updated>
+  <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[My First Bouldering]]></title>
-    <link href="http://jangajan.com/blog/2015/04/18/my-first-bouldering/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/04/18/my-first-bouldering/"/>
     <updated>2015-04-18T11:30:08+09:00</updated>
-    <id>http://jangajan.com/blog/2015/04/18/my-first-bouldering</id>
+    <id>http://ta1kt0me.github.io/blog/2015/04/18/my-first-bouldering</id>
     <content type="html"><![CDATA[<p>初めてボルダリングを体験しました。
 8級はクリアできたけど、7級できないですね。
 翌日筋肉痛きていて、朝起きたら手を握ることができなかった。</p>
@@ -29,9 +29,9 @@
   
   <entry>
     <title type="html"><![CDATA[よちよち.rbに参加しよう]]></title>
-    <link href="http://jangajan.com/blog/2014/12/21/letsjoinyochiyochirb/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/12/21/letsjoinyochiyochirb/"/>
     <updated>2014-12-21T06:39:32+09:00</updated>
-    <id>http://jangajan.com/blog/2014/12/21/letsjoinyochiyochirb</id>
+    <id>http://ta1kt0me.github.io/blog/2014/12/21/letsjoinyochiyochirb</id>
     <content type="html"><![CDATA[<p><a href="http://www.adventar.org/calendars/582">よちよち.rb Advent Calendar 2014</a> 21日目の記事です。 <br/>
 昨日は、記念すべき第50回のmeetupsをtoggetterでまとめた、<a href="http://togetter.com/li/759800">よちよち.rb 第50回 みんなで LT デビューしよう会</a>でした。EMOいLT連投で初めてとは思えないクオリティでした。当の自分は遅刻した上に落ちを接続準備の時に流してしまい、スライド2ページ残しでやりきれなかったという惨い結果でした。次回リベンジしたいです。</p>
 
@@ -181,9 +181,9 @@ GitHubには<a href="https://help.github.com/articles/github-flavored-markdown/"
   
   <entry>
     <title type="html"><![CDATA[2014年反省会]]></title>
-    <link href="http://jangajan.com/blog/2014/12/12/reviewing-2014/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/12/12/reviewing-2014/"/>
     <updated>2014-12-12T02:36:07+09:00</updated>
-    <id>http://jangajan.com/blog/2014/12/12/reviewing-2014</id>
+    <id>http://ta1kt0me.github.io/blog/2014/12/12/reviewing-2014</id>
     <content type="html"><![CDATA[<p><a href="http://www.adventar.org/calendars/582">よちよち.rb Advent Calendar 2014</a> 12日目の記事です。   <br/>
 昨日は、waterlowさんの<a href="http://waterlow2013.hatenablog.com/entry/2014/12/11/125423">私のよちよち.rb活用法</a>、でした。私は初めて参加した勉強会がよちよち.rbだったのですが、&#8217;悩むのOKの場所として&#8217;っていうのは、このコミュニティの大好きなところ一つです。誰かに教えてもらうのではなく、わからないことは声をあげて、一緒に調べて解決していくアプローチ。<br/>
 最初は難しかったのですが(特にわからないことを声に出すところ)、誰にでも発言できる雰囲気をうまく作り出していて、また参加したいなって思わせてくれます。</p>
@@ -283,9 +283,9 @@ Rubyでのプログラミングは楽しい。ただ単にプログラミング�
   
   <entry>
     <title type="html"><![CDATA[初野球観戦]]></title>
-    <link href="http://jangajan.com/blog/2014/05/10/baseball-game-watching/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/05/10/baseball-game-watching/"/>
     <updated>2014-05-10T00:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/05/10/baseball-game-watching</id>
+    <id>http://ta1kt0me.github.io/blog/2014/05/10/baseball-game-watching</id>
     <content type="html"><![CDATA[<h1>野球観戦</h1>
 
 <p>野球観戦なんて高校以来です。</p>

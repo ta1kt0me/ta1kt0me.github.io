@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Jekyll | JanGaJan.com]]></title>
+  <link href="http://ta1kt0me.github.io/blog/categories/jekyll/atom.xml" rel="self"/>
+  <link href="http://ta1kt0me.github.io/"/>
+  <updated>2015-07-04T18:44:12+09:00</updated>
+  <id>http://ta1kt0me.github.io/</id>
+  <author>
+    <name><![CDATA[talkto_me]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[HerokuからGitHub Pagesにブログを移行した]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2015/07/04/move-to-github-dot-io/"/>
+    <updated>2015-07-04T18:16:55+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2015/07/04/move-to-github-dot-io</id>
+    <content type="html"><![CDATA[<p>Jekyllとoctopressで作っているブログをHerokuからGitHub Pagesに移行した(つもり)。この記事が見えていればできているはず。</p>
+
+<!-- more -->
+
+
+<p>やったことはこんな感じ。</p>
+
+<ol>
+<li>github.ioのリポジトリを作成</li>
+<li><code>github-pages</code> gemのインストールと不要なgemのアンインストール</li>
+<li><code>bundle exec rake setup_github_pages</code>を実行</li>
+<li><code>bundle exec rake deploy</code>を実行</li>
+<li>cloudflareのDNSの設定をHerokuからGitHab Pagesに変更</li>
+</ol>
+
+
+<p>github.ioのリポジトリを作った時に、<code>rake setup_github_pages</code>を実行する前にGitHub Pagesのリポジトリにpushしちゃって、<code>rake deploy</code>を実行する前に<code>push</code>コマンドに<code>-f</code>オプションつけたりした。(ちゃんと後で元に戻した)
+5の時に、CNAMEを設定したファイルが必要になるんだけど、プロジェクトホーム直下において<code>rake deploy</code>しても反映されない&hellip;
+実は、プロジェクトホーム直下に<code>_deploy</code>というディレクトリができて、そこがGitHub Pagesのリポジトリと同期とることになることに気がついてややこしいなって思った。
+とりあえず移行できてよかった〜。この記事が見れていれば&hellip;!!!</p>
+]]></content>
+  </entry>
+  
+</feed>

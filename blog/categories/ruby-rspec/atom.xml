@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Ruby Rspec | JanGaJan.com]]></title>
-  <link href="http://jangajan.com/blog/categories/ruby-rspec/atom.xml" rel="self"/>
-  <link href="http://jangajan.com/"/>
-  <updated>2015-05-05T11:48:19+09:00</updated>
-  <id>http://jangajan.com/</id>
+  <link href="http://ta1kt0me.github.io/blog/categories/ruby-rspec/atom.xml" rel="self"/>
+  <link href="http://ta1kt0me.github.io/"/>
+  <updated>2015-07-04T18:44:12+09:00</updated>
+  <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Rspec3のexpectとallowの違い]]></title>
-    <link href="http://jangajan.com/blog/2014/12/08/expect-and-allow-in-rspec/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/12/08/expect-and-allow-in-rspec/"/>
     <updated>2014-12-08T00:00:35+09:00</updated>
-    <id>http://jangajan.com/blog/2014/12/08/expect-and-allow-in-rspec</id>
+    <id>http://ta1kt0me.github.io/blog/2014/12/08/expect-and-allow-in-rspec</id>
     <content type="html"><![CDATA[<p><a href="http://www.adventar.org/calendars/582">よちよち.rb Advent Calendar 2014</a> 8日目の記事です。 <br/>
 昨日は、bonbon0605さんの<a href="http://genius.hateblo.jp/entry/2014/12/07/093454">2014年に読んだり積んだりした本とその思い出を振り返ります</a>、でした。<br/>
 Ruby初学者がワンステップレベルアップする時に参考となる良書を紹介していただきました！</p>

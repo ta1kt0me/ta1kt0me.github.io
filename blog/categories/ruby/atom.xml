@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Ruby | JanGaJan.com]]></title>
-  <link href="http://jangajan.com/blog/categories/ruby/atom.xml" rel="self"/>
-  <link href="http://jangajan.com/"/>
-  <updated>2015-05-05T11:48:19+09:00</updated>
-  <id>http://jangajan.com/</id>
+  <link href="http://ta1kt0me.github.io/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://ta1kt0me.github.io/"/>
+  <updated>2015-07-04T18:44:12+09:00</updated>
+  <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[MetaNight 第6回を開催しました]]></title>
-    <link href="http://jangajan.com/blog/2015/03/07/e-g-d-meta-night-6th/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/03/07/e-g-d-meta-night-6th/"/>
     <updated>2015-03-07T01:02:02+09:00</updated>
-    <id>http://jangajan.com/blog/2015/03/07/e-g-d-meta-night-6th</id>
+    <id>http://ta1kt0me.github.io/blog/2015/03/07/e-g-d-meta-night-6th</id>
     <content type="html"><![CDATA[<p>イベント概要については、<a href="/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
 
 <p><a href="http://e-g-d.doorkeeper.jp/">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第６回目を開催しました。</p>
@@ -82,9 +82,9 @@
   
   <entry>
     <title type="html"><![CDATA[STIを試す]]></title>
-    <link href="http://jangajan.com/blog/2015/03/06/try-sti/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/03/06/try-sti/"/>
     <updated>2015-03-06T05:43:15+09:00</updated>
-    <id>http://jangajan.com/blog/2015/03/06/try-sti</id>
+    <id>http://ta1kt0me.github.io/blog/2015/03/06/try-sti</id>
     <content type="html"><![CDATA[<h1>Single Table Inheritance(STI)とは</h1>
 
 <p>単一テーブル継承というデザインパターンです。テーブルベースの継承階層を表現しています。Ruby同様、継承元は一つのテーブルだけです。<br/>
@@ -254,9 +254,9 @@ end
   
   <entry>
     <title type="html"><![CDATA[Gem Reading - Dotenv]]></title>
-    <link href="http://jangajan.com/blog/2015/02/16/gem-reading-dotenv/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/02/16/gem-reading-dotenv/"/>
     <updated>2015-02-16T17:27:40+09:00</updated>
-    <id>http://jangajan.com/blog/2015/02/16/gem-reading-dotenv</id>
+    <id>http://ta1kt0me.github.io/blog/2015/02/16/gem-reading-dotenv</id>
     <content type="html"><![CDATA[<p><a href="https://github.com/bkeepers/dotenv">dotenv</a>というGemを知ったので覗いてみました。</p>
 
 <!-- more -->
@@ -341,9 +341,9 @@ gemspec :name =&gt; 'dotenv-rails'
   
   <entry>
     <title type="html"><![CDATA[MetaNight 第5回を開催しました]]></title>
-    <link href="http://jangajan.com/blog/2015/02/12/e-g-d-meta-night-5th/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/02/12/e-g-d-meta-night-5th/"/>
     <updated>2015-02-12T13:46:20+09:00</updated>
-    <id>http://jangajan.com/blog/2015/02/12/e-g-d-meta-night-5th</id>
+    <id>http://ta1kt0me.github.io/blog/2015/02/12/e-g-d-meta-night-5th</id>
     <content type="html"><![CDATA[<p>イベント概要については、<a href="/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
 
 <p><a href="http://e-g-d.doorkeeper.jp/">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第５回目を開催しました。</p>
@@ -429,9 +429,9 @@ Classはobject_id持ってますし、変数に代入することもできます
   
   <entry>
     <title type="html"><![CDATA[Gem Reading - Jquery-rails]]></title>
-    <link href="http://jangajan.com/blog/2015/01/21/gem-reading-jquery-rails/"/>
+    <link href="http://ta1kt0me.github.io/blog/2015/01/21/gem-reading-jquery-rails/"/>
     <updated>2015-01-21T23:14:52+09:00</updated>
-    <id>http://jangajan.com/blog/2015/01/21/gem-reading-jquery-rails</id>
+    <id>http://ta1kt0me.github.io/blog/2015/01/21/gem-reading-jquery-rails</id>
     <content type="html"><![CDATA[<p>簡単なやつから攻める。<br/>
 まずは読むことになれます。ということで、jquery-rails。</p>
 

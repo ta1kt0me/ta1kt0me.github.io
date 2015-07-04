@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Elasticsearch | JanGaJan.com]]></title>
-  <link href="http://jangajan.com/blog/categories/elasticsearch/atom.xml" rel="self"/>
-  <link href="http://jangajan.com/"/>
-  <updated>2015-05-05T11:48:19+09:00</updated>
-  <id>http://jangajan.com/</id>
+  <link href="http://ta1kt0me.github.io/blog/categories/elasticsearch/atom.xml" rel="self"/>
+  <link href="http://ta1kt0me.github.io/"/>
+  <updated>2015-07-04T18:44:12+09:00</updated>
+  <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[localhostのelasticsearchにcurlしたらConnection Refused]]></title>
-    <link href="http://jangajan.com/blog/2014/12/16/fail-to-curl-to-elasticsearch/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/12/16/fail-to-curl-to-elasticsearch/"/>
     <updated>2014-12-16T19:13:11+09:00</updated>
-    <id>http://jangajan.com/blog/2014/12/16/fail-to-curl-to-elasticsearch</id>
+    <id>http://ta1kt0me.github.io/blog/2014/12/16/fail-to-curl-to-elasticsearch</id>
     <content type="html"><![CDATA[<p>よっしゃ、試してみよう！と思って出鼻をくじかれた話し。</p>
 
 <p>elasticsearch使ってる方多いですよね！今関わっているPJでも使っているので、どんなものか試してみました。ところが起動確認で早速つまづく始末です。</p>

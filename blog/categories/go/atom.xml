@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Go | JanGaJan.com]]></title>
-  <link href="http://jangajan.com/blog/categories/go/atom.xml" rel="self"/>
-  <link href="http://jangajan.com/"/>
-  <updated>2015-05-05T11:48:19+09:00</updated>
-  <id>http://jangajan.com/</id>
+  <link href="http://ta1kt0me.github.io/blog/categories/go/atom.xml" rel="self"/>
+  <link href="http://ta1kt0me.github.io/"/>
+  <updated>2015-07-04T18:44:12+09:00</updated>
+  <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Peco入れてみました]]></title>
-    <link href="http://jangajan.com/blog/2014/07/05/peco-peco/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/07/05/peco-peco/"/>
     <updated>2014-07-05T00:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/07/05/peco-peco</id>
+    <id>http://ta1kt0me.github.io/blog/2014/07/05/peco-peco</id>
     <content type="html"><![CDATA[<p>なぜか4時に起きてしまったのでブラジル-コロンビア戦を見る傍ら、昨日はてなで見かけた<a href="http://blog.horimisli.me/entry/terminal-env-2014">面白コンテンツ探求日記のこちら</a>の記事を眺めてたら<a href="https://github.com/peco/peco">peco</a>面白そうと思い立って試してみました。<br/>
 インタラクティブgrep。</p>
 

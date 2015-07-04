@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Conference | JanGaJan.com]]></title>
-  <link href="http://jangajan.com/blog/categories/conference/atom.xml" rel="self"/>
-  <link href="http://jangajan.com/"/>
-  <updated>2015-05-05T11:48:19+09:00</updated>
-  <id>http://jangajan.com/</id>
+  <link href="http://ta1kt0me.github.io/blog/categories/conference/atom.xml" rel="self"/>
+  <link href="http://ta1kt0me.github.io/"/>
+  <updated>2015-07-04T18:44:12+09:00</updated>
+  <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[YAPC::Asia 2014参加レポ]]></title>
-    <link href="http://jangajan.com/blog/2014/09/01/yapc-asia-2014/"/>
+    <link href="http://ta1kt0me.github.io/blog/2014/09/01/yapc-asia-2014/"/>
     <updated>2014-09-01T00:00:00+09:00</updated>
-    <id>http://jangajan.com/blog/2014/09/01/yapc-asia-2014</id>
+    <id>http://ta1kt0me.github.io/blog/2014/09/01/yapc-asia-2014</id>
     <content type="html"><![CDATA[<h1>感想</h1>
 
 <p>前置きですが、初参加です。Perl書けません。<br/>
