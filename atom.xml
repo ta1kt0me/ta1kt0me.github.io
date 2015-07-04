@@ -1,0 +1,2314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[JanGaJan.com]]></title>
+  <link href="http://jangajan.com/atom.xml" rel="self"/>
+  <link href="http://jangajan.com/"/>
+  <updated>2015-05-05T11:48:19+09:00</updated>
+  <id>http://jangajan.com/</id>
+  <author>
+    <name><![CDATA[talkto_me]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Warning: Each Child in an Array or Iterator Should Have a Unique "Key" Prop.]]></title>
+    <link href="http://jangajan.com/blog/2015/05/05/resolve-react-warning/"/>
+    <updated>2015-05-05T11:45:28+09:00</updated>
+    <id>http://jangajan.com/blog/2015/05/05/resolve-react-warning</id>
+    <content type="html"><![CDATA[<p>最近 reactをいじっています。</p>
+
+<p>taskの配列をもつ、TaskListというコンポーネントの中で、TaskCardという子コンポーネントをループで回して生成しているところでwarningが発生した。</p>
+
+<blockquote><p>Warning: Each child in an array or iterator should have a unique &ldquo;key&rdquo; prop. Check the render method of TaskList. See <a href="http://fb.me/react-warning-keys">http://fb.me/react-warning-keys</a> for more information.</p></blockquote>
+
+<!-- more -->
+
+
+<p>ソースは↓</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='coffee'><span class='line'><span class="vi">@TaskList = </span><span class="nx">React</span><span class="p">.</span><span class="nx">createClass</span>
+</span><span class='line'>  <span class="nv">render: </span><span class="nf">-&gt;</span>
+</span><span class='line'>    <span class="nv">tasks = </span><span class="nx">@props</span><span class="p">.</span><span class="nx">tasks</span><span class="p">.</span><span class="nx">map</span> <span class="nf">(task) -&gt;</span>
+</span><span class='line'>      <span class="o">`&lt;</span><span class="nx">TaskCard</span> <span class="nx">task</span><span class="o">=</span><span class="p">{</span><span class="nx">task</span><span class="p">}</span><span class="o">&gt;&lt;/</span><span class="nx">TaskCard</span><span class="o">&gt;`</span>
+</span><span class='line'>    <span class="o">`&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s">&quot;list-group&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="p">{</span> <span class="nx">tasks</span> <span class="p">}</span>
+</span><span class='line'>    <span class="o">&lt;/</span><span class="nx">div</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">`</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>key</code> というユニークになる情報をコンポーネントに持たせろよと。
+じゃぁ、と思って、task自体を設定した。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='coffee'><span class='line'><span class="vi">@TaskList = </span><span class="nx">React</span><span class="p">.</span><span class="nx">createClass</span>
+</span><span class='line'>  <span class="nv">render: </span><span class="nf">-&gt;</span>
+</span><span class='line'>    <span class="nv">tasks = </span><span class="nx">@props</span><span class="p">.</span><span class="nx">tasks</span><span class="p">.</span><span class="nx">map</span> <span class="nf">(task) -&gt;</span>
+</span><span class='line'>      <span class="o">`&lt;</span><span class="nx">TaskCard</span> <span class="nx">key</span><span class="o">=</span><span class="p">{</span><span class="nx">task</span><span class="p">}</span> <span class="nx">task</span><span class="o">=</span><span class="p">{</span><span class="nx">task</span><span class="p">}</span><span class="o">&gt;&lt;/</span><span class="nx">TaskCard</span><span class="o">&gt;`</span>
+</span><span class='line'>    <span class="o">`&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s">&quot;list-group&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="p">{</span> <span class="nx">tasks</span> <span class="p">}</span>
+</span><span class='line'>    <span class="o">&lt;/</span><span class="nx">div</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">`</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>そしたらこんなエラーが。</p>
+
+<blockquote><p>Warning: flattenChildren(&hellip;): Encountered two children with the same key, <code>.$[object Object]</code>. Child keys must be unique; when two children share a key, only the first child will be used.</p></blockquote>
+
+<p><code>index</code>なんかをもたせてあげないといけないらしい。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='coffee'><span class='line'><span class="vi">@TaskList = </span><span class="nx">React</span><span class="p">.</span><span class="nx">createClass</span>
+</span><span class='line'>  <span class="nv">render: </span><span class="nf">-&gt;</span>
+</span><span class='line'>    <span class="nv">tasks = </span><span class="nx">@props</span><span class="p">.</span><span class="nx">tasks</span><span class="p">.</span><span class="nx">map</span> <span class="nf">(task, i) -&gt;</span>
+</span><span class='line'>      <span class="o">`&lt;</span><span class="nx">TaskCard</span> <span class="nx">key</span><span class="o">=</span><span class="p">{</span><span class="nx">i</span><span class="p">}</span> <span class="nx">task</span><span class="o">=</span><span class="p">{</span><span class="nx">task</span><span class="p">}</span><span class="o">&gt;&lt;/</span><span class="nx">TaskCard</span><span class="o">&gt;`</span>
+</span><span class='line'>    <span class="o">`&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s">&quot;list-group&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="p">{</span> <span class="nx">tasks</span> <span class="p">}</span>
+</span><span class='line'>    <span class="o">&lt;/</span><span class="nx">div</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">`</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>task</code>の<code>id</code>が一意になるなら、<code>task.id</code> としてもいいかも</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[My First Bouldering]]></title>
+    <link href="http://jangajan.com/blog/2015/04/18/my-first-bouldering/"/>
+    <updated>2015-04-18T11:30:08+09:00</updated>
+    <id>http://jangajan.com/blog/2015/04/18/my-first-bouldering</id>
+    <content type="html"><![CDATA[<p>初めてボルダリングを体験しました。
+8級はクリアできたけど、7級できないですね。
+翌日筋肉痛きていて、朝起きたら手を握ることができなかった。</p>
+
+<!-- more -->
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Vimのcolorschemeの設定でエラー]]></title>
+    <link href="http://jangajan.com/blog/2015/03/15/vim-colorscheme/"/>
+    <updated>2015-03-15T01:15:11+09:00</updated>
+    <id>http://jangajan.com/blog/2015/03/15/vim-colorscheme</id>
+    <content type="html"><![CDATA[<p>思うところがあって、sublime textからvimにエディタを乗り換えようとしているところです。
+vimrcを見直している途中で、最新版を入れてpluginのupdateとかしていたら、以下のエラーが発生してcolorschemeが反映されなくなってしまった。</p>
+
+<!-- more -->
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>Error detected <span class="k">while</span> processing /Users/hoge/.vimrc:
+</span><span class='line'>line  144:
+</span><span class='line'>E185: Cannot find color scheme <span class="s1">&#39;railscasts&#39;</span>
+</span><span class='line'>Press ENTER or <span class="nb">type command </span>to <span class="k">continue</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>設定箇所を見てみると、こんな感じ。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='vim'><span class='line'><span class="k">colorscheme</span> railscasts
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>え、全然問題なさそう&hellip;と思って、vim上でコマンドを実行してみると、ちゃんと適用された&hellip;なにこれ。</p>
+
+<p>パッケージ管理にNeoBundleを使用しているのですが、エラーメッセージで検索したら、<a href="https://github.com/altercation/vim-colors-solarized/issues/104#issuecomment-71037368">GitHubにこんなコメント</a>が。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='vim'><span class='line'><span class="k">call</span> neobundle#<span class="k">end</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">colorscheme</span> railscasts
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>無事themeが適用されました。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[MetaNight 第6回を開催しました]]></title>
+    <link href="http://jangajan.com/blog/2015/03/07/e-g-d-meta-night-6th/"/>
+    <updated>2015-03-07T01:02:02+09:00</updated>
+    <id>http://jangajan.com/blog/2015/03/07/e-g-d-meta-night-6th</id>
+    <content type="html"><![CDATA[<p>イベント概要については、<a href="http://jangajan.com/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+
+<p><a href="http://e-g-d.doorkeeper.jp/">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第６回目を開催しました。</p>
+
+<p><a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=B00N9I0RMQ&linkCode=as2&tag=pochan0919-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00N9I0RMQ&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=pochan0919-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=B00N9I0RMQ" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
+
+<!-- more -->
+
+
+<h1>活動内容</h1>
+
+<p>Part 1 Chapter2 の <code>Constant</code> から <code>the rake example</code> の前までやりました。<br/>
+読みながらの意見とかはこちらに載せてあります。<br/>
+<a href="https://trello.com/b/OZ3llmtE/metanight-6th">https://trello.com/b/OZ3llmtE/metanight-6th</a></p>
+
+<h1>感想</h1>
+
+<p>今回は初の一人会(いつも皆様ありがとうございます)だったので、同日あった別イベントに参加しつつ読み進めました。<br/>
+雑談メインになったので、そんなに進まなかった。</p>
+
+<h2>Constant is like in a file system</h2>
+
+<p>定数の基本的な話です。同じ定数名だとしても、定義しているスコープが違えば、別物として扱います。そのため、仕組みとしてはファイルシステムを連想するとイメージしやすいです。例えば、別ディレクトリにあるファイルは、ファイル名が一緒でも別ファイルになります。定数も同様、同じ定数名でも、定義しているスコープが違えば参照する値は異なります。</p>
+
+<ul>
+<li>定数の先頭は大文字
+
+<ul>
+<li>クラス名やモジュール名は定数である</li>
+</ul>
+</li>
+<li>定数を上書き可能だが、警告が発生</li>
+</ul>
+
+
+<h2>英語</h2>
+
+<ul>
+<li>have to do with</li>
+</ul>
+
+
+<p>関係がある</p>
+
+<ul>
+<li>go even further</li>
+</ul>
+
+
+<p>さらに掘り下げる</p>
+
+<h2>その他</h2>
+
+<ul>
+<li>酒弱いので、飲むと記憶力が薄まる</li>
+<li>Rubyは面白い</li>
+<li>沖縄合宿行きたい</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[STIを試す]]></title>
+    <link href="http://jangajan.com/blog/2015/03/06/try-sti/"/>
+    <updated>2015-03-06T05:43:15+09:00</updated>
+    <id>http://jangajan.com/blog/2015/03/06/try-sti</id>
+    <content type="html"><![CDATA[<h1>Single Table Inheritance(STI)とは</h1>
+
+<p>単一テーブル継承というデザインパターンです。テーブルベースの継承階層を表現しています。Ruby同様、継承元は一つのテーブルだけです。<br/>
+<a href="http://www.martinfowler.com/eaaCatalog/singleTableInheritance.html">こちら</a>に具体的なイメージがあります。<br/>
+早速RailsでSTIをどうやるのか調べてみます。</p>
+
+<!-- more -->
+
+
+<h1>環境</h1>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">tool</th>
+<th style="text-align:right;">version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">ruby</td>
+<td style="text-align:right;">2.2.0</td>
+</tr>
+<tr>
+<td style="text-align:left;">rails</td>
+<td style="text-align:right;">4.2.0</td>
+</tr>
+</tbody>
+</table>
+
+
+<h1>試す</h1>
+
+<p>まずは準備をします。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails new sti_type --no-test-framework --skip-bundle
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails g model user name:string age:integer <span class="nb">type</span>:string
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:migrate
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>RailsでのSTIではmodelの <code>type</code> というカラムが重要な役割を果たします。</p>
+
+<figure class='code'><figcaption><span>app/models/guest.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Guest</span> <span class="o">&lt;</span> <span class="no">User</span><span class="p">;</span> <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>app/models/host.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">Host</span> <span class="o">&lt;</span> <span class="no">User</span><span class="p">;</span> <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>継承ツリーとしてはこんな感じになります。</p>
+
+<figure class='code'><figcaption><span>app/models/host.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>        <span class="o">|</span>
+</span><span class='line'>       <span class="no">User</span>
+</span><span class='line'>   <span class="n">_____</span><span class="o">|</span><span class="n">_____</span>
+</span><span class='line'>  <span class="o">|</span>           <span class="o">|</span>
+</span><span class='line'><span class="no">Guest</span>        <span class="no">Host</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これで一通りの準備が整いました。 <code>rails console</code> で動作を確認してみます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="err">$</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">rails</span> <span class="n">c</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="no">Guest</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Mark&#39;</span><span class="p">,</span> <span class="ss">age</span><span class="p">:</span> <span class="mi">18</span><span class="p">)</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="no">Host</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Yamada&#39;</span><span class="p">,</span> <span class="ss">age</span><span class="p">:</span> <span class="mi">50</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="n">pp</span> <span class="no">User</span><span class="o">.</span><span class="n">all</span>
+</span><span class='line'><span class="o">[</span><span class="c1">#&lt;Guest:0x007f84c1279a00</span>
+</span><span class='line'>  <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>  <span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Mark&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">age</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">type</span><span class="p">:</span> <span class="s2">&quot;Guest&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">created_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">19</span><span class="p">:</span><span class="mi">43</span><span class="p">:</span><span class="mi">24</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">updated_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">19</span><span class="p">:</span><span class="mi">43</span><span class="p">:</span><span class="mi">24</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span class='line'> <span class="c1">#&lt;Host:0x007f84c1279870</span>
+</span><span class='line'>  <span class="nb">id</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class='line'>  <span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Yamada&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">age</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">type</span><span class="p">:</span> <span class="s2">&quot;Host&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">created_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">19</span><span class="p">:</span><span class="mi">44</span><span class="p">:</span><span class="mo">02</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">updated_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">19</span><span class="p">:</span><span class="mi">44</span><span class="p">:</span><span class="mo">02</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="o">&gt;]</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&gt;</span> <span class="n">pp</span> <span class="no">Guest</span><span class="o">.</span><span class="n">all</span>
+</span><span class='line'><span class="o">[</span><span class="c1">#&lt;Guest:0x007f84c2b54b10</span>
+</span><span class='line'>  <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>  <span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Mark&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">age</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">type</span><span class="p">:</span> <span class="s2">&quot;Guest&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">created_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">19</span><span class="p">:</span><span class="mi">43</span><span class="p">:</span><span class="mi">24</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">updated_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">19</span><span class="p">:</span><span class="mi">43</span><span class="p">:</span><span class="mi">24</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="o">&gt;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>type</code> に、自分のクラス名がGuestだったら&#8217;Guest&#8217;と入ります。 <code>Guest</code> だけの属性を集めたい場合は <code>Guest.all</code> とすることで取得できます。</p>
+
+<h1><code>type</code>以外のカラムにクラス情報を格納したい</h1>
+
+<p>なにがしかの理由で <code>type</code> は使えない場合、 <code>self.inheritance_column</code> を使うことで、別のカラムをクラス名を格納するカラムに指定することができます。
+例えば、 <code>role</code> というカラムを使いたい場合です。</p>
+
+<h2>準備</h2>
+
+<p>汚いですが前のサンプルをそのまま使います。<br/>
+<code>role</code>というカラムを追加します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="err">$</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">rails</span> <span class="n">g</span> <span class="n">migration</span> <span class="no">AddRoleToUser</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>db/migrate/20150305201347_add_role_to_user.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">AddRoleToUser</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">change</span>
+</span><span class='line'>    <span class="n">add_column</span> <span class="ss">:users</span><span class="p">,</span> <span class="ss">:role</span><span class="p">,</span> <span class="ss">:string</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>データを綺麗にしたいのでDB作り直します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:setup
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake db:migrate
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>大事なのはここだけです。 <code>self.inheritance_column</code> に <code>role</code> を指定します。</p>
+
+<figure class='code'><figcaption><span>app/models/user.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="nb">self</span><span class="o">.</span><span class="n">inheritance_column</span> <span class="o">=</span> <span class="ss">:role</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>確認</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="o">&gt;</span> <span class="no">Guest</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Bob&#39;</span><span class="p">,</span> <span class="ss">age</span><span class="p">:</span> <span class="mi">1000</span><span class="p">)</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="no">Host</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;Tanaka&#39;</span><span class="p">,</span> <span class="ss">age</span><span class="p">:</span> <span class="mi">100</span><span class="p">)</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="n">pp</span> <span class="no">User</span><span class="o">.</span><span class="n">all</span>
+</span><span class='line'><span class="o">[</span><span class="c1">#&lt;Guest:0x007fe248c19c60</span>
+</span><span class='line'>  <span class="nb">id</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+</span><span class='line'>  <span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Bob&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">age</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">type</span><span class="p">:</span> <span class="kp">nil</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">created_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">20</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mi">55</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">updated_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">20</span><span class="p">:</span><span class="mi">23</span><span class="p">:</span><span class="mi">55</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">role</span><span class="p">:</span> <span class="s2">&quot;Guest&quot;</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span class='line'> <span class="c1">#&lt;Host:0x007fe248c19ad0</span>
+</span><span class='line'>  <span class="nb">id</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+</span><span class='line'>  <span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;Tanaka&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">age</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">type</span><span class="p">:</span> <span class="kp">nil</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">created_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">20</span><span class="p">:</span><span class="mi">24</span><span class="p">:</span><span class="mi">10</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">updated_at</span><span class="p">:</span> <span class="no">Thu</span><span class="p">,</span> <span class="mo">05</span> <span class="no">Mar</span> <span class="mi">2015</span> <span class="mi">20</span><span class="p">:</span><span class="mi">24</span><span class="p">:</span><span class="mi">10</span> <span class="no">UTC</span> <span class="o">+</span><span class="mo">00</span><span class="p">:</span><span class="mo">00</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">role</span><span class="p">:</span> <span class="s2">&quot;Host&quot;</span><span class="o">&gt;]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>type</code> ではなく、 <code>role</code> を使用していることが確認できました。</p>
+
+<h1>注意点</h1>
+
+<p>注意しなければいけなそうな点は、こんな感じでしょうか。</p>
+
+<ul>
+<li>子クラス(<code>Guest</code> や <code>Host</code>)ごとに特別のカラムが欲しい場合、 <code>users</code> に追加する必要があり、<code>nil</code>を許容しなければいけない
+
+<ul>
+<li><code>Guest</code> で使うが <code>Host</code> では使用しないケースがあるから</li>
+</ul>
+</li>
+<li>子クラスごとに、カラムの型を変えることはできない</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Gem Reading - Dotenv]]></title>
+    <link href="http://jangajan.com/blog/2015/02/16/gem-reading-dotenv/"/>
+    <updated>2015-02-16T17:27:40+09:00</updated>
+    <id>http://jangajan.com/blog/2015/02/16/gem-reading-dotenv</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/bkeepers/dotenv">dotenv</a>というGemを知ったので覗いてみました。</p>
+
+<!-- more -->
+
+
+<h1>about dotevn</h1>
+
+<p>読む前にどんなものか簡単に確認。</p>
+
+<h2>これなに？</h2>
+
+<p>環境変数 ENV をファイル管理できるGemです。<a href="http://qiita.com/closer/items/f8d8ba00ae86d7051764">こちら</a>の記事が参考になりました。</p>
+
+<h2>どう使うの？</h2>
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># 後でbundle install</span>
+</span><span class='line'><span class="n">gem</span> <span class="s1">&#39;dotenv&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>デフォルトでは<code>.env</code>というファイルの中に、</p>
+
+<figure class='code'><figcaption><span>.env</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">HOGE=1</span>
+</span><span class='line'><span class="l-Scalar-Plain">FUGA=2</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>と書いて、<code>.env</code>を読み込むための命令 <code>Dotenv.load</code> を実行すると、 <code>ENV['HOGE']</code> が <code>1</code> を返すようになります。環境変数をわざわざexportコマンドを使ったり、<code>.zshrc</code>といった設定ファイルに書かなくても使えるようになります。<br/>
+fixtureを見た感じ<code>=</code>じゃなくて、YAMLっぽく<code>:</code>も使えそう。</p>
+
+<h1>読んでみる</h1>
+
+<h2>2つのGem</h2>
+
+<p>このGemからは2つのGemを利用できます。</p>
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">source</span> <span class="s1">&#39;https://rubygems.org&#39;</span>
+</span><span class='line'><span class="n">gemspec</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">&#39;dotenv&#39;</span>
+</span><span class='line'><span class="n">gemspec</span> <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">&#39;dotenv-rails&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>gemspecファイルも2つあった。<br/>
+<code>dotenv</code>というGemはこの機能のベース部分。<code>dotenv-rails</code>というGemは、Railsを利用するときに、<code>dotenv</code>を自動で有効にしてくれるラッパーです。それと、このGemにはCLIのスクリプトも包含しています。</p>
+
+<h2>dotenv.rb</h2>
+
+<p>ここが外部から呼び出すインターフェースのメソッド(load, load!, overload)を定義しています。<code>module Dotenv extend self</code>として、これらをmoduleの特異メソッドにしています。<br/>
+環境変数を定義するファイルをこのメソッドの引数として渡せばいいが、引数なしの場合は <code>.env</code> がデフォルト値となります。</p>
+
+<p>まだ分かっていないのですが、 <code>instrument</code> というメソッドは、 <code>Active Support Instrumentation</code> という機能を使っている。  この機能はRails限定。</p>
+
+<p><code>reduce</code>が使われているんだけど、<code>inject</code> とどう使い分けするのかなって疑問に思ったら<a href="http://magazine.rubyist.net/?0038-MapAndCollect#l4">こんな記事</a>がありました。smalltalkとlispの考え方の違いか〜&hellip;実際にはaliasだから使う人の好みが出そう。</p>
+
+<h2>environment.rb</h2>
+
+<p><code>Dotenv::Environment</code>は<code>Hash</code>の子クラス。<code>.env</code>内のkey,value情報を自身に格納して、<code>apply</code> or <code>apply!</code> を呼び出すことで<code>ENV</code>に設定している。<code>apply</code>メソッドの呼び出しは、<code>dotenv.rb</code>で行っている。<code>Dotenv::Environment</code>の<code>initialize</code>の一部として<code>.env</code>の読み込みとパースをやってる。</p>
+
+<h2>parse.rb</h2>
+
+<p>大事なのは<code>call</code>メソッド。ここで<code>.env</code>の内容がパースされる。正規表現弱いんでこのあたりは宿題&hellip;orz<br/>
+<code>@@substitutions</code>というクラス変数があるんだけどここには<code>Substitutions</code>のnamespaceにあるクラスの配列が入ってる。<code>.env</code>のvalueに設定できるものとして、</p>
+
+<ol>
+<li>コマンドの出力結果</li>
+<li>変数展開</li>
+</ol>
+
+
+<p>がある。
+1 は <code>Dotenv::Substitutions::Command</code>で処理し、2 は<code>Dotenv::Substitutions::Variable</code>で処理する。  あー、実際にはそうなるように値を設定しているのかな？</p>
+
+<p>Substitutions.constants のところでクラス名が定数だということがわかった。</p>
+
+<h2>rails.rb</h2>
+
+<p>デフォルトでは、<code>before_configuration</code>のときに、<code>.env</code>を読み込む。<code>dotenv</code>と違い、ファイル名は<code>.env.local</code>,<code>.env.#{Rails.env}</code>もデフォルトで読み込み対象となる。</p>
+
+<p>それと、上述の<code>Active Support Instrumentation</code>をspringによるファイル変更時のENV再設定に利用しているっぽい。この通知の仕組み？をもうちょっと掘り下げてみようかな。</p>
+
+<h1>終わりに</h1>
+
+<p>英語が堪能は方は<a href="http://blog.mah-lab.com/2014/08/15/dotenv/">こちら</a>が参考になるかも。全然内容が頭の中に入ってこなかったのでもっとリスニング練習しよう。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[MetaNight 第5回を開催しました]]></title>
+    <link href="http://jangajan.com/blog/2015/02/12/e-g-d-meta-night-5th/"/>
+    <updated>2015-02-12T13:46:20+09:00</updated>
+    <id>http://jangajan.com/blog/2015/02/12/e-g-d-meta-night-5th</id>
+    <content type="html"><![CDATA[<p>イベント概要については、<a href="http://jangajan.com/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+
+<p><a href="http://e-g-d.doorkeeper.jp/">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第５回目を開催しました。</p>
+
+<p><a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=B00N9I0RMQ&linkCode=as2&tag=pochan0919-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00N9I0RMQ&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=pochan0919-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=B00N9I0RMQ" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
+
+<!-- more -->
+
+
+<h1>活動内容</h1>
+
+<p>フリーマンカフェで実施しました。<br/>
+Part 1 Chapter2 の The Truth About Classesから Constantの前までやりました。<br/>
+読みながらの意見とかはこちらに載せてあります。<br/>
+<a href="https://trello.com/b/6JT4fy3D/metanight-5th">https://trello.com/b/6JT4fy3D/metanight-5th</a></p>
+
+<h1>感想</h1>
+
+<p>前回よりもかなり間が空いてしまった&hellip;(結局1月にできなかった&hellip;)<br/>
+Billの図のおかげで、Rubyにおけるクラスとオブジェクトの関係性がよりはっきりわかってきました。<br/>
+Billできるやつ。</p>
+
+<h2>Classes themselves are nothing but objects</h2>
+
+<p><strong>Putting It All Together</strong> で表しているのですが、クラスはオブジェクトなんだよ、っていうことを語っています。そこが他の言語とは違うんだと。<br/>
+Classはobject_id持ってますし、変数に代入することもできます。実際にはClassへの参照を表現している定数(Class名)を変数に代入しています。ここは、次回のConstantのところに繋がってきますね。</p>
+
+<p>ClassとModuleの関係の話も出てきました。２つは非常によく似ているけれど、使い分け方の基準として</p>
+
+<ul>
+<li>インスタンス化と継承を使いたいならClass</li>
+<li>どこでもincludeできるのがModule</li>
+</ul>
+
+
+<p>と書いてありました。インスタンス化する必要があるかどうかが、おおきな分かれ目になるのかな。</p>
+
+<h2>英語</h2>
+
+<ul>
+<li>Take a deep breath</li>
+</ul>
+
+
+<p>文頭でよく見かける、一息ついて、という表現。takeの使い所ってよく分からないよね、って話が出ました。取るってニュアンスはわかるけれど、固定表現が多いのかな？</p>
+
+<ul>
+<li>get away with</li>
+</ul>
+
+
+<p>やりすごす、とか、すますことができる、とか&hellip;?</p>
+
+<ul>
+<li>Chances are</li>
+</ul>
+
+
+<p>多分、だろう、といった表現。なんでmaybeじゃないんだろう、特殊な意味が含まれてるのかな？<br/>
+微妙なニュアンスの違いがけっこう難しいです。</p>
+
+<ul>
+<li>A variable can reference a class</li>
+</ul>
+
+
+<p>referenceって形容詞だから文法的に変じゃない？って話が挙がりました。結果として、動詞としても使えるようなので、少しずつだけど、言葉が変化している面白い例なんだなと感じました。</p>
+
+<h2>その他</h2>
+
+<ul>
+<li>meta_ruby = MetaRuby.newのとき、MetaRuby.instance_methods == meta_ruby.methods</li>
+<li>allocate メソッド、rails(ActiveRecord)だと再定義されてる</li>
+<li>Class.superclassはModule、Module.classはClass、Class.super&hellip;.というループ</li>
+</ul>
+
+
+<p>今回は初参加の方が多くて新鮮でした。人数増やしたりオンライン検討したりしたほうがいいのかなぁと思ったり。</p>
+
+<p>第6回は2月末か、3月頭にやる。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Gem Reading - Jquery-rails]]></title>
+    <link href="http://jangajan.com/blog/2015/01/21/gem-reading-jquery-rails/"/>
+    <updated>2015-01-21T23:14:52+09:00</updated>
+    <id>http://jangajan.com/blog/2015/01/21/gem-reading-jquery-rails</id>
+    <content type="html"><![CDATA[<p>簡単なやつから攻める。<br/>
+まずは読むことになれます。ということで、jquery-rails。</p>
+
+<!-- more -->
+
+
+<h2>眺める</h2>
+
+<p>lib配下を見ても、これといったファイルないな〜と&hellip;</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>lib
+</span><span class='line'>├── jquery
+</span><span class='line'>│   ├── assert_select.rb
+</span><span class='line'>│   ├── rails
+</span><span class='line'>│   │   ├── engine.rb
+</span><span class='line'>│   │   └── version.rb
+</span><span class='line'>│   └── rails.rb
+</span><span class='line'>└── jquery-rails.rb
+</span><span class='line'>
+</span><span class='line'><span class="m">2</span> directories, <span class="m">5</span> files
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>engine.rb
+
+<ul>
+<li>Engin生成</li>
+</ul>
+</li>
+<li>version.rb
+
+<ul>
+<li>現在対応しているjqeruyのバージョンを定数で定義</li>
+</ul>
+</li>
+<li>assert_select.rb
+
+<ul>
+<li>assert_select_jqueryというテストメソッドを提供してくれる</li>
+</ul>
+</li>
+</ul>
+
+
+<p>他はモジュール定義してたり、requireしてたり。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>vendor/assets
+</span><span class='line'>└── javascripts
+</span><span class='line'>    ├── jquery.js
+</span><span class='line'>    ├── jquery.min.js
+</span><span class='line'>    ├── jquery.min.map
+</span><span class='line'>    ├── jquery2.js
+</span><span class='line'>    ├── jquery2.min.js
+</span><span class='line'>    ├── jquery2.min.map
+</span><span class='line'>    └── jquery_ujs.js
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>vendor/assets/javascriptsの中に一式揃ってますねー。<br/>
+そういえば、Rakefileあるじゃん。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>rake build              <span class="c"># Build jquery-rails-4.0.3.gem into the pkg directory</span>
+</span><span class='line'>rake install            <span class="c"># Build and install jquery-rails-4.0.3.gem into system gems</span>
+</span><span class='line'>rake release            <span class="c"># Create tag v4.0.3 and build and push jquery-rails-4.0.3.gem to Rubygems</span>
+</span><span class='line'>rake update_jquery      <span class="c"># Update jQuery versions</span>
+</span><span class='line'>rake update_jquery_ujs  <span class="c"># Update jQuery UJS version</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>中を見てみると、build、install以外のコマンドが定義されてました。</p>
+
+<p><code>release</code> は <code>version.rb</code> と <code>vendor/assets/javascripts</code>にダウンロードしたファイルのバージョン番号比較チェックしている。<br/>
+<code>update_jquery</code> と <code>update_jquery_ujs</code> は <code>vendor/assets/javascripts</code> 下に該当するバージョンのファイルをcurlしてきている。<br/>
+<code>vendor/assets/javascripts</code> に全部突っ込んでしまっているんですね。</p>
+
+<p>jsはでかかったんで、ここまで。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Gem Reading - Active_emoji]]></title>
+    <link href="http://jangajan.com/blog/2015/01/20/gem-reading-active-emoji/"/>
+    <updated>2015-01-20T23:59:19+09:00</updated>
+    <id>http://jangajan.com/blog/2015/01/20/gem-reading-active-emoji</id>
+    <content type="html"><![CDATA[<p>今年の目標にGemを読むというのをあげたので、少しずつやっていきます。
+今日Ginza.rbに参加して知った、<a href="https://github.com/sferik/active_emoji">active_emoji</a>を読んでみます。</p>
+
+<!-- more -->
+
+
+<p>Macでchromeだとソースの絵文字が文字化けするのでSafariでみましょう。<br/>
+コミットコメントから賑やかですね。
+lib配下にcore拡張があります。全部ただのaliasでした。</p>
+
+<p>何かあれば追加するのが良いでしょう。<br/>
+最後に頑張ってサンプルを読みましょう。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Rubyのヒアドキュメント]]></title>
+    <link href="http://jangajan.com/blog/2015/01/15/rubyheredocument/"/>
+    <updated>2015-01-15T19:18:55+09:00</updated>
+    <id>http://jangajan.com/blog/2015/01/15/rubyheredocument</id>
+    <content type="html"><![CDATA[<p>あまり使う機会もなく理解できていない部分があったのでヒアドキュメントについて整理しました。<br/>
+ヒアドキュメントって、heredocumentなんですね。hearだと思ってた&hellip;</p>
+
+<p>参考にしたのは<a href="http://docs.ruby-lang.org/ja/2.1.0/doc/spec=2fliteral.html#here">2.1のドキュメント</a>です。</p>
+
+<!-- more -->
+
+
+<h2>書き方</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">print</span> <span class="o">&lt;&lt;</span><span class="no">EOS</span>  <span class="c1"># &lt;&lt;の後に空白を入れたらエラー</span>
+</span><span class='line'><span class="sh">  hoge</span>
+</span><span class='line'><span class="sh">  fuga</span>
+</span><span class='line'><span class="no">EOS</span>
+</span><span class='line'><span class="c1"># 終了ラベルは行頭から始める必要がある</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>&lt;&lt;-</h2>
+
+<p>末尾のEOSの前にインデントを入れてもOK</p>
+
+<h2>&lt;&lt;&lsquo;EOS&rsquo;</h2>
+
+<p>開始ラベルをシングルクォーテーションで囲んだ場合、ヒアドキュメント内で文字列展開しない</p>
+
+<h2>&lt;&lt;&ldquo;EOS&rdquo;</h2>
+
+<p>開始ラベルをダブルクォーテーションで囲んだ場合、ヒアドキュメント内で文字列展開する</p>
+
+<h2>&lt;&lt;`EOS`</h2>
+
+<p>開始ラベルをバッククォートで囲んだ場合、ヒアドキュメント内のコマンドの実行結果を表示する</p>
+
+<h2>複数指定</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">print</span> <span class="o">&lt;&lt;</span><span class="no">EOS1</span><span class="p">,</span> <span class="o">&lt;&lt;</span><span class="no">EOS2</span>
+</span><span class='line'><span class="err">  eos1</span>
+</span><span class='line'><span class="err">EOS1  # ここまでがEOS1のヒアドキュメント、これ以降はEOS2のヒアドキュメント</span>
+</span><span class='line'><span class="err">  eos2</span>
+</span><span class='line'><span class="err">EOS2</span>
+</span><span class='line'><span class="err"># ここまでがEOS2のヒアドキュメント、  </span>
+</span><span class='line'><span class="sh">  eos1</span>
+</span><span class='line'><span class="sh">EOS1  # ここまでがEOS1のヒアドキュメント、これ以降はEOS2のヒアドキュメント</span>
+</span><span class='line'><span class="sh">  eos2</span>
+</span><span class='line'><span class="no">EOS2</span>
+</span><span class='line'><span class="c1"># ここまでがEOS2のヒアドキュメント、  </span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>EOS1終了ラベルを書く前にEOS2終了ラベルを書いたとしても、EOS1終了ラベルが出てくるまで、EOS1のヒアドキュメントとなる</p>
+
+<h2>その他</h2>
+
+<h3>開始ラベルの次の行からヒアドキュメントになる</h3>
+
+<p>読みづらいからあまりしないと思うけれど、例えば</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">printf</span><span class="p">(</span><span class="s1">&#39;%s%d&#39;</span><span class="p">,</span> <span class="o">&lt;&lt;</span><span class="no">EOS</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+</span><span class='line'><span class="sh">  hoge</span>
+</span><span class='line'><span class="no">EOS</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>という場合に、こうしたらエラー。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">printf</span><span class="p">(</span><span class="s1">&#39;%s%d&#39;</span><span class="p">,</span> <span class="o">&lt;&lt;</span><span class="no">EOS</span>
+</span><span class='line'><span class="sh">             , 1000)</span>
+</span><span class='line'><span class="sh">  hoge</span>
+</span><span class='line'><span class="no">EOS</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>コメントの不自然はご愛嬌です。嘘です。一番最後に表示したことで、表示がおかしくなったためです。<br/>
+また何かあったら追記します。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[冬休みの宿題]]></title>
+    <link href="http://jangajan.com/blog/2015/01/04/yochiyochi-dokusyokansoubun/"/>
+    <updated>2015-01-04T21:07:32+09:00</updated>
+    <id>http://jangajan.com/blog/2015/01/04/yochiyochi-dokusyokansoubun</id>
+    <content type="html"><![CDATA[<p>よちよち.rbで冬休みの宿題をやりました。</p>
+
+<!-- more -->
+
+
+<h1>Rails4でGoogle Map API連携アプリを開発する</h1>
+
+<p>宣言したのは<a href="http://h5y1m1411.gitbooks.io/rails4-with-google-map-api/">Rails4でGoogle Map API連携アプリを開発する</a>という資料。<br/>
+ざっくりとした内容は下記の通り。</p>
+
+<ul>
+<li>scaffoldでtodoアプリを作り、Railsの基本的な機能や約束事を学ぶ</li>
+<li>scaffoldで住所と座標を登録するアプリを作り、Googleマップを画面に表示して、登録した座標にピンを刺す</li>
+</ul>
+
+
+<p>yochiyochi.rbで覚えた内容を短時間で一通り復習できました。<br/>
+その他こんなところですね。</p>
+
+<ul>
+<li>underscore.js便利。lodashというやつも使えそう。</li>
+<li>googleマップとの連携がこんなにも簡単だったなんて。今度Gemの中身見てみよう</li>
+<li>iphoneやipad用のfaviconの画像はいくつか用意しないといけない</li>
+</ul>
+
+
+<p>アプリ用のGemを簡単に試したい時、モックを用意したい時なんかは使い勝手が良くてscaffoldいいなって思います。</p>
+
+<h1>Rubyで作る奇妙なプログラミング言語</h1>
+
+<p><a href="http://www.amazon.co.jp/gp/product/B00ICKLC2A/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=B00ICKLC2A&linkCode=as2&tag=pochan0919-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00ICKLC2A&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=pochan0919-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=B00ICKLC2A" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
+
+<p>早いうちに消化を！と思って@katorieさんから借りた本を読みました。<br/>
+前半、というか付録以外は、摩訶不思議な言語をRubyで実装しよう！という内容だったのでやることは写経です。本はRuby1.8,1.9向けでしたが、2.2で問題なく動きました。<br/>
+作ってみた言語のサンプルコードです。</p>
+
+<figure class='code'><figcaption><span>brainf_ck</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">++++++</span>
+</span><span class='line'><span class="o">[&gt;</span> <span class="o">++++++++++</span> <span class="o">&lt;</span> <span class="o">-]</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="o">+++++.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>whitespace</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>無の境地ですね。</p>
+
+<figure class='code'><figcaption><span>starry</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>        <span class="o">+</span>               <span class="o">+</span>  <span class="o">*</span>       <span class="o">+</span>     <span class="o">*</span> <span class="o">.</span>               <span class="o">+</span>
+</span><span class='line'>           <span class="o">+</span>  <span class="o">*</span>          <span class="o">+</span>     <span class="o">*</span> <span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>キラキラしてます。</p>
+
+<p>あと記号とか絵文字だけのbolic(絵文字が対応していないのでキャプチャで)</p>
+
+<p><img src="http://i.gyazo.com/266f3ec1afff95237e93c12d2f125bf2.png" alt="bolic" /></p>
+
+<p>言語のパターンとして、</p>
+
+<ul>
+<li>インタプリタ型</li>
+<li>中間言語型</li>
+<li>トランスレーター</li>
+</ul>
+
+
+<p>を試すことができます。<br/>
+ソースコードをほぼ全て丁寧に解説していて構文解析の入門というか、Rubyプログラミングの入門にはもってこいです(付録以外は)<br/>
+ParserやVMの基本的な仕組みや役割をRubyのソースコードで理解できます。<br/>
+紹介の仕方も興味深くて、構文の実装を一通り紹介しながら組み上げていくパターンと、解析部と実行部を並行して作り上げていくパターンがあって、実装の拡張の方法も垣間見れます。あと文章が面白い。  <br/>
+唯一の難点は確認のためのプログラムを書くのがつらいこと。(上のやつですね)</p>
+
+<p>構文ごとに解析と処理内容をコツコツ作っていけば言語はできるんですね。<br/>
+大事なのはシンタックスと意味論（見た目と中身）。<br/>
+データの持ち方のアプローチはいくつかあるみたいで、以下のようなやり方が示されていました。</p>
+
+<ul>
+<li>テープ(ハッシュ)を使う</li>
+<li>スタック(配列)を使う</li>
+<li>木構造を使う</li>
+</ul>
+
+
+<p>木構造のところは再帰プログラムになっているので、紙に書きながら「なるほどー」とかやってました。面白いですね。再帰と仲良くなることを目指そう。</p>
+
+<p>ちなみに付録でesoteric languageの闇を垣間見れます。付録と言いつつ一番面白いところなので心して読みましょう。著者の熱意を感じました(特にKEMURI)lambdaの丁寧な解説のところは基礎知識が必要だったので後で再チャレンジしたい。</p>
+
+<p>そういえば、この本を読む前に「コーディングを支える技術」の前半を読んでおくと理解が早くなるかもしれません。</p>
+
+<h2>コーディングを支える技術</h2>
+
+<p><a href="http://www.amazon.co.jp/gp/product/477415654X/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=477415654X&linkCode=as2&tag=pochan0919-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=477415654X&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=pochan0919-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=477415654X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
+
+<p>5章ぐらいまでしか読めなかった。正月のだらけに負けました。<br/>
+一般的なプログラミング言語の基本的な構文がなぜ必要になったか歴史的経緯とか、言語間のちょっとした違いを交えながら、コーディングの知識を解説しています。<br/>
+残りは時間のあるときにさら〜っと読んでみよう。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[MetaNight 第4回を開催しました]]></title>
+    <link href="http://jangajan.com/blog/2014/12/21/e-g-d-meta-night-4th/"/>
+    <updated>2014-12-21T18:25:54+09:00</updated>
+    <id>http://jangajan.com/blog/2014/12/21/e-g-d-meta-night-4th</id>
+    <content type="html"><![CDATA[<p>イベント概要については、<a href="http://jangajan.com/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+
+<p><a href="http://e-g-d.doorkeeper.jp/">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第４回目を開催しました。</p>
+
+<p><a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=B00N9I0RMQ&linkCode=as2&tag=pochan0919-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00N9I0RMQ&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=pochan0919-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=B00N9I0RMQ" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
+
+<!-- more -->
+
+
+<h1>活動内容</h1>
+
+<p>Part 1 Chapter2 の Inside the Object ModelからThe Truth About Classesの前までやりました。<br/>
+読みながらの意見とかはこちらに載せてあります。<br/>
+<a href="https://trello.com/b/djxLBmZ8/metanight-4th">https://trello.com/b/djxLBmZ8/metanight-4th</a></p>
+
+<h1>感想</h1>
+
+<p>PUBLIC HOUSEに行きました。</p>
+
+<h2>inside the object model</h2>
+
+<p>Billがさらっと書いた図がこの部分で言いたいことを全てを象徴しています。オブジェクトとクラス、インスタンス変数とメソッドの関係についてです。<br/>
+今回の内容でRubyにおけるオブジェクトとクラスの役割分担や関係性が少しずつ見えてきました。図で視覚的に理解するというのは非常に大事ですね。</p>
+
+<p>立場が変わると、言葉の意味が変わってくるという点も興味深かったです。<br/>
+クラスはオブジェクトが呼び出すことのできる<code>メソッド</code>を定義しているけれども、正確には、クラスはオブジェクトが呼び出すことのできる<code>インスタンスメソッド</code>を定義しています。クラスから見た<code>インスタンスメソッド</code>はオブジェクトから見た<code>メソッド</code>となります。<br/>
+<a href="https://trello.com/c/5nrd8XoA/36--">メソッドの差分を見てみた</a>で試してみました。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">obj</span> <span class="o">=</span> <span class="no">Object</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="no">Object</span><span class="o">.</span><span class="n">instance_methods</span> <span class="o">-</span> <span class="n">obj</span><span class="o">.</span><span class="n">methods</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[]</span>
+</span><span class='line'><span class="n">obj</span><span class="o">.</span><span class="n">methods</span> <span class="o">-</span> <span class="no">Object</span><span class="o">.</span><span class="n">instance_methods</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>となります。ちなみに、比較対象をObject.methodsにすると差分が出てきます。これについては後々出てくると思うのでちょっと置いておきます。</p>
+
+<p>他にも<code>methods</code>や<code>instance_methods</code>のようなオブジェクトの中を参照するコードのことを<code>introspective code</code>と言っているようでしたが、これは一般的な用語なのかな？と疑問に感じたりしました。</p>
+
+<h2>英語</h2>
+
+<ul>
+<li>Let’s wrap it all up</li>
+</ul>
+
+
+<p>しっくりきたのは、<code>まとめましょう</code>。</p>
+
+<ul>
+<li>OO speak</li>
+</ul>
+
+
+<p>OOはObject-Oriented 慣れないと？？ですね。</p>
+
+<ul>
+<li>spring into</li>
+</ul>
+
+
+<p>湧き上がる、という表現に落ち着きました。ないところから自然と生まれる、というニュアンスなのかなぁ&hellip;<br/>
+「Instance variables just spring into existence when you assign them a value」というところで使われていた。お洒落な言い回し。</p>
+
+<h2>その他</h2>
+
+<ul>
+<li>クラス図っぽい図が出てきたことを皮切りに、UMLやBPMNについて</li>
+<li>object_idはメソッドだった(どこかに持っているのかな？そういう疑問は<a href="http://www.amazon.co.jp/gp/product/4274050653/ref=as_li_ss_tl?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=4274050653&amp;linkCode=as2&amp;tag=pochan0919-22">これ</a>を読んで解決しよう！)</li>
+</ul>
+
+
+<p>第5回は1月にやります！</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[よちよち.rbに参加しよう]]></title>
+    <link href="http://jangajan.com/blog/2014/12/21/letsjoinyochiyochirb/"/>
+    <updated>2014-12-21T06:39:32+09:00</updated>
+    <id>http://jangajan.com/blog/2014/12/21/letsjoinyochiyochirb</id>
+    <content type="html"><![CDATA[<p><a href="http://www.adventar.org/calendars/582">よちよち.rb Advent Calendar 2014</a> 21日目の記事です。 <br/>
+昨日は、記念すべき第50回のmeetupsをtoggetterでまとめた、<a href="http://togetter.com/li/759800">よちよち.rb 第50回 みんなで LT デビューしよう会</a>でした。EMOいLT連投で初めてとは思えないクオリティでした。当の自分は遅刻した上に落ちを接続準備の時に流してしまい、スライド2ページ残しでやりきれなかったという惨い結果でした。次回リベンジしたいです。</p>
+
+<p>今回はよちよち.rbに参加する方法を紹介します。</p>
+
+<p>よちよち.rbでは初参加と、２回目以降の参加では事前準備が少し違います。<br/>
+詳しいことはdoorkeeperの申し込み画面に全て書いてあるので<a href="http://yochiyochirb.doorkeeper.jp/events/18523">こちらの「やってきてもらいたいこと」</a>をご覧ください。 <br/>
+これはあくまで今時点の最新なので、実際に参加するイベントの記載内容をご覧ください。</p>
+
+<!-- more -->
+
+
+<h1>初参加パターン</h1>
+
+<h2>事前準備</h2>
+
+<h3>GitHubのアカウントをとる</h3>
+
+<p>まずGitHubのアカウントを取得しましょう。できるならtwitterなど他のWebサービスと同じアカウント名にすると、後々いいことがあります。名前大事。超大事。</p>
+
+<h3>Doorkeeperのアカウントをとる</h3>
+
+<p><a href="https://manage.doorkeeper.jp/user/sign_up">https://manage.doorkeeper.jp/user/sign_up</a></p>
+
+<p>GitHubのアカウントでログインできます！<br/>
+できれば、GitHubとfacebookとTwitterは連携しておきましょう。</p>
+
+<h2>よちよち.rbに参加申し込みする</h2>
+
+<p>早速よちよち.rbのイベントページで参加申し込みをしましょう！<br/>
+イベントページに行って申し込みボタンを押すと、いくつかアンケートが出てきます。  なにこれわけわからない！と思った方、ちょっと調べてみて、それでもわからなければ素直にその旨を書けば大丈夫です。<br/>
+参加して一緒に解決していきましょう。</p>
+
+<h2>自己紹介を書く</h2>
+
+<p>簡単な自己紹介をGistで書きます。</p>
+
+<p><a href="https://gist.github.com/">https://gist.github.com/</a></p>
+
+<p>ここも、GitHubのアカウントでログインしてください。<br/>
+Gistは、簡単なメモ帳アプリです。メモごとにURLが作られます。<br/>
+<a href="http://tyoshikawa1106.hatenablog.com/entry/2013/04/10/000026">わかりやすい使い方はこちら</a></p>
+
+<p>書式はMarkdownという形式で書きます。<br/>
+GitHubには<a href="https://help.github.com/articles/github-flavored-markdown/">専用のMarkdown</a>があります。リンク先は英語ですけどめげないでください。初回だから書式とか気にせずいきましょう。<br/>
+下の内容を書きましょう！</p>
+
+<blockquote><p>書いておいてほしい内容</p>
+
+<p>お名前</p>
+
+<p>ご職業</p>
+
+<p>以下のリンクを参考にした Rails 4 と Github に関するあなたのステータス<a href="https://github.com/yochiyochirb/meetups/blob/master/member_status.md">各技術のステータス | よちよち.rb</a></p>
+
+<p>あと、たまに宿題(よくわからなかったりしたらスルー、だけど書いておくと面白いです)</p></blockquote>
+
+<h2>自己紹介をよちよち.rbに共有する</h2>
+
+<p>あと少し!!!<br/>
+イベントページにこんな記載があります。</p>
+
+<p><a href="http://gyazo.com/ad27260e7de843e1126b828273904580"><img src="http://i.gyazo.com/ad27260e7de843e1126b828273904580.png" alt="Gyazo" /></a></p>
+
+<p>「できあがったら、GistのURLをこちらへ貼ってください：」の下にあるURLにアクセスしましょう。<br/>
+画面の下にコメント欄があるので、Gistの自己紹介のURLを書き込んでCommentボタンを押すと準備完了です。</p>
+
+<p>長くなってしまいましたが、ここまでが初参加パターンです。<br/>
+そんなに時間はかからないはずです。</p>
+
+<p>次に行く前に、ちょっと脇道にそれます。</p>
+
+<h3>Git、GitHub、Gistの違い</h3>
+
+<p>ここまでで、Git、GitHub、Gistと似たような名前のものがいくつか出てきました。</p>
+
+<ul>
+<li>Git
+
+<ul>
+<li>バージョン管理のツール（アプリケーションと置き換えてもらっても大丈夫）</li>
+<li>バージョン管理ができるようになると、変更履歴を持つことができます</li>
+<li>つまり一つの歴史が生まれます</li>
+<li>これがあると、世の中の開発者もとい、サービスの利用者みんなが幸せになれるツールです（怪しい勧誘文句になってしまった）</li>
+</ul>
+</li>
+<li>GitHub
+
+<ul>
+<li>Gitをブラウザから使いやすくして便利な機能をいっぱいつけてくれるWebサービス</li>
+<li>しかもSNS</li>
+<li>それでもって、会社の名前(正式な社名はGitHub, Inc)</li>
+<li>これが落ちると、世の中の開発者もとい、サービスの利用者みんなが不幸になります</li>
+<li>これが落ちると、Googleキーワード検索の上位(というか一位)に滑り込んできます</li>
+<li>アクセスできないと思ったらTwitterで検索しましょう。阿鼻叫喚が聞こえます</li>
+</ul>
+</li>
+<li>Gist
+
+<ul>
+<li>GitHub, incが提供するメモ帳です。</li>
+<li>もうちょっと正確にいうと、シンプルなsnippets共有アプリです。snippetsというのはコードの断片です。コードには再利用性が高いものがたくさんあります。断片をメモしておくことで、参考にしたいアプリケーションのソースコードを開いてコピペしなくて済むようになります。</li>
+<li>Gistに保存しておくことで、他人との共有がスムーズにできたり、ブログへのソースコードの埋め込みが楽になったりします。</li>
+<li>別にコードに限らず、ただのメモ帳として使うこともできます。メリットはGitで管理可能なところ。バージョン管理できるので変更履歴とかも把握しやすい!</li>
+</ul>
+</li>
+</ul>
+
+
+<p>ちなみにGitHub, incはGitの開発にも関わっています。強大です。<br/>
+もし、キャラのOctocatグッズが欲しかったら、GitHub storeなるものを利用してみましょう。</p>
+
+<h1>2回目パターン</h1>
+
+<h2>よちよち.rbに参加申し込みする</h2>
+
+<p>初参加と同じ。</p>
+
+<h2>自己紹介を書いて、GitHubでPullRequestを出す</h2>
+
+<p>今度はGistではなく、Githubを利用します。</p>
+
+<ol>
+<li>Githubからmeetupsのリポジトリをローカルにcloneする</li>
+<li>新しいブランチを作る</li>
+<li>自己紹介のファイルを作成</li>
+<li>Gitを使ってadd, commitして、GitHubにpush</li>
+<li>GitHubでPull Request作って</li>
+<li>メンバーからLGTMを2つもらったら</li>
+<li>マージする</li>
+</ol>
+
+
+<p>駆け足でいきました。<br/>
+ここまで、Meetupsまでにやる必要があります。<br/>
+<a href="https://github.com/yochiyochirb/meetups/wiki#how-to-use-github">ここ</a>の<code>How to use Github</code>がすごく役に立ちます。<br/>
+わからなければ質問してみましょう。  <br/>
+質問することがこのコミュニティの醍醐味でもあります。<br/>
+ちなみに(おそらく間違っていないのですが)、今参加している人は皆ここで一度躓いています。</p>
+
+<h1>まとめ</h1>
+
+<p>興味があって参加を考えている方は次回以降のmeetups時に参考にしてください。<br/>
+明日はumekumiさんの「初めてLTをやった！」です。お楽しみに！</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[localhostのelasticsearchにcurlしたらConnection Refused]]></title>
+    <link href="http://jangajan.com/blog/2014/12/16/fail-to-curl-to-elasticsearch/"/>
+    <updated>2014-12-16T19:13:11+09:00</updated>
+    <id>http://jangajan.com/blog/2014/12/16/fail-to-curl-to-elasticsearch</id>
+    <content type="html"><![CDATA[<p>よっしゃ、試してみよう！と思って出鼻をくじかれた話し。</p>
+
+<p>elasticsearch使ってる方多いですよね！今関わっているPJでも使っているので、どんなものか試してみました。ところが起動確認で早速つまづく始末です。</p>
+
+<p>elasticsearchの起動確認するときに、curlを使ってみたらConnection refusedが発生しました。</p>
+
+<!-- more -->
+
+
+<h1>問題: curlしたらConnection refused</h1>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>elasticsearch -d
+</span><span class='line'><span class="nv">$ </span>curl -XPUT <span class="s1">&#39;http://localhost:9200/test/&#39;</span>
+</span><span class='line'>curl: <span class="o">(</span>7<span class="o">)</span> Failed to connect to localhost port 9200: Connection refused
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>!?</p>
+
+<p>解決策は<a href="http://stackoverflow.com/questions/22952676/curl-failed-to-connect-to-localhost-port-80">こちら</a>にありました。</p>
+
+<h1>原因: IPv6使ってる</h1>
+
+<p>hostsファイル内の<code>::1 localhost</code>が有効になっていると、curlがIPv6でアクセスしてしまうらしい。<br/>
+何気ないところ見落としてました&hellip;</p>
+
+<h1>解決: IPv4使うようにする</h1>
+
+<p><code>--ipv4</code>オプション使ってやる。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>curl --ipv4 -XPUT <span class="s1">&#39;http://localhost:9200/test/&#39;</span>
+</span><span class='line'><span class="o">{</span><span class="s2">&quot;acknowledged&quot;</span>:true<span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[2014年反省会]]></title>
+    <link href="http://jangajan.com/blog/2014/12/12/reviewing-2014/"/>
+    <updated>2014-12-12T02:36:07+09:00</updated>
+    <id>http://jangajan.com/blog/2014/12/12/reviewing-2014</id>
+    <content type="html"><![CDATA[<p><a href="http://www.adventar.org/calendars/582">よちよち.rb Advent Calendar 2014</a> 12日目の記事です。   <br/>
+昨日は、waterlowさんの<a href="http://waterlow2013.hatenablog.com/entry/2014/12/11/125423">私のよちよち.rb活用法</a>、でした。私は初めて参加した勉強会がよちよち.rbだったのですが、&#8217;悩むのOKの場所として&#8217;っていうのは、このコミュニティの大好きなところ一つです。誰かに教えてもらうのではなく、わからないことは声をあげて、一緒に調べて解決していくアプローチ。<br/>
+最初は難しかったのですが(特にわからないことを声に出すところ)、誰にでも発言できる雰囲気をうまく作り出していて、また参加したいなって思わせてくれます。</p>
+
+<p>さて、今回は自分なりに2014年を振り返ってみます。</p>
+
+<!-- more -->
+
+
+<h1>２月に引越し</h1>
+
+<p>引っ越しました。といっても、同じくで前住んでいたところから歩いて30分かからないところです。駅近くなってバス使わなくなった。部屋が広くなった、車の音で起こされることがなくなった、けど家賃は上がった。雪の日に前の家から荷物運んでたのいい思い出です。</p>
+
+<h1>3月に初めて勉強会に参加</h1>
+
+<p>引っ越しのときに積ん読になっていた<a href="http://www.amazon.co.jp/gp/product/4274068579/ref=as_li_ss_tl?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=4274068579&amp;linkCode=as2&amp;tag=pochan0919-22">7つの言語、7つの世界</a>という良書を発見して、読んでみたらRubyがなんか面白そうということに気が付きました。<br/>
+勢いで<a href="http://www.amazon.co.jp/gp/product/4774162876/ref=as_li_ss_tl?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=4774162876&amp;linkCode=as2&amp;tag=pochan0919-22">WEB+DB PRESSのRubyの特集が組まれていたやつ</a>を買ってみてRuby入れて、よしRailsだ！っていじってみたものの、仕組みが全くわからなかったんですね。何がわからないかわからない状態。一人でやるのちょっとつらそうだなぁと思い、初心者向けのRubyの勉強会を探していると、よちよち.rb 第12回の募集を見つけました。<br/>
+参加直前にTutorialをやって追いついたのとか懐かしいです。そういえば、@ohtsuka_t さんとはよちよち同期でした。<br/>
+参加して衝撃だったのは、エンジニア以外の参加者がいたこと。プログラミングのバックグラウンドはないけれど、継続参加している方が多かったんです。<br/>
+よちよち.rbの魅力やコミュニティの色は、アドベントカレンダーで余すことなく伝えてくれているので是非見てみてください！</p>
+
+<p>この時、4月に浅草でRubyのカンファレンスみたいなのが行われるという話を聞いて早速申し込みました。</p>
+
+<h1>4月に初めてのRubyのカンファレンスに参加</h1>
+
+<p>それで、大江戸Ruby会議04というイベントに参加しました。こういうイベントに参加したことがなかったので、スーツ着ていかないといけないのかと勘ぐってしまいましたが、誰もスーツなんて着ていなかったですね。場違いにならなくてよかった。<br/>
+カジュアルそうに見えて、話している内容が濃密でした。今スピーカー眺めたんですけど本当に豪華なイベントでしたね。<br/>
+参加してわかったのですが、皆さんRubyへの並々ならない愛を持っているなと感じました。<br/>
+参加した後の勢いでブログを立てました。</p>
+
+<h1>5月に初めてiOSのアプリをリリース</h1>
+
+<p>ちょっと脱線して、iphoneアプリを作ってリリースしたのですが、１週間ぐらいしたら、Macが壊れてソースコードが消えました。お蔵入りです。バージョン管理の大切さを学びました。<br/>
+よちよちのおかげで少しずつgitの使い方やGitHubの触り方が分かってきたところです。</p>
+
+<h1>6月にGithub Kaigiに参加</h1>
+
+<p>バージョン管理の大切さもわかってきたところでGitHub Kaigiです。Rubyに限らず普段GitHubを使っている人、後Atomのセッションとかありましたね。よくよく思い出してみたら、Github Kaigi、YAPC::Asia Tokyo 2014、Ruby Kaigi全部でGitHubの人の話聞いてる。Githubのおっかけしてる&hellip;</p>
+
+<h1>8月にRailsとGitHubを使った初めてのチーム開発とYAPC::Asia Tokyo 2014に参加</h1>
+
+<p>@katorieさんと@Yuki3738さんの思いつきにより、コミュニティのKajaの選出アプリを作ろうという話が盛り上がりました。多分２週間ぐらいでコミュニティの数名で作りました。大事なのは動くものを作って世の中に出すことをモットーになんとかリリースできました。<br/>
+空いている時間を利用した開発やリモートでのコミュニケーションの方法を手探りでやりつつ、なんとか形になるものを作れたのは嬉しかったです。<br/>
+ちなみに、月末で退職したのですが、最後の金曜を休みにしてYAPC::Asia Tokyo 2014へ。Rubyのカンファレンスとは違う面白さ、もっと緩くて自由な風潮がありました。<br/>
+2015年も行きたいし、最後とアナウンスがあったのは悲しいけれどもし、形態を変えて、例えばPerlじゃなくてプログラミングのカンファレンスとして続くことがあれば、毎年参加したい。そういえばしゅーさんがこっそりスタッフで参加してましたね。</p>
+
+<h1>9月にRubyKaigi 2014のレポート班を担当しました</h1>
+
+<p>やめた直後はほとんど家から出ず、ダラーっと過ごしていました。楽だけどまじでダメになりますね。<br/>
+@odailly_jpさんに声をかけていただき、RubyKaigiのレポート班に参加してみました。参加できなかった人は是非次回参加してください。この時の参加のモチベーションや人間関係が今も生きていて、一つの転換期になりました。<br/>
+後、Hirobaに参加しました。家族よりも毎日顔合わせている人がいて面白かったです。Hirobaの考え方は素敵ですよね。</p>
+
+<h1>10月、11月はよちよち.rbの外に目を向けてみた</h1>
+
+<p>ホームコミュニティはよちよち.rbですが、Ruby KaigiやHirobaで色々なコミュニティがあることを知り、ニートで時間もあるし外に目を向けてみようと思い、近場の勉強会やカンファレンスに参加しました。(時間に余裕があれば継続して行く)</p>
+
+<ul>
+<li>Shibuya.rb</li>
+<li>Rustful勉強会</li>
+<li>渋谷Ruby会議01</li>
+<li>デザインビギナーズ</li>
+<li>Nishishinjuku rb</li>
+<li>dev morning</li>
+<li>Ebisu.rb</li>
+<li>TokyuRuby会議07</li>
+</ul>
+
+
+<p>会う人会う人皆凄腕の方々ばかりで恐々としてますが、どこも独特の色を持っていて面白いです。もちろん参加するたびに新しい知見が溢れているので、勇気を出して行ってみると良いと思います。</p>
+
+<h1>読書会を始めた</h1>
+
+<p>レポート班で知り合った@tkymtkに声をかけてもらって一緒に読書会を開くことになりました。metanightというイベントで、meta programming 2の英語版の読書会です。マイペースでやっているので読み終わるのはだいぶ未来だと思います(できれば国内版が出る前に終わらせたい) ただ、焦る必要もないのでお酒飲みながら(私は下戸なのでコーヒーか紅茶飲んでます)雑談して少しずつ読み進めています。<br/>
+英語というところで抵抗感ある人は多いかもしれません。ただ、一人じゃ理解できない英語の表現も３人、４人となることで、より理解が深まります。この辺はよちよち.rbに参加したからこそ気付けた効用ですね。Railsの仕組みを知る上でRubyのメタプログラミングの概念は非常に重要ですし。<br/>
+興味のある方はぜひぜひ一緒にやりましょう。<a href="http://e-g-d.doorkeeper.jp/events/18487">年内最後の回</a>を12/17(水)にやります。</p>
+
+<h1>12月</h1>
+
+<p>忘年会楽しいですね。まだ半分です。12/20に<a href="http://yochiyochirb.doorkeeper.jp/events/17898">よちよち.rb内でLT大会</a>があります。普段のミートアップとは違い、Rails Tutorialをするわけではないので、よちよち.rbの雰囲気を味わいたい人、参加枠は残っていると思うので、足を運んでみるといいかもしれません。</p>
+
+<h1>まとめ</h1>
+
+<p>バーっと振り返りましたが、3/17によちよち.rbに参加したことがきっかけて今年一年の流れが生まれました。まさか自分が仕事やめるとも、読書会主催するとも、Railsで開発するとも思っていなかった、意識高くなってる感半端ないのでもっと脱力してモチベージョン維持しよう。<br/>
+全てはよちよち.rbの仕業ですね。よちよち.rbのせいで人生をRubyに狂わされた方が何名かいます。<br/>
+Rubyでのプログラミングは楽しい。ただ単にプログラミングが面白いだけではなく、Rubyをとりまくコミュニティの力がRubyを楽める一つの要因だと思います。今年は本当に色々な人と知り合うことができました。本当にありがとうございました。来年こそ、就職&hellip;</p>
+
+<p>長くなってしまいましたね。最後までくだらいポエム(その上よちよちとは関係無い自分の読書会の宣伝までする厚顔無恥っぷり)にお付き合いいただきありがとうございました。</p>
+
+<h1>次回</h1>
+
+<p>11月に実はもう一つ初めての体験があって、開発合宿をしました。
+よちよち.rbのいいところの一つに、良いと思ったものをすぐに取り入れて試してみるという文化があります。（すごく好きなところです） <br/>
+実はこれ、YAPC::Asia 2014の@onishiさんのトークで衝撃を受けて、Kajaeruの振り返りのKTPで提案しました。これが実現したことが個人的にはすごく嬉しかったです。色々と準備してくださった@yucao24hoursさん本当に本当にありがとうございました。<br/>
+明日は、この時一緒に開発した@highwideさんによる「よちよち合宿でやったこととか？」です(タイトル変わるのかな？)。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Rspec3のexpectとallowの違い]]></title>
+    <link href="http://jangajan.com/blog/2014/12/08/expect-and-allow-in-rspec/"/>
+    <updated>2014-12-08T00:00:35+09:00</updated>
+    <id>http://jangajan.com/blog/2014/12/08/expect-and-allow-in-rspec</id>
+    <content type="html"><![CDATA[<p><a href="http://www.adventar.org/calendars/582">よちよち.rb Advent Calendar 2014</a> 8日目の記事です。 <br/>
+昨日は、bonbon0605さんの<a href="http://genius.hateblo.jp/entry/2014/12/07/093454">2014年に読んだり積んだりした本とその思い出を振り返ります</a>、でした。<br/>
+Ruby初学者がワンステップレベルアップする時に参考となる良書を紹介していただきました！</p>
+
+<p>さて、今日はRspecのとあるメソッドから学んだ、mockとstubの違いについて書きます。  mockとstubの違いは、少し前に参加したよちよち.rbで疑問のまま終わってしまっていました。</p>
+
+<!-- more -->
+
+
+<p>最近になってRubyとRailsの仕事に関わっているのですが、Rspecに苦戦しています。   <br/>
+Rspecを使っている時に、次の２つのメソッドに出会いました。</p>
+
+<ul>
+<li>allow(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;)  <a href="https://relishapp.com/rspec/rspec-mocks/v/3-1/docs/basics/allowing-messages">参考</a></li>
+<li>expect(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;) <a href="https://relishapp.com/rspec/rspec-mocks/v/3-1/docs/basics/expecting-messages">参考</a></li>
+</ul>
+
+
+<p>この使い分けを知る過程でstubとmockの違いが自分の中でイメージできてきました。</p>
+
+<p>まずは、上記２つのメソッドの使い方を非常に単純な例に落とし込んでみます。</p>
+
+<p>上記はメソッドはどちらも、<code>object.hoge</code>ってメソッドを呼び出すと、戻り値が<code>fuga</code>となります。<br/>
+さて、どう違うのか、試してみます。</p>
+
+<h1>事前準備</h1>
+
+<p>問題を単純化します。(逆にわかりづらいかもしれないし、ソースコード減らしたかったのであまりいい書き方ではありません)<br/>
+<code>true</code>と<code>false</code>を返すだけのprivateメソッドとそのラッパーメソッドを用意します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">MockAndStub</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">always_true</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">truthy</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">always_false</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">falsey</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">private</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">truthy</span>
+</span><span class='line'>    <span class="kp">true</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">falsey</span>
+</span><span class='line'>    <span class="kp">false</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>それと、テストクラスです。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">describe</span> <span class="no">MockAndStub</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:obj</span><span class="p">)</span> <span class="p">{</span> <span class="no">MockAndStub</span><span class="o">.</span><span class="n">new</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># publicメソッドの戻り値が正しいことを確認</span>
+</span><span class='line'>  <span class="n">context</span> <span class="s1">&#39;do not use stub and mock&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">it</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">always_true</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be_truthy</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">it</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">always_false</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be_falsey</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>準備ができました。まずは<code>allow</code>から見ていきましょう。</p>
+
+<h1>allow(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;)</h1>
+
+<p><code>allow</code>はstubとして働きます。<br/>
+<code>allow</code>を使うと、上述の説明どおり、<code>object.hoge</code>というメソッドを呼び出すと、<code>fuga</code>が返ってきます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>  <span class="n">context</span> <span class="s1">&#39;use stub&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="c1"># 1. fail</span>
+</span><span class='line'>    <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="p">{</span> <span class="n">allow</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:truthy</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="kp">false</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">it</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">always_true</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be_truthy</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># 2. success</span>
+</span><span class='line'>    <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="p">{</span> <span class="n">allow</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:falsey</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">it</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">always_false</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be_truthy</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">context</span> <span class="s1">&#39;use stub, but not use&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="c1"># 3. success</span>
+</span><span class='line'>    <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="p">{</span> <span class="n">allow</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:falsey</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">it</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">always_true</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be_truthy</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>1. fail</h2>
+
+<p>１のパターンのテストはfailします。<br/>
+<code>allow(obj).to receive(:truthy).and_return(false)</code>とすると、<code>obj</code>が<code>:truthy</code>というメソッドコールを受け取ったら、必ず<code>false</code>が返ってきます。<br/>
+<code>always_true</code>は内部で<code>:truthy</code>を呼び出しているので、戻り値は<code>false</code>となります。<br/>
+よって、<code>obj.always_true</code>は<code>false</code>なので、failします。</p>
+
+<h2>2. success</h2>
+
+<p>今度はsuccessです。<code>:falsey</code>は<code>true</code>を返すと設定しているので、<code>obj.always_false</code>は<code>true</code>となります。</p>
+
+<h2>3. success</h2>
+
+<p>次はテストに関係無いメソッドをstub化した場合です。これも、関係ないのでsuccessになります。</p>
+
+<p>上記のように、<code>A: allow</code>はメソッドコールがあった時に指定した値を利用してテストすることができます。</p>
+
+<h1>expect(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;)</h1>
+
+<p>続いて<code>expect</code>で、こちらはmockです。<br/>
+<code>allow</code>と<code>expect</code>の違いは、メソッドコールの検証の有無です。<code>expect</code>では<code>receive</code>で指定したメソッドが呼び出されていない場合、failします。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>  <span class="n">context</span> <span class="s1">&#39;use mock&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;use mock, and not use&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="c1"># 4. fail</span>
+</span><span class='line'>      <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:falsey</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">it</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">always_true</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be_truthy</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;use mock, and use&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="c1"># 5. success</span>
+</span><span class='line'>      <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:falsey</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">it</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">always_false</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be_truthy</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>4. fail</h2>
+
+<p><code>receive</code>で指定したメソッドを呼び出さない場合です。<br/>
+itのブロック自体は正しいため、beforeの<code>expect</code>を<code>allow</code>に変えるか、<code>before</code>自体を消すとsuccessになります。</p>
+
+<h2>5. success</h2>
+
+<p><code>receive</code>で指定したメソッドを呼び出しています。<br/>
+値を<code>true</code>に変更した上で、<code>true</code>になっていることを確認しているので、successとなります。</p>
+
+<h1>まとめ</h1>
+
+<p>allowのexpectの違いはメソッドコールの検査になります。これを踏まえた上で、下の記事を読むとなるほど！と思うことができました。</p>
+
+<ul>
+<li><a href="http://techracho.bpsinc.jp/hachi8833/2014_07_10/17971">http://techracho.bpsinc.jp/hachi8833/2014_07_10/17971</a></li>
+<li><a href="http://aligach.net/diary/20110109.html">http://aligach.net/diary/20110109.html</a></li>
+<li><a href="http://d.hatena.ne.jp/takihiro/20081023/1224762895">http://d.hatena.ne.jp/takihiro/20081023/1224762895</a></li>
+</ul>
+
+
+<p>つまり、stubとmockの違いは、インターフェースの検査(メソッドコールのチェック)をするかしないか、ということですね。</p>
+
+<p>ところで、2つの違いはわかったけれど、「どう使い分ければいいのか」が実はもっと大事です。<br/>
+ただ、これはテストに依存するため、確認すべきことは何か、を意識しながら切り分ける必要があります。<br/>
+<a href="http://d.hatena.ne.jp/devbankh/">Martin Fowlerの&#8221;Mocks Aren’t Stubs&#8221;の翻訳記事</a>があって、非常に長い上に全容を理解しきれていないのですが、</p>
+
+<blockquote><p>振る舞いの結びつきを意識しなければいけないか</p></blockquote>
+
+<p>という点が判断材料になるかと思います。<br/>
+あと、</p>
+
+<blockquote><p>モックオブジェクトはXPコミュニティから出てきたものだ。また、XPの主な特徴の一つは、テストドリブン開発を重要視していることだ。テストドリブン開発では、テストを書くことで推進される反復を通じてシステム設計も進んでいく。
+そういったわけで、モックオブジェクトの支持者達が相互作用テストの設計における効果についてことさら語るのも驚くことではない。このスタイルでは、主要なオブジェクトに対する最初のテストを書くから [それらのオブジェクトの] 振る舞いの開発を始めることになる。</p></blockquote>
+
+<p>とあるので、TDDするならmock使うでいいと思います。</p>
+
+<p>ひとまず、色々試してみて、気になることがあれば、また何か書くかもしれません。</p>
+
+<h1>最後に</h1>
+
+<p>そして、今日は<a href="http://yochiyochirb.doorkeeper.jp/events/18227">よちよち.rb 第48回 &ldquo;よちよちもくもく会&rdquo;</a>です(予定があって行けなくて残念)</p>
+
+<p>プログラミング未経験でも参加できる一番初心者に優しいRubyの勉強会、もといコミュニティです。<br/>
+後一枠余っているので、試しに参加して楽しんでみてください。<br/>
+当日キャンセルがちょこっと出たりすることが多いので、満席でもキャンセル待ちにしておくと、いいことがあるかもしれません。</p>
+
+<p>明日はまだ決まっていません&hellip;(紹介したかった&hellip;) # TODO:誰か現れたら更新するかも<br/>
+きっと今日参加する誰かが書いてくれるはずです。<br/>
+楽しみにお待ち下さい。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[MetaNight 第3回を開催しました]]></title>
+    <link href="http://jangajan.com/blog/2014/12/03/e-g-d-meta-night-3rd/"/>
+    <updated>2014-12-03T23:55:01+09:00</updated>
+    <id>http://jangajan.com/blog/2014/12/03/e-g-d-meta-night-3rd</id>
+    <content type="html"><![CDATA[<p>イベント概要については、<a href="http://jangajan.com/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
+
+<p><a href="http://e-g-d.doorkeeper.jp/events/16300">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第３回目を開催しました。</p>
+
+<p><a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=B00N9I0RMQ&linkCode=as2&tag=pochan0919-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00N9I0RMQ&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=pochan0919-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=B00N9I0RMQ" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
+
+<!-- more -->
+
+
+<h1>活動内容</h1>
+
+<p>Part 1 Chapter 2のThe Problem with Open ClassesからChapter 2の終わりまでやりました。<br/>
+読みながらの意見とかはこちらに載せてあります。<br/>
+<a href="https://trello.com/b/5WFCQ2ER/metanight-3rd">https://trello.com/b/5WFCQ2ER/metanight-3rd</a></p>
+
+<h1>感想</h1>
+
+<p>前回ダメだったフリーマンカフェに行きました。</p>
+
+<h2>a dark side of open class</h2>
+
+<p>オープンクラスのネガティブな側面が紹介されていました。<br/>
+Monkeypatchの例としてリファクタリングの過程で<code>Array#replace</code>というメソッドを用意すると、既存機能をoverrideしてしまってテストでこけたという内容です。<br/>
+テストのおかげでリファクタリングの不具合に気付かせておいてさりげなくテストいいぜアピールをしていますね。</p>
+
+<p>overrideは必ずしも悪いことではなくて、例えばRailsなんかでも、<code>require</code>メソッドをoverrideしていたりします。Railsは標準ライブラリのクラスにも様々なメソッドを追加して、あると便利！と思わせるものは多いです。</p>
+
+<p>Billがさらっと、<code>grep(/regex/)</code>を使っていて、pipe感覚でメソッドチェインをできるのはRubyで書いていていいところだという気づきもありました。</p>
+
+<p>それと<code>Array#replace</code>は実は破壊的らしい。Ruby Sliverのひっかけ問題によく出るので要注意らしい！</p>
+
+<h2>英語</h2>
+
+<ul>
+<li>fire up irb</li>
+</ul>
+
+
+<p>irbを起動する、というニュアンス。発火を表現するいい日本語ってありそうで見つからなかった。</p>
+
+<ul>
+<li>perplex</li>
+</ul>
+
+
+<p>なぜconfuseではダメなのか。ニュアンスの違いが難しい。</p>
+
+<ul>
+<li>pique</li>
+</ul>
+
+
+<p>駆り立てる。ネガティブな意味合いを持っている表現だけど、ここの場合だとどうなんだろう。</p>
+
+<h2>その他</h2>
+
+<ul>
+<li>エディターは何を使っているのか。４人全員バラバラだった</li>
+<li>スクラムというものについてかじりました</li>
+<li>tapはメソッドチェイン中にログ出力したいときに使いやすそう</li>
+</ul>
+
+
+<p>第4回を12月中にできたらやりたいな。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Gem:pr-commentをリリース]]></title>
+    <link href="http://jangajan.com/blog/2014/12/02/release-pr-comment/"/>
+    <updated>2014-12-02T18:18:46+09:00</updated>
+    <id>http://jangajan.com/blog/2014/12/02/release-pr-comment</id>
+    <content type="html"><![CDATA[<p><a href="https://rubygems.org/gems/pr-comment">pr-comment</a>というGemを作りました。</p>
+
+<!-- more -->
+
+
+<p>自分用に作ったスクリプトをGem化してみました。不満駆動開発。<br/>
+用途はターミナルでPull Requestのレビューとかコメントを見やすくするものです。<br/>
+中でoctokit呼び出して、結果を並び替えて表示しているだけです。<br/>
+使っているかというとうーん、ですね。<br/>
+一昨日ぐらいに実行したらちゃんと出ていないところがあったので直さないと。
+テストもそうだけど、例外処理もずさんなんでそのへんも、含めてここ汚いとか雑とかもっとこうしろとかISSUEで鉞いただけると喜びます。<br/>
+デザインだけは見やすい案を随時募集中です。</p>
+
+<p>&lsquo;競合プロダクトがあっても挫けずに自分の道を進んでもらえればなと思いました&#8217;といういただいた言葉を胸に刻んでちょっとずつ改善していきたい。</p>
+
+<h1>使い方</h1>
+
+<p>一応使い方を。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>prc all owner/repo pull-request-no
+</span><span class='line'>prc close owner/repo pull-request-no
+</span><span class='line'>prc open owner/repo pull-request-no
+</span><span class='line'>
+</span><span class='line'>prc close yochiyochirb/kajaeru <span class="m">83</span> <span class="c"># こんな感じで使う</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>感想</h1>
+
+<p>作りながら面白いGemや知識がちょこちょことありました。アプリケーションしか書いていないと気づかない<code>thor</code>や<code>simple-color</code>(こっちは使わなかったけど)などなど。<br/>
+今はgithubのtokenを手動で環境変数に設定しないといけないから、そこ直したいな。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Cucumber on Rails 入門2]]></title>
+    <link href="http://jangajan.com/blog/2014/11/26/use-cucumber-2/"/>
+    <updated>2014-11-26T00:01:19+09:00</updated>
+    <id>http://jangajan.com/blog/2014/11/26/use-cucumber-2</id>
+    <content type="html"><![CDATA[<p><a href="http://jangajan.com/blog/2014/11/25/use-cucumber/">前回</a>
+に引き続き簡単なCucumberのテストケースを作ります。</p>
+
+<p>サンプルソースはこちらです。<br/>
+<a href="https://github.com/ta1kt0me/cucumber-test/tree/forth-test">ta1kt0me/cucumber-test</a></p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:center;"> ライブラリ  </th>
+<th style="text-align:center;"> バージョン  </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;"> ruby        </td>
+<td style="text-align:center;"> 2.1.5       </td>
+</tr>
+<tr>
+<td style="text-align:center;"> rails       </td>
+<td style="text-align:center;"> 4.1.5       </td>
+</tr>
+<tr>
+<td style="text-align:center;"> cucumber    </td>
+<td style="text-align:center;"> 1.3.17      </td>
+</tr>
+</tbody>
+</table>
+
+
+<!-- more -->
+
+
+<h1>今回やること</h1>
+
+<ol>
+<li><code>given</code>を使う</li>
+<li><code>and</code>を使う</li>
+<li><code>background</code>を使う</li>
+<li>1つのシナリオにWhen-Thenを複数回書く</li>
+</ol>
+
+
+<h1>given</h1>
+
+<p>givenを利用して、テストデータの投入を行います。<br/>
+Factory Girl使います。</p>
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">group</span> <span class="ss">:test</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;cucumber-rails&#39;</span><span class="p">,</span> <span class="nb">require</span><span class="p">:</span> <span class="kp">false</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;database_cleaner&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;factory_girl_rails&#39;</span> <span class="c1"># 追加</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="err">$</span> <span class="n">bundle</span>
+</span><span class='line'><span class="err">$</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">rails</span> <span class="n">g</span> <span class="ss">factory_girl</span><span class="p">:</span><span class="n">model</span> <span class="no">Book</span> <span class="ss">title</span><span class="p">:</span><span class="n">string</span> <span class="ss">author</span><span class="p">:</span><span class="n">string</span> <span class="ss">price</span><span class="p">:</span><span class="n">integer</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>features/home_page.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>  <span class="ss">Scenario</span><span class="p">:</span> <span class="no">Viwing</span> <span class="n">application</span><span class="s1">&#39;s home page</span>
+</span><span class='line'><span class="s1">    # 追加</span>
+</span><span class='line'><span class="s1">    Given there&#39;</span><span class="n">s</span> <span class="n">a</span> <span class="n">book</span> <span class="n">titled</span> <span class="s1">&#39;Alice\&#39;s Adventures in Wonderland&#39;</span> <span class="n">with</span> <span class="s1">&#39;Lewis Carroll&#39;</span> <span class="n">author</span><span class="p">,</span> <span class="s1">&#39;1000&#39;</span> <span class="n">yen</span>
+</span><span class='line'>    <span class="no">When</span> <span class="n">I</span> <span class="n">am</span> <span class="n">on</span> <span class="n">the</span> <span class="n">top</span> <span class="n">page</span>
+</span><span class='line'>    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>features/step_definitions/home_page_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># 追加</span>
+</span><span class='line'><span class="no">Given</span><span class="p">(</span><span class="sr">/^there&#39;s a book titled &#39;(.*?)&#39; with &#39;(.*?)&#39; author, &#39;(\d+)&#39; yen$/</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">title</span><span class="p">,</span> <span class="n">author</span><span class="p">,</span> <span class="n">price</span><span class="o">|</span>
+</span><span class='line'>  <span class="vi">@book</span> <span class="o">=</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:book</span><span class="p">,</span> <span class="ss">title</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="ss">author</span><span class="p">:</span> <span class="n">author</span><span class="p">,</span> <span class="ss">price</span><span class="p">:</span> <span class="n">price</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>(自分用メモ:改善点)<br/>
+シングルクォートで囲まないでもいいかも。<br/>
+テストケース内で利用しない限りあえてインスタンス変数にする必要もないなー。</p>
+
+<h1>and</h1>
+
+<p>続いてand。これは簡単です。</p>
+
+<figure class='code'><figcaption><span>features/home_page.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="no">Then</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;Listing books&#39;</span>
+</span><span class='line'><span class="no">And</span>  <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;Alice\&amp;#39;s Adventures in Wonderland&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>応用きくやつです。</p>
+
+<h1>background</h1>
+
+<p>シナリオの前に複雑な操作や処理をしたい場合に有効です。<br/>
+Bookの作成ページをテストするシナリオの前段として、トップページを表示する操作をbackgroundで書いてみます。<br/>
+なお、このシナリオではリンク・ボタン操作やフィールド入力をするので、便利なcapybara-webkitを導入します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">group</span> <span class="ss">:test</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;cucumber-rails&#39;</span><span class="p">,</span> <span class="nb">require</span><span class="p">:</span> <span class="kp">false</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;database_cleaner&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;factory_girl_rails&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capybara-webkit&#39;</span> <span class="c1"># 追加</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="err">$</span> <span class="n">bundle</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>新しいシナリオ、new_page.featureを作ります。</p>
+
+<figure class='code'><figcaption><span>features/new_page.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="ss">Feature</span><span class="p">:</span> <span class="no">New</span> <span class="no">Page</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="ss">Background</span><span class="p">:</span>
+</span><span class='line'>    <span class="no">Given</span> <span class="n">I</span> <span class="n">go</span> <span class="n">to</span> <span class="n">the</span> <span class="n">top</span> <span class="n">page</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="ss">Scenario</span><span class="p">:</span> <span class="no">Adding</span> <span class="no">New</span> <span class="no">Book</span>
+</span><span class='line'>    <span class="no">When</span> <span class="n">I</span> <span class="n">click</span> <span class="s1">&#39;New Book&#39;</span> <span class="n">link</span>
+</span><span class='line'>    <span class="no">Then</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;New book&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>features/step_definitions/new_page_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">Given</span><span class="p">(</span><span class="sr">/^I go to the top page$/</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">visit</span> <span class="n">root_path</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">When</span><span class="p">(</span><span class="sr">/^I click &#39;(.*?)&#39; link$/</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">link_name</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">click_link</span><span class="p">(</span><span class="n">link_name</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>1つのシナリオにWhen-Thenを複数回書く</h1>
+
+<p>new_page.featureを完成させましょう。</p>
+
+<ol>
+<li>&lsquo;New Book&#8217;リンクを押したら、&#8217;New Book&#8217;タイトルが表示される</li>
+<li>&lsquo;Title&rsquo;,&lsquo;Author&rsquo;,&lsquo;Price&#8217;を入力して、&#8217;Create Book&#8217;ボタンを押したら、&#8217;Book was successfully created.&#8217;というメッセージと入力した内容が表示される</li>
+</ol>
+
+
+<p>というシナリオを作ります。</p>
+
+<figure class='code'><figcaption><span>features/new_page.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>  <span class="ss">Scenario</span><span class="p">:</span> <span class="no">Adding</span> <span class="no">New</span> <span class="no">Book</span>
+</span><span class='line'>    <span class="no">When</span> <span class="n">I</span> <span class="n">click</span> <span class="s1">&#39;New Book&#39;</span> <span class="n">link</span>
+</span><span class='line'>    <span class="no">Then</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;New book&#39;</span>
+</span><span class='line'>    <span class="no">When</span> <span class="n">I</span> <span class="n">fill</span> <span class="k">in</span> <span class="s1">&#39;Title&#39;</span> <span class="n">with</span> <span class="s1">&#39;Star Wars&#39;</span>
+</span><span class='line'>    <span class="no">And</span> <span class="n">I</span> <span class="n">fill</span> <span class="k">in</span> <span class="s1">&#39;Author&#39;</span> <span class="n">with</span> <span class="s1">&#39;George Walton Lucas, Jr&#39;</span>
+</span><span class='line'>    <span class="no">And</span> <span class="n">I</span> <span class="n">fill</span> <span class="k">in</span> <span class="s1">&#39;Price&#39;</span> <span class="n">with</span> <span class="s1">&#39;2980&#39;</span>
+</span><span class='line'>    <span class="no">And</span> <span class="n">I</span> <span class="n">click</span> <span class="s1">&#39;Create Book&#39;</span> <span class="n">button</span>
+</span><span class='line'>    <span class="no">Then</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;Book was successfully created.&#39;</span>
+</span><span class='line'>    <span class="no">And</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;Star Wars&#39;</span>
+</span><span class='line'>    <span class="no">And</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;George Walton Lucas, Jr&#39;</span>
+</span><span class='line'>    <span class="no">And</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;2980&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>features/step_definitions/new_page_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="no">When</span><span class="p">(</span><span class="sr">/^I click &#39;(.*?)&#39; button$/</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">button_name</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">click_button</span><span class="p">(</span><span class="n">button_name</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">When</span><span class="p">(</span><span class="sr">/^I fill in &#39;(.*?)&#39; with &#39;(.*?)&#39;$/</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">fill_in</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="ss">with</span><span class="p">:</span> <span class="n">value</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>capybara-webkitですが、<a href="https://gist.github.com/zhengjia/428105">チートシート</a>があるので有効活用しましょう。</p>
+
+<p>stepsで定義した操作は共通化してあげると良いですね。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Cucumber on Rails 入門1]]></title>
+    <link href="http://jangajan.com/blog/2014/11/25/use-cucumber/"/>
+    <updated>2014-11-25T14:15:41+09:00</updated>
+    <id>http://jangajan.com/blog/2014/11/25/use-cucumber</id>
+    <content type="html"><![CDATA[<p>Railsでcucumberを動かしてみます。<br/>
+サンプルソースはこちらです。<br/>
+<a href="https://github.com/ta1kt0me/cucumber-test/tree/first-test">ta1kt0me/cucumber-test</a></p>
+
+<p>cucumberを使うことになったので簡単なサンプルを作成してみます。</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:center;"> ライブラリ  </th>
+<th style="text-align:center;"> バージョン  </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;"> ruby        </td>
+<td style="text-align:center;"> 2.1.5       </td>
+</tr>
+<tr>
+<td style="text-align:center;"> rails       </td>
+<td style="text-align:center;"> 4.1.5       </td>
+</tr>
+<tr>
+<td style="text-align:center;"> cucumber    </td>
+<td style="text-align:center;"> 1.3.17      </td>
+</tr>
+</tbody>
+</table>
+
+
+<p>構成はこんな感じです。</p>
+
+<!-- more -->
+
+
+<h1>Cucumberとは</h1>
+
+<p>Rubyで書けるインテグレーションテストのためのテストフレームワークの一つです。
+Cucumber自体は、Railsに依存していないため、Sinatraのアプリでも使用可能です。</p>
+
+<h1>今回やること</h1>
+
+<p>!. cucumberのインストール
+2. scaffoldで作成したアプリのトップページを表示するテストを書く</p>
+
+<p>事前にscaffoldで適当なアプリを作成します。<br/>
+今回は以下のコマンドを実行しました。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle <span class="nb">exec </span>rails g scaffold Book title:string author:string price:integer
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Cucumber</h1>
+
+<h2>最低限覚えること</h2>
+
+<p>Cucumberのテストシナリオは、GherkinというDSLで書きます。<br/>
+今回はGherkinの一部だけを利用して簡単なテストを書きます。<br/>
+Gherkinについては、<a href="http://blog.eiel.info/blog/2013/02/12/gherkin/">こちら</a>のサイトにわかりやすい解説があります。<br/>
+また、今回のサンプルですが<a href="https://semaphoreapp.com/blog/2013/08/14/setting-up-bdd-stack-on-a-new-rails-4-application.html">こちら</a>のサイトの内容をもとに確認しています。</p>
+
+<h3>言葉</h3>
+
+<ul>
+<li>Feature
+
+<ul>
+<li>機能を表します。1つのファイルに1つだけ</li>
+</ul>
+</li>
+<li>Scenario
+
+<ul>
+<li>テストのシナリオです</li>
+</ul>
+</li>
+<li>When
+
+<ul>
+<li>ユーザーの動作を表します。リンクをクリックする、とか</li>
+</ul>
+</li>
+<li>Then
+
+<ul>
+<li>Whenの結果どうなるか、を表します</li>
+</ul>
+</li>
+</ul>
+
+
+<p>階層構造としてはこうなります。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>Feature: 機能A
+</span><span class='line'>    Scenario: シナリオ1
+</span><span class='line'>        When ユーザーがTopページにきた時
+</span><span class='line'>        Then タイトルにhogeが表示されている
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>ファイル</h3>
+
+<ul>
+<li>features/hoge.feature
+
+<ul>
+<li>テストのシナリオを書くところ</li>
+</ul>
+</li>
+<li>features/step_definitions/hoge.rb
+
+<ul>
+<li>シナリオの動作を定義するところ</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>インストール</h2>
+
+<h3>Gemfile変更 &amp; install</h3>
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">group</span> <span class="ss">:test</span> <span class="k">do</span>
+</span><span class='line'>  <span class="c1"># gem &#39;cucumber&#39; # githubのサンプルコードには入ってますが、いらないです。</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;cucumber-rails&#39;</span><span class="p">,</span> <span class="nb">require</span><span class="p">:</span> <span class="kp">false</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;database_cleaner&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>bundle install
+</span><span class='line'>bundle <span class="nb">exec </span>rails generate cucumber:install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>シナリオを書く</h2>
+
+<p>今回はユーザーがトップページにいる時に、タイトル文字列&#8217;Listing books&#8217;が表示されていることを確認します。</p>
+
+<figure class='code'><figcaption><span>features/home_page.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="ss">Feature</span><span class="p">:</span> <span class="no">Home</span> <span class="n">page</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="ss">Scenario</span><span class="p">:</span> <span class="no">Viwing</span> <span class="n">application</span><span class="s1">&#39;s home page</span>
+</span><span class='line'><span class="s1">    When I am on the top page</span>
+</span><span class='line'><span class="s1">    Then I should see the &#39;</span><span class="no">Listing</span> <span class="n">books</span><span class="err">&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>この時点でテストを実行するとエラーが出ます。</p>
+
+<figure class='code'><figcaption><span>features/home_page.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="err">$</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">rake</span> <span class="n">cucumber</span>
+</span><span class='line'>   <span class="no">Then</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;Listing books&#39;</span>  <span class="c1"># features/home_page.feature:5</span>
+</span><span class='line'>      <span class="no">Undefined</span> <span class="ss">step</span><span class="p">:</span> <span class="s2">&quot;I should see the &#39;Listing books&#39;&quot;</span> <span class="p">(</span><span class="no">Cucumber</span><span class="o">::</span><span class="no">Undefined</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">features</span><span class="o">/</span><span class="n">home_page</span><span class="o">.</span><span class="n">feature</span><span class="p">:</span><span class="mi">5</span><span class="ss">:in</span> <span class="sb">`Then I should see the &#39;Listing books&#39;&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sb">1 scenario (1 undefined)</span>
+</span><span class='line'><span class="sb">2 steps (2 undefined)</span>
+</span><span class='line'><span class="sb">0m0.005s</span>
+</span><span class='line'>
+</span><span class='line'><span class="sb">You can implement step definitions for undefined steps with these snippets:</span>
+</span><span class='line'>
+</span><span class='line'><span class="sb">When(/^I am on the homepage$/) do</span>
+</span><span class='line'><span class="sb">  pending # express the regexp above with the code you wish you had</span>
+</span><span class='line'><span class="sb">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="sb">Then(/^I should see the &#39;Listing books&#39;$/) do</span>
+</span><span class='line'><span class="sb">  pending # express the regexp above with the code you wish you had</span>
+</span><span class='line'><span class="sb">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>When</code>と<code>Then</code>で指定した動作（ステップ）が定義されてないことが原因です。</p>
+
+<h2>ステップを定義する</h2>
+
+<p>シナリオに書いた<code>When</code>と<code>Then</code>のステップを定義します。<br/>
+文字列一致で挙動を設定します。</p>
+
+<figure class='code'><figcaption><span>features/step_definitions/home_page_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">When</span><span class="p">(</span><span class="sr">/^I am on the top page$/</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">visit</span> <span class="n">root_path</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Then</span><span class="p">(</span><span class="sr">/^I should see the &#39;(.*?)&#39;$/</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">title</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">assert</span> <span class="n">page</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="n">title</span><span class="p">)</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>もう一度実行します。</p>
+
+<figure class='code'><figcaption><span>features/step_definitions/home_page_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="err">$</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">rake</span> <span class="n">cucumber</span>
+</span><span class='line'><span class="ss">eature</span><span class="p">:</span> <span class="no">Home</span> <span class="n">page</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="ss">Scenario</span><span class="p">:</span> <span class="no">Viwing</span> <span class="n">application</span><span class="s1">&#39;s home page # features/home_page.feature:3</span>
+</span><span class='line'><span class="s1">    When I am on the top page              # features/step_definitions/home_page_steps.rb:1</span>
+</span><span class='line'><span class="s1">    Then I should see the &#39;</span><span class="no">Listing</span> <span class="n">books</span><span class="err">&#39;</span>  <span class="c1"># features/step_definitions/home_page_steps.rb:5</span>
+</span><span class='line'>
+</span><span class='line'><span class="mi">1</span> <span class="n">scenario</span> <span class="p">(</span><span class="mi">1</span> <span class="n">passed</span><span class="p">)</span>
+</span><span class='line'><span class="mi">2</span> <span class="n">steps</span> <span class="p">(</span><span class="mi">2</span> <span class="n">passed</span><span class="p">)</span>
+</span><span class='line'><span class="mi">0</span><span class="n">m0</span><span class="o">.</span><span class="mi">081</span><span class="n">s</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>成功しましたね。<br/>
+rspecと組み合わせることでrspecの記法できるようなります。<br/>
+またcapybara-webkitやwebratと組み合わせることで、よりStepが簡単に実装できるようになると思います。</p>
+
+<h1>課題</h1>
+
+<p>次はFactorygirlを使ってシナリオの前提条件となるGiveを使ってみます。</p>
+
+<p>しまった。cucumberの最初のcは大文字が正しいかもしれない&hellip;</p>
+]]></content>
+  </entry>
+  
+</feed>

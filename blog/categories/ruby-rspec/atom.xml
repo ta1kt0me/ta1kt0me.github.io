@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ruby Rspec | JanGaJan.com]]></title>
+  <link href="http://jangajan.com/blog/categories/ruby-rspec/atom.xml" rel="self"/>
+  <link href="http://jangajan.com/"/>
+  <updated>2015-05-05T11:48:19+09:00</updated>
+  <id>http://jangajan.com/</id>
+  <author>
+    <name><![CDATA[talkto_me]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Rspec3のexpectとallowの違い]]></title>
+    <link href="http://jangajan.com/blog/2014/12/08/expect-and-allow-in-rspec/"/>
+    <updated>2014-12-08T00:00:35+09:00</updated>
+    <id>http://jangajan.com/blog/2014/12/08/expect-and-allow-in-rspec</id>
+    <content type="html"><![CDATA[<p><a href="http://www.adventar.org/calendars/582">よちよち.rb Advent Calendar 2014</a> 8日目の記事です。 <br/>
+昨日は、bonbon0605さんの<a href="http://genius.hateblo.jp/entry/2014/12/07/093454">2014年に読んだり積んだりした本とその思い出を振り返ります</a>、でした。<br/>
+Ruby初学者がワンステップレベルアップする時に参考となる良書を紹介していただきました！</p>
+
+<p>さて、今日はRspecのとあるメソッドから学んだ、mockとstubの違いについて書きます。  mockとstubの違いは、少し前に参加したよちよち.rbで疑問のまま終わってしまっていました。</p>
+
+<!-- more -->
+
+
+<p>最近になってRubyとRailsの仕事に関わっているのですが、Rspecに苦戦しています。   <br/>
+Rspecを使っている時に、次の２つのメソッドに出会いました。</p>
+
+<ul>
+<li>allow(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;)  <a href="https://relishapp.com/rspec/rspec-mocks/v/3-1/docs/basics/allowing-messages">参考</a></li>
+<li>expect(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;) <a href="https://relishapp.com/rspec/rspec-mocks/v/3-1/docs/basics/expecting-messages">参考</a></li>
+</ul>
+
+
+<p>この使い分けを知る過程でstubとmockの違いが自分の中でイメージできてきました。</p>
+
+<p>まずは、上記２つのメソッドの使い方を非常に単純な例に落とし込んでみます。</p>
+
+<p>上記はメソッドはどちらも、<code>object.hoge</code>ってメソッドを呼び出すと、戻り値が<code>fuga</code>となります。<br/>
+さて、どう違うのか、試してみます。</p>
+
+<h1>事前準備</h1>
+
+<p>問題を単純化します。(逆にわかりづらいかもしれないし、ソースコード減らしたかったのであまりいい書き方ではありません)<br/>
+<code>true</code>と<code>false</code>を返すだけのprivateメソッドとそのラッパーメソッドを用意します。</p>
+
+<pre><code class="rb">class MockAndStub
+  def always_true
+    return truthy
+  end
+
+  def always_false
+    return falsey
+  end
+
+  private
+  def truthy
+    true
+  end
+
+  def falsey
+    false
+  end
+end
+</code></pre>
+
+<p>それと、テストクラスです。</p>
+
+<pre><code>describe MockAndStub do
+  let(:obj) { MockAndStub.new }
+
+  # publicメソッドの戻り値が正しいことを確認
+  context 'do not use stub and mock' do
+    it { expect(obj.always_true).to be_truthy }
+    it { expect(obj.always_false).to be_falsey }
+  end
+end
+</code></pre>
+
+<p>準備ができました。まずは<code>allow</code>から見ていきましょう。</p>
+
+<h1>allow(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;)</h1>
+
+<p><code>allow</code>はstubとして働きます。<br/>
+<code>allow</code>を使うと、上述の説明どおり、<code>object.hoge</code>というメソッドを呼び出すと、<code>fuga</code>が返ってきます。</p>
+
+<pre><code class="rb">  ...
+  context 'use stub' do
+    # 1. fail
+    before(:each) { allow(obj).to receive(:truthy).and_return(false) }
+    it { expect(obj.always_true).to be_truthy }
+
+    # 2. success
+    before(:each) { allow(obj).to receive(:falsey).and_return(true) }
+    it { expect(obj.always_false).to be_truthy }    
+  end
+
+  context 'use stub, but not use' do
+    # 3. success
+    before(:each) { allow(obj).to receive(:falsey).and_return(true) }
+    it { expect(obj.always_true).to be_truthy }
+  end
+  ...
+</code></pre>
+
+<h2>1. fail</h2>
+
+<p>１のパターンのテストはfailします。<br/>
+<code>allow(obj).to receive(:truthy).and_return(false)</code>とすると、<code>obj</code>が<code>:truthy</code>というメソッドコールを受け取ったら、必ず<code>false</code>が返ってきます。<br/>
+<code>always_true</code>は内部で<code>:truthy</code>を呼び出しているので、戻り値は<code>false</code>となります。<br/>
+よって、<code>obj.always_true</code>は<code>false</code>なので、failします。</p>
+
+<h2>2. success</h2>
+
+<p>今度はsuccessです。<code>:falsey</code>は<code>true</code>を返すと設定しているので、<code>obj.always_false</code>は<code>true</code>となります。</p>
+
+<h2>3. success</h2>
+
+<p>次はテストに関係無いメソッドをstub化した場合です。これも、関係ないのでsuccessになります。</p>
+
+<p>上記のように、<code>A: allow</code>はメソッドコールがあった時に指定した値を利用してテストすることができます。</p>
+
+<h1>expect(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;)</h1>
+
+<p>続いて<code>expect</code>で、こちらはmockです。<br/>
+<code>allow</code>と<code>expect</code>の違いは、メソッドコールの検証の有無です。<code>expect</code>では<code>receive</code>で指定したメソッドが呼び出されていない場合、failします。</p>
+
+<pre><code class="rb">  ...
+  context 'use mock' do
+    context 'use mock, and not use' do
+      # 4. fail
+      before(:each) { expect(obj).to receive(:falsey).and_return(true) }
+      it { expect(obj.always_true).to be_truthy }
+    end
+
+    context 'use mock, and use' do
+      # 5. success
+      before(:each) { expect(obj).to receive(:falsey).and_return(true) }
+      it { expect(obj.always_false).to be_truthy }
+    end
+  end
+  ...
+</code></pre>
+
+<h2>4. fail</h2>
+
+<p><code>receive</code>で指定したメソッドを呼び出さない場合です。<br/>
+itのブロック自体は正しいため、beforeの<code>expect</code>を<code>allow</code>に変えるか、<code>before</code>自体を消すとsuccessになります。</p>
+
+<h2>5. success</h2>
+
+<p><code>receive</code>で指定したメソッドを呼び出しています。<br/>
+値を<code>true</code>に変更した上で、<code>true</code>になっていることを確認しているので、successとなります。</p>
+
+<h1>まとめ</h1>
+
+<p>allowのexpectの違いはメソッドコールの検査になります。これを踏まえた上で、下の記事を読むとなるほど！と思うことができました。</p>
+
+<ul>
+<li><a href="http://techracho.bpsinc.jp/hachi8833/2014_07_10/17971">http://techracho.bpsinc.jp/hachi8833/2014_07_10/17971</a></li>
+<li><a href="http://aligach.net/diary/20110109.html">http://aligach.net/diary/20110109.html</a></li>
+<li><a href="http://d.hatena.ne.jp/takihiro/20081023/1224762895">http://d.hatena.ne.jp/takihiro/20081023/1224762895</a></li>
+</ul>
+
+
+<p>つまり、stubとmockの違いは、インターフェースの検査(メソッドコールのチェック)をするかしないか、ということですね。</p>
+
+<p>ところで、2つの違いはわかったけれど、「どう使い分ければいいのか」が実はもっと大事です。<br/>
+ただ、これはテストに依存するため、確認すべきことは何か、を意識しながら切り分ける必要があります。<br/>
+<a href="http://d.hatena.ne.jp/devbankh/">Martin Fowlerの&#8221;Mocks Aren’t Stubs&#8221;の翻訳記事</a>があって、非常に長い上に全容を理解しきれていないのですが、</p>
+
+<blockquote><p>振る舞いの結びつきを意識しなければいけないか</p></blockquote>
+
+<p>という点が判断材料になるかと思います。<br/>
+あと、</p>
+
+<blockquote><p>モックオブジェクトはXPコミュニティから出てきたものだ。また、XPの主な特徴の一つは、テストドリブン開発を重要視していることだ。テストドリブン開発では、テストを書くことで推進される反復を通じてシステム設計も進んでいく。
+そういったわけで、モックオブジェクトの支持者達が相互作用テストの設計における効果についてことさら語るのも驚くことではない。このスタイルでは、主要なオブジェクトに対する最初のテストを書くから [それらのオブジェクトの] 振る舞いの開発を始めることになる。</p></blockquote>
+
+<p>とあるので、TDDするならmock使うでいいと思います。</p>
+
+<p>ひとまず、色々試してみて、気になることがあれば、また何か書くかもしれません。</p>
+
+<h1>最後に</h1>
+
+<p>そして、今日は<a href="http://yochiyochirb.doorkeeper.jp/events/18227">よちよち.rb 第48回 &ldquo;よちよちもくもく会&rdquo;</a>です(予定があって行けなくて残念)</p>
+
+<p>プログラミング未経験でも参加できる一番初心者に優しいRubyの勉強会、もといコミュニティです。<br/>
+後一枠余っているので、試しに参加して楽しんでみてください。<br/>
+当日キャンセルがちょこっと出たりすることが多いので、満席でもキャンセル待ちにしておくと、いいことがあるかもしれません。</p>
+
+<p>明日はまだ決まっていません&hellip;(紹介したかった&hellip;) # TODO:誰か現れたら更新するかも<br/>
+きっと今日参加する誰かが書いてくれるはずです。<br/>
+楽しみにお待ち下さい。</p>
+]]></content>
+  </entry>
+  
+</feed>

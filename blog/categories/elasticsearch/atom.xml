@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Elasticsearch | JanGaJan.com]]></title>
+  <link href="http://jangajan.com/blog/categories/elasticsearch/atom.xml" rel="self"/>
+  <link href="http://jangajan.com/"/>
+  <updated>2015-05-05T11:48:19+09:00</updated>
+  <id>http://jangajan.com/</id>
+  <author>
+    <name><![CDATA[talkto_me]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[localhostのelasticsearchにcurlしたらConnection Refused]]></title>
+    <link href="http://jangajan.com/blog/2014/12/16/fail-to-curl-to-elasticsearch/"/>
+    <updated>2014-12-16T19:13:11+09:00</updated>
+    <id>http://jangajan.com/blog/2014/12/16/fail-to-curl-to-elasticsearch</id>
+    <content type="html"><![CDATA[<p>よっしゃ、試してみよう！と思って出鼻をくじかれた話し。</p>
+
+<p>elasticsearch使ってる方多いですよね！今関わっているPJでも使っているので、どんなものか試してみました。ところが起動確認で早速つまづく始末です。</p>
+
+<p>elasticsearchの起動確認するときに、curlを使ってみたらConnection refusedが発生しました。</p>
+
+<!-- more -->
+
+
+<h1>問題: curlしたらConnection refused</h1>
+
+<pre><code class="sh">$ elasticsearch -d
+$ curl -XPUT 'http://localhost:9200/test/'
+curl: (7) Failed to connect to localhost port 9200: Connection refused
+</code></pre>
+
+<p>!?</p>
+
+<p>解決策は<a href="http://stackoverflow.com/questions/22952676/curl-failed-to-connect-to-localhost-port-80">こちら</a>にありました。</p>
+
+<h1>原因: IPv6使ってる</h1>
+
+<p>hostsファイル内の<code>::1 localhost</code>が有効になっていると、curlがIPv6でアクセスしてしまうらしい。<br/>
+何気ないところ見落としてました&hellip;</p>
+
+<h1>解決: IPv4使うようにする</h1>
+
+<p><code>--ipv4</code>オプション使ってやる。</p>
+
+<pre><code class="sh">curl --ipv4 -XPUT 'http://localhost:9200/test/'
+{"acknowledged":true}
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>
