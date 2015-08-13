@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://ta1kt0me.github.io/atom.xml" rel="self"/>
   <link href="http://ta1kt0me.github.io/"/>
-  <updated>2015-07-04T20:59:21+09:00</updated>
+  <updated>2015-08-14T02:14:56+09:00</updated>
   <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,199 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rubyとrailsのdelegate]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2015/08/14/ruby-rails-delegate/"/>
+    <updated>2015-08-14T02:05:49+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2015/08/14/ruby-rails-delegate</id>
+    <content type="html"><![CDATA[<p>委譲があまりよくわかっていなかったのでメモ。継承よりは使いやすそう。</p>
+
+<!-- more -->
+
+
+<h1>rubyのdelegate</h1>
+
+<p>Forwardableクラスに委譲のメソッドがあります。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;forwardable&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Hoge</span>
+</span><span class='line'>  <span class="kp">extend</span> <span class="no">Forwardable</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># also: def_delegators :@delegator, :name, :age</span>
+</span><span class='line'>  <span class="n">delegate</span> <span class="o">[</span><span class="ss">:name</span><span class="p">,</span> <span class="ss">:age</span><span class="o">]</span> <span class="o">=&gt;</span> <span class="ss">:@delegator</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span> <span class="n">args</span>
+</span><span class='line'>    <span class="vi">@delegator</span> <span class="o">=</span> <span class="n">args</span> <span class="o">==</span> <span class="s1">&#39;nakachi&#39;</span> <span class="p">?</span> <span class="no">Nakachi</span><span class="o">.</span><span class="n">new</span> <span class="p">:</span> <span class="no">Tanaka</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">Nakachi</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">name</span><span class="p">;</span> <span class="s1">&#39;I am Nakachi&#39;</span> <span class="k">end</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">age</span><span class="p">;</span> <span class="mi">100</span> <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">Tanaka</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">name</span><span class="p">;</span> <span class="s1">&#39;I am Tanaka&#39;</span> <span class="k">end</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">age</span><span class="p">;</span> <span class="mi">10</span> <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">hoge</span> <span class="o">=</span> <span class="no">Hoge</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;nakachi&#39;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">hoge</span><span class="o">.</span><span class="n">name</span> <span class="c1">#=&gt; &#39;I am Nakachi&#39;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">hoge</span><span class="o">.</span><span class="n">age</span>  <span class="c1">#=&gt; 100</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>railsのdelegate</h1>
+
+<p><code>activesupport</code>でModuleのインスタンスメソッドとして定義されています。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;active_support&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;active_support/core_ext&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">module</span> <span class="nn">DelegatorFuga</span>
+</span><span class='line'>  <span class="n">delegate</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:age</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="ss">:delegator</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">Nakachi</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">name</span><span class="p">;</span> <span class="s1">&#39;I am Nakachi&#39;</span> <span class="k">end</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">age</span><span class="p">;</span> <span class="mi">100</span> <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">Tanaka</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">name</span><span class="p">;</span> <span class="s1">&#39;I am Tanaka&#39;</span> <span class="k">end</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">age</span><span class="p">;</span> <span class="mi">10</span> <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Fuga</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">DelegatorFuga</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">attr_reader</span> <span class="ss">:delegator</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span> <span class="n">args</span>
+</span><span class='line'>    <span class="vi">@delegator</span> <span class="o">=</span> <span class="n">args</span> <span class="o">==</span> <span class="s1">&#39;nakachi&#39;</span> <span class="p">?</span> <span class="no">DelegatorFuga</span><span class="o">::</span><span class="no">Nakachi</span><span class="o">.</span><span class="n">new</span> <span class="p">:</span> <span class="no">DelegatorFuga</span><span class="o">::</span><span class="no">Tanaka</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">fuga</span> <span class="o">=</span> <span class="no">Fuga</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;nakachi&#39;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">fuga</span><span class="o">.</span><span class="n">name</span> <span class="c1">#=&gt; &#39;I am Nakachi&#39;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">fuga</span><span class="o">.</span><span class="n">age</span>  <span class="c1">#=&gt; 100</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>こっちには、<code>prefix</code>と<code>allow_nil</code>というオプションがある。</p>
+
+<h2>allow_nil</h2>
+
+<p>委譲先がnilの場合でもメソッド呼び出し時にnilを返してくれるようになる。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&gt;</span> <span class="n">delegate</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:age</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="ss">:delegator</span><span class="p">,</span> <span class="ss">allow_nil</span><span class="p">:</span> <span class="kp">true</span>
+</span><span class='line'><span class="o">&gt;</span> <span class="vi">@delegator</span> <span class="o">=</span> <span class="n">args</span> <span class="o">==</span> <span class="s1">&#39;nakachi&#39;</span> <span class="p">?</span> <span class="kp">nil</span> <span class="p">:</span> <span class="no">DelegatorFuga</span><span class="o">::</span><span class="no">Tanaka</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">fuga</span> <span class="o">=</span> <span class="no">Fuga</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;nakachi&#39;</span>
+</span><span class='line'><span class="c1"># method_missingは発生しない</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">fuga</span><span class="o">.</span><span class="n">name</span> <span class="c1">#=&gt; nil</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">fuga</span><span class="o">.</span><span class="n">age</span>  <span class="c1">#=&gt; nil</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>prefix</h2>
+
+<p>delegateしたメソッドのprefixをつける。この場合、prefixをつけない形式でメソッドを呼び出すことはできなくなる。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&gt;</span> <span class="n">delegate</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:age</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="ss">:delegator</span><span class="p">,</span> <span class="ss">prefix</span><span class="p">:</span> <span class="kp">true</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">fuga</span> <span class="o">=</span> <span class="no">Fuga</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;nakachi&#39;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">fuga</span><span class="o">.</span><span class="n">delegator_name</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">fuga</span><span class="o">.</span><span class="n">delegator_age</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&gt;</span> <span class="n">delegate</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:age</span><span class="p">,</span> <span class="ss">to</span><span class="p">:</span> <span class="ss">:delegator</span><span class="p">,</span> <span class="ss">prefix</span><span class="p">:</span> <span class="ss">:my</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">fuga</span> <span class="o">=</span> <span class="no">Fuga</span><span class="o">.</span><span class="n">new</span> <span class="s1">&#39;nakachi&#39;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">fuga</span><span class="o">.</span><span class="n">my_name</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">fuga</span><span class="o">.</span><span class="n">my_age</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[HerokuからGitHub Pagesにブログを移行した]]></title>
@@ -1809,266 +2002,6 @@ Monkeypatchの例としてリファクタリングの過程で<code>Array#replac
 
 <p>作りながら面白いGemや知識がちょこちょことありました。アプリケーションしか書いていないと気づかない<code>thor</code>や<code>simple-color</code>(こっちは使わなかったけど)などなど。<br/>
 今はgithubのtokenを手動で環境変数に設定しないといけないから、そこ直したいな。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Cucumber on Rails 入門2]]></title>
-    <link href="http://ta1kt0me.github.io/blog/2014/11/26/use-cucumber-2/"/>
-    <updated>2014-11-26T00:01:19+09:00</updated>
-    <id>http://ta1kt0me.github.io/blog/2014/11/26/use-cucumber-2</id>
-    <content type="html"><![CDATA[<p><a href="http://ta1kt0me.github.io/blog/2014/11/25/use-cucumber/">前回</a>
-に引き続き簡単なCucumberのテストケースを作ります。</p>
-
-<p>サンプルソースはこちらです。<br/>
-<a href="https://github.com/ta1kt0me/cucumber-test/tree/forth-test">ta1kt0me/cucumber-test</a></p>
-
-<table>
-<thead>
-<tr>
-<th style="text-align:center;"> ライブラリ  </th>
-<th style="text-align:center;"> バージョン  </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center;"> ruby        </td>
-<td style="text-align:center;"> 2.1.5       </td>
-</tr>
-<tr>
-<td style="text-align:center;"> rails       </td>
-<td style="text-align:center;"> 4.1.5       </td>
-</tr>
-<tr>
-<td style="text-align:center;"> cucumber    </td>
-<td style="text-align:center;"> 1.3.17      </td>
-</tr>
-</tbody>
-</table>
-
-
-<!-- more -->
-
-
-<h1>今回やること</h1>
-
-<ol>
-<li><code>given</code>を使う</li>
-<li><code>and</code>を使う</li>
-<li><code>background</code>を使う</li>
-<li>1つのシナリオにWhen-Thenを複数回書く</li>
-</ol>
-
-
-<h1>given</h1>
-
-<p>givenを利用して、テストデータの投入を行います。<br/>
-Factory Girl使います。</p>
-
-<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">group</span> <span class="ss">:test</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;cucumber-rails&#39;</span><span class="p">,</span> <span class="nb">require</span><span class="p">:</span> <span class="kp">false</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;database_cleaner&#39;</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;factory_girl_rails&#39;</span> <span class="c1"># 追加</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="err">$</span> <span class="n">bundle</span>
-</span><span class='line'><span class="err">$</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">rails</span> <span class="n">g</span> <span class="ss">factory_girl</span><span class="p">:</span><span class="n">model</span> <span class="no">Book</span> <span class="ss">title</span><span class="p">:</span><span class="n">string</span> <span class="ss">author</span><span class="p">:</span><span class="n">string</span> <span class="ss">price</span><span class="p">:</span><span class="n">integer</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>features/home_page.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'>  <span class="ss">Scenario</span><span class="p">:</span> <span class="no">Viwing</span> <span class="n">application</span><span class="s1">&#39;s home page</span>
-</span><span class='line'><span class="s1">    # 追加</span>
-</span><span class='line'><span class="s1">    Given there&#39;</span><span class="n">s</span> <span class="n">a</span> <span class="n">book</span> <span class="n">titled</span> <span class="s1">&#39;Alice\&#39;s Adventures in Wonderland&#39;</span> <span class="n">with</span> <span class="s1">&#39;Lewis Carroll&#39;</span> <span class="n">author</span><span class="p">,</span> <span class="s1">&#39;1000&#39;</span> <span class="n">yen</span>
-</span><span class='line'>    <span class="no">When</span> <span class="n">I</span> <span class="n">am</span> <span class="n">on</span> <span class="n">the</span> <span class="n">top</span> <span class="n">page</span>
-</span><span class='line'>    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>features/step_definitions/home_page_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="c1"># 追加</span>
-</span><span class='line'><span class="no">Given</span><span class="p">(</span><span class="sr">/^there&#39;s a book titled &#39;(.*?)&#39; with &#39;(.*?)&#39; author, &#39;(\d+)&#39; yen$/</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">title</span><span class="p">,</span> <span class="n">author</span><span class="p">,</span> <span class="n">price</span><span class="o">|</span>
-</span><span class='line'>  <span class="vi">@book</span> <span class="o">=</span> <span class="no">FactoryGirl</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="ss">:book</span><span class="p">,</span> <span class="ss">title</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="ss">author</span><span class="p">:</span> <span class="n">author</span><span class="p">,</span> <span class="ss">price</span><span class="p">:</span> <span class="n">price</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>(自分用メモ:改善点)<br/>
-シングルクォートで囲まないでもいいかも。<br/>
-テストケース内で利用しない限りあえてインスタンス変数にする必要もないなー。</p>
-
-<h1>and</h1>
-
-<p>続いてand。これは簡単です。</p>
-
-<figure class='code'><figcaption><span>features/home_page.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'><span class="no">Then</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;Listing books&#39;</span>
-</span><span class='line'><span class="no">And</span>  <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;Alice\&amp;#39;s Adventures in Wonderland&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>応用きくやつです。</p>
-
-<h1>background</h1>
-
-<p>シナリオの前に複雑な操作や処理をしたい場合に有効です。<br/>
-Bookの作成ページをテストするシナリオの前段として、トップページを表示する操作をbackgroundで書いてみます。<br/>
-なお、このシナリオではリンク・ボタン操作やフィールド入力をするので、便利なcapybara-webkitを導入します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">group</span> <span class="ss">:test</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;cucumber-rails&#39;</span><span class="p">,</span> <span class="nb">require</span><span class="p">:</span> <span class="kp">false</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;database_cleaner&#39;</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;factory_girl_rails&#39;</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capybara-webkit&#39;</span> <span class="c1"># 追加</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="err">$</span> <span class="n">bundle</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>新しいシナリオ、new_page.featureを作ります。</p>
-
-<figure class='code'><figcaption><span>features/new_page.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="ss">Feature</span><span class="p">:</span> <span class="no">New</span> <span class="no">Page</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="ss">Background</span><span class="p">:</span>
-</span><span class='line'>    <span class="no">Given</span> <span class="n">I</span> <span class="n">go</span> <span class="n">to</span> <span class="n">the</span> <span class="n">top</span> <span class="n">page</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="ss">Scenario</span><span class="p">:</span> <span class="no">Adding</span> <span class="no">New</span> <span class="no">Book</span>
-</span><span class='line'>    <span class="no">When</span> <span class="n">I</span> <span class="n">click</span> <span class="s1">&#39;New Book&#39;</span> <span class="n">link</span>
-</span><span class='line'>    <span class="no">Then</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;New book&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>features/step_definitions/new_page_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">Given</span><span class="p">(</span><span class="sr">/^I go to the top page$/</span><span class="p">)</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">visit</span> <span class="n">root_path</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">When</span><span class="p">(</span><span class="sr">/^I click &#39;(.*?)&#39; link$/</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">link_name</span><span class="o">|</span>
-</span><span class='line'>  <span class="n">click_link</span><span class="p">(</span><span class="n">link_name</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>1つのシナリオにWhen-Thenを複数回書く</h1>
-
-<p>new_page.featureを完成させましょう。</p>
-
-<ol>
-<li>&lsquo;New Book&#8217;リンクを押したら、&#8217;New Book&#8217;タイトルが表示される</li>
-<li>&lsquo;Title&rsquo;,&lsquo;Author&rsquo;,&lsquo;Price&#8217;を入力して、&#8217;Create Book&#8217;ボタンを押したら、&#8217;Book was successfully created.&#8217;というメッセージと入力した内容が表示される</li>
-</ol>
-
-
-<p>というシナリオを作ります。</p>
-
-<figure class='code'><figcaption><span>features/new_page.feature</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'>  <span class="ss">Scenario</span><span class="p">:</span> <span class="no">Adding</span> <span class="no">New</span> <span class="no">Book</span>
-</span><span class='line'>    <span class="no">When</span> <span class="n">I</span> <span class="n">click</span> <span class="s1">&#39;New Book&#39;</span> <span class="n">link</span>
-</span><span class='line'>    <span class="no">Then</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;New book&#39;</span>
-</span><span class='line'>    <span class="no">When</span> <span class="n">I</span> <span class="n">fill</span> <span class="k">in</span> <span class="s1">&#39;Title&#39;</span> <span class="n">with</span> <span class="s1">&#39;Star Wars&#39;</span>
-</span><span class='line'>    <span class="no">And</span> <span class="n">I</span> <span class="n">fill</span> <span class="k">in</span> <span class="s1">&#39;Author&#39;</span> <span class="n">with</span> <span class="s1">&#39;George Walton Lucas, Jr&#39;</span>
-</span><span class='line'>    <span class="no">And</span> <span class="n">I</span> <span class="n">fill</span> <span class="k">in</span> <span class="s1">&#39;Price&#39;</span> <span class="n">with</span> <span class="s1">&#39;2980&#39;</span>
-</span><span class='line'>    <span class="no">And</span> <span class="n">I</span> <span class="n">click</span> <span class="s1">&#39;Create Book&#39;</span> <span class="n">button</span>
-</span><span class='line'>    <span class="no">Then</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;Book was successfully created.&#39;</span>
-</span><span class='line'>    <span class="no">And</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;Star Wars&#39;</span>
-</span><span class='line'>    <span class="no">And</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;George Walton Lucas, Jr&#39;</span>
-</span><span class='line'>    <span class="no">And</span> <span class="n">I</span> <span class="n">should</span> <span class="n">see</span> <span class="n">the</span> <span class="s1">&#39;2980&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>features/step_definitions/new_page_steps.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'><span class="no">When</span><span class="p">(</span><span class="sr">/^I click &#39;(.*?)&#39; button$/</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">button_name</span><span class="o">|</span>
-</span><span class='line'>  <span class="n">click_button</span><span class="p">(</span><span class="n">button_name</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="no">When</span><span class="p">(</span><span class="sr">/^I fill in &#39;(.*?)&#39; with &#39;(.*?)&#39;$/</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="o">|</span>
-</span><span class='line'>  <span class="n">fill_in</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="ss">with</span><span class="p">:</span> <span class="n">value</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>capybara-webkitですが、<a href="https://gist.github.com/zhengjia/428105">チートシート</a>があるので有効活用しましょう。</p>
-
-<p>stepsで定義した操作は共通化してあげると良いですね。</p>
 ]]></content>
   </entry>
   

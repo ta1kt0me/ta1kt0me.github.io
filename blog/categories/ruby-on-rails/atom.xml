@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby-on-rails | JanGaJan.com]]></title>
   <link href="http://ta1kt0me.github.io/blog/categories/ruby-on-rails/atom.xml" rel="self"/>
   <link href="http://ta1kt0me.github.io/"/>
-  <updated>2015-07-04T20:59:21+09:00</updated>
+  <updated>2015-08-14T02:14:56+09:00</updated>
   <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,119 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rubyとrailsのdelegate]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2015/08/14/ruby-rails-delegate/"/>
+    <updated>2015-08-14T02:05:49+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2015/08/14/ruby-rails-delegate</id>
+    <content type="html"><![CDATA[<p>委譲があまりよくわかっていなかったのでメモ。継承よりは使いやすそう。</p>
+
+<!-- more -->
+
+
+<h1>rubyのdelegate</h1>
+
+<p>Forwardableクラスに委譲のメソッドがあります。</p>
+
+<pre><code class="ruby">require 'forwardable'
+
+class Hoge
+  extend Forwardable
+
+  # also: def_delegators :@delegator, :name, :age
+  delegate [:name, :age] =&gt; :@delegator
+
+  def initialize args
+    @delegator = args == 'nakachi' ? Nakachi.new : Tanaka.new
+  end
+
+  class Nakachi
+    def name; 'I am Nakachi' end
+    def age; 100 end
+  end
+
+  class Tanaka
+    def name; 'I am Tanaka' end
+    def age; 10 end
+  end
+end
+
+hoge = Hoge.new 'nakachi'
+puts hoge.name #=&gt; 'I am Nakachi'
+puts hoge.age  #=&gt; 100
+</code></pre>
+
+<h1>railsのdelegate</h1>
+
+<p><code>activesupport</code>でModuleのインスタンスメソッドとして定義されています。</p>
+
+<pre><code class="ruby">require 'active_support'
+require 'active_support/core_ext'
+
+module DelegatorFuga
+  delegate :name, :age, to: :delegator
+
+  class Nakachi
+    def name; 'I am Nakachi' end
+    def age; 100 end
+  end
+
+  class Tanaka
+    def name; 'I am Tanaka' end
+    def age; 10 end
+  end
+end
+
+class Fuga
+  include DelegatorFuga
+
+  attr_reader :delegator
+
+  def initialize args
+    @delegator = args == 'nakachi' ? DelegatorFuga::Nakachi.new : DelegatorFuga::Tanaka.new
+  end
+end
+
+fuga = Fuga.new 'nakachi'
+puts fuga.name #=&gt; 'I am Nakachi'
+puts fuga.age  #=&gt; 100
+</code></pre>
+
+<p>こっちには、<code>prefix</code>と<code>allow_nil</code>というオプションがある。</p>
+
+<h2>allow_nil</h2>
+
+<p>委譲先がnilの場合でもメソッド呼び出し時にnilを返してくれるようになる。</p>
+
+<pre><code class="ruby">&gt; delegate :name, :age, to: :delegator, allow_nil: true
+&gt; @delegator = args == 'nakachi' ? nil : DelegatorFuga::Tanaka.new
+
+fuga = Fuga.new 'nakachi'
+# method_missingは発生しない
+puts fuga.name #=&gt; nil
+puts fuga.age  #=&gt; nil
+</code></pre>
+
+<h2>prefix</h2>
+
+<p>delegateしたメソッドのprefixをつける。この場合、prefixをつけない形式でメソッドを呼び出すことはできなくなる。</p>
+
+<pre><code class="ruby">&gt; delegate :name, :age, to: :delegator, prefix: true
+
+fuga = Fuga.new 'nakachi'
+puts fuga.delegator_name
+puts fuga.delegator_age
+</code></pre>
+
+<pre><code class="ruby">&gt; delegate :name, :age, to: :delegator, prefix: :my
+
+fuga = Fuga.new 'nakachi'
+puts fuga.my_name
+puts fuga.my_age
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[STIを試す]]></title>
@@ -426,27 +539,6 @@ heroku config:set RACK_ENV=production
 <h2>本番で確認</h2>
 
 <p>このままherokuへのpushが成功した後、数分してからNew Relicにアクセスすれば接続確認できます。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Factorygirlの読み込みでエラー]]></title>
-    <link href="http://ta1kt0me.github.io/blog/2014/10/08/require-rspec/"/>
-    <updated>2014-10-08T14:19:07+09:00</updated>
-    <id>http://ta1kt0me.github.io/blog/2014/10/08/require-rspec</id>
-    <content type="html"><![CDATA[<p>パーフェクトRuby on Rails の7章のFactoryGirlを省略するところ(リスト7.12)で<code>uninitialized constant FactoryGirl (NameError)</code>が発生しました。</p>
-
-<!-- more -->
-
-
-<p><code>factory_girl_rails</code>を読み込んであげればおーけーです。</p>
-
-<pre><code class="rb spec/spec_helper.rb">require 'factory_girl_rails'
-
-RSpec.configure do |config|
-  config.include FactoryGirl::Syntax::Methods
-end
-</code></pre>
 ]]></content>
   </entry>
   

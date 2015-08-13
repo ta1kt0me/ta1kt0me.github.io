@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | JanGaJan.com]]></title>
   <link href="http://ta1kt0me.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://ta1kt0me.github.io/"/>
-  <updated>2015-07-04T20:59:21+09:00</updated>
+  <updated>2015-08-14T02:14:56+09:00</updated>
   <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,119 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rubyとrailsのdelegate]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2015/08/14/ruby-rails-delegate/"/>
+    <updated>2015-08-14T02:05:49+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2015/08/14/ruby-rails-delegate</id>
+    <content type="html"><![CDATA[<p>委譲があまりよくわかっていなかったのでメモ。継承よりは使いやすそう。</p>
+
+<!-- more -->
+
+
+<h1>rubyのdelegate</h1>
+
+<p>Forwardableクラスに委譲のメソッドがあります。</p>
+
+<pre><code class="ruby">require 'forwardable'
+
+class Hoge
+  extend Forwardable
+
+  # also: def_delegators :@delegator, :name, :age
+  delegate [:name, :age] =&gt; :@delegator
+
+  def initialize args
+    @delegator = args == 'nakachi' ? Nakachi.new : Tanaka.new
+  end
+
+  class Nakachi
+    def name; 'I am Nakachi' end
+    def age; 100 end
+  end
+
+  class Tanaka
+    def name; 'I am Tanaka' end
+    def age; 10 end
+  end
+end
+
+hoge = Hoge.new 'nakachi'
+puts hoge.name #=&gt; 'I am Nakachi'
+puts hoge.age  #=&gt; 100
+</code></pre>
+
+<h1>railsのdelegate</h1>
+
+<p><code>activesupport</code>でModuleのインスタンスメソッドとして定義されています。</p>
+
+<pre><code class="ruby">require 'active_support'
+require 'active_support/core_ext'
+
+module DelegatorFuga
+  delegate :name, :age, to: :delegator
+
+  class Nakachi
+    def name; 'I am Nakachi' end
+    def age; 100 end
+  end
+
+  class Tanaka
+    def name; 'I am Tanaka' end
+    def age; 10 end
+  end
+end
+
+class Fuga
+  include DelegatorFuga
+
+  attr_reader :delegator
+
+  def initialize args
+    @delegator = args == 'nakachi' ? DelegatorFuga::Nakachi.new : DelegatorFuga::Tanaka.new
+  end
+end
+
+fuga = Fuga.new 'nakachi'
+puts fuga.name #=&gt; 'I am Nakachi'
+puts fuga.age  #=&gt; 100
+</code></pre>
+
+<p>こっちには、<code>prefix</code>と<code>allow_nil</code>というオプションがある。</p>
+
+<h2>allow_nil</h2>
+
+<p>委譲先がnilの場合でもメソッド呼び出し時にnilを返してくれるようになる。</p>
+
+<pre><code class="ruby">&gt; delegate :name, :age, to: :delegator, allow_nil: true
+&gt; @delegator = args == 'nakachi' ? nil : DelegatorFuga::Tanaka.new
+
+fuga = Fuga.new 'nakachi'
+# method_missingは発生しない
+puts fuga.name #=&gt; nil
+puts fuga.age  #=&gt; nil
+</code></pre>
+
+<h2>prefix</h2>
+
+<p>delegateしたメソッドのprefixをつける。この場合、prefixをつけない形式でメソッドを呼び出すことはできなくなる。</p>
+
+<pre><code class="ruby">&gt; delegate :name, :age, to: :delegator, prefix: true
+
+fuga = Fuga.new 'nakachi'
+puts fuga.delegator_name
+puts fuga.delegator_age
+</code></pre>
+
+<pre><code class="ruby">&gt; delegate :name, :age, to: :delegator, prefix: :my
+
+fuga = Fuga.new 'nakachi'
+puts fuga.my_name
+puts fuga.my_age
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[MetaNight 第6回を開催しました]]></title>
@@ -424,88 +537,6 @@ Classはobject_id持ってますし、変数に代入することもできます
 <p>今回は初参加の方が多くて新鮮でした。人数増やしたりオンライン検討したりしたほうがいいのかなぁと思ったり。</p>
 
 <p>第6回は2月末か、3月頭にやる。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Gem Reading - Jquery-rails]]></title>
-    <link href="http://ta1kt0me.github.io/blog/2015/01/21/gem-reading-jquery-rails/"/>
-    <updated>2015-01-21T23:14:52+09:00</updated>
-    <id>http://ta1kt0me.github.io/blog/2015/01/21/gem-reading-jquery-rails</id>
-    <content type="html"><![CDATA[<p>簡単なやつから攻める。<br/>
-まずは読むことになれます。ということで、jquery-rails。</p>
-
-<!-- more -->
-
-
-<h2>眺める</h2>
-
-<p>lib配下を見ても、これといったファイルないな〜と&hellip;</p>
-
-<pre><code class="sh">lib
-├── jquery
-│   ├── assert_select.rb
-│   ├── rails
-│   │   ├── engine.rb
-│   │   └── version.rb
-│   └── rails.rb
-└── jquery-rails.rb
-
-2 directories, 5 files
-</code></pre>
-
-<ul>
-<li>engine.rb
-
-<ul>
-<li>Engin生成</li>
-</ul>
-</li>
-<li>version.rb
-
-<ul>
-<li>現在対応しているjqeruyのバージョンを定数で定義</li>
-</ul>
-</li>
-<li>assert_select.rb
-
-<ul>
-<li>assert_select_jqueryというテストメソッドを提供してくれる</li>
-</ul>
-</li>
-</ul>
-
-
-<p>他はモジュール定義してたり、requireしてたり。</p>
-
-<pre><code class="sh">vendor/assets
-└── javascripts
-    ├── jquery.js
-    ├── jquery.min.js
-    ├── jquery.min.map
-    ├── jquery2.js
-    ├── jquery2.min.js
-    ├── jquery2.min.map
-    └── jquery_ujs.js
-</code></pre>
-
-<p>vendor/assets/javascriptsの中に一式揃ってますねー。<br/>
-そういえば、Rakefileあるじゃん。</p>
-
-<pre><code class="sh">rake build              # Build jquery-rails-4.0.3.gem into the pkg directory
-rake install            # Build and install jquery-rails-4.0.3.gem into system gems
-rake release            # Create tag v4.0.3 and build and push jquery-rails-4.0.3.gem to Rubygems
-rake update_jquery      # Update jQuery versions
-rake update_jquery_ujs  # Update jQuery UJS version
-</code></pre>
-
-<p>中を見てみると、build、install以外のコマンドが定義されてました。</p>
-
-<p><code>release</code> は <code>version.rb</code> と <code>vendor/assets/javascripts</code>にダウンロードしたファイルのバージョン番号比較チェックしている。<br/>
-<code>update_jquery</code> と <code>update_jquery_ujs</code> は <code>vendor/assets/javascripts</code> 下に該当するバージョンのファイルをcurlしてきている。<br/>
-<code>vendor/assets/javascripts</code> に全部突っ込んでしまっているんですね。</p>
-
-<p>jsはでかかったんで、ここまで。</p>
 ]]></content>
   </entry>
   
