@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Sublimetext3 | JanGaJan.com]]></title>
+  <link href="http://ta1kt0me.github.io/blog/categories/sublimetext3/atom.xml" rel="self"/>
+  <link href="http://ta1kt0me.github.io/"/>
+  <updated>2015-07-04T20:59:21+09:00</updated>
+  <id>http://ta1kt0me.github.io/</id>
+  <author>
+    <name><![CDATA[talkto_me]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Sublime Text 3でEvernoteを使う]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2014/11/03/evernote-with-st3/"/>
+    <updated>2014-11-03T22:19:35+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2014/11/03/evernote-with-st3</id>
+    <content type="html"><![CDATA[<p>Sublime Text 3 を Evernoteのクライアントにする方法です。
+以前にも試したのですが、使いやすいPackageがなかったので、見つかって嬉しい。</p>
+
+<!-- more -->
+
+
+<p>evernoteのアカウントを持っていることが前提です。</p>
+
+<h1>必要なPackage</h1>
+
+<p><a href="https://sublime.wbond.net/packages/Evernote">Evernote</a></p>
+
+<h1>初期設定</h1>
+
+<h2>Token生成</h2>
+
+<p>Command Paletteから<code>Evernote Settings:Reconfigure Authorization</code>を選択。<br/>
+ブラウザが起動して、EvernoteのDeveloper Tokensページが開くので、Tokenを作る。<br/>
+生成した<code>Developer Token</code>と<code>NoteStore URL</code>を設定ファイルに書き込む。</p>
+
+<h2>Evernote設定ファイル作成</h2>
+
+<p>Command Paletteから<code>Evernote Settings: User</code>を選択。</p>
+
+<pre><code class="json Evernote.sublime-settings">{
+    "noteStoreUrl": "生成したNoteStore URL",
+    "token": "生成したDeveloper Token"
+}
+</code></pre>
+
+<p>以上でSublime Textでの設定は完了。</p>
+
+<h1>新規メモ作成</h1>
+
+<ol>
+<li>新規ノートを作成
+Command Paletteから<code>Evernote:  New empty note</code>を選択。<br/>
+<code>title</code>と<code>notebook</code>と<code>tags</code>を入力。
+このままでは保存されません。</li>
+<li>ノートを保存
+Command Paletteから<code>Evernote:Send to Evernote as new note</code>を選択。<br/>
+これでevernoteに保存されます。
+たまに、tokenを聞かれることがありますので、その時は、上のtokenを入力する必要があります。</li>
+</ol>
+
+
+<h1>ノートを探す</h1>
+
+<p>とりわけ使いやすそうだったもの。
+Command Paletteから入力します。</p>
+
+<ul>
+<li>Evernote:Open Evernote Note
+
+<ul>
+<li>notebook > titleから使いたいノートを検索</li>
+</ul>
+</li>
+<li>Evernote:List recent notes
+
+<ul>
+<li>最近使ったノートを表示</li>
+</ul>
+</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Sublime Text3にMarkdown環境を作る]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2014/11/03/markdown-plugin-st3/"/>
+    <updated>2014-11-03T19:23:45+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2014/11/03/markdown-plugin-st3</id>
+    <content type="html"><![CDATA[<p>Sublime Text 3にMarkdownのPluginを入れてみました。</p>
+
+<!-- more -->
+
+
+<h1>Package</h1>
+
+<p>導入したPackageは次の通り。<br/>
+使いながら減らしていくかも。</p>
+
+<h2><a href="https://sublime.wbond.net/packages/Markdown%20Extended">Markdown Extended</a></h2>
+
+<h2><a href="https://sublime.wbond.net/packages/MarkdownCodeBlockWrapper">MarkdownCodeBlockWrapper</a></h2>
+
+<h2><a href="https://sublime.wbond.net/packages/MarkdownEditing">MarkdownEditing</a></h2>
+
+<h2><a href="https://sublime.wbond.net/packages/MarkdownTOC">MarkdownTOC</a></h2>
+
+<h2><a href="https://sublime.wbond.net/packages/OmniMarkupPreviewer">OmniMarkupPreviewer</a></h2>
+
+<h2><a href="https://sublime.wbond.net/packages/Table%20Editor">Table Editor</a></h2>
+
+<h1>Preference</h1>
+
+<p>Markdownのみに適用したい設定の仕方。<br/>
+SyntaxをMarkdownに設定した状態で、Command Paletteから<code>Prefrences: Alignment File Settings Syntax Specific User</code>を選択。</p>
+
+<pre><code class="json">{
+    "enable_table_editor": true,
+    "extensions":
+    [
+        "mdown",
+        "txt",
+        "md",
+        "markdown"
+    ],
+    "tab_size": 4,
+    "translate_tabs_to_spaces": true,
+    "trim_trailing_white_space_on_save": false
+}
+</code></pre>
+
+<h1>Key-Binding</h1>
+
+<p><code>markdown</code>と<code>md</code>といったMarkdownの拡張子(syntax)の時のみキーバインドを設定する。</p>
+
+<pre><code class="json">[
+    // Shift+enterで末尾に'  \n'を入れる
+  { "keys": ["shift+enter"], "command": "insert_snippet", "args": { "contents": "  \n" }, "context": [{ "key": "selector", "operator": "equal", "operand": "text.html.markdown, text.html.md" }]},
+    // alt+lで'[title](http://)'を挿入する
+  { "keys": [ "alt+l" ], "command": "insert_snippet", "args": { "contents": "[title](http://)"}, "context": [{ "key": "selector", "operator": "equal", "operand": "text.html.markdown, text.html.md" }]}
+]
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>

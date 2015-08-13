@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Coffeescript | JanGaJan.com]]></title>
+  <link href="http://ta1kt0me.github.io/blog/categories/coffeescript/atom.xml" rel="self"/>
+  <link href="http://ta1kt0me.github.io/"/>
+  <updated>2015-07-04T20:59:21+09:00</updated>
+  <id>http://ta1kt0me.github.io/</id>
+  <author>
+    <name><![CDATA[talkto_me]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Hubotでデータを保存する]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2014/09/02/hubot-brain-sample/"/>
+    <updated>2014-09-02T20:38:53+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2014/09/02/hubot-brain-sample</id>
+    <content type="html"><![CDATA[<p>hubotでデータを永続的に保存するためにはredisとの連携が必要です。</p>
+
+<!-- more -->
+
+
+<h1>使い方</h1>
+
+<p>redisとセットで使うので、redisを起動しておくことを忘れずに。<br/>
+herokuで使いたい場合は、addonが必要になります。</p>
+
+<pre><code class="coffeescript">module.exports = (robot) -&gt;
+  robot.hear /janga/i, (msg) -&gt;
+
+  # データ取得
+  jangajan = robot.brain.get('janga')
+
+  # データ更新
+  robot.brain.set('janga', jangajan)
+
+  # データ保存 - redis起動してないと保存できない
+  robot.brain.save()
+
+  # データの保存場所
+  console.log robot.brain['data']
+  # =&gt; { users: { '1': { id: '1', name: 'Shell', room: 'Shell' } },
+  #     _private: { janga: [ [Object] ] } }
+</code></pre>
+
+<p>実際には<code>_private</code>というキーの値として保存されています。<br/>
+あまりよくはないけれど、<code>robot.brain['data']['_pravate']['janga']</code>で取得することもできます。</p>
+]]></content>
+  </entry>
+  
+</feed>

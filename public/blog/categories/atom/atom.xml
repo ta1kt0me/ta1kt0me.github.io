@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Atom | JanGaJan.com]]></title>
+  <link href="http://ta1kt0me.github.io/blog/categories/atom/atom.xml" rel="self"/>
+  <link href="http://ta1kt0me.github.io/"/>
+  <updated>2015-07-04T20:59:21+09:00</updated>
+  <id>http://ta1kt0me.github.io/</id>
+  <author>
+    <name><![CDATA[talkto_me]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Dict-en2jaというatomのpackageを公開しました]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2014/07/03/release-dict-en2ja/"/>
+    <updated>2014-07-03T00:00:00+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2014/07/03/release-dict-en2ja</id>
+    <content type="html"><![CDATA[<h1>dict-en2jaというatomのpackageを公開しました</h1>
+
+<p><code>publish</code>するときにバージョンの指定がまずったせいで、公開初版が2.0.0となりました。<br/>
+いまだに<code>publish</code>コマンドの正解がわからない。そんな打たないし。</p>
+
+<!-- more -->
+
+
+<p>初めてatomのパッケージ作りました。<br/>
+初めてcoffeescriptでもの作りました。<br/>
+初めてgithubで作ったものがforkされました。(forkされてしまった！)</p>
+
+<p>辞書のAPiを呼び出して英単語の意味を表するatomのpackageです。<br/>
+エディタ内で完結したかったので作ってみました。
+(本当はAPIも自分で作った方がいいのかなぁ)</p>
+
+<h2>atom packageの感想</h2>
+
+<p>atom!痒いところに手が届かなくてsublimeに戻りがちですが、ちょくちょく使っています。<br/>
+viewとpaneのところ、coffeescriptが初めてっていうのもありますが、情報もそんなに多くなかった（しググラビリティ悪い）ので使い方わかるまでに時間かかりました。<br/>
+viewの種類はいくつかあったので色々試してみたいな。結局htmlなので、ムリクリ表示する領域を生成していたりするのもありましたね。<br/>
+タグ構造もですが、やり方が諸々で。基本的な仕組みであればatom自体のソースコードが一番参考になるかもしれません。<br/>
+viewを独自拡張したものを使用しなかったので次はその辺りをうまく使えるようになりたい。<br/>
+後、修正を適用するときにいちいちreloadしなきゃいけないのは手間でした。何かいい方法ないのかな。</p>
+
+<h2>coffeescriptの感想</h2>
+
+<p>coffeescriptの練習も着手理由１つでした。
+コンパイルしたjsみなくても挙動が判断できるようにならないとだめですね。<br/>
+スペース１つでコンパイル結果がかわるのでちょっとしたtypoでおかしなことになるのはしんどい。でも書きやすかった。<br/>
+それと、実はhtml(xml)へのアクセスには向かない感じ？この辺りはjsのplugin入れて対応しました。<br/>
+こっちはhubot-scriptを参考にしました。githubは宝の山ですね。<br/>
+まだ使いどころが悩ましいですが、少しずつ仲良くしていきたいです。</p>
+
+<h2>そんなところで</h2>
+
+<p>まとなものは初めて作ったので、よかったらお試しください。
+使用感などフィードバックをいただけると嬉しいです。
+一人でざーっと作ったのでソースの指摘も嬉しいです。</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Life Ruby | JanGaJan.com]]></title>
+  <link href="http://ta1kt0me.github.io/blog/categories/life-ruby/atom.xml" rel="self"/>
+  <link href="http://ta1kt0me.github.io/"/>
+  <updated>2015-07-04T20:59:21+09:00</updated>
+  <id>http://ta1kt0me.github.io/</id>
+  <author>
+    <name><![CDATA[talkto_me]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[冬休みの宿題]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2015/01/04/yochiyochi-dokusyokansoubun/"/>
+    <updated>2015-01-04T21:07:32+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2015/01/04/yochiyochi-dokusyokansoubun</id>
+    <content type="html"><![CDATA[<p>よちよち.rbで冬休みの宿題をやりました。</p>
+
+<!-- more -->
+
+
+<h1>Rails4でGoogle Map API連携アプリを開発する</h1>
+
+<p>宣言したのは<a href="http://h5y1m1411.gitbooks.io/rails4-with-google-map-api/">Rails4でGoogle Map API連携アプリを開発する</a>という資料。<br/>
+ざっくりとした内容は下記の通り。</p>
+
+<ul>
+<li>scaffoldでtodoアプリを作り、Railsの基本的な機能や約束事を学ぶ</li>
+<li>scaffoldで住所と座標を登録するアプリを作り、Googleマップを画面に表示して、登録した座標にピンを刺す</li>
+</ul>
+
+
+<p>yochiyochi.rbで覚えた内容を短時間で一通り復習できました。<br/>
+その他こんなところですね。</p>
+
+<ul>
+<li>underscore.js便利。lodashというやつも使えそう。</li>
+<li>googleマップとの連携がこんなにも簡単だったなんて。今度Gemの中身見てみよう</li>
+<li>iphoneやipad用のfaviconの画像はいくつか用意しないといけない</li>
+</ul>
+
+
+<p>アプリ用のGemを簡単に試したい時、モックを用意したい時なんかは使い勝手が良くてscaffoldいいなって思います。</p>
+
+<h1>Rubyで作る奇妙なプログラミング言語</h1>
+
+<p><a href="http://www.amazon.co.jp/gp/product/B00ICKLC2A/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=B00ICKLC2A&linkCode=as2&tag=pochan0919-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00ICKLC2A&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=pochan0919-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=B00ICKLC2A" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
+
+<p>早いうちに消化を！と思って@katorieさんから借りた本を読みました。<br/>
+前半、というか付録以外は、摩訶不思議な言語をRubyで実装しよう！という内容だったのでやることは写経です。本はRuby1.8,1.9向けでしたが、2.2で問題なく動きました。<br/>
+作ってみた言語のサンプルコードです。</p>
+
+<pre><code class="ruby  brainf_ck">++++++
+[&gt; ++++++++++ &lt; -]
+&gt; +++++.
+</code></pre>
+
+<pre><code class="ruby whitespace"></code></pre>
+
+<p>無の境地ですね。</p>
+
+<pre><code class="ruby starry">            +               +  *       +     * .               +
+               +  *          +     * .
+</code></pre>
+
+<p>キラキラしてます。</p>
+
+<p>あと記号とか絵文字だけのbolic(絵文字が対応していないのでキャプチャで)</p>
+
+<p><img src="http://i.gyazo.com/266f3ec1afff95237e93c12d2f125bf2.png" alt="bolic" /></p>
+
+<p>言語のパターンとして、</p>
+
+<ul>
+<li>インタプリタ型</li>
+<li>中間言語型</li>
+<li>トランスレーター</li>
+</ul>
+
+
+<p>を試すことができます。<br/>
+ソースコードをほぼ全て丁寧に解説していて構文解析の入門というか、Rubyプログラミングの入門にはもってこいです(付録以外は)<br/>
+ParserやVMの基本的な仕組みや役割をRubyのソースコードで理解できます。<br/>
+紹介の仕方も興味深くて、構文の実装を一通り紹介しながら組み上げていくパターンと、解析部と実行部を並行して作り上げていくパターンがあって、実装の拡張の方法も垣間見れます。あと文章が面白い。  <br/>
+唯一の難点は確認のためのプログラムを書くのがつらいこと。(上のやつですね)</p>
+
+<p>構文ごとに解析と処理内容をコツコツ作っていけば言語はできるんですね。<br/>
+大事なのはシンタックスと意味論（見た目と中身）。<br/>
+データの持ち方のアプローチはいくつかあるみたいで、以下のようなやり方が示されていました。</p>
+
+<ul>
+<li>テープ(ハッシュ)を使う</li>
+<li>スタック(配列)を使う</li>
+<li>木構造を使う</li>
+</ul>
+
+
+<p>木構造のところは再帰プログラムになっているので、紙に書きながら「なるほどー」とかやってました。面白いですね。再帰と仲良くなることを目指そう。</p>
+
+<p>ちなみに付録でesoteric languageの闇を垣間見れます。付録と言いつつ一番面白いところなので心して読みましょう。著者の熱意を感じました(特にKEMURI)lambdaの丁寧な解説のところは基礎知識が必要だったので後で再チャレンジしたい。</p>
+
+<p>そういえば、この本を読む前に「コーディングを支える技術」の前半を読んでおくと理解が早くなるかもしれません。</p>
+
+<h2>コーディングを支える技術</h2>
+
+<p><a href="http://www.amazon.co.jp/gp/product/477415654X/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=477415654X&linkCode=as2&tag=pochan0919-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=477415654X&Format=_SL160_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=pochan0919-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=477415654X" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
+
+<p>5章ぐらいまでしか読めなかった。正月のだらけに負けました。<br/>
+一般的なプログラミング言語の基本的な構文がなぜ必要になったか歴史的経緯とか、言語間のちょっとした違いを交えながら、コーディングの知識を解説しています。<br/>
+残りは時間のあるときにさら〜っと読んでみよう。</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: http://ta1kt0me.github.io/sitemap.xml
