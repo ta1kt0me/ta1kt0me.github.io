@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://ta1kt0me.github.io/atom.xml" rel="self"/>
   <link href="http://ta1kt0me.github.io/"/>
-  <updated>2015-08-14T02:19:08+09:00</updated>
+  <updated>2015-08-18T01:51:12+09:00</updated>
   <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,193 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Docker-rails-with-mysql]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2015/08/18/docker-rails-with-mysql/"/>
+    <updated>2015-08-18T01:21:56+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2015/08/18/docker-rails-with-mysql</id>
+    <content type="html"><![CDATA[<p>docker周りが賑わっているので簡単な初期構築。
+まずは、docker-composeを使ったmysqlのRailsアプリケーションの環境を構築してみます。</p>
+
+<p>ソースコードは<a href="https://github.com/suburi/docker-mysql-rails">こちら</a>。</p>
+
+<!-- more -->
+
+
+<p>今回はRailsアプリケーション作成済みの前提です。</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;"> tool </th>
+<th style="text-align:right;"> version </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">Ruby</td>
+<td style="text-align:right;">2.2.2</td>
+</tr>
+<tr>
+<td style="text-align:left;">Rails</td>
+<td style="text-align:right;">4.2.3</td>
+</tr>
+<tr>
+<td style="text-align:left;">docker</td>
+<td style="text-align:right;">1.8.1</td>
+</tr>
+<tr>
+<td style="text-align:left;">mysql</td>
+<td style="text-align:right;">5.6.26</td>
+</tr>
+</tbody>
+</table>
+
+
+<h2>ツールのインストール</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>brew install Caskroom/cask/virtualbox
+</span><span class='line'># docker-swarmは今回は使わない
+</span><span class='line'>brew install docker docker-machine docker-compose docker-swarm
+</span><span class='line'># この下は順番が怪しい
+</span><span class='line'>docker-machine create --driver virtualbox default
+</span><span class='line'>eval $(docker-machine env default)
+</span><span class='line'>docker-machine start default</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="https://docs.docker.com/machine/get-started/">https://docs.docker.com/machine/get-started/</a></p>
+
+<h2>Dockerfileの作成</h2>
+
+<p>公式にDockerでRails環境を構築する手順があるのですが、Rubyのバージョン以外全て一緒です。
+<a href="https://docs.docker.com/compose/rails/">https://docs.docker.com/compose/rails/</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>FROM ruby:2.2.2
+</span><span class='line'>RUN apt-get update -qq && apt-get install -y build-essential libpq-dev
+</span><span class='line'>RUN mkdir /myapp
+</span><span class='line'>WORKDIR /myapp
+</span><span class='line'>ADD Gemfile /myapp/Gemfile
+</span><span class='line'>RUN bundle install
+</span><span class='line'>ADD . /myapp</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>docker-composeの作成</h2>
+
+<p>上記のサンプルと同様、dbとwebの2台構成にしています。
+mysqlの場合、<code>MYSQL_ROOT_PASSWORD</code>という環境変数は、必須項目となります。
+latestのバージョンは利用するタイミングによって変わる可能性があります。
+詳しくは<a href="https://hub.docker.com/_/mysql/">Docker Hub のmysql</a>を確認してください。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mysql:latest</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">environment</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">MYSQL_ROOT_PASSWORD=root</span>
+</span><span class='line'><span class="l-Scalar-Plain">web</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">command</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">bundle exec rails s -p 3000 -b &#39;0.0.0.0&#39;</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">.:/myapp</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">./tools/mysql:/etc/mysql/conf.d</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="s">&quot;3000:3000&quot;</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">db</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>my.cnfはカスタマイズしたものを利用したいので、リポジトリに<code>${RAILS_ROOT}/tools/mysql/my.cnf</code>という設定ファイルを作成し、<code>- ./tools/mysql:/etc/mysql/conf.d</code>の行を追加してください。特にカスタマイズする必要がなければこの行は不要です。</p>
+
+<h2>database接続設定</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">default</span><span class="p-Indicator">:</span> <span class="nl">&amp;default</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">adapter</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">mysql2</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">encoding</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">utf8</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">reconnect</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">false</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">pool</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">db</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">3306</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">username</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">root</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">password</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">root</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">timeout</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5000</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">&lt;&lt;</span><span class="p-Indicator">:</span> <span class="nv">*default</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">database</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">app_development</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>hostは<code>db</code>という名前になります。docker-compose.ymlのdbのキーと同じになりますね。adapterを<code>mysql2</code>にしているので、Gemfileにも忘れずに、<code>gem 'mysql2'</code>を追加します。</p>
+
+<h2>migrate</h2>
+
+<p>ここまでが完了したら、アプリ起動まで後少し。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">cd ${RAILS_ROOT}</span>
+</span><span class='line'><span class="l-Scalar-Plain">docker-compose build</span>
+</span><span class='line'><span class="l-Scalar-Plain">docker-compose run web db:create</span>
+</span><span class='line'><span class="l-Scalar-Plain">docker-compose run web db:migrate</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>アプリ起動</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">docker-compose up</span>
+</span><span class='line'><span class="l-Scalar-Plain"># 別ターミナルで</span>
+</span><span class='line'><span class="l-Scalar-Plain">open http://$(docker-machine ip default):3000</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rubyとrailsのdelegate]]></title>
@@ -1958,50 +2145,6 @@ Monkeypatchの例としてリファクタリングの過程で<code>Array#replac
 
 
 <p>第4回を12月中にできたらやりたいな。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Gem:pr-commentをリリース]]></title>
-    <link href="http://ta1kt0me.github.io/blog/2014/12/02/release-pr-comment/"/>
-    <updated>2014-12-02T18:18:46+09:00</updated>
-    <id>http://ta1kt0me.github.io/blog/2014/12/02/release-pr-comment</id>
-    <content type="html"><![CDATA[<p><a href="https://rubygems.org/gems/pr-comment">pr-comment</a>というGemを作りました。</p>
-
-<!-- more -->
-
-
-<p>自分用に作ったスクリプトをGem化してみました。不満駆動開発。<br/>
-用途はターミナルでPull Requestのレビューとかコメントを見やすくするものです。<br/>
-中でoctokit呼び出して、結果を並び替えて表示しているだけです。<br/>
-使っているかというとうーん、ですね。<br/>
-一昨日ぐらいに実行したらちゃんと出ていないところがあったので直さないと。
-テストもそうだけど、例外処理もずさんなんでそのへんも、含めてここ汚いとか雑とかもっとこうしろとかISSUEで鉞いただけると喜びます。<br/>
-デザインだけは見やすい案を随時募集中です。</p>
-
-<p>&lsquo;競合プロダクトがあっても挫けずに自分の道を進んでもらえればなと思いました&#8217;といういただいた言葉を胸に刻んでちょっとずつ改善していきたい。</p>
-
-<h1>使い方</h1>
-
-<p>一応使い方を。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>prc all owner/repo pull-request-no
-</span><span class='line'>prc close owner/repo pull-request-no
-</span><span class='line'>prc open owner/repo pull-request-no
-</span><span class='line'>
-</span><span class='line'>prc close yochiyochirb/kajaeru <span class="m">83</span> <span class="c"># こんな感じで使う</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h1>感想</h1>
-
-<p>作りながら面白いGemや知識がちょこちょことありました。アプリケーションしか書いていないと気づかない<code>thor</code>や<code>simple-color</code>(こっちは使わなかったけど)などなど。<br/>
-今はgithubのtokenを手動で環境変数に設定しないといけないから、そこ直したいな。</p>
 ]]></content>
   </entry>
   

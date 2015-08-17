@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://ta1kt0me.github.io/blog/2015/08/18/docker-rails-with-mysql/</loc>
+    <lastmod>2015-08-18T01:21:56+09:00</lastmod>
+  </url>
+  <url>
     <loc>http://ta1kt0me.github.io/blog/2015/08/14/ruby-rails-delegate/</loc>
     <lastmod>2015-08-14T02:05:49+09:00</lastmod>
   </url>
@@ -330,6 +334,27 @@
   </url>
   <url>
     <loc>http://ta1kt0me.github.io/blog/categories/jekyll/</loc>
+  </url>
+  <url>
+    <loc>http://ta1kt0me.github.io/blog/categories/docker-ruby-on-rails-mysql/</loc>
+  </url>
+  <url>
+    <loc>http://ta1kt0me.github.io/posts/2/</loc>
+  </url>
+  <url>
+    <loc>http://ta1kt0me.github.io/posts/3/</loc>
+  </url>
+  <url>
+    <loc>http://ta1kt0me.github.io/posts/4/</loc>
+  </url>
+  <url>
+    <loc>http://ta1kt0me.github.io/posts/5/</loc>
+  </url>
+  <url>
+    <loc>http://ta1kt0me.github.io/posts/6/</loc>
+  </url>
+  <url>
+    <loc>http://ta1kt0me.github.io/posts/7/</loc>
   </url>
   <url>
     <loc>http://ta1kt0me.github.io/googlef6b4a31aeac11309.html</loc>

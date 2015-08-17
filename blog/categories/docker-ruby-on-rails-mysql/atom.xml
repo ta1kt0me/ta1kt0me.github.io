@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Docker Ruby-on-rails Mysql | JanGaJan.com]]></title>
+  <link href="http://ta1kt0me.github.io/blog/categories/docker-ruby-on-rails-mysql/atom.xml" rel="self"/>
+  <link href="http://ta1kt0me.github.io/"/>
+  <updated>2015-08-18T01:51:12+09:00</updated>
+  <id>http://ta1kt0me.github.io/</id>
+  <author>
+    <name><![CDATA[talkto_me]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Docker-rails-with-mysql]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2015/08/18/docker-rails-with-mysql/"/>
+    <updated>2015-08-18T01:21:56+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2015/08/18/docker-rails-with-mysql</id>
+    <content type="html"><![CDATA[<p>docker周りが賑わっているので簡単な初期構築。
+まずは、docker-composeを使ったmysqlのRailsアプリケーションの環境を構築してみます。</p>
+
+<p>ソースコードは<a href="https://github.com/suburi/docker-mysql-rails">こちら</a>。</p>
+
+<!-- more -->
+
+
+<p>今回はRailsアプリケーション作成済みの前提です。</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;"> tool </th>
+<th style="text-align:right;"> version </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">Ruby</td>
+<td style="text-align:right;">2.2.2</td>
+</tr>
+<tr>
+<td style="text-align:left;">Rails</td>
+<td style="text-align:right;">4.2.3</td>
+</tr>
+<tr>
+<td style="text-align:left;">docker</td>
+<td style="text-align:right;">1.8.1</td>
+</tr>
+<tr>
+<td style="text-align:left;">mysql</td>
+<td style="text-align:right;">5.6.26</td>
+</tr>
+</tbody>
+</table>
+
+
+<h2>ツールのインストール</h2>
+
+<pre><code>brew install Caskroom/cask/virtualbox
+# docker-swarmは今回は使わない
+brew install docker docker-machine docker-compose docker-swarm
+# この下は順番が怪しい
+docker-machine create --driver virtualbox default
+eval $(docker-machine env default)
+docker-machine start default
+</code></pre>
+
+<p><a href="https://docs.docker.com/machine/get-started/">https://docs.docker.com/machine/get-started/</a></p>
+
+<h2>Dockerfileの作成</h2>
+
+<p>公式にDockerでRails環境を構築する手順があるのですが、Rubyのバージョン以外全て一緒です。
+<a href="https://docs.docker.com/compose/rails/">https://docs.docker.com/compose/rails/</a></p>
+
+<pre><code>FROM ruby:2.2.2
+RUN apt-get update -qq &amp;&amp; apt-get install -y build-essential libpq-dev
+RUN mkdir /myapp
+WORKDIR /myapp
+ADD Gemfile /myapp/Gemfile
+RUN bundle install
+ADD . /myapp
+</code></pre>
+
+<h2>docker-composeの作成</h2>
+
+<p>上記のサンプルと同様、dbとwebの2台構成にしています。
+mysqlの場合、<code>MYSQL_ROOT_PASSWORD</code>という環境変数は、必須項目となります。
+latestのバージョンは利用するタイミングによって変わる可能性があります。
+詳しくは<a href="https://hub.docker.com/_/mysql/">Docker Hub のmysql</a>を確認してください。</p>
+
+<pre><code class="yaml">db:
+  image: mysql:latest
+  environment:
+    - MYSQL_ROOT_PASSWORD=root
+web:
+  build: .
+  command: bundle exec rails s -p 3000 -b '0.0.0.0'
+  volumes:
+    - .:/myapp
+    - ./tools/mysql:/etc/mysql/conf.d
+  ports:
+    - "3000:3000"
+  links:
+    - db
+</code></pre>
+
+<p>my.cnfはカスタマイズしたものを利用したいので、リポジトリに<code>${RAILS_ROOT}/tools/mysql/my.cnf</code>という設定ファイルを作成し、<code>- ./tools/mysql:/etc/mysql/conf.d</code>の行を追加してください。特にカスタマイズする必要がなければこの行は不要です。</p>
+
+<h2>database接続設定</h2>
+
+<pre><code>default: &amp;default
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  pool: 5
+  host: db
+  port: 3306
+  username: root
+  password: root
+  timeout: 5000
+
+development:
+  &lt;&lt;: *default
+  database: app_development
+</code></pre>
+
+<p>hostは<code>db</code>という名前になります。docker-compose.ymlのdbのキーと同じになりますね。adapterを<code>mysql2</code>にしているので、Gemfileにも忘れずに、<code>gem 'mysql2'</code>を追加します。</p>
+
+<h2>migrate</h2>
+
+<p>ここまでが完了したら、アプリ起動まで後少し。
+<code>
+cd ${RAILS_ROOT}
+docker-compose build
+docker-compose run web db:create
+docker-compose run web db:migrate
+</code></p>
+
+<h2>アプリ起動</h2>
+
+<pre><code>docker-compose up
+# 別ターミナルで
+open http://$(docker-machine ip default):3000
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>
