@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://ta1kt0me.github.io/atom.xml" rel="self"/>
   <link href="http://ta1kt0me.github.io/"/>
-  <updated>2015-08-18T01:51:12+09:00</updated>
+  <updated>2015-08-18T01:52:42+09:00</updated>
   <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Docker-rails-with-mysql]]></title>
+    <title type="html"><![CDATA[Rails With Mysql on Docker]]></title>
     <link href="http://ta1kt0me.github.io/blog/2015/08/18/docker-rails-with-mysql/"/>
     <updated>2015-08-18T01:21:56+09:00</updated>
     <id>http://ta1kt0me.github.io/blog/2015/08/18/docker-rails-with-mysql</id>
