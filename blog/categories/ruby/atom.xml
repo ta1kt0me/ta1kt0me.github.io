@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | JanGaJan.com]]></title>
   <link href="http://ta1kt0me.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://ta1kt0me.github.io/"/>
-  <updated>2015-08-18T01:53:01+09:00</updated>
+  <updated>2015-11-22T18:54:16+09:00</updated>
   <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,179 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rubyのパフォーマンス改善]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2015/11/22/profile-ruby/"/>
+    <updated>2015-11-22T13:29:37+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2015/11/22/profile-ruby</id>
+    <content type="html"><![CDATA[<p>Rubyのパフォーマンス改善に挑戦してみます。
+やることとしては以下に絞って確認してみます。</p>
+
+<ul>
+<li>benchmarkを使って実行時間を計測</li>
+<li>stackprofを使ってメソッドの呼び出し状況を確認</li>
+</ul>
+
+
+<!-- more -->
+
+
+<p>例えば、Railsアプリで、PostsController#indexでDBからPostをランダムに10件取得する処理があるとします。
+ちなみに、<code>posts</code>テーブルには10万件のレコードがあります。</p>
+
+<pre><code class="rb">class PostsController &lt; ApplicationController
+  def index
+    @posts = Post.all.sample(10)
+  end
+end
+</code></pre>
+
+<h1>計測用モジュールを作成する</h1>
+
+<p>Ruby2.2には<code>prepend</code>という計測時に便利なメソッドが追加されました。</p>
+
+<p><code>#{app.root}/lib</code>に、<code>app_performance.rb</code>という計測用のモジュールを追加してみます。</p>
+
+<pre><code class="rb">module AppPerformance
+  def index
+    p '始まるよ'
+    super
+    p '終わるよ'
+  end
+end
+</code></pre>
+
+<p>ついでに、<code>autoload_paths</code>に<code>#{Rails.root}/lib</code>を追加するのを忘れないでください。
+そして、<code>PostsController</code>側でこの<code>AppPerfonce</code>モジュールを<code>prepend</code>してみます。</p>
+
+<pre><code class="rb">class PostsController &lt; ApplicationController
+  prepend AppPerformance
+
+  def index
+    @posts = Post.all.sample(10)
+  end
+end
+</code></pre>
+
+<p>これでindexページにアクセスしてみましょう。ログがSQLの前後に表示されていることが確認できますね。</p>
+
+<pre><code>Started GET "/posts" for 127.0.0.1 at 2015-11-22 14:30:54 +0900
+Processing by PostsController#index as HTML
+"始まるよ"
+  Post Load (773.0ms)  SELECT "posts".* FROM "posts"  ORDER BY "posts"."published_at" DESC
+"終わるよ"
+  Rendered posts/index.html.erb within layouts/application (3.0ms)
+Completed 200 OK in 1943ms (Views: 45.3ms | ActiveRecord: 773.5ms)
+</code></pre>
+
+<p>準備が整ったので<code>index</code>の処理時間を確認してみましょう。</p>
+
+<h1>処理時間を計測する</h1>
+
+<p><a href="http://docs.ruby-lang.org/ja/2.2.0/library/benchmark.html">benchmark</a>ライブラリを使用してみます。</p>
+
+<pre><code class="rb">module AppPerformance
+  def index
+    result = Benchmark.measure do
+      super
+    end
+    File.open('tmp/benchmark_before.txt', 'w') {|f| f.write(result) }
+  end
+end
+</code></pre>
+
+<p>実行結果を確認してみます。</p>
+
+<pre><code>$ cat tmp/benchmark_before.txt
+1.710000   0.110000   1.820000 (  2.208176) )
+</code></pre>
+
+<p>カッコ内が呼び出しから実行までにかかった時間です。
+<code>2.20</code>はだいぶかかっていますねー。</p>
+
+<h1>関数の呼び出し状況を計測する</h1>
+
+<p>次に、<a href="https://github.com/tmm1/stackprof">stackprof</a>を利用して関数の呼び出し状況を確認してみましょう。</p>
+
+<p><code>stackprof</code>をインストールします。</p>
+
+<pre><code class="sh">echo "gem 'stackprof' &gt;&gt; Gemfile"
+bundle install
+</code></pre>
+
+<p>次に<code>app_performance.rb</code>を修正します。
+<code>rb
+module AppPerformance
+  def index
+    result = Benchmark.measure do
+      StackProf.run(mode: :cpu, raw: true, out: "tmp/stackprof-cpu_before.dump") do
+        super
+      end
+    end
+    File.open('tmp/benchmark_before.txt', 'w') {|f| f.write(result) }
+  end
+end
+</code></p>
+
+<p><code>stackprof</code>コマンドで実行結果を確認します。</p>
+
+<pre><code class="sh">$ bundle exec stackprof --text tmp/stackprof-cpu_before.dump --limit 5
+==================================
+  Mode: cpu(1000)
+  Samples: 1236 (0.00% miss rate)
+  GC: 440 (35.60%)
+==================================
+     TOTAL    (pct)     SAMPLES    (pct)     FRAME
+       319  (25.8%)         319  (25.8%)     block in SQLite3::Statement#each
+       151  (12.2%)         151  (12.2%)     block in ActiveRecord::Result#hash_rows
+       325  (26.3%)          85   (6.9%)     block in ActiveRecord::Result#each
+        67   (5.4%)          67   (5.4%)     ActiveRecord::Core#init_internals
+        62   (5.0%)          31   (2.5%)     ActiveRecord::ModelSchema::ClassMethods#inheritance_column==================================
+</code></pre>
+
+<p>使用率の高い上位5つのメソッドを表示しました。当然ですが、ARやDB周りのメソッド呼び出しが多いですね。</p>
+
+<h1>改善</h1>
+
+<p><code>sample</code>の利用をやめて、DBで事前にソートするようにしました。
+DB依存のコードになってしまいますが、余計な処理を省くためにsqlite3の<code>RANDOM()</code>関数を使用します。</p>
+
+<pre><code class="rb">class PostsController &lt; ApplicationController
+  prepend AppPerformance
+
+  def index
+    @posts = Post.order('RANDOM()').take(10)
+  end
+end
+</code></pre>
+
+<p>結果はこちら。</p>
+
+<pre><code>$ cat tmp/benchmark_after.txt
+  0.090000   0.060000   0.150000 (  0.252615)
+
+$ bundle exec stackprof --text tmp/stackprof-cpu_after.dump --limit 5
+==================================
+  Mode: cpu(1000)
+  Samples: 18 (86.47% miss rate)
+  GC: 0 (0.00%)
+==================================
+     TOTAL    (pct)     SAMPLES    (pct)     FRAME
+         3  (16.7%)           3  (16.7%)     ActiveRecord::Core::ClassMethods#arel_table
+         2  (11.1%)           2  (11.1%)     ActiveRecord::Base.logger
+         2  (11.1%)           2  (11.1%)     block in SQLite3::Statement#each
+         1   (5.6%)           1   (5.6%)     Arel::Collectors::PlainString#&lt;&lt;
+         1   (5.6%)           1   (5.6%)     block in SQLite3::Statement#get_metadata
+</code></pre>
+
+<p>ちなみに<code>take</code>ではなく<code>limit</code>を利用すると、計測数値はさらに向上します。(<code>render</code>処理での実行時間は遅くなりますが)</p>
+
+<p>だいぶ極端な例になりましたが、<code>benchmark</code>や<code>stackprof</code>を利用することで、改善のポイントや勘所が絞り込みやすくなります。
+今回試してみて思ったのはテストしやすいコードは計測しもしやすいコードになりやすそう。
+また、<code>prepend</code>メソッドは必要以上の変更をせずにメソッドをフックしたいケースで非常に使いやすいです。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rubyとrailsのdelegate]]></title>
@@ -449,94 +622,6 @@ gemspec :name =&gt; 'dotenv-rails'
 <h1>終わりに</h1>
 
 <p>英語が堪能は方は<a href="http://blog.mah-lab.com/2014/08/15/dotenv/">こちら</a>が参考になるかも。全然内容が頭の中に入ってこなかったのでもっとリスニング練習しよう。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MetaNight 第5回を開催しました]]></title>
-    <link href="http://ta1kt0me.github.io/blog/2015/02/12/e-g-d-meta-night-5th/"/>
-    <updated>2015-02-12T13:46:20+09:00</updated>
-    <id>http://ta1kt0me.github.io/blog/2015/02/12/e-g-d-meta-night-5th</id>
-    <content type="html"><![CDATA[<p>イベント概要については、<a href="/blog/2014/11/02/about-meta-night/">About MetaNight</a>をご覧ください。</p>
-
-<p><a href="http://e-g-d.doorkeeper.jp/">MetaNight</a>という<a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&amp;camp=247&amp;creative=7399&amp;creativeASIN=B00N9I0RMQ&amp;linkCode=as2&amp;tag=pochan0919-22">Metaprogramming Ruby 2</a>の読書会の第５回目を開催しました。</p>
-
-<p><a href="http://www.amazon.co.jp/gp/product/B00N9I0RMQ/ref=as_li_ss_il?ie=UTF8&camp=247&creative=7399&creativeASIN=B00N9I0RMQ&linkCode=as2&tag=pochan0919-22"><img border="0" src="http://ws-fe.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B00N9I0RMQ&Format=_SL250_&ID=AsinImage&MarketPlace=JP&ServiceVersion=20070822&WS=1&tag=pochan0919-22" ></a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=B00N9I0RMQ" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
-
-<!-- more -->
-
-
-<h1>活動内容</h1>
-
-<p>フリーマンカフェで実施しました。<br/>
-Part 1 Chapter2 の The Truth About Classesから Constantの前までやりました。<br/>
-読みながらの意見とかはこちらに載せてあります。<br/>
-<a href="https://trello.com/b/6JT4fy3D/metanight-5th">https://trello.com/b/6JT4fy3D/metanight-5th</a></p>
-
-<h1>感想</h1>
-
-<p>前回よりもかなり間が空いてしまった&hellip;(結局1月にできなかった&hellip;)<br/>
-Billの図のおかげで、Rubyにおけるクラスとオブジェクトの関係性がよりはっきりわかってきました。<br/>
-Billできるやつ。</p>
-
-<h2>Classes themselves are nothing but objects</h2>
-
-<p><strong>Putting It All Together</strong> で表しているのですが、クラスはオブジェクトなんだよ、っていうことを語っています。そこが他の言語とは違うんだと。<br/>
-Classはobject_id持ってますし、変数に代入することもできます。実際にはClassへの参照を表現している定数(Class名)を変数に代入しています。ここは、次回のConstantのところに繋がってきますね。</p>
-
-<p>ClassとModuleの関係の話も出てきました。２つは非常によく似ているけれど、使い分け方の基準として</p>
-
-<ul>
-<li>インスタンス化と継承を使いたいならClass</li>
-<li>どこでもincludeできるのがModule</li>
-</ul>
-
-
-<p>と書いてありました。インスタンス化する必要があるかどうかが、おおきな分かれ目になるのかな。</p>
-
-<h2>英語</h2>
-
-<ul>
-<li>Take a deep breath</li>
-</ul>
-
-
-<p>文頭でよく見かける、一息ついて、という表現。takeの使い所ってよく分からないよね、って話が出ました。取るってニュアンスはわかるけれど、固定表現が多いのかな？</p>
-
-<ul>
-<li>get away with</li>
-</ul>
-
-
-<p>やりすごす、とか、すますことができる、とか&hellip;?</p>
-
-<ul>
-<li>Chances are</li>
-</ul>
-
-
-<p>多分、だろう、といった表現。なんでmaybeじゃないんだろう、特殊な意味が含まれてるのかな？<br/>
-微妙なニュアンスの違いがけっこう難しいです。</p>
-
-<ul>
-<li>A variable can reference a class</li>
-</ul>
-
-
-<p>referenceって形容詞だから文法的に変じゃない？って話が挙がりました。結果として、動詞としても使えるようなので、少しずつだけど、言葉が変化している面白い例なんだなと感じました。</p>
-
-<h2>その他</h2>
-
-<ul>
-<li>meta_ruby = MetaRuby.newのとき、MetaRuby.instance_methods == meta_ruby.methods</li>
-<li>allocate メソッド、rails(ActiveRecord)だと再定義されてる</li>
-<li>Class.superclassはModule、Module.classはClass、Class.super&hellip;.というループ</li>
-</ul>
-
-
-<p>今回は初参加の方が多くて新鮮でした。人数増やしたりオンライン検討したりしたほうがいいのかなぁと思ったり。</p>
-
-<p>第6回は2月末か、3月頭にやる。</p>
 ]]></content>
   </entry>
   
