@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | JanGaJan.com]]></title>
   <link href="http://ta1kt0me.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://ta1kt0me.github.io/"/>
-  <updated>2015-11-22T18:54:16+09:00</updated>
+  <updated>2015-12-11T22:42:34+09:00</updated>
   <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -14,11 +14,11 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Rubyのパフォーマンス改善]]></title>
+    <title type="html"><![CDATA[Rubyでのパフォーマンス改善]]></title>
     <link href="http://ta1kt0me.github.io/blog/2015/11/22/profile-ruby/"/>
     <updated>2015-11-22T13:29:37+09:00</updated>
     <id>http://ta1kt0me.github.io/blog/2015/11/22/profile-ruby</id>
-    <content type="html"><![CDATA[<p>Rubyのパフォーマンス改善に挑戦してみます。
+    <content type="html"><![CDATA[<p>Rubyでのパフォーマンス改善に挑戦してみます。
 やることとしては以下に絞って確認してみます。</p>
 
 <ul>
