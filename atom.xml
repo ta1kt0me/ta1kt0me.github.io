@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://ta1kt0me.github.io/atom.xml" rel="self"/>
   <link href="http://ta1kt0me.github.io/"/>
-  <updated>2016-02-17T01:24:37+09:00</updated>
+  <updated>2016-03-18T00:21:59+09:00</updated>
   <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,206 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rubyで素数計算]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2016/03/18/prime-number/"/>
+    <updated>2016-03-18T00:01:44+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2016/03/18/prime-number</id>
+    <content type="html"><![CDATA[<p>AOJの0009で素数の数を計算する問題。パフォーマンスがうまく解決できなかった。</p>
+
+<p><a href="http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=0009">http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=0009</a></p>
+
+<!-- more -->
+
+
+<ul>
+<li>2以外の偶数は探索対象としない</li>
+<li>最大値の平方根より大きい値は探索対象としない</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">max</span> <span class="o">=</span> <span class="mi">199_999</span>
+</span><span class='line'><span class="n">res</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="o">.</span><span class="n">.max</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span><span class="o">.</span><span class="n">delete_if</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:even?</span><span class="p">)</span><span class="o">.</span><span class="n">each_with_object</span><span class="p">(</span><span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">e</span><span class="p">,</span> <span class="n">a</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">limit</span> <span class="o">=</span> <span class="no">Math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">round</span>
+</span><span class='line'>  <span class="n">lst</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">take_while</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">limit</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">a</span><span class="o">.</span><span class="n">push</span> <span class="n">e</span> <span class="k">unless</span> <span class="n">lst</span><span class="o">.</span><span class="n">any?</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">e</span> <span class="o">%</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">res</span><span class="o">.</span><span class="n">count</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>結果はあってるけど、タイムアウトした&hellip;</p>
+
+<p><a href="https://www.wikiwand.com/ja/%E3%82%A8%E3%83%A9%E3%83%88%E3%82%B9%E3%83%86%E3%83%8D%E3%82%B9%E3%81%AE%E7%AF%A9">エラトステネスの篩</a>をやってみた。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">max</span> <span class="o">=</span> <span class="mi">199_999</span>
+</span><span class='line'><span class="n">lst</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="n">.max</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span>
+</span><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'><span class="n">sqrt</span> <span class="o">=</span> <span class="no">Math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">max</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="kp">loop</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">elem</span> <span class="o">=</span> <span class="n">lst</span><span class="o">.</span><span class="n">shift</span>
+</span><span class='line'>  <span class="n">result</span> <span class="o">&lt;&lt;</span> <span class="n">elem</span>
+</span><span class='line'>  <span class="k">break</span> <span class="k">if</span> <span class="n">elem</span> <span class="o">&gt;=</span> <span class="n">sqrt</span>
+</span><span class='line'>  <span class="n">lst</span><span class="o">.</span><span class="n">delete_if</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span> <span class="o">%</span> <span class="n">elem</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">puts</span> <span class="p">(</span><span class="n">result</span> <span class="o">+</span> <span class="n">lst</span><span class="p">)</span><span class="o">.</span><span class="n">count</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これでもタイムアウト&hellip;</p>
+
+<p><a href="http://docs.ruby-lang.org/ja/2.3.0/library/prime.html">Prime</a>という素数を扱うライブラリがあったので使ってみる。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;prime&#39;</span>
+</span><span class='line'><span class="n">max</span> <span class="o">=</span> <span class="mi">199_999</span>
+</span><span class='line'><span class="no">Prime</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="n">max</span><span class="p">)</span><span class="o">.</span><span class="n">count</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>せっかくなのでbenchmark-ipsで計測。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">require</span> <span class="s1">&#39;benchmark/ips&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Benchmark</span><span class="o">.</span><span class="n">ips</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">calc</span>
+</span><span class='line'>    <span class="n">max</span> <span class="o">=</span> <span class="mi">199_999</span>
+</span><span class='line'>    <span class="n">res</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="o">.</span><span class="n">.max</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span><span class="o">.</span><span class="n">delete_if</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:even?</span><span class="p">)</span><span class="o">.</span><span class="n">each_with_object</span><span class="p">(</span><span class="o">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">e</span><span class="p">,</span> <span class="n">a</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">limit</span> <span class="o">=</span> <span class="no">Math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">round</span>
+</span><span class='line'>      <span class="n">lst</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">take_while</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">limit</span> <span class="p">}</span>
+</span><span class='line'>      <span class="n">a</span><span class="o">.</span><span class="n">push</span> <span class="n">e</span> <span class="k">unless</span> <span class="n">lst</span><span class="o">.</span><span class="n">any?</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">e</span> <span class="o">%</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="n">res</span><span class="o">.</span><span class="n">count</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">eratostenes</span>
+</span><span class='line'>    <span class="n">max</span> <span class="o">=</span> <span class="mi">199_999</span>
+</span><span class='line'>    <span class="n">lst</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">.</span><span class="n">.max</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span>
+</span><span class='line'>    <span class="n">result</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>    <span class="n">sqrt</span> <span class="o">=</span> <span class="no">Math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">max</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kp">loop</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">elem</span> <span class="o">=</span> <span class="n">lst</span><span class="o">.</span><span class="n">shift</span>
+</span><span class='line'>      <span class="n">result</span> <span class="o">&lt;&lt;</span> <span class="n">elem</span>
+</span><span class='line'>      <span class="k">break</span> <span class="k">if</span> <span class="n">elem</span> <span class="o">&gt;=</span> <span class="n">sqrt</span>
+</span><span class='line'>      <span class="n">lst</span><span class="o">.</span><span class="n">delete_if</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span> <span class="o">%</span> <span class="n">elem</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">(</span><span class="n">result</span> <span class="o">+</span> <span class="n">lst</span><span class="p">)</span><span class="o">.</span><span class="n">count</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">prime</span>
+</span><span class='line'>    <span class="nb">require</span> <span class="s1">&#39;prime&#39;</span>
+</span><span class='line'>    <span class="n">max</span> <span class="o">=</span> <span class="mi">199_999</span>
+</span><span class='line'>    <span class="no">Prime</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="n">max</span><span class="p">)</span><span class="o">.</span><span class="n">count</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">x</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="ss">time</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="ss">warmup</span><span class="p">:</span> <span class="mi">2</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s1">&#39;calc&#39;</span><span class="p">)</span> <span class="p">{</span> <span class="n">calc</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s1">&#39;eratostenes&#39;</span><span class="p">)</span> <span class="p">{</span> <span class="n">eratostenes</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="s1">&#39;prime&#39;</span><span class="p">)</span> <span class="p">{</span> <span class="n">prime</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">x</span><span class="o">.</span><span class="n">compare!</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Warming</span> <span class="n">up</span> <span class="o">--------------------------------------</span>
+</span><span class='line'>                <span class="n">calc</span>     <span class="mi">1</span><span class="o">.</span><span class="mo">000</span>  <span class="n">i</span><span class="o">/</span><span class="mi">100</span><span class="n">ms</span>
+</span><span class='line'>         <span class="n">eratostenes</span>     <span class="mi">1</span><span class="o">.</span><span class="mo">000</span>  <span class="n">i</span><span class="o">/</span><span class="mi">100</span><span class="n">ms</span>
+</span><span class='line'>               <span class="n">prime</span>    <span class="mi">21</span><span class="o">.</span><span class="mo">000</span>  <span class="n">i</span><span class="o">/</span><span class="mi">100</span><span class="n">ms</span>
+</span><span class='line'><span class="no">Calculating</span> <span class="o">-------------------------------------</span>
+</span><span class='line'>                <span class="n">calc</span>      <span class="mi">0</span><span class="o">.</span><span class="mi">596</span>  <span class="p">(</span><span class="err">±</span> <span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="sx">%) i/s -      6.000</span>
+</span><span class='line'><span class="sx">         eratostenes      4.838  (±20.7%)</span> <span class="n">i</span><span class="o">/</span><span class="n">s</span> <span class="o">-</span>     <span class="mi">46</span><span class="o">.</span><span class="mo">000</span>
+</span><span class='line'>               <span class="n">prime</span>    <span class="mi">195</span><span class="o">.</span><span class="mi">376</span>  <span class="p">(</span><span class="err">±</span><span class="mi">21</span><span class="o">.</span><span class="mi">5</span><span class="o">%</span><span class="p">)</span> <span class="n">i</span><span class="o">/</span><span class="n">s</span> <span class="o">-</span>      <span class="mi">1</span><span class="o">.</span><span class="mi">848</span><span class="n">k</span>
+</span><span class='line'>
+</span><span class='line'><span class="ss">Comparison</span><span class="p">:</span>
+</span><span class='line'>               <span class="ss">prime</span><span class="p">:</span>      <span class="mi">195</span><span class="o">.</span><span class="mi">4</span> <span class="n">i</span><span class="o">/</span><span class="n">s</span>
+</span><span class='line'>         <span class="ss">eratostenes</span><span class="p">:</span>        <span class="mi">4</span><span class="o">.</span><span class="mi">8</span> <span class="n">i</span><span class="o">/</span><span class="n">s</span> <span class="o">-</span> <span class="mi">40</span><span class="o">.</span><span class="mi">39</span><span class="n">x</span> <span class="n">slower</span>
+</span><span class='line'>                <span class="ss">calc</span><span class="p">:</span>        <span class="mi">0</span><span class="o">.</span><span class="mi">6</span> <span class="n">i</span><span class="o">/</span><span class="n">s</span> <span class="o">-</span> <span class="mi">327</span><span class="o">.</span><span class="mi">62</span><span class="n">x</span> <span class="n">slower</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Prime早い&hellip;エラトステネスの篩も最初のやり方に比べたらかなり早いですね。Primeどうやっているんだろう。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rubyでのパフォーマンス改善]]></title>
@@ -2090,255 +2290,6 @@ Rubyでのプログラミングは楽しい。ただ単にプログラミング�
 よちよち.rbのいいところの一つに、良いと思ったものをすぐに取り入れて試してみるという文化があります。（すごく好きなところです） <br/>
 実はこれ、YAPC::Asia 2014の@onishiさんのトークで衝撃を受けて、Kajaeruの振り返りのKTPで提案しました。これが実現したことが個人的にはすごく嬉しかったです。色々と準備してくださった@yucao24hoursさん本当に本当にありがとうございました。<br/>
 明日は、この時一緒に開発した@highwideさんによる「よちよち合宿でやったこととか？」です(タイトル変わるのかな？)。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rspec3のexpectとallowの違い]]></title>
-    <link href="http://ta1kt0me.github.io/blog/2014/12/08/expect-and-allow-in-rspec/"/>
-    <updated>2014-12-08T00:00:35+09:00</updated>
-    <id>http://ta1kt0me.github.io/blog/2014/12/08/expect-and-allow-in-rspec</id>
-    <content type="html"><![CDATA[<p><a href="http://www.adventar.org/calendars/582">よちよち.rb Advent Calendar 2014</a> 8日目の記事です。 <br/>
-昨日は、bonbon0605さんの<a href="http://genius.hateblo.jp/entry/2014/12/07/093454">2014年に読んだり積んだりした本とその思い出を振り返ります</a>、でした。<br/>
-Ruby初学者がワンステップレベルアップする時に参考となる良書を紹介していただきました！</p>
-
-<p>さて、今日はRspecのとあるメソッドから学んだ、mockとstubの違いについて書きます。  mockとstubの違いは、少し前に参加したよちよち.rbで疑問のまま終わってしまっていました。</p>
-
-<!-- more -->
-
-
-<p>最近になってRubyとRailsの仕事に関わっているのですが、Rspecに苦戦しています。   <br/>
-Rspecを使っている時に、次の２つのメソッドに出会いました。</p>
-
-<ul>
-<li>allow(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;)  <a href="https://relishapp.com/rspec/rspec-mocks/v/3-1/docs/basics/allowing-messages">参考</a></li>
-<li>expect(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;) <a href="https://relishapp.com/rspec/rspec-mocks/v/3-1/docs/basics/expecting-messages">参考</a></li>
-</ul>
-
-
-<p>この使い分けを知る過程でstubとmockの違いが自分の中でイメージできてきました。</p>
-
-<p>まずは、上記２つのメソッドの使い方を非常に単純な例に落とし込んでみます。</p>
-
-<p>上記はメソッドはどちらも、<code>object.hoge</code>ってメソッドを呼び出すと、戻り値が<code>fuga</code>となります。<br/>
-さて、どう違うのか、試してみます。</p>
-
-<h1>事前準備</h1>
-
-<p>問題を単純化します。(逆にわかりづらいかもしれないし、ソースコード減らしたかったのであまりいい書き方ではありません)<br/>
-<code>true</code>と<code>false</code>を返すだけのprivateメソッドとそのラッパーメソッドを用意します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="k">class</span> <span class="nc">MockAndStub</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">always_true</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">truthy</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">always_false</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">falsey</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kp">private</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">truthy</span>
-</span><span class='line'>    <span class="kp">true</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">falsey</span>
-</span><span class='line'>    <span class="kp">false</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>それと、テストクラスです。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="n">describe</span> <span class="no">MockAndStub</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:obj</span><span class="p">)</span> <span class="p">{</span> <span class="no">MockAndStub</span><span class="o">.</span><span class="n">new</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1"># publicメソッドの戻り値が正しいことを確認</span>
-</span><span class='line'>  <span class="n">context</span> <span class="s1">&#39;do not use stub and mock&#39;</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">it</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">always_true</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be_truthy</span> <span class="p">}</span>
-</span><span class='line'>    <span class="n">it</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">always_false</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be_falsey</span> <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>準備ができました。まずは<code>allow</code>から見ていきましょう。</p>
-
-<h1>allow(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;)</h1>
-
-<p><code>allow</code>はstubとして働きます。<br/>
-<code>allow</code>を使うと、上述の説明どおり、<code>object.hoge</code>というメソッドを呼び出すと、<code>fuga</code>が返ってきます。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'>  <span class="n">context</span> <span class="s1">&#39;use stub&#39;</span> <span class="k">do</span>
-</span><span class='line'>    <span class="c1"># 1. fail</span>
-</span><span class='line'>    <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="p">{</span> <span class="n">allow</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:truthy</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="kp">false</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>    <span class="n">it</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">always_true</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be_truthy</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># 2. success</span>
-</span><span class='line'>    <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="p">{</span> <span class="n">allow</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:falsey</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>    <span class="n">it</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">always_false</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be_truthy</span> <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">context</span> <span class="s1">&#39;use stub, but not use&#39;</span> <span class="k">do</span>
-</span><span class='line'>    <span class="c1"># 3. success</span>
-</span><span class='line'>    <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="p">{</span> <span class="n">allow</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:falsey</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>    <span class="n">it</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">always_true</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be_truthy</span> <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>1. fail</h2>
-
-<p>１のパターンのテストはfailします。<br/>
-<code>allow(obj).to receive(:truthy).and_return(false)</code>とすると、<code>obj</code>が<code>:truthy</code>というメソッドコールを受け取ったら、必ず<code>false</code>が返ってきます。<br/>
-<code>always_true</code>は内部で<code>:truthy</code>を呼び出しているので、戻り値は<code>false</code>となります。<br/>
-よって、<code>obj.always_true</code>は<code>false</code>なので、failします。</p>
-
-<h2>2. success</h2>
-
-<p>今度はsuccessです。<code>:falsey</code>は<code>true</code>を返すと設定しているので、<code>obj.always_false</code>は<code>true</code>となります。</p>
-
-<h2>3. success</h2>
-
-<p>次はテストに関係無いメソッドをstub化した場合です。これも、関係ないのでsuccessになります。</p>
-
-<p>上記のように、<code>A: allow</code>はメソッドコールがあった時に指定した値を利用してテストすることができます。</p>
-
-<h1>expect(object).to receive(:hoge).and_return(&lsquo;fuga&rsquo;)</h1>
-
-<p>続いて<code>expect</code>で、こちらはmockです。<br/>
-<code>allow</code>と<code>expect</code>の違いは、メソッドコールの検証の有無です。<code>expect</code>では<code>receive</code>で指定したメソッドが呼び出されていない場合、failします。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span><span class='line'>  <span class="n">context</span> <span class="s1">&#39;use mock&#39;</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;use mock, and not use&#39;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="c1"># 4. fail</span>
-</span><span class='line'>      <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:falsey</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>      <span class="n">it</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">always_true</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be_truthy</span> <span class="p">}</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">context</span> <span class="s1">&#39;use mock, and use&#39;</span> <span class="k">do</span>
-</span><span class='line'>      <span class="c1"># 5. success</span>
-</span><span class='line'>      <span class="n">before</span><span class="p">(</span><span class="ss">:each</span><span class="p">)</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:falsey</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>      <span class="n">it</span> <span class="p">{</span> <span class="n">expect</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">always_false</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">be_truthy</span> <span class="p">}</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>4. fail</h2>
-
-<p><code>receive</code>で指定したメソッドを呼び出さない場合です。<br/>
-itのブロック自体は正しいため、beforeの<code>expect</code>を<code>allow</code>に変えるか、<code>before</code>自体を消すとsuccessになります。</p>
-
-<h2>5. success</h2>
-
-<p><code>receive</code>で指定したメソッドを呼び出しています。<br/>
-値を<code>true</code>に変更した上で、<code>true</code>になっていることを確認しているので、successとなります。</p>
-
-<h1>まとめ</h1>
-
-<p>allowのexpectの違いはメソッドコールの検査になります。これを踏まえた上で、下の記事を読むとなるほど！と思うことができました。</p>
-
-<ul>
-<li><a href="http://techracho.bpsinc.jp/hachi8833/2014_07_10/17971">http://techracho.bpsinc.jp/hachi8833/2014_07_10/17971</a></li>
-<li><a href="http://aligach.net/diary/20110109.html">http://aligach.net/diary/20110109.html</a></li>
-<li><a href="http://d.hatena.ne.jp/takihiro/20081023/1224762895">http://d.hatena.ne.jp/takihiro/20081023/1224762895</a></li>
-</ul>
-
-
-<p>つまり、stubとmockの違いは、インターフェースの検査(メソッドコールのチェック)をするかしないか、ということですね。</p>
-
-<p>ところで、2つの違いはわかったけれど、「どう使い分ければいいのか」が実はもっと大事です。<br/>
-ただ、これはテストに依存するため、確認すべきことは何か、を意識しながら切り分ける必要があります。<br/>
-<a href="http://d.hatena.ne.jp/devbankh/">Martin Fowlerの&#8221;Mocks Aren’t Stubs&#8221;の翻訳記事</a>があって、非常に長い上に全容を理解しきれていないのですが、</p>
-
-<blockquote><p>振る舞いの結びつきを意識しなければいけないか</p></blockquote>
-
-<p>という点が判断材料になるかと思います。<br/>
-あと、</p>
-
-<blockquote><p>モックオブジェクトはXPコミュニティから出てきたものだ。また、XPの主な特徴の一つは、テストドリブン開発を重要視していることだ。テストドリブン開発では、テストを書くことで推進される反復を通じてシステム設計も進んでいく。
-そういったわけで、モックオブジェクトの支持者達が相互作用テストの設計における効果についてことさら語るのも驚くことではない。このスタイルでは、主要なオブジェクトに対する最初のテストを書くから [それらのオブジェクトの] 振る舞いの開発を始めることになる。</p></blockquote>
-
-<p>とあるので、TDDするならmock使うでいいと思います。</p>
-
-<p>ひとまず、色々試してみて、気になることがあれば、また何か書くかもしれません。</p>
-
-<h1>最後に</h1>
-
-<p>そして、今日は<a href="http://yochiyochirb.doorkeeper.jp/events/18227">よちよち.rb 第48回 &ldquo;よちよちもくもく会&rdquo;</a>です(予定があって行けなくて残念)</p>
-
-<p>プログラミング未経験でも参加できる一番初心者に優しいRubyの勉強会、もといコミュニティです。<br/>
-後一枠余っているので、試しに参加して楽しんでみてください。<br/>
-当日キャンセルがちょこっと出たりすることが多いので、満席でもキャンセル待ちにしておくと、いいことがあるかもしれません。</p>
-
-<p>明日はまだ決まっていません&hellip;(紹介したかった&hellip;) # TODO:誰か現れたら更新するかも<br/>
-きっと今日参加する誰かが書いてくれるはずです。<br/>
-楽しみにお待ち下さい。</p>
 ]]></content>
   </entry>
   

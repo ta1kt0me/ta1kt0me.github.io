@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | JanGaJan.com]]></title>
   <link href="http://ta1kt0me.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://ta1kt0me.github.io/"/>
-  <updated>2016-02-17T01:24:37+09:00</updated>
+  <updated>2016-03-18T00:21:59+09:00</updated>
   <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,124 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rubyで素数計算]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2016/03/18/prime-number/"/>
+    <updated>2016-03-18T00:01:44+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2016/03/18/prime-number</id>
+    <content type="html"><![CDATA[<p>AOJの0009で素数の数を計算する問題。パフォーマンスがうまく解決できなかった。</p>
+
+<p><a href="http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=0009">http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=0009</a></p>
+
+<!-- more -->
+
+
+<ul>
+<li>2以外の偶数は探索対象としない</li>
+<li>最大値の平方根より大きい値は探索対象としない</li>
+</ul>
+
+
+<pre><code class="rb">max = 199_999
+res = (5..max).to_a.delete_if(&amp;:even?).each_with_object([2, 3]) do |e, a|
+  limit = Math.sqrt(e).round
+  lst = a.take_while { |i| i &lt; limit }
+  a.push e unless lst.any? { |i| e % i == 0 }
+end
+puts res.count
+</code></pre>
+
+<p>結果はあってるけど、タイムアウトした&hellip;</p>
+
+<p><a href="https://www.wikiwand.com/ja/%E3%82%A8%E3%83%A9%E3%83%88%E3%82%B9%E3%83%86%E3%83%8D%E3%82%B9%E3%81%AE%E7%AF%A9">エラトステネスの篩</a>をやってみた。</p>
+
+<pre><code class="rb">max = 199_999
+lst = (2..max).to_a
+result = []
+sqrt = Math.sqrt(max)
+
+loop do
+  elem = lst.shift
+  result &lt;&lt; elem
+  break if elem &gt;= sqrt
+  lst.delete_if { |i| i % elem == 0 }
+end
+
+puts (result + lst).count
+</code></pre>
+
+<p>これでもタイムアウト&hellip;</p>
+
+<p><a href="http://docs.ruby-lang.org/ja/2.3.0/library/prime.html">Prime</a>という素数を扱うライブラリがあったので使ってみる。
+<code>rb
+require 'prime'
+max = 199_999
+Prime.each(max).count
+</code></p>
+
+<p>せっかくなのでbenchmark-ipsで計測。</p>
+
+<pre><code class="rb">require 'benchmark/ips'
+
+Benchmark.ips do |x|
+  def calc
+    max = 199_999
+    res = (5..max).to_a.delete_if(&amp;:even?).each_with_object([2, 3]) do |e, a|
+      limit = Math.sqrt(e).round
+      lst = a.take_while { |i| i &lt; limit }
+      a.push e unless lst.any? { |i| e % i == 0 }
+    end
+    res.count
+  end
+
+  def eratostenes
+    max = 199_999
+    lst = (2..max).to_a
+    result = []
+    sqrt = Math.sqrt(max)
+
+    loop do
+      elem = lst.shift
+      result &lt;&lt; elem
+      break if elem &gt;= sqrt
+      lst.delete_if { |i| i % elem == 0 }
+    end
+
+    (result + lst).count
+  end
+
+  def prime
+    require 'prime'
+    max = 199_999
+    Prime.each(max).count
+  end
+
+  x.config(time: 10, warmup: 2)
+  x.report('calc') { calc }
+  x.report('eratostenes') { eratostenes }
+  x.report('prime') { prime }
+  x.compare!
+end
+
+Warming up --------------------------------------
+                calc     1.000  i/100ms
+         eratostenes     1.000  i/100ms
+               prime    21.000  i/100ms
+Calculating -------------------------------------
+                calc      0.596  (± 0.0%) i/s -      6.000
+         eratostenes      4.838  (±20.7%) i/s -     46.000
+               prime    195.376  (±21.5%) i/s -      1.848k
+
+Comparison:
+               prime:      195.4 i/s
+         eratostenes:        4.8 i/s - 40.39x slower
+                calc:        0.6 i/s - 327.62x slower
+</code></pre>
+
+<p>Prime早い&hellip;エラトステネスの篩も最初のやり方に比べたらかなり早いですね。Primeどうやっているんだろう。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rubyでのパフォーマンス改善]]></title>
@@ -535,93 +653,6 @@ end
 <li>子クラスごとに、カラムの型を変えることはできない</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Gem Reading - Dotenv]]></title>
-    <link href="http://ta1kt0me.github.io/blog/2015/02/16/gem-reading-dotenv/"/>
-    <updated>2015-02-16T17:27:40+09:00</updated>
-    <id>http://ta1kt0me.github.io/blog/2015/02/16/gem-reading-dotenv</id>
-    <content type="html"><![CDATA[<p><a href="https://github.com/bkeepers/dotenv">dotenv</a>というGemを知ったので覗いてみました。</p>
-
-<!-- more -->
-
-
-<h1>about dotevn</h1>
-
-<p>読む前にどんなものか簡単に確認。</p>
-
-<h2>これなに？</h2>
-
-<p>環境変数 ENV をファイル管理できるGemです。<a href="http://qiita.com/closer/items/f8d8ba00ae86d7051764">こちら</a>の記事が参考になりました。</p>
-
-<h2>どう使うの？</h2>
-
-<pre><code class="rb Gemfile"># 後でbundle install
-gem 'dotenv'
-</code></pre>
-
-<p>デフォルトでは<code>.env</code>というファイルの中に、
-<code>yml .env
-HOGE=1
-FUGA=2
-</code>
-と書いて、<code>.env</code>を読み込むための命令 <code>Dotenv.load</code> を実行すると、 <code>ENV['HOGE']</code> が <code>1</code> を返すようになります。環境変数をわざわざexportコマンドを使ったり、<code>.zshrc</code>といった設定ファイルに書かなくても使えるようになります。<br/>
-fixtureを見た感じ<code>=</code>じゃなくて、YAMLっぽく<code>:</code>も使えそう。</p>
-
-<h1>読んでみる</h1>
-
-<h2>2つのGem</h2>
-
-<p>このGemからは2つのGemを利用できます。</p>
-
-<pre><code class="ruby Gemfile">source 'https://rubygems.org'
-gemspec :name =&gt; 'dotenv'
-gemspec :name =&gt; 'dotenv-rails'
-</code></pre>
-
-<p>gemspecファイルも2つあった。<br/>
-<code>dotenv</code>というGemはこの機能のベース部分。<code>dotenv-rails</code>というGemは、Railsを利用するときに、<code>dotenv</code>を自動で有効にしてくれるラッパーです。それと、このGemにはCLIのスクリプトも包含しています。</p>
-
-<h2>dotenv.rb</h2>
-
-<p>ここが外部から呼び出すインターフェースのメソッド(load, load!, overload)を定義しています。<code>module Dotenv extend self</code>として、これらをmoduleの特異メソッドにしています。<br/>
-環境変数を定義するファイルをこのメソッドの引数として渡せばいいが、引数なしの場合は <code>.env</code> がデフォルト値となります。</p>
-
-<p>まだ分かっていないのですが、 <code>instrument</code> というメソッドは、 <code>Active Support Instrumentation</code> という機能を使っている。  この機能はRails限定。</p>
-
-<p><code>reduce</code>が使われているんだけど、<code>inject</code> とどう使い分けするのかなって疑問に思ったら<a href="http://magazine.rubyist.net/?0038-MapAndCollect#l4">こんな記事</a>がありました。smalltalkとlispの考え方の違いか〜&hellip;実際にはaliasだから使う人の好みが出そう。</p>
-
-<h2>environment.rb</h2>
-
-<p><code>Dotenv::Environment</code>は<code>Hash</code>の子クラス。<code>.env</code>内のkey,value情報を自身に格納して、<code>apply</code> or <code>apply!</code> を呼び出すことで<code>ENV</code>に設定している。<code>apply</code>メソッドの呼び出しは、<code>dotenv.rb</code>で行っている。<code>Dotenv::Environment</code>の<code>initialize</code>の一部として<code>.env</code>の読み込みとパースをやってる。</p>
-
-<h2>parse.rb</h2>
-
-<p>大事なのは<code>call</code>メソッド。ここで<code>.env</code>の内容がパースされる。正規表現弱いんでこのあたりは宿題&hellip;orz<br/>
-<code>@@substitutions</code>というクラス変数があるんだけどここには<code>Substitutions</code>のnamespaceにあるクラスの配列が入ってる。<code>.env</code>のvalueに設定できるものとして、</p>
-
-<ol>
-<li>コマンドの出力結果</li>
-<li>変数展開</li>
-</ol>
-
-
-<p>がある。
-1 は <code>Dotenv::Substitutions::Command</code>で処理し、2 は<code>Dotenv::Substitutions::Variable</code>で処理する。  あー、実際にはそうなるように値を設定しているのかな？</p>
-
-<p>Substitutions.constants のところでクラス名が定数だということがわかった。</p>
-
-<h2>rails.rb</h2>
-
-<p>デフォルトでは、<code>before_configuration</code>のときに、<code>.env</code>を読み込む。<code>dotenv</code>と違い、ファイル名は<code>.env.local</code>,<code>.env.#{Rails.env}</code>もデフォルトで読み込み対象となる。</p>
-
-<p>それと、上述の<code>Active Support Instrumentation</code>をspringによるファイル変更時のENV再設定に利用しているっぽい。この通知の仕組み？をもうちょっと掘り下げてみようかな。</p>
-
-<h1>終わりに</h1>
-
-<p>英語が堪能は方は<a href="http://blog.mah-lab.com/2014/08/15/dotenv/">こちら</a>が参考になるかも。全然内容が頭の中に入ってこなかったのでもっとリスニング練習しよう。</p>
 ]]></content>
   </entry>
   
