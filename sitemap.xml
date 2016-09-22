@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://ta1kt0me.github.io/blog/2016/09/22/keymap-sierra/</loc>
+    <lastmod>2016-09-22T09:10:42+09:00</lastmod>
+  </url>
+  <url>
     <loc>http://ta1kt0me.github.io/blog/2016/03/18/prime-number/</loc>
     <lastmod>2016-03-18T00:01:44+09:00</lastmod>
   </url>
@@ -347,22 +351,7 @@
     <loc>http://ta1kt0me.github.io/blog/categories/docker-ruby-on-rails-mysql/</loc>
   </url>
   <url>
-    <loc>http://ta1kt0me.github.io/posts/2/</loc>
-  </url>
-  <url>
-    <loc>http://ta1kt0me.github.io/posts/3/</loc>
-  </url>
-  <url>
-    <loc>http://ta1kt0me.github.io/posts/4/</loc>
-  </url>
-  <url>
-    <loc>http://ta1kt0me.github.io/posts/5/</loc>
-  </url>
-  <url>
-    <loc>http://ta1kt0me.github.io/posts/6/</loc>
-  </url>
-  <url>
-    <loc>http://ta1kt0me.github.io/posts/7/</loc>
+    <loc>http://ta1kt0me.github.io/blog/categories/macos-sierra-karabiner-elements/</loc>
   </url>
   <url>
     <loc>http://ta1kt0me.github.io/googlef6b4a31aeac11309.html</loc>

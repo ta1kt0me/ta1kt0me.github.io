@@ -8,8 +8,9 @@
   <title>JanGaJan.com</title>
   <meta name="author" content="talkto_me">
   
-  <meta name="description" content="HAMLのViewのヘルパーメソッドどう書くのかという話です。
-Module Haml::Helpersを使います。 ">
+  <meta name="description" content="ユーザーに紐づくタスクに、タグ付けをするという機能を実現する方法です。
+acts-as-taggable-onというgemを利用することで簡単(苦戦した&hellip;)にタグ機能は実現できるそうです。
+なんとかできたっぽい&hellip; 環境は、こんな感じです。 Rails 4.1.6 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,6 +109,53 @@ Module Haml::Helpersを使います。 ">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/10/04/acts-as-taggable-on-in-rails/">Rails4でacts-as-taggable-on Gemを使う</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-10-04T03:40:31+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>3:40 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>ユーザーに紐づくタスクに、タグ付けをするという機能を実現する方法です。<br/>
+<code>acts-as-taggable-on</code>というgemを利用することで簡単(苦戦した&hellip;)にタグ機能は実現できるそうです。<br/>
+なんとかできたっぽい&hellip;</p>
+
+<p>環境は、こんな感じです。</p>
+
+<ul>
+<li>Rails 4.1.6</li>
+<li>ruby 2.1.2p95</li>
+<li>acts-as-taggable-on 3.4.2</li>
+</ul>
+
+
+<p>Githubの<a href="https://github.com/mbleigh/acts-as-taggable-on#tag-ownership">README</a>を参考にしました</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/10/04/acts-as-taggable-on-in-rails/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -482,41 +530,6 @@ datetime_selectで表示した<code>月</code>欄の表示が妙だ。</p>
   
     <footer>
       <a rel="full-article" href="/blog/2014/09/10/perfect-rails-6-bootstrap/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/09/09/sed-insert-text/">Sedで1行追加</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-09-09T22:41:12+09:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>10:41 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Macでコマンドラインから指定した行にテキストを1行追加する方法です。<br/>
-sedコマンドを使ってやってみたら、エラーが発生しました。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/09/09/sed-insert-text/">Read on &rarr;</a>
     </footer>
   
 
