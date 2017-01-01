@@ -5,13 +5,10 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>独自ドメイン設定 - JanGaJan.com</title>
+  <title>Refactoring-wetwear - JanGaJan.com</title>
   <meta name="author" content="talkto_me">
   
-  <meta name="description" content="独自ドメイン設定の道程 せっかくなので独自ドメインでも設定してみよう。
-そうすれば否が応でも書かずにはいられないはず。
-有料だもの。現金な人間です。 手順としてはこんな感じでした。 独自ドメイン取得(お名前.com)
-cloudflareで独自ドメインとherokuを紐付け &hellip;">
+  <meta name="description" content="よちよち.rbの忘年会の本交換会でゲットしたリファクタリング・ウェットウェアを読みました。 端的にいうと、お前ら直感に従え、という本でした。 雑なまとめ方してしまった。脳の構造を意識しつつ、習熟度を高める学習方法を色々試して自分なりにうまく行くやり方を探そうぜ、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +17,7 @@ cloudflareで独自ドメインとherokuを紐付け &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://ta1kt0me.github.io/blog/2014/05/08/get-original-domain/">
+  <link rel="canonical" href="http://ta1kt0me.github.io/blog/2016/12/31/refactoring-wetwear/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="JanGaJan.com" type="application/atom+xml">
@@ -114,7 +111,7 @@ cloudflareで独自ドメインとherokuを紐付け &hellip;">
   <header>
     
       
-        <h1 class="entry-title">独自ドメイン設定</h1>
+        <h1 class="entry-title">Refactoring-wetwear</h1>
       
     
     
@@ -124,77 +121,48 @@ cloudflareで独自ドメインとherokuを紐付け &hellip;">
 
 
 
-<time class='entry-date' datetime='2014-05-08'><span class='date'><span class='date-month'>May</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+<time class='entry-date' datetime='2016-12-31T19:18:27+09:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2016</span></span> <span class='time'>7:18 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h1>独自ドメイン設定の道程</h1>
+<div class="entry-content"><p>よちよち.rbの忘年会の本交換会でゲットした<a href="http://amzn.to/2ii5hUi">リファクタリング・ウェットウェア</a>を読みました。</p>
 
-<p>せっかくなので独自ドメインでも設定してみよう。<br/>
-そうすれば否が応でも書かずにはいられないはず。<br/>
-有料だもの。現金な人間です。</p>
-
-<p>手順としてはこんな感じでした。</p>
+<p>端的にいうと、お前ら直感に従え、という本でした。</p>
 
 <!-- more -->
 
 
-<ol>
-<li>独自ドメイン取得(お名前.com)</li>
-<li>cloudflareで独自ドメインとherokuを紐付け</li>
-<li>herokuに独自ドメイン設定</li>
-<li>おまけ:google analyticsの設定</li>
-</ol>
+<p>雑なまとめ方してしまった。脳の構造を意識しつつ、習熟度を高める学習方法を色々試して自分なりにうまく行くやり方を探そうぜ、なんならワークショップな雰囲気で楽しもうぜ、という本でした。</p>
+
+<p>信じれば上達が早くなるというほんとかよと思うところもありつつも、ドレイファスモデルに従った自分の周りにいる達人を思い浮かべて読んでみると素直に納得できる部分もあったので疑う心を忘れて読みふけっていました。</p>
+
+<p>人の脳の構造自体解明は道半ばなので、科学的に、というよりは達人たちの習慣を省みて人の特徴やコンテキスト（特にコンテキスト）を重視した学習方法の改善の仕方やフィードバックの得方を紹介しています。プログラマ向けというよりはもっと汎用的に使えそうな実践方法です。</p>
+
+<p>コンピュータと対比した時に、脳には2つのCPU(LモードとRモード)が1つの共有バスを通して物事を処理していて、達人ほどRモードを使いこなしているが、LモードからRモードへの切り替えは難しく慣らすためにはどうすればいいか、それぞれの得手不得手なことを理解した上で自分に合ったやり方を探してみようということで、達人プログラマーと同じくところどころ「実践しようぜ」と働きかける部分があるので楽しめました。ただ、習慣化することは難しい。</p>
+
+<p>創造性を獲得するために、意識すると良さそうだなと思ったことを箇条書きするとこんなところ。</p>
+
+<ul>
+<li>直感を信じて検証しろ、言葉で考えるな</li>
+<li>多感覚を利用して、空間で情報をとらえる</li>
+<li>無駄なことは覚えないで、エクソコーテクスを活用する</li>
+<li>人を動かすのは多くの場合コンテキストだ</li>
+<li>成功体験から学ぶ</li>
+<li>集中するためにコンテキストスイッチを避ける</li>
+</ul>
 
 
-<hr />
+<p>パターン化やマインドマップによる創造性の獲得の話は自分の中だと音楽の捉え方ですごくしっくりくる部分がありました。コンテキストが音や曲に直に反映させれるので自分の中でのパターン化の成功体験として身についていることを実感できました。絵のワークショップは集中できたものの全然クソみたいにひどくて書き終わった後笑ってしまった。</p>
 
-<h1>独自ドメイン取得</h1>
+<p>この本のおかげで、<a href="http://amzn.to/2hFiyWk">パターン、Wiki、XP ~時を超えた創造の原則</a>を読んでみたくなりました。</p>
 
-<p>お名前.comで独自ドメイン購入。<br/>
-最近は.tokyoやら.redやらあるんですね。<br/>
-.comにしました。<br/>
-あらかじめ候補探しておきましょう。<br/>
-大体は使われています。
-悩んでいると日が暮れます。</p>
-
-<hr />
-
-<h1>cloudflare独自ドメインとheroku連携</h1>
-
-<p>wwwつけると入力手間だな〜っていう理由でルートドメインはしたくない。<br/>
-たまたま<a href="http://blog.jnito.com/entry/2014/05/04/090537">こちらの記事</a>を見かけまして。<br/>
-cloudflareを利用することにしました。<br/>
-用途はブログを公開するだけだし、SSL利用するまでもなかったので無料プランで試してみました。<br/>
-使い切れてないですが、設定だけでもできたの良し。目的達成。<br/>
-設定完了後、whoisコマンドのName Serverの値がcloudflare用に変わります。<br/>
-反映されるのに待ちます。</p>
+<p><img src="../images/IMG_7231.JPG" alt="" />
+今年は直感を信じていきます。</p>
 
 <hr />
-
-<h1>herokuに独自ドメイン設定</h1>
-
-<p>herokuアプリのSettingsのDomainsに独自ドメインを追加。<br/>
-これしないと、herokuの404画面が出てくる。</p>
-
-<hr />
-
-<h1>google analyticsの設定</h1>
-
-<p>トラッキング情報のトラッキングコードを<em>google-analytics.htmlにコピペ。<br/>
-</em>config.ymlを以下の通り変更
-<code>yaml
-  analytics:
-+    google: false
-+    google: true</code></p>
-
-<p>夜明けに寝て夕暮れ時に目覚めても反映されてませんでした。<br/>
-気長に待ちましょう。</p>
-
-<p>どれも長い。</p>
 </div>
 
 
@@ -219,22 +187,16 @@ cloudflareを利用することにしました。<br/>
 
 
 
-<time class='entry-date' datetime='2014-05-08'><span class='date'><span class='date-month'>May</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+<time class='entry-date' datetime='2016-12-31T19:18:27+09:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2016</span></span> <span class='time'>7:18 pm</span></time>
       
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/blog/'>blog</a>
-  
-</span>
 
 
     </p>
     
       <div class="sharing">
-  <a href="http://b.hatena.ne.jp/entry/http://ta1kt0me.github.io/blog/2014/05/08/get-original-domain/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  <a href="http://b.hatena.ne.jp/entry/http://ta1kt0me.github.io/blog/2016/12/31/refactoring-wetwear/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ta1kt0me.github.io/blog/2014/05/08/get-original-domain/" data-via="talkto_me" data-counturl="http://ta1kt0me.github.io/blog/2014/05/08/get-original-domain/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ta1kt0me.github.io/blog/2016/12/31/refactoring-wetwear/" data-via="talkto_me" data-counturl="http://ta1kt0me.github.io/blog/2016/12/31/refactoring-wetwear/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -254,10 +216,8 @@ cloudflareを利用することにしました。<br/>
 </script>
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/04/20/setup-jekyll-blog/" title="Previous Post: jekyllでブログを作ってみた">&laquo; jekyllでブログを作ってみた</a>
+        <a class="basic-alignment left" href="/blog/2016/09/22/keymap-sierra/" title="Previous Post: macOS SierraでCap lockとcontrolのキーボードを入れ替える">&laquo; macOS SierraでCap lockとcontrolのキーボードを入れ替える</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/05/10/baseball-game-watching/" title="Next Post: 初野球観戦">初野球観戦 &raquo;</a>
       
     </p>
     <p>
@@ -301,8 +261,8 @@ cloudflareを利用することにしました。<br/>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://ta1kt0me.github.io/blog/2014/05/08/get-original-domain/';
-        var disqus_url = 'http://ta1kt0me.github.io/blog/2014/05/08/get-original-domain/';
+        var disqus_identifier = 'http://ta1kt0me.github.io/blog/2016/12/31/refactoring-wetwear/';
+        var disqus_url = 'http://ta1kt0me.github.io/blog/2016/12/31/refactoring-wetwear/';
         var disqus_script = 'embed.js';
       
     (function () {

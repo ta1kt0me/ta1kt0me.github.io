@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://ta1kt0me.github.io/atom.xml" rel="self"/>
   <link href="http://ta1kt0me.github.io/"/>
-  <updated>2016-09-22T09:27:30+09:00</updated>
+  <updated>2017-01-01T13:25:37+09:00</updated>
   <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Refactoring-wetwear]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2016/12/31/refactoring-wetwear/"/>
+    <updated>2016-12-31T19:18:27+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2016/12/31/refactoring-wetwear</id>
+    <content type="html"><![CDATA[<p>よちよち.rbの忘年会の本交換会でゲットした<a href="http://amzn.to/2ii5hUi">リファクタリング・ウェットウェア</a>を読みました。</p>
+
+<p>端的にいうと、お前ら直感に従え、という本でした。</p>
+
+<!-- more -->
+
+
+<p>雑なまとめ方してしまった。脳の構造を意識しつつ、習熟度を高める学習方法を色々試して自分なりにうまく行くやり方を探そうぜ、なんならワークショップな雰囲気で楽しもうぜ、という本でした。</p>
+
+<p>信じれば上達が早くなるというほんとかよと思うところもありつつも、ドレイファスモデルに従った自分の周りにいる達人を思い浮かべて読んでみると素直に納得できる部分もあったので疑う心を忘れて読みふけっていました。</p>
+
+<p>人の脳の構造自体解明は道半ばなので、科学的に、というよりは達人たちの習慣を省みて人の特徴やコンテキスト（特にコンテキスト）を重視した学習方法の改善の仕方やフィードバックの得方を紹介しています。プログラマ向けというよりはもっと汎用的に使えそうな実践方法です。</p>
+
+<p>コンピュータと対比した時に、脳には2つのCPU(LモードとRモード)が1つの共有バスを通して物事を処理していて、達人ほどRモードを使いこなしているが、LモードからRモードへの切り替えは難しく慣らすためにはどうすればいいか、それぞれの得手不得手なことを理解した上で自分に合ったやり方を探してみようということで、達人プログラマーと同じくところどころ「実践しようぜ」と働きかける部分があるので楽しめました。ただ、習慣化することは難しい。</p>
+
+<p>創造性を獲得するために、意識すると良さそうだなと思ったことを箇条書きするとこんなところ。</p>
+
+<ul>
+<li>直感を信じて検証しろ、言葉で考えるな</li>
+<li>多感覚を利用して、空間で情報をとらえる</li>
+<li>無駄なことは覚えないで、エクソコーテクスを活用する</li>
+<li>人を動かすのは多くの場合コンテキストだ</li>
+<li>成功体験から学ぶ</li>
+<li>集中するためにコンテキストスイッチを避ける</li>
+</ul>
+
+
+<p>パターン化やマインドマップによる創造性の獲得の話は自分の中だと音楽の捉え方ですごくしっくりくる部分がありました。コンテキストが音や曲に直に反映させれるので自分の中でのパターン化の成功体験として身についていることを実感できました。絵のワークショップは集中できたものの全然クソみたいにひどくて書き終わった後笑ってしまった。</p>
+
+<p>この本のおかげで、<a href="http://amzn.to/2hFiyWk">パターン、Wiki、XP ~時を超えた創造の原則</a>を読んでみたくなりました。</p>
+
+<p><img src="../images/IMG_7231.JPG" alt="" />
+今年は直感を信じていきます。</p>
+
+<hr />
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[macOS SierraでCap Lockとcontrolのキーボードを入れ替える]]></title>
@@ -2187,53 +2230,6 @@ GitHubには<a href="https://help.github.com/articles/github-flavored-markdown/"
 
 <p>興味があって参加を考えている方は次回以降のmeetups時に参考にしてください。<br/>
 明日はumekumiさんの「初めてLTをやった！」です。お楽しみに！</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[localhostのelasticsearchにcurlしたらConnection Refused]]></title>
-    <link href="http://ta1kt0me.github.io/blog/2014/12/16/fail-to-curl-to-elasticsearch/"/>
-    <updated>2014-12-16T19:13:11+09:00</updated>
-    <id>http://ta1kt0me.github.io/blog/2014/12/16/fail-to-curl-to-elasticsearch</id>
-    <content type="html"><![CDATA[<p>よっしゃ、試してみよう！と思って出鼻をくじかれた話し。</p>
-
-<p>elasticsearch使ってる方多いですよね！今関わっているPJでも使っているので、どんなものか試してみました。ところが起動確認で早速つまづく始末です。</p>
-
-<p>elasticsearchの起動確認するときに、curlを使ってみたらConnection refusedが発生しました。</p>
-
-<!-- more -->
-
-
-<h1>問題: curlしたらConnection refused</h1>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>elasticsearch -d
-</span><span class='line'><span class="nv">$ </span>curl -XPUT <span class="s1">&#39;http://localhost:9200/test/&#39;</span>
-</span><span class='line'>curl: <span class="o">(</span>7<span class="o">)</span> Failed to connect to localhost port 9200: Connection refused
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>!?</p>
-
-<p>解決策は<a href="http://stackoverflow.com/questions/22952676/curl-failed-to-connect-to-localhost-port-80">こちら</a>にありました。</p>
-
-<h1>原因: IPv6使ってる</h1>
-
-<p>hostsファイル内の<code>::1 localhost</code>が有効になっていると、curlがIPv6でアクセスしてしまうらしい。<br/>
-何気ないところ見落としてました&hellip;</p>
-
-<h1>解決: IPv4使うようにする</h1>
-
-<p><code>--ipv4</code>オプション使ってやる。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>curl --ipv4 -XPUT <span class="s1">&#39;http://localhost:9200/test/&#39;</span>
-</span><span class='line'><span class="o">{</span><span class="s2">&quot;acknowledged&quot;</span>:true<span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   
