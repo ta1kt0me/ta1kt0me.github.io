@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby-on-rails | JanGaJan.com]]></title>
   <link href="http://ta1kt0me.github.io/blog/categories/ruby-on-rails/atom.xml" rel="self"/>
   <link href="http://ta1kt0me.github.io/"/>
-  <updated>2017-01-01T14:07:26+09:00</updated>
+  <updated>2017-03-04T09:33:06+09:00</updated>
   <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -221,7 +221,7 @@ Guest        Host
   updated_at: Thu, 05 Mar 2015 19:43:24 UTC +00:00&gt;]
 </code></pre>
 
-<p><code>type</code> に、自分のクラス名がGuestだったら&#8217;Guest&#8217;と入ります。 <code>Guest</code> だけの属性を集めたい場合は <code>Guest.all</code> とすることで取得できます。</p>
+<p><code>type</code> に、自分のクラス名がGuestだったら'Guest'と入ります。 <code>Guest</code> だけの属性を集めたい場合は <code>Guest.all</code> とすることで取得できます。</p>
 
 <h1><code>type</code>以外のカラムにクラス情報を格納したい</h1>
 

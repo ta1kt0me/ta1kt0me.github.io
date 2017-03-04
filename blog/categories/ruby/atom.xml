@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | JanGaJan.com]]></title>
   <link href="http://ta1kt0me.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://ta1kt0me.github.io/"/>
-  <updated>2017-01-01T14:07:26+09:00</updated>
+  <updated>2017-03-04T09:33:06+09:00</updated>
   <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,63 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rails Generateで作ったrubyファイルにfrozen String Literalのコメントを追加する]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2017/03/04/add-comment-for-frozen-string-literal-in-rails-generate/"/>
+    <updated>2017-03-04T09:59:30+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2017/03/04/add-comment-for-frozen-string-literal-in-rails-generate</id>
+    <content type="html"><![CDATA[<p><code>rails generate</code> したファイルにいちいちfrozen string literalのコメント追加するのは面倒ですよね。<br/>
+ということでモンキーパッチ。</p>
+
+<!-- more -->
+
+
+<p>railsの5.1.0.beta1が公開されている時のmasterで試しました。
+initializerに入れておけば動く。</p>
+
+<p><a href="https://gist.github.com/ta1kt0me/6a7058d16621785d4f7038bde6cd3b98">Add frozen string literal comment into generated files in rails v5.1.0</a></p>
+
+<pre><code>module AddFrozenStringLiteralComment
+  def add_frozen_string_literal_comment(dist)
+    if File.exist?(dist) &amp;&amp; File.extname(dist) == '.rb'
+      File.open(dist, 'r') do |f|
+        body = f.read
+
+        File.open(dist, 'w') do |new_f|
+          new_f.write("# frozen_string_literal: true\n" + body)
+        end
+      end
+    end
+  end
+end
+
+module GeneratorPrepend
+  include AddFrozenStringLiteralComment
+
+  def invoke!
+    res = super
+    add_frozen_string_literal_comment(existing_migration)
+    res
+  end
+end
+
+module TemplatePrepend
+  include AddFrozenStringLiteralComment
+
+  def template(source, *args, &amp;block)
+    res = super
+    add_frozen_string_literal_comment(args.first)
+    res
+  end
+end
+
+Rails::Generators::Migration
+Rails::Generators::Actions::CreateMigration.send :prepend, GeneratorPrepend
+Rails::Generators::NamedBase.send :prepend, TemplatePrepend
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rubyで素数計算]]></title>
@@ -479,178 +536,6 @@ puts fuga.my_age
 <li>酒弱いので、飲むと記憶力が薄まる</li>
 <li>Rubyは面白い</li>
 <li>沖縄合宿行きたい</li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[STIを試す]]></title>
-    <link href="http://ta1kt0me.github.io/blog/2015/03/06/try-sti/"/>
-    <updated>2015-03-06T05:43:15+09:00</updated>
-    <id>http://ta1kt0me.github.io/blog/2015/03/06/try-sti</id>
-    <content type="html"><![CDATA[<h1>Single Table Inheritance(STI)とは</h1>
-
-<p>単一テーブル継承というデザインパターンです。テーブルベースの継承階層を表現しています。Ruby同様、継承元は一つのテーブルだけです。<br/>
-<a href="http://www.martinfowler.com/eaaCatalog/singleTableInheritance.html">こちら</a>に具体的なイメージがあります。<br/>
-早速RailsでSTIをどうやるのか調べてみます。</p>
-
-<!-- more -->
-
-
-<h1>環境</h1>
-
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">tool</th>
-<th style="text-align:right;">version</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">ruby</td>
-<td style="text-align:right;">2.2.0</td>
-</tr>
-<tr>
-<td style="text-align:left;">rails</td>
-<td style="text-align:right;">4.2.0</td>
-</tr>
-</tbody>
-</table>
-
-
-<h1>試す</h1>
-
-<p>まずは準備をします。</p>
-
-<pre><code class="sh">$ bundle exec rails new sti_type --no-test-framework --skip-bundle
-$ bundle exec rails g model user name:string age:integer type:string
-$ bundle exec rake db:migrate
-</code></pre>
-
-<p>RailsでのSTIではmodelの <code>type</code> というカラムが重要な役割を果たします。</p>
-
-<pre><code class="rb app/models/guest.rb">class Guest &lt; User; end
-</code></pre>
-
-<pre><code class="rb app/models/host.rb">class Host &lt; User; end
-</code></pre>
-
-<p>継承ツリーとしてはこんな感じになります。</p>
-
-<pre><code>ActiveRecord::Base
-        |
-       User
-   _____|_____
-  |           |
-Guest        Host
-</code></pre>
-
-<p>これで一通りの準備が整いました。 <code>rails console</code> で動作を確認してみます。</p>
-
-<pre><code class="rb">$ bundle exec rails c
-&gt; Guest.create(name: 'Mark', age: 18)
-&gt; Host.create(name: 'Yamada', age: 50)
-
-&gt; pp User.all
-[#&lt;Guest:0x007f84c1279a00
-  id: 1,
-  name: "Mark",
-  age: 18,
-  type: "Guest",
-  created_at: Thu, 05 Mar 2015 19:43:24 UTC +00:00,
-  updated_at: Thu, 05 Mar 2015 19:43:24 UTC +00:00&gt;,
- #&lt;Host:0x007f84c1279870
-  id: 2,
-  name: "Yamada",
-  age: 50,
-  type: "Host",
-  created_at: Thu, 05 Mar 2015 19:44:02 UTC +00:00,
-  updated_at: Thu, 05 Mar 2015 19:44:02 UTC +00:00&gt;]
-
-&gt; pp Guest.all
-[#&lt;Guest:0x007f84c2b54b10
-  id: 1,
-  name: "Mark",
-  age: 18,
-  type: "Guest",
-  created_at: Thu, 05 Mar 2015 19:43:24 UTC +00:00,
-  updated_at: Thu, 05 Mar 2015 19:43:24 UTC +00:00&gt;]
-</code></pre>
-
-<p><code>type</code> に、自分のクラス名がGuestだったら&#8217;Guest&#8217;と入ります。 <code>Guest</code> だけの属性を集めたい場合は <code>Guest.all</code> とすることで取得できます。</p>
-
-<h1><code>type</code>以外のカラムにクラス情報を格納したい</h1>
-
-<p>なにがしかの理由で <code>type</code> は使えない場合、 <code>self.inheritance_column</code> を使うことで、別のカラムをクラス名を格納するカラムに指定することができます。
-例えば、 <code>role</code> というカラムを使いたい場合です。</p>
-
-<h2>準備</h2>
-
-<p>汚いですが前のサンプルをそのまま使います。<br/>
-<code>role</code>というカラムを追加します。</p>
-
-<pre><code>$ bundle exec rails g migration AddRoleToUser
-</code></pre>
-
-<pre><code class="rb db/migrate/20150305201347_add_role_to_user.rb">class AddRoleToUser &lt; ActiveRecord::Migration
-  def change
-    add_column :users, :role, :string
-  end
-end
-</code></pre>
-
-<p>データを綺麗にしたいのでDB作り直します。
-<code>sh
-$ bundle exec rake db:setup
-$ bundle exec rake db:migrate
-</code></p>
-
-<p>大事なのはここだけです。 <code>self.inheritance_column</code> に <code>role</code> を指定します。</p>
-
-<pre><code class="rb app/models/user.rb">class User &lt; ActiveRecord::Base
-  self.inheritance_column = :role
-end
-</code></pre>
-
-<h2>確認</h2>
-
-<pre><code class="rb ">&gt; Guest.create(name: 'Bob', age: 1000)
-&gt; Host.create(name: 'Tanaka', age: 100)
-&gt; pp User.all
-[#&lt;Guest:0x007fe248c19c60
-  id: 3,
-  name: "Bob",
-  age: 1000,
-  type: nil,
-  created_at: Thu, 05 Mar 2015 20:23:55 UTC +00:00,
-  updated_at: Thu, 05 Mar 2015 20:23:55 UTC +00:00,
-  role: "Guest"&gt;,
- #&lt;Host:0x007fe248c19ad0
-  id: 4,
-  name: "Tanaka",
-  age: 100,
-  type: nil,
-  created_at: Thu, 05 Mar 2015 20:24:10 UTC +00:00,
-  updated_at: Thu, 05 Mar 2015 20:24:10 UTC +00:00,
-  role: "Host"&gt;]
-</code></pre>
-
-<p><code>type</code> ではなく、 <code>role</code> を使用していることが確認できました。</p>
-
-<h1>注意点</h1>
-
-<p>注意しなければいけなそうな点は、こんな感じでしょうか。</p>
-
-<ul>
-<li>子クラス(<code>Guest</code> や <code>Host</code>)ごとに特別のカラムが欲しい場合、 <code>users</code> に追加する必要があり、<code>nil</code>を許容しなければいけない
-
-<ul>
-<li><code>Guest</code> で使うが <code>Host</code> では使用しないケースがあるから</li>
-</ul>
-</li>
-<li>子クラスごとに、カラムの型を変えることはできない</li>
 </ul>
 
 ]]></content>

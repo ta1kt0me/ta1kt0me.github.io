@@ -4,7 +4,7 @@
   <title><![CDATA[JanGaJan.com]]></title>
   <link href="http://ta1kt0me.github.io/atom.xml" rel="self"/>
   <link href="http://ta1kt0me.github.io/"/>
-  <updated>2017-01-01T14:07:26+09:00</updated>
+  <updated>2017-03-04T09:33:06+09:00</updated>
   <id>http://ta1kt0me.github.io/</id>
   <author>
     <name><![CDATA[talkto_me]]></name>
@@ -12,6 +12,100 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rails Generateで作ったrubyファイルにfrozen String Literalのコメントを追加する]]></title>
+    <link href="http://ta1kt0me.github.io/blog/2017/03/04/add-comment-for-frozen-string-literal-in-rails-generate/"/>
+    <updated>2017-03-04T09:59:30+09:00</updated>
+    <id>http://ta1kt0me.github.io/blog/2017/03/04/add-comment-for-frozen-string-literal-in-rails-generate</id>
+    <content type="html"><![CDATA[<p><code>rails generate</code> したファイルにいちいちfrozen string literalのコメント追加するのは面倒ですよね。<br/>
+ということでモンキーパッチ。</p>
+
+<!-- more -->
+
+
+<p>railsの5.1.0.beta1が公開されている時のmasterで試しました。
+initializerに入れておけば動く。</p>
+
+<p><a href="https://gist.github.com/ta1kt0me/6a7058d16621785d4f7038bde6cd3b98">Add frozen string literal comment into generated files in rails v5.1.0</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>module AddFrozenStringLiteralComment
+</span><span class='line'>  def add_frozen_string_literal_comment(dist)
+</span><span class='line'>    if File.exist?(dist) && File.extname(dist) == '.rb'
+</span><span class='line'>      File.open(dist, 'r') do |f|
+</span><span class='line'>        body = f.read
+</span><span class='line'>
+</span><span class='line'>        File.open(dist, 'w') do |new_f|
+</span><span class='line'>          new_f.write("# frozen_string_literal: true\n" + body)
+</span><span class='line'>        end
+</span><span class='line'>      end
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>module GeneratorPrepend
+</span><span class='line'>  include AddFrozenStringLiteralComment
+</span><span class='line'>
+</span><span class='line'>  def invoke!
+</span><span class='line'>    res = super
+</span><span class='line'>    add_frozen_string_literal_comment(existing_migration)
+</span><span class='line'>    res
+</span><span class='line'>  end
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>module TemplatePrepend
+</span><span class='line'>  include AddFrozenStringLiteralComment
+</span><span class='line'>
+</span><span class='line'>  def template(source, *args, &block)
+</span><span class='line'>    res = super
+</span><span class='line'>    add_frozen_string_literal_comment(args.first)
+</span><span class='line'>    res
+</span><span class='line'>  end
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>Rails::Generators::Migration
+</span><span class='line'>Rails::Generators::Actions::CreateMigration.send :prepend, GeneratorPrepend
+</span><span class='line'>Rails::Generators::NamedBase.send :prepend, TemplatePrepend</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[リファクタリング・ウェットウェアを読んだ]]></title>
@@ -1339,7 +1433,7 @@ vimrcを見直している途中で、最新版を入れてpluginのupdateとか
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><code>type</code> に、自分のクラス名がGuestだったら&#8217;Guest&#8217;と入ります。 <code>Guest</code> だけの属性を集めたい場合は <code>Guest.all</code> とすることで取得できます。</p>
+<p><code>type</code> に、自分のクラス名がGuestだったら'Guest'と入ります。 <code>Guest</code> だけの属性を集めたい場合は <code>Guest.all</code> とすることで取得できます。</p>
 
 <h1><code>type</code>以外のカラムにクラス情報を格納したい</h1>
 
@@ -2079,158 +2173,6 @@ ParserやVMの基本的な仕組みや役割をRubyのソースコードで理�
 
 
 <p>第5回は1月にやります！</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[よちよち.rbに参加しよう]]></title>
-    <link href="http://ta1kt0me.github.io/blog/2014/12/21/letsjoinyochiyochirb/"/>
-    <updated>2014-12-21T06:39:32+09:00</updated>
-    <id>http://ta1kt0me.github.io/blog/2014/12/21/letsjoinyochiyochirb</id>
-    <content type="html"><![CDATA[<p><a href="http://www.adventar.org/calendars/582">よちよち.rb Advent Calendar 2014</a> 21日目の記事です。 <br/>
-昨日は、記念すべき第50回のmeetupsをtoggetterでまとめた、<a href="http://togetter.com/li/759800">よちよち.rb 第50回 みんなで LT デビューしよう会</a>でした。EMOいLT連投で初めてとは思えないクオリティでした。当の自分は遅刻した上に落ちを接続準備の時に流してしまい、スライド2ページ残しでやりきれなかったという惨い結果でした。次回リベンジしたいです。</p>
-
-<p>今回はよちよち.rbに参加する方法を紹介します。</p>
-
-<p>よちよち.rbでは初参加と、２回目以降の参加では事前準備が少し違います。<br/>
-詳しいことはdoorkeeperの申し込み画面に全て書いてあるので<a href="http://yochiyochirb.doorkeeper.jp/events/18523">こちらの「やってきてもらいたいこと」</a>をご覧ください。 <br/>
-これはあくまで今時点の最新なので、実際に参加するイベントの記載内容をご覧ください。</p>
-
-<!-- more -->
-
-
-<h1>初参加パターン</h1>
-
-<h2>事前準備</h2>
-
-<h3>GitHubのアカウントをとる</h3>
-
-<p>まずGitHubのアカウントを取得しましょう。できるならtwitterなど他のWebサービスと同じアカウント名にすると、後々いいことがあります。名前大事。超大事。</p>
-
-<h3>Doorkeeperのアカウントをとる</h3>
-
-<p><a href="https://manage.doorkeeper.jp/user/sign_up">https://manage.doorkeeper.jp/user/sign_up</a></p>
-
-<p>GitHubのアカウントでログインできます！<br/>
-できれば、GitHubとfacebookとTwitterは連携しておきましょう。</p>
-
-<h2>よちよち.rbに参加申し込みする</h2>
-
-<p>早速よちよち.rbのイベントページで参加申し込みをしましょう！<br/>
-イベントページに行って申し込みボタンを押すと、いくつかアンケートが出てきます。  なにこれわけわからない！と思った方、ちょっと調べてみて、それでもわからなければ素直にその旨を書けば大丈夫です。<br/>
-参加して一緒に解決していきましょう。</p>
-
-<h2>自己紹介を書く</h2>
-
-<p>簡単な自己紹介をGistで書きます。</p>
-
-<p><a href="https://gist.github.com/">https://gist.github.com/</a></p>
-
-<p>ここも、GitHubのアカウントでログインしてください。<br/>
-Gistは、簡単なメモ帳アプリです。メモごとにURLが作られます。<br/>
-<a href="http://tyoshikawa1106.hatenablog.com/entry/2013/04/10/000026">わかりやすい使い方はこちら</a></p>
-
-<p>書式はMarkdownという形式で書きます。<br/>
-GitHubには<a href="https://help.github.com/articles/github-flavored-markdown/">専用のMarkdown</a>があります。リンク先は英語ですけどめげないでください。初回だから書式とか気にせずいきましょう。<br/>
-下の内容を書きましょう！</p>
-
-<blockquote><p>書いておいてほしい内容</p>
-
-<p>お名前</p>
-
-<p>ご職業</p>
-
-<p>以下のリンクを参考にした Rails 4 と Github に関するあなたのステータス<a href="https://github.com/yochiyochirb/meetups/blob/master/member_status.md">各技術のステータス | よちよち.rb</a></p>
-
-<p>あと、たまに宿題(よくわからなかったりしたらスルー、だけど書いておくと面白いです)</p></blockquote>
-
-<h2>自己紹介をよちよち.rbに共有する</h2>
-
-<p>あと少し!!!<br/>
-イベントページにこんな記載があります。</p>
-
-<p><a href="http://gyazo.com/ad27260e7de843e1126b828273904580"><img src="http://i.gyazo.com/ad27260e7de843e1126b828273904580.png" alt="Gyazo" /></a></p>
-
-<p>「できあがったら、GistのURLをこちらへ貼ってください：」の下にあるURLにアクセスしましょう。<br/>
-画面の下にコメント欄があるので、Gistの自己紹介のURLを書き込んでCommentボタンを押すと準備完了です。</p>
-
-<p>長くなってしまいましたが、ここまでが初参加パターンです。<br/>
-そんなに時間はかからないはずです。</p>
-
-<p>次に行く前に、ちょっと脇道にそれます。</p>
-
-<h3>Git、GitHub、Gistの違い</h3>
-
-<p>ここまでで、Git、GitHub、Gistと似たような名前のものがいくつか出てきました。</p>
-
-<ul>
-<li>Git
-
-<ul>
-<li>バージョン管理のツール（アプリケーションと置き換えてもらっても大丈夫）</li>
-<li>バージョン管理ができるようになると、変更履歴を持つことができます</li>
-<li>つまり一つの歴史が生まれます</li>
-<li>これがあると、世の中の開発者もとい、サービスの利用者みんなが幸せになれるツールです（怪しい勧誘文句になってしまった）</li>
-</ul>
-</li>
-<li>GitHub
-
-<ul>
-<li>Gitをブラウザから使いやすくして便利な機能をいっぱいつけてくれるWebサービス</li>
-<li>しかもSNS</li>
-<li>それでもって、会社の名前(正式な社名はGitHub, Inc)</li>
-<li>これが落ちると、世の中の開発者もとい、サービスの利用者みんなが不幸になります</li>
-<li>これが落ちると、Googleキーワード検索の上位(というか一位)に滑り込んできます</li>
-<li>アクセスできないと思ったらTwitterで検索しましょう。阿鼻叫喚が聞こえます</li>
-</ul>
-</li>
-<li>Gist
-
-<ul>
-<li>GitHub, incが提供するメモ帳です。</li>
-<li>もうちょっと正確にいうと、シンプルなsnippets共有アプリです。snippetsというのはコードの断片です。コードには再利用性が高いものがたくさんあります。断片をメモしておくことで、参考にしたいアプリケーションのソースコードを開いてコピペしなくて済むようになります。</li>
-<li>Gistに保存しておくことで、他人との共有がスムーズにできたり、ブログへのソースコードの埋め込みが楽になったりします。</li>
-<li>別にコードに限らず、ただのメモ帳として使うこともできます。メリットはGitで管理可能なところ。バージョン管理できるので変更履歴とかも把握しやすい!</li>
-</ul>
-</li>
-</ul>
-
-
-<p>ちなみにGitHub, incはGitの開発にも関わっています。強大です。<br/>
-もし、キャラのOctocatグッズが欲しかったら、GitHub storeなるものを利用してみましょう。</p>
-
-<h1>2回目パターン</h1>
-
-<h2>よちよち.rbに参加申し込みする</h2>
-
-<p>初参加と同じ。</p>
-
-<h2>自己紹介を書いて、GitHubでPullRequestを出す</h2>
-
-<p>今度はGistではなく、Githubを利用します。</p>
-
-<ol>
-<li>Githubからmeetupsのリポジトリをローカルにcloneする</li>
-<li>新しいブランチを作る</li>
-<li>自己紹介のファイルを作成</li>
-<li>Gitを使ってadd, commitして、GitHubにpush</li>
-<li>GitHubでPull Request作って</li>
-<li>メンバーからLGTMを2つもらったら</li>
-<li>マージする</li>
-</ol>
-
-
-<p>駆け足でいきました。<br/>
-ここまで、Meetupsまでにやる必要があります。<br/>
-<a href="https://github.com/yochiyochirb/meetups/wiki#how-to-use-github">ここ</a>の<code>How to use Github</code>がすごく役に立ちます。<br/>
-わからなければ質問してみましょう。  <br/>
-質問することがこのコミュニティの醍醐味でもあります。<br/>
-ちなみに(おそらく間違っていないのですが)、今参加している人は皆ここで一度躓いています。</p>
-
-<h1>まとめ</h1>
-
-<p>興味があって参加を考えている方は次回以降のmeetups時に参考にしてください。<br/>
-明日はumekumiさんの「初めてLTをやった！」です。お楽しみに！</p>
 ]]></content>
   </entry>
   
