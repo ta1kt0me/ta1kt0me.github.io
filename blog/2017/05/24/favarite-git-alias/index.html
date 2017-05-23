@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Rails Generateで作ったrubyファイルにfrozen String Literalのコメントを追加する - JanGaJan.com</title>
+  <title>最近お気に入りのgit Alias - JanGaJan.com</title>
   <meta name="author" content="talkto_me">
   
-  <meta name="description" content="rails generate したファイルにいちいちfrozen string literalのコメント追加するのは面倒ですよね。
-ということでモンキーパッチ。 railsの5.1.0.beta1が公開されている時のmasterで試しました。
-initializerに入れておけば動く。 Add &hellip;">
+  <meta name="description" content="最近登録してよく使うようになってきたgitのaliasを紹介します。 git pushf
+git bcleanup
+git rewrite git pushf git push --force-with-lease のaliasです。これで変更が加えられていた場合、強制的にpushするのを防げます &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@ initializerに入れておけば動く。 Add &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://ta1kt0me.github.io/blog/2017/03/04/add-comment-for-frozen-string-literal-in-rails-generate/">
+  <link rel="canonical" href="http://ta1kt0me.github.io/blog/2017/05/24/favarite-git-alias/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="JanGaJan.com" type="application/atom+xml">
@@ -113,7 +113,7 @@ initializerに入れておけば動く。 Add &hellip;">
   <header>
     
       
-        <h1 class="entry-title">Rails Generateで作ったrubyファイルにfrozen String Literalのコメントを追加する</h1>
+        <h1 class="entry-title">最近お気に入りのgit Alias</h1>
       
     
     
@@ -123,99 +123,38 @@ initializerに入れておけば動く。 Add &hellip;">
 
 
 
-<time class='entry-date' datetime='2017-03-04T09:59:30+09:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>9:59 am</span></time>
+<time class='entry-date' datetime='2017-05-24T08:23:48+09:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>8:23 am</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><code>rails generate</code> したファイルにいちいちfrozen string literalのコメント追加するのは面倒ですよね。<br/>
-ということでモンキーパッチ。</p>
+<div class="entry-content"><p>最近登録してよく使うようになってきたgitのaliasを紹介します。</p>
+
+<ul>
+<li>git pushf</li>
+<li>git bcleanup</li>
+<li>git rewrite</li>
+</ul>
+
 
 <!-- more -->
 
 
-<p>railsの5.1.0.beta1が公開されている時のmasterで試しました。
-initializerに入れておけば動く。</p>
+<h2>git pushf</h2>
 
-<p><a href="https://gist.github.com/ta1kt0me/6a7058d16621785d4f7038bde6cd3b98">Add frozen string literal comment into generated files in rails v5.1.0</a></p>
+<p><code>git push --force-with-lease</code> のaliasです。これで変更が加えられていた場合、強制的にpushするのを防げます。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>module AddFrozenStringLiteralComment
-</span><span class='line'>  def add_frozen_string_literal_comment(dist)
-</span><span class='line'>    if File.exist?(dist) && File.extname(dist) == '.rb'
-</span><span class='line'>      File.open(dist, 'r') do |f|
-</span><span class='line'>        body = f.read
-</span><span class='line'>
-</span><span class='line'>        File.open(dist, 'w') do |new_f|
-</span><span class='line'>          new_f.write("# frozen_string_literal: true\n" + body)
-</span><span class='line'>        end
-</span><span class='line'>      end
-</span><span class='line'>    end
-</span><span class='line'>  end
-</span><span class='line'>end
-</span><span class='line'>
-</span><span class='line'>module GeneratorPrepend
-</span><span class='line'>  include AddFrozenStringLiteralComment
-</span><span class='line'>
-</span><span class='line'>  def invoke!
-</span><span class='line'>    res = super
-</span><span class='line'>    add_frozen_string_literal_comment(existing_migration)
-</span><span class='line'>    res
-</span><span class='line'>  end
-</span><span class='line'>end
-</span><span class='line'>
-</span><span class='line'>module TemplatePrepend
-</span><span class='line'>  include AddFrozenStringLiteralComment
-</span><span class='line'>
-</span><span class='line'>  def template(source, *args, &block)
-</span><span class='line'>    res = super
-</span><span class='line'>    add_frozen_string_literal_comment(args.first)
-</span><span class='line'>    res
-</span><span class='line'>  end
-</span><span class='line'>end
-</span><span class='line'>
-</span><span class='line'>Rails::Generators::Migration
-</span><span class='line'>Rails::Generators::Actions::CreateMigration.send :prepend, GeneratorPrepend
-</span><span class='line'>Rails::Generators::NamedBase.send :prepend, TemplatePrepend</span></code></pre></td></tr></table></div></figure>
+<h2>git bcleanup</h2>
 
+<p>いらなくなったブランチを削除するというaliasです。<code>master</code>にマージしたローカルブランチを<code>master</code>以外削除するということをします。
+つまり、 <code>git branch --merged master | grep -v '^* master$' | xargs git branch -d</code> のalias。
+<code>git cleanup branch</code> とかにしたのですが微妙に長かったので今の形に収まりました。fishで<code>git bc</code>のabbrを作っても良さげ。</p>
+
+<h2>git rewrite</h2>
+
+<p>コミットメッセージtypoしちゃう時に使う<code>git commit --amend</code>のaliasです。コミットメッセージ難しいですよね。</p>
 </div>
 
 
@@ -240,22 +179,16 @@ initializerに入れておけば動く。</p>
 
 
 
-<time class='entry-date' datetime='2017-03-04T09:59:30+09:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>9:59 am</span></time>
+<time class='entry-date' datetime='2017-05-24T08:23:48+09:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>8:23 am</span></time>
       
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/ruby/'>ruby</a>
-  
-</span>
 
 
     </p>
     
       <div class="sharing">
-  <a href="http://b.hatena.ne.jp/entry/http://ta1kt0me.github.io/blog/2017/03/04/add-comment-for-frozen-string-literal-in-rails-generate/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  <a href="http://b.hatena.ne.jp/entry/http://ta1kt0me.github.io/blog/2017/05/24/favarite-git-alias/" class="hatena-bookmark-button" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ta1kt0me.github.io/blog/2017/03/04/add-comment-for-frozen-string-literal-in-rails-generate/" data-via="talkto_me" data-counturl="http://ta1kt0me.github.io/blog/2017/03/04/add-comment-for-frozen-string-literal-in-rails-generate/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ta1kt0me.github.io/blog/2017/05/24/favarite-git-alias/" data-via="talkto_me" data-counturl="http://ta1kt0me.github.io/blog/2017/05/24/favarite-git-alias/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -275,10 +208,8 @@ initializerに入れておけば動く。</p>
 </script>
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2016/12/31/refactoring-wetwear/" title="Previous Post: リファクタリング・ウェットウェアを読んだ">&laquo; リファクタリング・ウェットウェアを読んだ</a>
+        <a class="basic-alignment left" href="/blog/2017/03/04/add-comment-for-frozen-string-literal-in-rails-generate/" title="Previous Post: rails generateで作ったrubyファイルにfrozen string literalのコメントを追加する">&laquo; rails generateで作ったrubyファイルにfrozen string literalのコメントを追加する</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2017/05/24/favarite-git-alias/" title="Next Post: 最近お気に入りのgit alias">最近お気に入りのgit alias &raquo;</a>
       
     </p>
     <p>
@@ -322,8 +253,8 @@ initializerに入れておけば動く。</p>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://ta1kt0me.github.io/blog/2017/03/04/add-comment-for-frozen-string-literal-in-rails-generate/';
-        var disqus_url = 'http://ta1kt0me.github.io/blog/2017/03/04/add-comment-for-frozen-string-literal-in-rails-generate/';
+        var disqus_identifier = 'http://ta1kt0me.github.io/blog/2017/05/24/favarite-git-alias/';
+        var disqus_url = 'http://ta1kt0me.github.io/blog/2017/05/24/favarite-git-alias/';
         var disqus_script = 'embed.js';
       
     (function () {

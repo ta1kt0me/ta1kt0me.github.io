@@ -8,8 +8,23 @@
   <title>JanGaJan.com</title>
   <meta name="author" content="talkto_me">
   
-  <meta name="description" content="パーフェクト Ruby on Railsを、第6章からやってます。 RailsにおけるTimezoneの設定方法です。
-config/application.rbで設定します。 ">
+  <meta name="description" content="パーフェクト Ruby on Railsを、第6章からやってます。 日本語対応のi18nの設定でエラーが発生しました。
+補足ですが、私のRailsの環境は4.1.5です。 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+ActionView::Template::Error &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,6 +123,78 @@ config/application.rbで設定します。 ">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/09/12/perfect-rails-i18n/">I18nの設定でdatetime_selectのエラー対応</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-09-12T18:25:27+09:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:25 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.amazon.co.jp/gp/product/4774165166/ref=as_li_ss_tl?ie=UTF8&camp=247&creative=7399&creativeASIN=4774165166&linkCode=as2&tag=pochan0919-22">パーフェクト Ruby on Rails</a><img src="http://ir-jp.amazon-adsystem.com/e/ir?t=pochan0919-22&l=as2&o=9&a=4774165166" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />を、第6章からやってます。</p>
+
+<p>日本語対応のi18nの設定でエラーが発生しました。<br/>
+補足ですが、私のRailsの環境は<code>4.1.5</code>です。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="no">ActionView</span><span class="o">::</span><span class="no">Template</span><span class="o">::</span><span class="no">Error</span> <span class="p">(</span><span class="n">undefined</span> <span class="nb">method</span> <span class="sb">`map&#39; for &quot;translation missing: ja.date.order&quot;:String):</span>
+</span><span class='line'><span class="sb">    27:   &lt;/div&gt;</span>
+</span><span class='line'><span class="sb">    28:   &lt;div class=&quot;form-group&quot;&gt;</span>
+</span><span class='line'><span class="sb">    29:     &lt;%= f.label :end_time %&gt;</span>
+</span><span class='line'><span class="sb">    30:     &lt;%= f.datetime_select :end_time, start_year: now.year, end_year: now.year + 1 %&gt;</span>
+</span><span class='line'><span class="sb">    31:   &lt;/div&gt;</span>
+</span><span class='line'><span class="sb">    32:   &lt;div class=&quot;form-group&quot;&gt;</span>
+</span><span class='line'><span class="sb">    33:     &lt;%= f.label :content %&gt;</span>
+</span><span class='line'><span class="sb">  app/views/events/new.html.erb:30:in `</span><span class="n">block</span> <span class="k">in</span> <span class="n">_app_views_events_new_html_erb__622987462779560017_70179900721920</span><span class="s1">&#39;</span>
+</span><span class='line'><span class="s1">  app/views/events/new.html.erb:5:in `_app_views_events_new_html_erb__622987462779560017_70179900721920&#39;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">Rendered</span> <span class="n">vendor</span><span class="o">/</span><span class="n">bundle</span><span class="o">/</span><span class="n">ruby</span><span class="o">/</span><span class="mi">2</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">actionpack</span><span class="o">-</span><span class="mi">4</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">action_dispatch</span><span class="o">/</span><span class="n">middleware</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">rescues</span><span class="o">/</span><span class="n">_trace</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">8</span><span class="n">ms</span><span class="p">)</span>
+</span><span class='line'>  <span class="no">Rendered</span> <span class="n">vendor</span><span class="o">/</span><span class="n">bundle</span><span class="o">/</span><span class="n">ruby</span><span class="o">/</span><span class="mi">2</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">actionpack</span><span class="o">-</span><span class="mi">4</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">action_dispatch</span><span class="o">/</span><span class="n">middleware</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">rescues</span><span class="o">/</span><span class="n">_request_and_response</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="n">ms</span><span class="p">)</span>
+</span><span class='line'>  <span class="no">Rendered</span> <span class="n">vendor</span><span class="o">/</span><span class="n">bundle</span><span class="o">/</span><span class="n">ruby</span><span class="o">/</span><span class="mi">2</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">actionpack</span><span class="o">-</span><span class="mi">4</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">5</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">action_dispatch</span><span class="o">/</span><span class="n">middleware</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">rescues</span><span class="o">/</span><span class="n">template_error</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">erb</span> <span class="n">within</span> <span class="n">rescues</span><span class="o">/</span><span class="n">layout</span> <span class="p">(</span><span class="mi">16</span><span class="o">.</span><span class="mi">9</span><span class="n">ms</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/09/12/perfect-rails-i18n/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -433,42 +520,6 @@ UnixでのパイプをRubyで表すとどうなるか。</p>
   
     <footer>
       <a rel="full-article" href="/blog/2014/09/01/yapc-asia-2014/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/21/github-login-bottun/">Railsでソーシャルログインボタン(Github)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-08-21'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>RailsでGithub、twitter、facebookといったソーシャルのoauthログインボタンを出したい人向けです。</p>
-
-<p>Githubのomniauth連携をした時に、専用のログインボタンを簡単に用意できないか探してみたところ、いい感じのGemがありました。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/08/21/github-login-bottun/">Read on &rarr;</a>
     </footer>
   
 
